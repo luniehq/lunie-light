@@ -1694,10 +1694,10 @@
     webdriver "6.6.2"
     webdriverio "6.6.2"
 
-"@wdio/spec-reporter@^6.4.7":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@wdio/spec-reporter/-/spec-reporter-6.6.0.tgz#ede1ed00cd29410e591fc977ccd387c9a6059656"
-  integrity sha512-JKeFsvVpG3LDfHDEHT/AAZgp8NafgTn7hwlSUBPQy9wiJv7HzbQp81Na1yNHhBIPQog+9VWcx1uIKphX+vSegg==
+"@wdio/spec-reporter@^6.6.3":
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/@wdio/spec-reporter/-/spec-reporter-6.6.3.tgz#16c2d4a5eee4ce2a6024c6edf32af394b34059c8"
+  integrity sha512-wNDwqaxvc3JrnxVoU3ubWbNXCh40I4hCM6iIxtIID7xetOw+k/jQgFfbL7jqs6VBU7gHNbQYBck0ZqVRj5JhdQ==
   dependencies:
     "@wdio/reporter" "6.6.0"
     chalk "^4.0.0"
