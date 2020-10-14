@@ -1704,10 +1704,10 @@
     easy-table "^1.1.1"
     pretty-ms "^7.0.0"
 
-"@wdio/sync@^6.5.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.6.0.tgz#278e53f5e00b500a4199fd01e3df88ee8bfe1dce"
-  integrity sha512-nv1dn1d6uHkO3zKtj2pbC1xtasOrsMvhGoudywYfExrOGvKax0lrSGEawkUeBaX/Nd4K4omu9qMYN9dpDqKU0A==
+"@wdio/sync@^6.6.4":
+  version "6.6.4"
+  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.6.4.tgz#b1349cd1ec4aaa9193edbdb42563bdf7b120e5f5"
+  integrity sha512-Y40KRrFUcavHswrH/SjSwoF3uF6vWRQNZvNFEKW69TET9gQ6W8hbSz91Ok299Ru1f2fCjwxh6NQ6hH1qCX94Aw==
   dependencies:
     "@types/puppeteer" "^3.0.1"
     "@wdio/logger" "6.6.0"
