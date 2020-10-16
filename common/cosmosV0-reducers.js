@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const { encodeB32, decodeB32 } = require('./address-encoding')
+const { encodeB32, decodeB32 } = require('./address')
 const { fixDecimalsAndRoundUp } = require('./numbers.js')
 const { getProposalSummary } = require('./common-reducers')
 /**

@@ -1,13 +1,13 @@
 const BigNumber = require('bignumber.js')
 const _ = require('lodash')
-const { encodeB32, decodeB32, pubkeyToAddress } = require('./address-encoding')
+const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
 class CosmosV0API {
-  constructor(network, store, fiatValuesAPI, db) {
+  constructor(axios, network, store, fiatValuesAPI, db) {
     this.baseURL = network.api_url
-    this.initialize({})
+    this.axios = axios
     this.network = network
     this.networkId = network.id
     this.delegatorBech32Prefix = network.address_prefix
@@ -15,11 +15,11 @@ class CosmosV0API {
     this.store = store
     this.fiatValuesAPI = fiatValuesAPI
     this.db = db
+
+    this.setReducers()
   }
 
-  initialize(config) {
-    this.context = config.context
-
+  setReducers() {
     this.reducers = require('./cosmosV0-reducers')
   }
 
@@ -34,9 +34,9 @@ class CosmosV0API {
 
   async getRetry(url, intent = 0) {
     try {
-      return await fetch(
+      return await this.axios(
         this.baseURL + (url.startsWith('/') ? url : '/' + url)
-      ).then((res) => res.json())
+      ).then((res) => res.data)
     } catch (error) {
       // give up
       if (intent >= 3) {
@@ -144,6 +144,51 @@ class CosmosV0API {
       delegationEnum.ACTIVE,
       this.network
     ).amount
+  }
+
+  async getValidator(address) {
+    const [
+      validator,
+      annualProvision,
+      validatorSet,
+      signedBlocksWindow,
+    ] = await Promise.all([
+      this.query(`staking/validators/${address}`),
+      this.getAnnualProvision(),
+      this.getAllValidatorSets(),
+      this.getSignedBlockWindow(),
+    ])
+
+    // create a dictionary to reduce array lookups
+    const consensusValidators = _.keyBy(validatorSet.validators, 'address')
+    const totalVotingPower = validatorSet.validators.reduce(
+      (sum, { voting_power: votingPower }) => sum.plus(votingPower),
+      BigNumber(0)
+    )
+
+    // query for signing info
+    const signingInfos = _.keyBy(
+      await this.getValidatorSigningInfos([validator]),
+      'address'
+    )
+
+    const consensusAddress = pubkeyToAddress(
+      validator.consensus_pubkey,
+      this.validatorConsensusBech32Prefix
+    )
+    validator.voting_power = consensusValidators[consensusAddress]
+      ? BigNumber(consensusValidators[consensusAddress].voting_power)
+          .div(totalVotingPower)
+          .toNumber()
+      : 0
+    validator.signing_info = signingInfos[consensusAddress]
+
+    return this.reducers.validatorReducer(
+      this.network.id,
+      signedBlocksWindow,
+      validator,
+      annualProvision
+    )
   }
 
   async getAllValidators(height) {
@@ -467,7 +512,7 @@ class CosmosV0API {
   }
 
   async getBlockV2(blockHeight) {
-    if (!blockHeight || this.store.height === blockHeight) {
+    if (blockHeight && this.store.height === blockHeight) {
       return this.store.block
     } else {
       return await this.getBlockByHeightV2(blockHeight)

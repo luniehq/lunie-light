@@ -1,10 +1,16 @@
 <template>
-  <div>
-    <Nuxt />
+  <div id="app" class="lunie-light">
+    <AppHeader />
+    <div id="app-content">
+      <!-- <UserMenu /> -->
+      <Nuxt />
+    </div>
   </div>
 </template>
 
 <style>
+@import '../styles/app.css';
+
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;

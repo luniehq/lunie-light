@@ -22,12 +22,21 @@
     }
   },
   "dependencies": {
+    "@dicebear/avatars": "^4.2.5",
+    "@dicebear/avatars-jdenticon-sprites": "^4.2.5",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
     "bignumber.js": "^9.0.1",
     "core-js": "^3.6.5",
+    "graphql": "^15.3.0",
+    "graphql-tag": "^2.11.0",
     "lodash": "^4.17.20",
-    "nuxt": "^2.14.6"
+    "lodash.orderby": "^4.6.0",
+    "moment": "^2.29.1",
+    "nuxt": "^2.14.6",
+    "nuxt-material-design-icons": "^1.0.4",
+    "vue-clipboard2": "^0.3.1",
+    "vue-infinite-scroll": "^2.0.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
