@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import orderBy from 'lodash.orderby'
 import network from '../../network'
 
@@ -104,7 +104,7 @@ export default {
     stakingDenom: network.stakingDenom,
   }),
   computed: {
-    ...mapGetters([`address`]),
+    ...mapState([`address`]),
     sortedEnrichedValidators() {
       const orderedValidators = orderBy(
         this.validators.map((validator) => ({
@@ -152,9 +152,6 @@ export default {
         }
       },
     },
-  },
-  mounted() {
-    // this.$apollo.queries.rewards.startPolling(1000 * 60 * 5)
   },
   methods: {
     loadMore() {

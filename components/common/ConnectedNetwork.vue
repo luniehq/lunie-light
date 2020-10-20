@@ -67,7 +67,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import { prettyInt } from '../../common/numbers'
 import network from '../../network'
 import CosmosV2Source from '../../common/cosmosV2-source'
@@ -87,7 +86,6 @@ export default {
     block: {},
   }),
   computed: {
-    ...mapGetters([`network`]),
     networkTooltip() {
       return this.block
         ? `You're connected to ${this.block.chainId}.`

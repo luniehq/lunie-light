@@ -10,4 +10,12 @@ export default {
     },
   ],
   network_type: 'cosmos',
+  address_prefix: 'cosmos',
+
+  // utility functions
+  getCoinLookup(network, denom, coinLookupDenomType = `chainDenom`) {
+    return network.coinLookup.find(
+      (coin) => coin[coinLookupDenomType] === denom
+    )
+  },
 }

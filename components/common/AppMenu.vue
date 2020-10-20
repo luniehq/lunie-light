@@ -3,7 +3,7 @@
     <div>
       <nuxt-link
         class="app-menu-item hide-s"
-        to="/portfolio"
+        :to="`/portfolio/${address}`"
         exact="exact"
         title="Portfolio"
         @click.native="handleClick()"
@@ -57,8 +57,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: `app-menu`,
+  computed: {
+    ...mapState(['address']),
+  },
   methods: {
     handleClick() {
       this.$emit(`close`)

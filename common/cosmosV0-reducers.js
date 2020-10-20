@@ -423,28 +423,31 @@ async function balanceV2Reducer(
   const total = isStakingDenom
     ? BigNumber(lunieCoin.amount).plus(delegatedStake).plus(undelegatingStake)
     : lunieCoin.amount
-  const fiatValue = await fiatValueAPI.calculateFiatValues(
-    [
-      {
-        ...lunieCoin,
-        amount: total,
-      },
-    ],
-    fiatCurrency
-  )
-  const availableFiatValue = await fiatValueAPI.calculateFiatValues(
-    [lunieCoin],
-    fiatCurrency
-  )
+  let fiatValue, availableFiatValue
+  if (fiatValueAPI) {
+    fiatValue = await fiatValueAPI.calculateFiatValues(
+      [
+        {
+          ...lunieCoin,
+          amount: total,
+        },
+      ],
+      fiatCurrency
+    )[lunieCoin.denom]
+    availableFiatValue = await fiatValueAPI.calculateFiatValues(
+      [lunieCoin],
+      fiatCurrency
+    )[stakingDenom]
+  }
   return {
     id: lunieCoin.denom,
     type: isStakingDenom ? 'STAKE' : 'CURRENCY',
     total,
     denom: lunieCoin.denom,
-    fiatValue: fiatValue[lunieCoin.denom],
+    fiatValue,
     available: lunieCoin.amount,
     staked: delegatedStake.amount || 0,
-    availableFiatValue: availableFiatValue[stakingDenom],
+    availableFiatValue,
   }
 }
 

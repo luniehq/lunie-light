@@ -1,4 +1,4 @@
 export const state = () => ({
-  network: require('../network.js'),
-  address: '',
+  address: 'cosmos1mmu8hhkfpzh7jxrtjylmhceyt7hs3acr278u3v',
+  session: {},
 })

@@ -142,6 +142,7 @@ class CosmosV2API extends CosmosV0API {
   }
 
   async getRewards(delegatorAddress, fiatCurrency, network) {
+    await this.dataReady
     this.checkAddress(delegatorAddress)
     const result = await this.query(
       `distribution/delegators/${delegatorAddress}/rewards`

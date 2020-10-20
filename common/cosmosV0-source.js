@@ -12,11 +12,20 @@ class CosmosV0API {
     this.networkId = network.id
     this.delegatorBech32Prefix = network.address_prefix
     this.validatorConsensusBech32Prefix = `${network.address_prefix}valcons`
-    this.store = store
+    this.store = store // TODO remove store
     this.fiatValuesAPI = fiatValuesAPI
     this.db = db
 
+    // system to stop queries to proceed if store data is not yet available
+    this.dataReady = new Promise((resolve) => {
+      this.resolveReady = resolve
+    })
+
     this.setReducers()
+    this.loadValidors().then((validators) => {
+      this.store.validators = _.keyBy(validators, 'operatorAddress')
+      this.resolveReady()
+    })
   }
 
   setReducers() {
@@ -191,7 +200,12 @@ class CosmosV0API {
     )
   }
 
-  async getAllValidators(height) {
+  async getAllValidators() {
+    await this.dataReady
+    return this.store.validators
+  }
+
+  async loadValidors(height) {
     const [
       validators,
       annualProvision,
@@ -245,6 +259,7 @@ class CosmosV0API {
   }
 
   async getDetailedVotes(proposal) {
+    await this.dataReady
     const [
       votes,
       deposits,
@@ -432,7 +447,8 @@ class CosmosV0API {
     )
   }
 
-  getTopVoters() {
+  async getTopVoters() {
+    await this.dataReady
     // for now defaulting to pick the 10 largest voting powers
     return _.take(
       _.reverse(
@@ -584,6 +600,7 @@ class CosmosV0API {
   }
 
   async getDelegationsForDelegatorAddress(address) {
+    await this.dataReady
     this.checkAddress(address)
     const delegations =
       (await this.query(`staking/delegators/${address}/delegations`)) || []
@@ -601,6 +618,7 @@ class CosmosV0API {
   }
 
   async getUndelegationsForDelegatorAddress(address) {
+    await this.dataReady
     this.checkAddress(address)
     const undelegations =
       (await this.query(
@@ -677,6 +695,7 @@ class CosmosV0API {
   }
 
   async getRewards(delegatorAddress, fiatCurrency, network) {
+    await this.dataReady
     this.checkAddress(delegatorAddress)
     const result = await this.query(
       `distribution/delegators/${delegatorAddress}/rewards`
@@ -695,6 +714,7 @@ class CosmosV0API {
   }
 
   async getAllDelegators() {
+    await this.dataReady
     const allDelegations = await Object.keys(this.store.validators).reduce(
       async (all, validator) => {
         const delegations = await this.query(
