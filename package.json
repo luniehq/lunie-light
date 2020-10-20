@@ -34,7 +34,7 @@
     "lodash": "^4.17.20",
     "lodash.orderby": "^4.6.0",
     "moment": "^2.29.1",
-    "nuxt": "^2.14.6",
+    "nuxt": "^2.14.7",
     "nuxt-material-design-icons": "^1.0.4",
     "v-tooltip": "^2.0.3",
     "vue-clipboard2": "^0.3.1",
