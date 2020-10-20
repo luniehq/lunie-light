@@ -3,9 +3,7 @@
     <div :key="balance.denom" class="table-cell big">
       <img
         class="currency-flag"
-        :src="
-          '~/assets/images/currencies/' + balance.denom.toLowerCase() + '.png'
-        "
+        :src="image"
         :alt="`${balance.denom}` + ' currency'"
       />
       <div class="total-and-fiat">
@@ -126,6 +124,10 @@ export default {
     },
     unstakeClaimable() {
       return new Date(this.balance.endTime) <= new Date()
+    },
+    image() {
+      const fileName = this.balance.denom.toLowerCase() + '.png'
+      return require(`../../assets/images/currencies/${fileName}`)
     },
   },
   methods: {

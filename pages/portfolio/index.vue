@@ -1,14 +1,34 @@
 <template>
   <TmPage :sign-in-required="true">
     <!-- <template slot="signInRequired"> -->
-    <TmBalance />
-    <DelegationsOverview />
-    <Undelegations />
+    <Balances :balances="balances" :rewards="rewards" />
+    <DelegationsOverview
+      :balances="balances"
+      :rewards="rewards"
+      :delegations="delegations"
+    />
+    <Undelegations :undelegations="undelegations" />
   </TmPage>
 </template>
 
 <script>
+import network from '~/network'
+import CosmosV2Source from '~/common/cosmosV2-source'
+
 export default {
   name: `page-portfolio`,
+  async asyncData({ $axios, $cookies }) {
+    const address = $cookies.get('address')
+    const currency = $cookies.get('currency') || 'USD'
+    const store = {}
+    const api = new CosmosV2Source($axios, network, store, null, null)
+    const [delegations, balances, rewards, undelegations] = await Promise.all([
+      api.getDelegationsForDelegatorAddress(address),
+      api.getBalancesV2FromAddress(address, currency, network),
+      api.getRewards(address, currency, network),
+      api.getUndelegationsForDelegatorAddress(address),
+    ])
+    return { delegations, balances, rewards, undelegations }
+  },
 }
 </script>

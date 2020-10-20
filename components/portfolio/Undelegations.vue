@@ -11,18 +11,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import network from '../../network'
-import CosmosV2Source from '../../common/cosmosV2-source'
 
 export default {
   name: `undelegations`,
-  data: () => ({
-    undelegations: [],
-    undelegationsLoaded: false,
-  }),
+  props: {
+    undelegations: {
+      type: Array,
+      default: () => [],
+    },
+  },
   computed: {
-    ...mapState([`address`]),
     balances() {
       return this.undelegations.map((undelegation) => {
         return {
@@ -43,25 +42,6 @@ export default {
     onWithdraw() {
       this.$refs.WithdrawModal.open()
     },
-    async loadData({ $axios, $cookies }) {
-      const address = $cookies.get('address')
-      const store = {}
-      const api = new CosmosV2Source($axios, network, store, null, null)
-      const undelegations = await api.getUndelegationsForDelegatorAddress(
-        address
-      )
-      return Object.assign(this, { undelegations })
-    },
-  },
-  mounted() {
-    this.loadData(this)
-  },
-  async asyncData({ $axios, $cookies }) {
-    const address = $cookies.get('address')
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const undelegations = await api.getUndelegationsForDelegatorAddress(address)
-    return { undelegations }
   },
 }
 </script>

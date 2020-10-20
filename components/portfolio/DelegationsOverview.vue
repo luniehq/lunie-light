@@ -34,19 +34,28 @@
 <script>
 import { mapState } from 'vuex'
 import network from '../../network'
-import CosmosV2Source from '../../common/cosmosV2-source'
 
 export default {
   name: `delegations-overview`,
+  props: {
+    balances: {
+      type: Array,
+      default: () => [],
+    },
+    rewards: {
+      type: Array,
+      default: () => [],
+    },
+    delegations: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data: () => ({
-    delegations: [],
-    balances: [],
-    rewards: [],
-    delegationsLoaded: false,
     preferredCurrency: 'USD',
   }),
   computed: {
-    ...mapState([`session`, `address`]),
+    ...mapState([`session`]),
     stakedBalance() {
       // balances not loaded yet
       if (!this.balances.length) {
@@ -75,27 +84,10 @@ export default {
     },
   },
   mounted() {
-    this.loadData(this)
-
     const persistedPreferredCurrency = this.session.preferredCurrency
     if (persistedPreferredCurrency) {
       this.preferredCurrency = persistedPreferredCurrency
     }
-  },
-  // TODO load data only once in page portfolio and pass on
-  async asyncData({ $axios, params }) {
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const [delegations, balances, rewards] = await Promise.all([
-      api.getDelegationsForDelegatorAddress(params.address),
-      api.getBalancesV2FromAddress(
-        params.address,
-        'USD', // this.preferredCurrency,
-        network
-      ),
-      api.getRewards(params.address, 'USD', network),
-    ])
-    return { delegations, balances, rewards }
   },
   methods: {
     goToValidators() {
@@ -103,18 +95,6 @@ export default {
     },
     openUnstakeModal() {
       this.$refs.UnstakeModal.open()
-    },
-    async loadData({ $axios, $cookies }) {
-      const address = $cookies.get('address')
-      const currency = $cookies.get('currency') || 'USD'
-      const store = {}
-      const api = new CosmosV2Source($axios, network, store, null, null)
-      const [delegations, balances, rewards] = await Promise.all([
-        api.getDelegationsForDelegatorAddress(address),
-        api.getBalancesV2FromAddress(address, currency, network),
-        api.getRewards(address, currency, network),
-      ])
-      return Object.assign(this, { delegations, balances, rewards })
     },
   },
 }

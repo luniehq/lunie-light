@@ -70,37 +70,29 @@
 import { mapState } from 'vuex'
 import { noBlanks } from '../../common/strings'
 import network from '../../network'
-import CosmosV2Source from '../../common/cosmosV2-source'
 
 export default {
-  name: `tm-balance`,
+  name: `balances`,
   filters: {
     noBlanks,
   },
-  async asyncData({ $axios, $cookies, error }) {
-    try {
-      const address = $cookies.get('address')
-      const currency = $cookies.get('currency') || 'USD'
-      const store = {}
-      const api = new CosmosV2Source($axios, network, store, null, null)
-      const [balances, rewards] = await Promise.all([
-        api.getBalancesV2FromAddress(address, currency, network),
-        api.getRewards(address, currency, network),
-      ])
-      return { balances, rewards }
-    } catch (err) {
-      error(err)
-    }
+  props: {
+    balances: {
+      type: Array,
+      default: () => [],
+    },
+    rewards: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
-      balances: [],
-      rewards: [],
       preferredCurrency: 'USD',
     }
   },
   computed: {
-    ...mapState([`session`, `address`]),
+    ...mapState([`session`]),
     // only be ready to withdraw of the validator rewards are loaded and the user has rewards to withdraw
     // the validator rewards are needed to filter the top 5 validators to withdraw from
     readyToWithdraw() {
@@ -134,8 +126,6 @@ export default {
     },
   },
   mounted() {
-    this.loadData(this)
-
     const persistedPreferredCurrency = this.session.preferredCurrency
     if (persistedPreferredCurrency) {
       this.preferredCurrency = persistedPreferredCurrency
@@ -159,17 +149,6 @@ export default {
     },
     sendRewards(totalRewards) {
       this.rewardsSentToGA = true
-    },
-    async loadData({ $axios, $cookies }) {
-      const address = $cookies.get('address')
-      const currency = $cookies.get('currency') || 'USD'
-      const store = {}
-      const api = new CosmosV2Source($axios, network, store, null, null)
-      const [balances, rewards] = await Promise.all([
-        api.getBalancesV2FromAddress(address, currency, network),
-        api.getRewards(address, currency, network),
-      ])
-      return Object.assign(this, { balances, rewards })
     },
   },
 }
