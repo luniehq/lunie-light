@@ -56,12 +56,11 @@ export default {
   mounted() {
     this.loadData(this)
   },
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, $cookies }) {
+    const address = $cookies.get('address')
     const store = {}
     const api = new CosmosV2Source($axios, network, store, null, null)
-    const undelegations = await api.getUndelegationsForDelegatorAddress(
-      params.address
-    )
+    const undelegations = await api.getUndelegationsForDelegatorAddress(address)
     return { undelegations }
   },
 }

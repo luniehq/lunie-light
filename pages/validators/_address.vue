@@ -239,16 +239,16 @@ export default {
     },
   },
 
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, $cookies }) {
+    const address = $cookies.get('address')
     const store = {}
     const api = new CosmosV2Source($axios, network, store, null, null)
     const [validator, delegations] = await Promise.all([
-      api.getValidator(params.address),
-      // this.address
-      //   ? api.getDelegationsForDelegatorAddress(this.address)
-      Promise.resolve([]),
+      api.getValidator(address),
+      address
+        ? api.getDelegationsForDelegatorAddress(address)
+        : Promise.resolve([]),
     ])
-    // this.loaded = true
     return { validator, delegations }
   },
 }
