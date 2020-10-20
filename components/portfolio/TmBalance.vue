@@ -77,6 +77,21 @@ export default {
   filters: {
     noBlanks,
   },
+  async asyncData({ $axios, $cookies, error }) {
+    try {
+      const address = $cookies.get('address')
+      const currency = $cookies.get('currency') || 'USD'
+      const store = {}
+      const api = new CosmosV2Source($axios, network, store, null, null)
+      const [balances, rewards] = await Promise.all([
+        api.getBalancesV2FromAddress(address, currency, network),
+        api.getRewards(address, currency, network),
+      ])
+      return { balances, rewards }
+    } catch (err) {
+      error(err)
+    }
+  },
   data() {
     return {
       balances: [],
@@ -145,32 +160,17 @@ export default {
     sendRewards(totalRewards) {
       this.rewardsSentToGA = true
     },
-    async loadData({ $axios, $route: { params } }) {
+    async loadData({ $axios, $cookies }) {
+      const address = $cookies.get('address')
+      const currency = $cookies.get('currency') || 'USD'
       const store = {}
       const api = new CosmosV2Source($axios, network, store, null, null)
       const [balances, rewards] = await Promise.all([
-        api.getBalancesV2FromAddress(
-          params.address,
-          'USD', // this.preferredCurrency,
-          network
-        ),
-        api.getRewards(params.address, 'USD', network),
+        api.getBalancesV2FromAddress(address, currency, network),
+        api.getRewards(address, currency, network),
       ])
       return Object.assign(this, { balances, rewards })
     },
-  },
-  async asyncData({ $axios, params }) {
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const [balances, rewards] = await Promise.all([
-      api.getBalancesV2FromAddress(
-        params.address,
-        'USD', // this.preferredCurrency,
-        network
-      ),
-      api.getRewards(params.address, 'USD', network),
-    ])
-    return { balances, rewards }
   },
 }
 </script>

@@ -14,7 +14,11 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['@/plugins/copy.client.js', '@/plugins/infinite-scroll.client.js'],
+  plugins: [
+    '@/plugins/copy.client.js',
+    '@/plugins/infinite-scroll.client.js',
+    '@/plugins/tooltip.client.js',
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -33,6 +37,8 @@ export default {
     '@nuxtjs/axios',
     // https://github.com/anteriovieira/nuxt-material-design-icons
     'nuxt-material-design-icons',
+    // https://github.com/microcipcip/cookie-universal/tree/master/packages/cookie-universal-nuxt#readme
+    'cookie-universal-nuxt',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)

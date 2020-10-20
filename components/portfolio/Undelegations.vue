@@ -43,6 +43,18 @@ export default {
     onWithdraw() {
       this.$refs.WithdrawModal.open()
     },
+    async loadData({ $axios, $cookies }) {
+      const address = $cookies.get('address')
+      const store = {}
+      const api = new CosmosV2Source($axios, network, store, null, null)
+      const undelegations = await api.getUndelegationsForDelegatorAddress(
+        address
+      )
+      return Object.assign(this, { undelegations })
+    },
+  },
+  mounted() {
+    this.loadData(this)
   },
   async asyncData({ $axios, params }) {
     const store = {}

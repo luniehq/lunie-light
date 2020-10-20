@@ -202,7 +202,7 @@ class CosmosV0API {
 
   async getAllValidators() {
     await this.dataReady
-    return this.store.validators
+    return Object.values(this.store.validators)
   }
 
   async loadValidors(height) {

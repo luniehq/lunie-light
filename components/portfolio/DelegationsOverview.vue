@@ -104,17 +104,15 @@ export default {
     openUnstakeModal() {
       this.$refs.UnstakeModal.open()
     },
-    async loadData({ $axios, $route: { params } }) {
+    async loadData({ $axios, $cookies }) {
+      const address = $cookies.get('address')
+      const currency = $cookies.get('currency') || 'USD'
       const store = {}
       const api = new CosmosV2Source($axios, network, store, null, null)
       const [delegations, balances, rewards] = await Promise.all([
-        api.getDelegationsForDelegatorAddress(params.address),
-        api.getBalancesV2FromAddress(
-          params.address,
-          'USD', // this.preferredCurrency,
-          network
-        ),
-        api.getRewards(params.address, 'USD', network),
+        api.getDelegationsForDelegatorAddress(address),
+        api.getBalancesV2FromAddress(address, currency, network),
+        api.getRewards(address, currency, network),
       ])
       return Object.assign(this, { delegations, balances, rewards })
     },

@@ -151,7 +151,7 @@
         </li>
       </ul>
 
-      <DelegationModal
+      <!-- <DelegationModal
         ref="delegationModal"
         :target-validator="validator"
         :is-nomination="true"
@@ -160,7 +160,7 @@
         ref="undelegationModal"
         :source-validator="validator"
         :is-unnomination="true"
-      />
+      /> -->
     </template>
   </TmPage>
 </template>
