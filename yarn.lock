@@ -1875,10 +1875,10 @@
   dependencies:
     "@wdio/utils" "6.6.3"
 
-"@wdio/reporter@6.6.0":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@wdio/reporter/-/reporter-6.6.0.tgz#900176a59fe275cbce41fca24de5879cf7c4c5fa"
-  integrity sha512-9qO1+3IGIr68IkgPoRoJBl+f2bnJKx/xKFKJhnLpzFLmc76tsQ35C9OAw+xZpwEb+j7sXGFLU7N8LDtN/ogFbQ==
+"@wdio/reporter@6.6.6":
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/@wdio/reporter/-/reporter-6.6.6.tgz#a94d96ee09a0178ade461c0dc139072155e7fd36"
+  integrity sha512-udCWCyMfNxAEyZutl0CYZwTeIFD9bgmu8+VJcZ5LDr+lbnpbW9OrYmvDfhKspm9jxfw0RbD/sV84UjIv2qierA==
   dependencies:
     fs-extra "^9.0.0"
 
@@ -1895,12 +1895,12 @@
     webdriver "6.6.3"
     webdriverio "6.6.7"
 
-"@wdio/spec-reporter@^6.4.7":
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/@wdio/spec-reporter/-/spec-reporter-6.6.0.tgz#ede1ed00cd29410e591fc977ccd387c9a6059656"
-  integrity sha512-JKeFsvVpG3LDfHDEHT/AAZgp8NafgTn7hwlSUBPQy9wiJv7HzbQp81Na1yNHhBIPQog+9VWcx1uIKphX+vSegg==
+"@wdio/spec-reporter@^6.6.8":
+  version "6.6.8"
+  resolved "https://registry.yarnpkg.com/@wdio/spec-reporter/-/spec-reporter-6.6.8.tgz#3366a5c2d59aa900899fd95e55128628af9b5b78"
+  integrity sha512-mqY0Xaj11wE6viGIk+I0id6JnyVA+GGAwOVom19JpvfpiuhpR0XMJpJ+mHZrAZhq+F+yLCESEEMEyI5Mq03jXg==
   dependencies:
-    "@wdio/reporter" "6.6.0"
+    "@wdio/reporter" "6.6.6"
     chalk "^4.0.0"
     easy-table "^1.1.1"
     pretty-ms "^7.0.0"
