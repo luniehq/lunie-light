@@ -27,234 +27,149 @@
           :steps="['Details', 'Fees', 'Sign']"
           :active-step="step"
         />
-        <p
-          v-if="
-            extension.enabled &&
-            !isExtensionAccount &&
-            step === signStep &&
-            selectedSignMethod === SIGN_METHODS.EXTENSION
-          "
-          class="form-message notice extension-address"
-        >
-          The address you are trying to send with is not available in the
-          extension.
+      </div>
+      <div v-if="requiresSignIn" class="action-modal-form">
+        <p class="form-message notice">
+          You're using Lunie in explore mode. Sign in or create an account to
+          get started.
         </p>
       </div>
-      <template v-if="!checkFeatureAvailable">
-        <FeatureNotAvailable :feature="title" />
-      </template>
-      <template v-else>
-        <div v-if="requiresSignIn" class="action-modal-form">
-          <p class="form-message notice">
-            You're using Lunie in explore mode. Sign in or create an account to
-            get started.
-          </p>
-        </div>
-        <div v-else-if="step === defaultStep" class="action-modal-form">
-          <slot />
-        </div>
-        <div v-else-if="step === feeStep" class="action-modal-form">
-          <TableInvoice
-            v-if="networkFeesLoaded"
-            :amount="Number(subTotal)"
-            :fee="networkFees.transactionFee"
-            :transaction-denom="getDenom"
-          />
-          <!-- <TmFormMsg
+      <div v-else-if="step === defaultStep" class="action-modal-form">
+        <slot />
+      </div>
+      <div v-else-if="step === feeStep" class="action-modal-form">
+        <TableInvoice
+          :amount="Number(subTotal)"
+          :fee="networkFee.fee"
+          :transaction-denom="getDenom"
+        />
+        <!-- <TmFormMsg
             type="custom"
             :msg="`You don't have enough ${selectedDenom}s to proceed.`"
           /> -->
-        </div>
-        <div v-else-if="step === signStep" class="action-modal-form">
+      </div>
+      <div v-else-if="step === signStep" class="action-modal-form">
+        <TmFormGroup
+          v-if="signMethods.length > 1"
+          class="action-modal-form-group"
+          field-id="sign-method"
+          field-label="Signing Method"
+        >
+          <TmField
+            id="sign-method"
+            v-model="selectedSignMethod"
+            :options="signMethods"
+            type="select"
+          />
+        </TmFormGroup>
+        <form
+          v-else-if="selectedSignMethod === SIGN_METHODS.LOCAL"
+          @submit.prevent="validateChangeStep"
+        >
           <TmFormGroup
-            v-if="signMethods.length > 1"
-            class="action-modal-form-group"
-            field-id="sign-method"
-            field-label="Signing Method"
+            class="action-modal-group"
+            field-id="password"
+            field-label="Password"
           >
             <TmField
-              id="sign-method"
-              v-model="selectedSignMethod"
-              :options="signMethods"
-              type="select"
+              id="password"
+              v-model="password"
+              v-focus
+              type="password"
+              placeholder="Password"
             />
-          </TmFormGroup>
-          <HardwareState
-            v-if="selectedSignMethod === SIGN_METHODS.LEDGER"
-            :icon="session.browserWithLedgerSupport ? 'usb' : 'info'"
-            :loading="!!sending"
-          >
-            <div v-if="session.browserWithLedgerSupport">
-              {{
-                sending
-                  ? `Please verify and sign the transaction on your Ledger`
-                  : `Please plug in your Ledger&nbsp;Nano and open
-              the Cosmos app`
-              }}
-            </div>
-            <div v-else>
-              Please use Chrome or Brave. Ledger is not supported in this
-              browser.
-            </div>
-          </HardwareState>
-          <HardwareState
-            v-else-if="selectedSignMethod === SIGN_METHODS.EXTENSION"
-            :icon="session.browserWithLedgerSupport ? 'laptop' : 'info'"
-            :loading="!!sending"
-          >
-            <div v-if="extension.enabled && !sending">
-              Please send the transaction to be signed in the Lunie Browser
-              Extension.
-            </div>
-            <div v-if="extension.enabled && sending">
-              Please open the Lunie Browser Extension, review the details, and
-              approve the transaction.
-            </div>
-            <div v-if="!extension.enabled">
-              Please install the Lunie Browser Extension from the
-              <a
-                href="http://bit.ly/lunie-ext"
-                target="_blank"
-                rel="noopener norefferer"
-                >Chrome Web Store</a
-              >.
-            </div>
-          </HardwareState>
-          <form
-            v-else-if="selectedSignMethod === SIGN_METHODS.LOCAL"
-            @submit.prevent="validateChangeStep"
-          >
-            <TmFormGroup
-              class="action-modal-group"
-              field-id="password"
-              field-label="Password"
-            >
-              <TmField
-                id="password"
-                v-model="password"
-                v-focus
-                type="password"
-                placeholder="Password"
-              />
-              <!-- <TmFormMsg
+            <!-- <TmFormMsg
                 name="Password"
                 type="required"
               /> -->
-            </TmFormGroup>
-          </form>
-        </div>
-        <div v-else-if="step === inclusionStep" class="action-modal-form">
-          <TmDataMsg icon="hourglass_empty" :spin="true">
-            <div slot="title">Sent and confirming</div>
-            <div slot="subtitle">
-              Waiting for confirmation from {{ networkId }}.
-            </div>
-          </TmDataMsg>
-        </div>
-        <div
-          v-else-if="step === successStep"
-          class="action-modal-form success-step"
-        >
-          <TmDataMsg icon="check" icon-color="var(--success)" :success="true">
-            <div slot="title">{{ notifyMessage.title }}</div>
-            <div slot="subtitle">
-              {{ notifyMessage.body }}
-              <br />
-              <br />
-              <router-link
-                :to="`/${$router.history.current.params.networkId}/transactions`"
-                >See your transaction</router-link
-              >
-            </div>
-          </TmDataMsg>
-        </div>
-        <p
-          v-if="submissionError"
-          class="tm-form-msg sm tm-form-msg--error submission-error"
-        >
-          {{ submissionError }}
-        </p>
-        <div class="action-modal-footer">
-          <slot name="action-modal-footer">
-            <TmFormGroup
-              v-if="[defaultStep, feeStep, signStep].includes(step)"
-              class="action-modal-group"
-            >
-              <TmBtn
-                id="closeBtn"
-                value="Cancel"
-                type="secondary"
-                @click.native="close"
-              />
-              <TmBtn
-                v-if="requiresSignIn"
-                v-focus
-                value="Sign In"
-                type="primary"
-                @click.native="goToSession"
-                @click.enter.native="goToSession"
-              />
-              <TmBtn
-                v-else-if="sending"
-                :value="submitButtonCaption"
-                disabled="disabled"
-                type="primary"
-              />
-              <TmBtn
-                v-else-if="step !== signStep"
-                ref="next"
-                type="primary"
-                value="Next"
-                :loading="step === feeStep && !networkFeesLoaded"
-                :disabled="
-                  disabled ||
-                  !balancesLoaded ||
-                  (step === feeStep && !networkFeesLoaded)
-                "
-                @click.native="validateChangeStep"
-              />
-              <TmBtn
-                v-else
-                type="primary"
-                value="Send"
-                :disabled="
-                  !selectedSignMethod ||
-                  (!extension.enabled && selectedSignMethod === 'extension')
-                "
-                @click.native="validateChangeStep"
-              />
-            </TmFormGroup>
-          </slot>
-        </div>
-      </template>
+          </TmFormGroup>
+        </form>
+      </div>
+      <div v-else-if="step === inclusionStep" class="action-modal-form">
+        <TmDataMsg icon="hourglass_empty" :spin="true">
+          <div slot="title">Sent and confirming</div>
+          <div slot="subtitle">
+            Waiting for confirmation from {{ network.name }}.
+          </div>
+        </TmDataMsg>
+      </div>
+      <div
+        v-else-if="step === successStep"
+        class="action-modal-form success-step"
+      >
+        <TmDataMsg icon="check" icon-color="var(--success)" :success="true">
+          <div slot="title">{{ notifyMessage.title }}</div>
+          <div slot="subtitle">
+            {{ notifyMessage.body }}
+            <br />
+            <br />
+            <router-link to="/transactions">See your transaction</router-link>
+          </div>
+        </TmDataMsg>
+      </div>
+      <p
+        v-if="submissionError"
+        class="tm-form-msg sm tm-form-msg--error submission-error"
+      >
+        {{ submissionError }}
+      </p>
+      <div class="action-modal-footer">
+        <slot name="action-modal-footer">
+          <TmFormGroup
+            v-if="[defaultStep, feeStep, signStep].includes(step)"
+            class="action-modal-group"
+          >
+            <TmBtn
+              id="closeBtn"
+              value="Cancel"
+              type="secondary"
+              @click.native="close"
+            />
+            <TmBtn
+              v-if="requiresSignIn"
+              v-focus
+              value="Sign In"
+              type="primary"
+              @click.native="goToSession"
+              @click.enter.native="goToSession"
+            />
+            <TmBtn
+              v-else-if="sending"
+              value="Sending..."
+              disabled="disabled"
+              type="primary"
+            />
+            <TmBtn
+              v-else-if="step !== signStep"
+              ref="next"
+              type="primary"
+              value="Next"
+              :loading="step === feeStep"
+              :disabled="disabled || !balancesLoaded || step === feeStep"
+              @click.native="validateChangeStep"
+            />
+            <TmBtn
+              v-else
+              type="primary"
+              value="Send"
+              @click.native="validateChangeStep"
+            />
+          </TmFormGroup>
+        </slot>
+      </div>
     </div>
   </transition>
 </template>
 
 <script>
-// import * as Sentry from '@sentry/browser'
 import BigNumber from 'bignumber.js'
-import { mapState, mapGetters } from 'vuex'
-// import HardwareState from 'src/components/common/TmHardwareState'
-// import TmBtn from 'src/components/common/TmBtn'
-// import TmField from 'src/components/common/TmField'
-// import TmFormGroup from 'src/components/common/TmFormGroup'
-// import TmFormMsg from 'src/components/common/TmFormMsg'
-// import FeatureNotAvailable from 'src/components/common/FeatureNotAvailable'
-// import TmDataMsg from 'src/components/common/TmDataMsg'
-// import TransactionManager from '../../signing/transaction-manager'
-// import { getPolkadotAPI } from '../../../../common/polkadotApiConnector'
-// import Steps from './Steps'
-// import TableInvoice from './TableInvoice'
-import { requiredIf } from 'vuelidate/lib/validators'
-import { prettyInt, SMALLEST } from '../../common/numbers'
-import { track, sendEvent } from '../../common/google-analytics'
-import network from '../../network'
-import config from '~/config'
+import { mapState } from 'vuex'
+// import { requiredIf } from 'vuelidate/lib/validators'
+import { prettyInt, SMALLEST } from '~/common/numbers'
+import network from '~/network'
+import fees from '~/fees'
 
 class TransactionManager {} // TODO
-
-const getPolkadotAPI = () => ({}) // TODO
 
 const defaultStep = `details`
 const feeStep = `fees`
@@ -264,51 +179,19 @@ const successStep = `success`
 
 const SIGN_METHODS = {
   LOCAL: `local`,
-  LEDGER: `ledger`,
-  EXTENSION: `extension`,
-}
-
-const signMethodOptions = {
-  LEDGER: {
-    key: `Ledger Nano`,
-    value: SIGN_METHODS.LEDGER,
-  },
-  EXTENSION: {
-    key: `Lunie Browser Extension`,
-    value: SIGN_METHODS.EXTENSION,
-  },
-  LOCAL: {
-    key: `Local Account (Unsafe)`,
-    value: SIGN_METHODS.LOCAL,
-  },
+  // LEDGER: `ledger`,
+  // EXTENSION: `extension`,
 }
 
 const sessionType = {
   EXPLORE: 'explore',
   LOCAL: SIGN_METHODS.LOCAL,
-  LEDGER: SIGN_METHODS.LEDGER,
-  EXTENSION: SIGN_METHODS.EXTENSION,
-}
-
-const networkCapabilityDictionary = {
-  true: 'ENABLED',
-  false: 'DISABLED',
-  null: 'MISSING',
+  // LEDGER: SIGN_METHODS.LEDGER,
+  // EXTENSION: SIGN_METHODS.EXTENSION,
 }
 
 export default {
   name: `action-modal`,
-  components: {
-    // HardwareState,
-    // TmBtn,
-    // TmField,
-    // TmFormGroup,
-    // TmFormMsg,
-    // TmDataMsg,
-    // TableInvoice,
-    // Steps,
-    // FeatureNotAvailable,
-  },
   filters: {
     prettyInt,
   },
@@ -364,11 +247,8 @@ export default {
   },
   data: () => ({
     step: defaultStep,
-    selectedSignMethod: null,
     password: null,
     sending: false,
-    networkFees: null,
-    gasEstimate: 0,
     submissionError: null,
     show: false,
     loaded: false,
@@ -379,41 +259,31 @@ export default {
     inclusionStep,
     successStep,
     SIGN_METHODS,
-    featureAvailable: true,
-    isMobileApp: config.mobileApp,
-    queueEmpty: true,
     includedHeight: undefined,
     smallestAmount: SMALLEST,
     balances: [],
     balancesLoaded: false,
-    networkFeesLoaded: false,
+    network,
   }),
   computed: {
-    ...mapState([`extension`, `session`]),
-    ...mapGetters([`isExtensionAccount`, `networks`, `currentNetwork`]),
-    ...mapGetters({ networkId: `network` }),
-    checkFeatureAvailable() {
-      const action = `action_` + this.featureFlag
-      // DEPRECATE to support the upgrade of the old Boolean value to the new ENUM capability model, we support here temporarily the upgrade from the Boolean model to the ENUM model
-      return typeof network[action] === `boolean` || network[action] === null
-        ? networkCapabilityDictionary[network[action]] === 'ENABLED'
-        : network[action] === 'ENABLED'
+    ...mapState(['session']),
+    networkFee() {
+      return fees[this.transactionData.type]
+    },
+    selectedSignMethod() {
+      return sessionType.LOCAL
     },
     requiresSignIn() {
-      return (
-        !this.session.signedIn ||
-        this.session.sessionType === sessionType.EXPLORE
-      )
+      return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
       return this.featureFlag === 'undelegate' ? 0 : this.amount
     },
     invoiceTotal() {
-      if (networkFeesLoaded) {
-        return Number(this.subTotal) + Number(networkFees.transactionFee.amount)
-      } else {
-        return 0
-      }
+      return (
+        Number(this.subTotal) +
+        Number(fees[this.transactionData.type].fee.amount)
+      )
     },
     isValidChildForm() {
       // here we trigger the validation of the child form
@@ -421,40 +291,6 @@ export default {
         return this.validate()
       }
       return true
-    },
-    signMethods() {
-      const signMethods = []
-      if (
-        config.development &&
-        this.session.sessionType === sessionType.EXPLORE
-      ) {
-        signMethods.push(signMethodOptions.LOCAL)
-      } else if (
-        this.isMobileApp &&
-        this.session.sessionType === sessionType.LOCAL
-      ) {
-        signMethods.push(signMethodOptions.LOCAL)
-      } else if (this.session.sessionType === sessionType.EXPLORE) {
-        signMethods.push(signMethodOptions.LEDGER)
-        signMethods.push(signMethodOptions.EXTENSION)
-      } else if (this.session.sessionType === sessionType.LEDGER) {
-        signMethods.push(signMethodOptions.LEDGER)
-      } else if (this.session.sessionType === sessionType.EXTENSION) {
-        signMethods.push(signMethodOptions.EXTENSION)
-      } else {
-        signMethods.push(signMethodOptions.LOCAL)
-      }
-      return signMethods
-    },
-    submitButtonCaption() {
-      switch (this.selectedSignMethod) {
-        case 'ledger':
-          return `Waiting for Ledger`
-        case 'extension':
-          return `Waiting for Extension`
-        default:
-          return 'Sending...'
-      }
     },
     getDenom() {
       return this.selectedDenom || network.stakingDenom
@@ -475,17 +311,6 @@ export default {
       return balance
     },
   },
-  watch: {
-    // if there is only one sign method, preselect it
-    signMethods: {
-      immediate: true,
-      handler(signMethods) {
-        if (signMethods.length === 1) {
-          this.selectedSignMethod = signMethods[0].value
-        }
-      },
-    },
-  },
   updated() {
     if (
       (this.title === 'Withdraw' || this.step === 'fees') &&
@@ -500,51 +325,25 @@ export default {
   methods: {
     confirmModalOpen() {
       let confirmResult = false
-      if (this.session.currrentModalOpen || !this.queueEmpty) {
+      if (this.currrentModalOpen) {
         confirmResult = window.confirm(
           'You are in the middle of creating a transaction. Are you sure you want to cancel this action and start a new one?'
         )
         if (confirmResult) {
-          if (this.queueEmpty) {
-            this.session.currrentModalOpen.close()
-          }
+          this.currrentModalOpen.close()
           this.$store.commit(`setCurrrentModalOpen`, false)
-          // clearing request query
-          this.transactionManager.cancel(
-            { userAddress: this.session.address, networkId: network.id },
-            this.selectedSignMethod
-          )
-          this.queueEmpty = true
         }
       }
     },
-    async open() {
-      // checking if there is something in a queue
-      const queue = await this.transactionManager.getSignQueue(
-        this.selectedSignMethod
-      )
-      if (queue) {
-        this.queueEmpty = false
-      }
+    open() {
       this.confirmModalOpen()
-      if (this.session.currrentModalOpen || !this.queueEmpty) {
+      if (this.currrentModalOpen) {
         return
       }
       this.$store.commit(`setCurrrentModalOpen`, this)
-      this.trackEvent(`event`, `modal`, this.title)
       this.show = true
-      if (this.session.sessionType === sessionType.EXTENSION) {
-        this.$store.dispatch(`getAddressesFromExtension`)
-      }
     },
     close() {
-      if (this.step === 'sign') {
-        // remove the request from any sign method to avoid orphaned transactions in the sign methods
-        this.transactionManager.cancel(
-          { userAddress: this.session.address, networkId: network.id },
-          this.selectedSignMethod
-        )
-      }
       this.$store.commit(`setCurrrentModalOpen`, false)
       this.submissionError = null
       this.password = null
@@ -552,7 +351,6 @@ export default {
       this.show = false
       this.sending = false
       this.includedHeight = undefined
-      networkFeesLoaded = false
 
       // reset form
       // in some cases $v is not yet set
@@ -561,18 +359,10 @@ export default {
       // }
       this.$emit(`close`)
     },
-    trackEvent(...args) {
-      track(...args)
-    },
-    sendEvent(customObject, ...args) {
-      sendEvent(customObject, ...args)
-    },
     goToSession() {
       this.close()
 
-      this.$store.dispatch(`signOut`, network)
-      if (this.$route.name !== `portfolio`)
-        this.$router.push({ name: 'portfolio' })
+      this.$router.push('/address')
     },
     // isValidInput(property) {
     //   this.$v[property].$touch()
@@ -628,38 +418,20 @@ export default {
         return
       }
 
-      this.trackEvent(`event`, `submit`, this.title, this.selectedSignMethod)
-
       const { type, memo, ...message } = this.transactionData
 
       try {
-        let transactionData
-        // Polkadot loads transaction data automatic
-        if (network.network_type === 'cosmos') {
-          transactionData = await this.transactionManager.getCosmosTransactionData(
-            {
-              memo,
-              gasEstimate: networkFees.gasEstimate,
-              // convert fee to chain values
-              fee: [networkFees.transactionFee],
-              senderAddress: this.session.address,
-              network,
-            }
-          )
-        }
-        let polkadotAPI
-        if (network.network_type === 'polkadot') {
-          transactionData = {
-            fee: {
-              amount: networkFees.transactionFee.amount,
-              denom: this.getDenom,
-            },
-            addressRole: this.session.addressRole,
+        const transactionData = await this.transactionManager.getCosmosTransactionData(
+          {
+            memo,
+            gasEstimate: this.networkFee.gasEstimate,
+            fee: [this.networkFee.fee],
+            senderAddress: this.address,
+            network,
           }
-          polkadotAPI = await getPolkadotAPI(network)
-        }
-        const HDPath = this.session.HDPath || network.defaultHDPath
-        const curve = this.session.curve || network.defaultCurve
+        )
+        const HDPath = network.HDPath
+        const curve = network.curve
 
         const hashResult = await this.transactionManager.createSignBroadcast({
           messageType: type,
@@ -669,7 +441,6 @@ export default {
           network,
           signingType: this.selectedSignMethod,
           password: this.password,
-          polkadotAPI,
           HDPath,
           curve,
         })
@@ -683,37 +454,9 @@ export default {
     },
     onTxIncluded() {
       this.step = successStep
-      this.trackEvent(
-        `event`,
-        `successful-submit`,
-        this.title,
-        this.selectedSignMethod
-      )
       this.$emit(`txIncluded`)
-      // sending to ga
-      this.sendEvent(
-        {
-          network: network.id,
-          address: this.session.address,
-        },
-        'Action',
-        'Modal',
-        this.featureFlag,
-        this.featureFlag === 'claim_rewards' &&
-          this.rewards &&
-          this.rewards.length > 0
-          ? this.rewards[0].amount
-          : this.amount
-      )
     },
     onSendingFailed(error) {
-      /* istanbul ignore next */
-      // Sentry.withScope((scope) => {
-      //   scope.setExtra('signMethod', this.selectedSignMethod)
-      //   scope.setExtra('transactionData', this.transactionData)
-      //   scope.setExtra('gasEstimate', networkFees.gasEstimate)
-      //   Sentry.captureException(error)
-      // })
       this.step = signStep
       this.submissionError = `${this.submissionErrorPrefix}: ${error.message}.`
       this.trackEvent(`event`, `failed-submit`, this.title, error.message)
@@ -722,24 +465,24 @@ export default {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
   },
-  validations() {
-    return {
-      password: {
-        required: requiredIf(
-          () =>
-            this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-            this.step === signStep
-        ),
-      },
-      invoiceTotal: {
-        max: (x) =>
-          networkFeesLoaded &&
-          networkFees.transactionFee.denom !== this.selectedDenom
-            ? true
-            : Number(x) <= this.selectedBalance.amount,
-      },
-    }
-  },
+  // validations() {
+  //   return {
+  //     password: {
+  //       required: requiredIf(
+  //         () =>
+  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+  //           this.step === signStep
+  //       ),
+  //     },
+  //     invoiceTotal: {
+  //       max: (x) =>
+  //         networkFeesLoaded &&
+  //         networkFees.transactionFee.denom !== this.selectedDenom
+  //           ? true
+  //           : Number(x) <= this.selectedBalance.amount,
+  //     },
+  //   }
+  // },
 }
 </script>
 

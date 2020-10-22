@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <CardSignInRequired v-if="signInRequired && !address" />
+    <CardSignInRequired v-if="signInRequired && !session" />
 
     <TmDataLoading v-if="loading && !loaderPath" />
     <template v-if="loading && loaderPath" class="loading-image-container">
@@ -32,7 +32,7 @@ import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
   computed: {
-    ...mapState(['address']),
+    ...mapState(['session']),
   },
   props: {
     loading: {
@@ -68,8 +68,8 @@ export default {
     address: undefined,
   }),
   mounted() {
-    const address = this.$cookies.get('address')
-    this.$store.dispatch('signIn', address)
+    const session = this.$cookies.get('session')
+    this.$store.dispatch('signIn', session)
   },
 }
 </script>

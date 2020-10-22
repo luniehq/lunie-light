@@ -80,7 +80,10 @@ export default {
           network.HDPath,
           network.curve
         )
-        this.$store.dispatch('signIn', wallet.cosmosAddress)
+        this.$store.dispatch('signIn', {
+          address: wallet.cosmosAddress,
+          type: 'local',
+        })
         this.$router.push({
           name: 'portfolio',
         })

@@ -75,7 +75,10 @@ export default {
 
       try {
         testPassword(this.address, this.password)
-        this.$store.dispatch('signIn', this.address)
+        this.$store.dispatch('signIn', {
+          address: this.address,
+          type: 'local',
+        })
         this.$router.push('/portfolio')
       } catch (err) {
         this.loading = false

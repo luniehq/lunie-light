@@ -53,9 +53,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import CosmosV2Source from '../../common/cosmosV2-source'
-import network from '../../network'
+import CosmosV2Source from '~/common/cosmosV2-source'
+import network from '~/network'
 
 export default {
   name: `page-validators`,
@@ -69,7 +68,6 @@ export default {
     showMobileSorting: false,
   }),
   computed: {
-    ...mapState([`address`]),
     filteredValidators() {
       if (this.searchTerm) {
         return this.sortedValidators.filter(({ name, operatorAddress }) => {
@@ -94,7 +92,9 @@ export default {
   },
 
   async asyncData({ $axios, store }) {
-    const address = store.state.address
+    const address = store.state.session
+      ? store.state.session.address
+      : undefined
     const _store = {}
     const api = new CosmosV2Source($axios, network, _store, null, null)
     const [validators, delegations] = await Promise.all([

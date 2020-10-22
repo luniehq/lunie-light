@@ -49,7 +49,10 @@ export default {
       // this.$v.$touch()
       // if (this.$v.$error) return
 
-      this.$store.dispatch('signIn', this.address)
+      this.$store.dispatch('signIn', {
+        address: this.address,
+        type: 'explore',
+      })
       this.$router.push('/portfolio')
     },
   },

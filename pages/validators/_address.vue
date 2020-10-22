@@ -189,7 +189,9 @@ export default {
     },
   },
   async asyncData({ $axios, params, store }) {
-    const address = store.state.address
+    const address = store.state.session
+      ? store.state.session.address
+      : undefined
     const _store = {}
     const api = new CosmosV2Source($axios, network, _store, null, null)
     const [validator, delegations] = await Promise.all([

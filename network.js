@@ -1,5 +1,6 @@
 export default {
   id: 'cosmos-hub-mainnet',
+  name: 'Cosmos Hub',
   api_url: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
   coinLookup: [

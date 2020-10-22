@@ -143,37 +143,16 @@
 <script>
 // import { required, decimal, maxLength } from 'vuelidate/lib/validators'
 import { mapGetters } from 'vuex'
-// import TmFormGroup from 'src/components/common/TmFormGroup'
-// import TmField from 'src/components/common/TmField'
-// import TmFieldGroup from 'src/components/common/TmFieldGroup'
-// import TmBtn from 'src/components/common/TmBtn'
-// import TmFormMsg from 'src/components/common/TmFormMsg'
-// import ActionModal from './ActionModal'
 import BigNumber from 'bignumber.js'
-import { SMALLEST } from '../../common/numbers'
-import b32 from '../../common/b32'
-import { formatAddress } from '../../common/address'
-import { lunieMessageTypes } from '../../common/lunie-message-types'
-import network from '../../network'
-import config from '~/config'
+import { SMALLEST } from '~/common/numbers'
+import { formatAddress, decodeB32 } from '~/common/address'
+import { lunieMessageTypes } from '~/common/lunie-message-types'
+import network from '~/network'
 
 const defaultMemo = ''
 
-// const isPolkadotAddress = (address) => {
-//   const polkadotRegexp = /^(([0-9a-zA-Z]{47})|([0-9a-zA-Z]{48}))$/
-//   return polkadotRegexp.test(address)
-// }
-
 export default {
   name: `send-modal`,
-  components: {
-    // TmField,
-    // TmFieldGroup,
-    // TmFormGroup,
-    // TmFormMsg,
-    // ActionModal,
-    // TmBtn,
-  },
   props: {
     denoms: {
       type: Array,
@@ -182,7 +161,7 @@ export default {
   },
   data: () => ({
     address: ``,
-    amount: config.development ? 0.000001 : null, // dev life, hard life > make simple
+    amount: null,
     memo: defaultMemo,
     max_memo_characters: 256,
     isFirstLoad: true,
@@ -193,7 +172,6 @@ export default {
     networkFeesLoaded: false,
   }),
   computed: {
-    ...mapGetters([`network`, `networks`, `stakingDenom`]),
     ...mapGetters({ userAddress: `address` }),
     selectedBalance() {
       return (
@@ -275,7 +253,7 @@ export default {
 
       // in case the account has no balances we will display the staking denom received from the denom query
       if (balances.length === 0) {
-        this.selectedToken = this.stakingDenom
+        this.selectedToken = network.stakingDenom
       } else {
         this.selectedToken = balances[0].denom
       }
@@ -289,7 +267,7 @@ export default {
         this.selectedToken =
           this.balances && this.balances.length > 0
             ? this.balances[0].denom
-            : this.stakingDenom
+            : network.stakingDenom
       }
       this.$refs.actionModal.open()
     },
@@ -326,7 +304,7 @@ export default {
     },
     bech32Validate(param) {
       try {
-        b32.decode(param)
+        decodeB32(param)
         return true
       } catch (error) {
         return false
