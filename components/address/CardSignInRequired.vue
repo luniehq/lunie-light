@@ -35,28 +35,32 @@
           title="Recover with backup code"
           route="/recover"
         />
+        <span class="footnote" @click="signOut">
+          Continue without address
+        </span>
       </div>
     </div>
   </SessionFrame>
 </template>
 
 <script>
+import { getWalletIndex } from '@lunie/cosmos-keys'
+
 export default {
   name: `card-sign-in-required`,
   data: () => ({
     loaded: false,
   }),
   computed: {
-    // ...mapState([`keystore`]),
     accountExists() {
-      return false
-      // return this.keystore && this.keystore.accounts.length > 0
+      return getWalletIndex().length > 0
     },
   },
-  created() {
-    // this.$store.dispatch('loadLocalAccounts').then(() => {
-    //   this.loaded = true
-    // })
+  methods: {
+    signOut() {
+      this.$cookies.remove('address')
+      this.$router.push('/validators')
+    },
   },
 }
 </script>
@@ -76,6 +80,7 @@ h3 {
   padding-left: 1.5rem;
   font-size: 12px;
   color: var(--link);
+  cursor: pointer;
 }
 
 .card-sign-in {
