@@ -1,10 +1,6 @@
 <template>
   <div class="sidebar-bottom">
-    <div
-      v-if="!block.chainId"
-      id="tm-connected-network"
-      class="tm-connected-network"
-    >
+    <div v-if="block" id="tm-connected-network" class="tm-connected-network">
       <div class="tm-connected-network__connection">
         <div id="tm-connected-network__icon" class="tm-connected-network__icon">
           <span
@@ -76,15 +72,14 @@ export default {
   filters: {
     prettyInt,
   },
-  async asyncData({ $axios }) {
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const block = await api.getBlockV2()
-    return { block }
-  },
-  data: () => ({
-    block: {},
-  }),
+  data: () => ({ block: undefined }),
+  // TODO doesn't work as not a page
+  // async asyncData({ $axios }) {
+  //   const store = {}
+  //   const api = new CosmosV2Source($axios, network, store, null, null)
+  //   const block = await api.getBlockV2()
+  //   return { block }
+  // },
   computed: {
     networkTooltip() {
       return this.block
@@ -93,6 +88,7 @@ export default {
     },
   },
   mounted() {
+    if (!this.block) this.loadBlock()
     setInterval(() => {
       this.loadBlock()
     }, 10000)
