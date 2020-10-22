@@ -23,7 +23,7 @@
       <slot></slot>
       <TmDataLoading v-if="!loading && loadingMore" />
     </template>
-    <!-- <slot v-if="session.signedIn" name="signInRequired"></slot> -->
+    <slot v-if="address" name="signInRequired"></slot>
   </div>
 </template>
 
@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  mounted() {
+    const address = this.$cookies.get('address')
+    this.$store.dispatch('signIn', address)
   },
 }
 </script>
