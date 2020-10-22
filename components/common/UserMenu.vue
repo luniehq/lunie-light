@@ -3,7 +3,7 @@
     <UserMenuAddress :address="session ? session.address : undefined" />
     <TmBtn
       type="secondary"
-      :value="address ? 'Change Address' : 'View Address'"
+      :value="session ? 'Change Address' : 'View Address'"
       @click.native="$router.push('/address')"
     />
   </div>

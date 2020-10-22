@@ -19,11 +19,7 @@
         </div>
         <span class="action-modal-title">{{ title }}</span>
         <Steps
-          v-if="
-            [defaultStep, feeStep, signStep].includes(step) &&
-            checkFeatureAvailable &&
-            !isMobileApp
-          "
+          v-if="[defaultStep, feeStep, signStep].includes(step)"
           :steps="['Details', 'Fees', 'Sign']"
           :active-step="step"
         />
@@ -227,10 +223,6 @@ export default {
         body: `You have successfully completed a transaction.`,
       }),
     },
-    featureFlag: {
-      type: String,
-      default: ``,
-    },
     // disable proceeding from the first page
     disabled: {
       type: Boolean,
@@ -266,7 +258,7 @@ export default {
     network,
   }),
   computed: {
-    ...mapState(['session']),
+    ...mapState(['session', 'currrentModalOpen']),
     networkFee() {
       return fees[this.transactionData.type]
     },
@@ -277,7 +269,7 @@ export default {
       return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
-      return this.featureFlag === 'undelegate' ? 0 : this.amount
+      return this.transactionType === 'UnstakeTx' ? 0 : this.amount
     },
     invoiceTotal() {
       return (
@@ -336,11 +328,12 @@ export default {
       }
     },
     open() {
-      this.confirmModalOpen()
-      if (this.currrentModalOpen) {
-        return
-      }
-      this.$store.commit(`setCurrrentModalOpen`, this)
+      // TODO creates weird loop
+      // this.confirmModalOpen()
+      // if (this.currrentModalOpen) {
+      //   return
+      // }
+      // this.$store.commit(`setCurrrentModalOpen`, this)
       this.show = true
     },
     close() {

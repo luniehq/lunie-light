@@ -23,7 +23,7 @@
       <slot></slot>
       <TmDataLoading v-if="!loading && loadingMore" />
     </template>
-    <slot v-if="address" name="signInRequired"></slot>
+    <slot v-if="session" name="signInRequired"></slot>
   </div>
 </template>
 
@@ -64,11 +64,8 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-    address: undefined,
-  }),
   mounted() {
-    const session = this.$cookies.get('session')
+    const session = this.$cookies.get('lunie-session')
     this.$store.dispatch('signIn', session)
   },
 }

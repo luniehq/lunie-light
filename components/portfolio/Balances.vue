@@ -60,9 +60,9 @@
       />
 
       <SendModal ref="SendModal" :denoms="getAllDenoms" />
-      <ModalWithdrawRewards ref="ModalWithdrawRewards" />
+      <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
       <StakeModal ref="StakeModal" />
-      <UnstakeModal ref="UnstakeModal" />
+      <UnstakeModal ref="UnstakeModal" /> -->
     </div>
   </div>
 </template>
@@ -126,10 +126,10 @@ export default {
     },
   },
   mounted() {
-    const persistedPreferredCurrency = this.session.preferredCurrency
-    if (persistedPreferredCurrency) {
-      this.preferredCurrency = persistedPreferredCurrency
-    }
+    // const persistedPreferredCurrency = this.session.preferredCurrency
+    // if (persistedPreferredCurrency) {
+    //   this.preferredCurrency = persistedPreferredCurrency
+    // }
   },
   methods: {
     onWithdrawal() {

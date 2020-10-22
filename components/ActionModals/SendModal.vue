@@ -10,8 +10,6 @@
     :transaction-data="transactionData"
     :selected-denom="selectedToken"
     :notify-message="notifyMessage"
-    feature-flag="send"
-    :disabled="sendingNgm"
     @close="clear"
     @txIncluded="onSuccess"
   >
@@ -130,11 +128,6 @@
         name="Memo"
         type="maxLength"
         :max="max_memo_characters"
-      />
-      <TmFormMsg
-        v-if="sendingNgm"
-        type="custom"
-        msg="Sending NGM is currently disabled."
       /> -->
     </TmFormGroup>
   </ActionModal>
@@ -142,7 +135,7 @@
 
 <script>
 // import { required, decimal, maxLength } from 'vuelidate/lib/validators'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'
 import { SMALLEST } from '~/common/numbers'
 import { formatAddress, decodeB32 } from '~/common/address'
@@ -172,7 +165,7 @@ export default {
     networkFeesLoaded: false,
   }),
   computed: {
-    ...mapGetters({ userAddress: `address` }),
+    ...mapState([`session`]),
     selectedBalance() {
       return (
         this.balances.find(({ denom }) => denom === this.selectedToken) || {
@@ -181,13 +174,13 @@ export default {
       )
     },
     transactionData() {
-      if (isNaN(this.amount) || !this.address || !this.selectedToken) {
+      if (isNaN(this.amount) || !this.session || !this.selectedToken) {
         return {}
       }
       return {
         type: lunieMessageTypes.SEND,
         to: [this.address],
-        from: [this.userAddress],
+        from: [this.session.address],
         amount: {
           amount: this.amount,
           denom: this.selectedToken,
@@ -207,23 +200,6 @@ export default {
       return this.denoms
         ? this.denoms.map((denom) => (denom = { key: denom, value: denom }))
         : []
-    },
-    sendingNgm() {
-      const whitelistedAccount = [
-        'emoney1cs4323dyzu0wxfj4vc62m8q3xsczfavqx9x3zd',
-        'emoney147verqcxwdkgrn663x2qj66zyqc5mu479afw9n',
-        'emoney14r5rva8qk5ee6rvk5sdtmxea40uf74k7uh4yjv',
-        'emoney1s73cel9vxllx700eaeuqr70663w5f0twzcks3l',
-        'emoney1uae5c48qjdc9psfzkwvre0shm9z8wlsfnse2nz',
-      ]
-      return (
-        this.selectedToken === 'NGM' &&
-        network.id === 'emoney-mainnet' &&
-        !(
-          whitelistedAccount.includes(this.userAddress) ||
-          whitelistedAccount.includes(this.address)
-        )
-      )
     },
     // TODO: maxAmount should be handled from ActionModal
     maxAmount() {
@@ -274,11 +250,10 @@ export default {
     onSuccess(event) {
       this.$emit(`success`, event)
     },
-    // validateForm() {
-    //   this.$v.$touch()
-
-    //   return !this.$v.$invalid
-    // },
+    validateForm() {
+      // this.$v.$touch()
+      // return !this.$v.$invalid
+    },
     clear() {
       // this.$v.$reset()
 
