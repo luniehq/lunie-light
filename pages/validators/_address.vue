@@ -166,7 +166,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { shortDecimals, fullDecimals, percent } from '../../common/numbers'
 import { noBlanks } from '../../common/strings'
 import { fromNow } from '../../common/time'
@@ -189,6 +188,18 @@ export default {
       default: () => 'returns',
     },
   },
+  async asyncData({ $axios, $cookies, params }) {
+    const address = $cookies.get('address')
+    const store = {}
+    const api = new CosmosV2Source($axios, network, store, null, null)
+    const [validator, delegations] = await Promise.all([
+      api.getValidator(params.address),
+      address
+        ? api.getDelegationsForDelegatorAddress(address)
+        : Promise.resolve([]),
+    ])
+    return { validator, delegations }
+  },
   data: () => ({
     validator: {},
     rewards: 0,
@@ -200,7 +211,6 @@ export default {
     delegations: [],
   }),
   computed: {
-    ...mapState([`address`]),
     hasDelegation() {
       return !!this.delegations.find(
         (delegation) =>
@@ -237,19 +247,6 @@ export default {
           : 0
       }
     },
-  },
-
-  async asyncData({ $axios, $cookies }) {
-    const address = $cookies.get('address')
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const [validator, delegations] = await Promise.all([
-      api.getValidator(address),
-      address
-        ? api.getDelegationsForDelegatorAddress(address)
-        : Promise.resolve([]),
-    ])
-    return { validator, delegations }
   },
 }
 </script>

@@ -1,13 +1,14 @@
 <template>
   <TmPage :sign-in-required="true">
-    <!-- <template slot="signInRequired"> -->
-    <Balances :balances="balances" :rewards="rewards" />
-    <DelegationsOverview
-      :balances="balances"
-      :rewards="rewards"
-      :delegations="delegations"
-    />
-    <Undelegations :undelegations="undelegations" />
+    <template slot="signInRequired">
+      <Balances :balances="balances" :rewards="rewards" />
+      <DelegationsOverview
+        :balances="balances"
+        :rewards="rewards"
+        :delegations="delegations"
+      />
+      <Undelegations :undelegations="undelegations" />
+    </template>
   </TmPage>
 </template>
 
@@ -17,9 +18,17 @@ import CosmosV2Source from '~/common/cosmosV2-source'
 
 export default {
   name: `page-portfolio`,
+  data: () => ({
+    delegations: [],
+    balances: [],
+    rewards: [],
+    undelegations: [],
+  }),
   async asyncData({ $axios, $cookies }) {
     const address = $cookies.get('address')
     const currency = $cookies.get('currency') || 'USD'
+    if (!address) return {}
+
     const store = {}
     const api = new CosmosV2Source($axios, network, store, null, null)
     const [delegations, balances, rewards, undelegations] = await Promise.all([

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <!-- <CardSignInRequired v-if="signInRequired && !session.signedIn" /> -->
+    <CardSignInRequired v-if="signInRequired && !address" />
 
     <TmDataLoading v-if="loading && !loaderPath" />
     <template v-if="loading && loaderPath" class="loading-image-container">
@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: `tm-page`,
-  components: {},
+  data: () => ({
+    address: undefined,
+  }),
   props: {
     loading: {
       type: Boolean,
@@ -63,8 +63,13 @@ export default {
       default: false,
     },
   },
-  computed: {
-    ...mapState([`session`]),
+  mounted() {
+    this.addressInterval = setInterval(() => {
+      this.address = this.$cookies.get('address')
+    }, 500)
+  },
+  destroyed() {
+    clearInterval(this.addressInterval)
   },
 }
 </script>

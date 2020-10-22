@@ -1,70 +1,70 @@
 <template>
-  <nuxt-link no-prefetch :to="`/validators/${validator.operatorAddress}`">
-    <tr class="li-validator" :data-name="validator.name">
-      <td>{{ index + 1 }}</td>
-      <td class="hide-xs">
-        <div class="status-container">
-          <span
-            :class="validator.status | toLower"
-            class="validator-status"
-            :title="validator.statusDetailed"
+  <tr
+    class="li-validator"
+    :data-name="validator.name"
+    @click="$router.push(`/validators/${validator.operatorAddress}`)"
+  >
+    <td>{{ index + 1 }}</td>
+    <td class="hide-xs">
+      <div class="status-container">
+        <span
+          :class="validator.status | toLower"
+          class="validator-status"
+          :title="validator.statusDetailed"
+        >
+          {{ validator.status }}
+        </span>
+      </div>
+    </td>
+    <td class="data-table__row__info">
+      <Avatar
+        v-if="!validator || !validator.picture || validator.picture === 'null'"
+        class="li-validator-image"
+        alt="generic validator logo - generated avatar from address"
+        :address="validator.operatorAddress"
+      />
+      <img
+        v-else-if="validator && validator.picture"
+        :src="validator.picture"
+        class="li-validator-image"
+        :alt="`validator logo for ` + validator.name"
+      />
+      <div class="validator-info">
+        <h3 class="li-validator-name">
+          {{ validator.name }}
+        </h3>
+        <div v-if="delegation.amount > 0">
+          <h4>
+            {{ delegation.amount | bigFigureOrShortDecimals }}
+          </h4>
+          <h5
+            v-if="
+              rewards.find(
+                (reward) =>
+                  reward.denom === stakingDenom && reward.amount > 0.001
+              )
+            "
           >
-            {{ validator.status }}
-          </span>
-        </div>
-      </td>
-      <td class="data-table__row__info">
-        <Avatar
-          v-if="
-            !validator || !validator.picture || validator.picture === 'null'
-          "
-          class="li-validator-image"
-          alt="generic validator logo - generated avatar from address"
-          :address="validator.operatorAddress"
-        />
-        <img
-          v-else-if="validator && validator.picture"
-          :src="validator.picture"
-          class="li-validator-image"
-          :alt="`validator logo for ` + validator.name"
-        />
-        <div class="validator-info">
-          <h3 class="li-validator-name">
-            {{ validator.name }}
-          </h3>
-          <div v-if="delegation.amount > 0">
-            <h4>
-              {{ delegation.amount | bigFigureOrShortDecimals }}
-            </h4>
-            <h5
-              v-if="
-                rewards.find(
-                  (reward) =>
-                    reward.denom === stakingDenom && reward.amount > 0.001
-                )
-              "
+            <span
+              >+{{
+                filterStakingDenomReward() | bigFigureOrShortDecimals
+              }}</span
             >
-              <span
-                >+{{
-                  filterStakingDenomReward() | bigFigureOrShortDecimals
-                }}</span
-              >
-            </h5>
-          </div>
+          </h5>
         </div>
-      </td>
-      <td :class="{ 'hide-xs': showOnMobile !== 'expectedReturns' }">
-        {{
-          validator.expectedReturns
-            ? bigFigureOrPercent(validator.expectedReturns)
-            : `--`
-        }}
-      </td>
-      <td :class="{ 'hide-xs': showOnMobile !== 'voting-power' }">
-        {{ validator.votingPower | bigFigureOrPercent }}
-      </td>
-    </tr>
-  </nuxt-link>
+      </div>
+    </td>
+    <td :class="{ 'hide-xs': showOnMobile !== 'expectedReturns' }">
+      {{
+        validator.expectedReturns
+          ? bigFigureOrPercent(validator.expectedReturns)
+          : `--`
+      }}
+    </td>
+    <td :class="{ 'hide-xs': showOnMobile !== 'voting-power' }">
+      {{ validator.votingPower | bigFigureOrPercent }}
+    </td>
+  </tr>
 </template>
 
 <script>

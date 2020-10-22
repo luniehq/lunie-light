@@ -4,11 +4,6 @@
       class="menu-address"
       :address="address || ''"
       tooltip-text="Your Address"
-      :address-type="
-        ['stash', 'controller'].includes(session.addressRole)
-          ? capitalizeFirstLetter(session.addressRole)
-          : undefined
-      "
     />
     <!-- <div
       v-if="!session.isMobile && session.sessionType === 'ledger'"
@@ -26,21 +21,20 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex'
 // import { showAddressOnLedger } from 'scripts/ledger'
-import { capitalizeFirstLetter } from '../../common/strings'
 export default {
   name: `user-menu-address`,
+  props: {
+    address: {
+      type: String,
+      default: undefined,
+    },
+  },
   data: () => ({
     ledgerAddressError: undefined,
     // showAddressOnLedgerFn: showAddressOnLedger,
   }),
-  computed: {
-    ...mapState([`session`]),
-    ...mapGetters([`address`, `currentNetwork`]),
-  },
   methods: {
-    capitalizeFirstLetter,
     // async showAddressOnLedger() {
     //   if (this.messageTimeout) {
     //     clearTimeout(this.messageTimeout)

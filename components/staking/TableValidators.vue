@@ -3,18 +3,6 @@
     <transition name="fade">
       <ul v-if="showMobileSorting" class="sortingOptions">
         <li
-          :class="{ active: isSortedBy(`popularity`) }"
-          @click="sortBy(`popularity`)"
-        >
-          <i class="sorting-icon material-icons notranslate">star_rate</i>
-          Popular on Lunie
-          <i
-            :class="{ inactive: !isSortedBy(`popularity`) }"
-            class="sorting-check material-icons notranslate"
-            >check</i
-          >
-        </li>
-        <li
           :class="{ active: isSortedBy(`votingPower`) }"
           @click="sortBy(`votingPower`)"
         >

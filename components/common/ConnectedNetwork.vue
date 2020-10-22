@@ -93,17 +93,20 @@ export default {
     },
   },
   mounted() {
-    setInterval(async () => {
-      const store = {}
-      const api = new CosmosV2Source(this.$axios, network, store, null, null)
-      const block = await api.getBlockV2()
-      this.block = block
+    setInterval(() => {
+      this.loadBlock()
     }, 10000)
   },
   methods: {
     handleClick() {
       this.$emit(`close-menu`)
       window.scrollTo(0, 0)
+    },
+    async loadBlock() {
+      const store = {}
+      const api = new CosmosV2Source(this.$axios, network, store, null, null)
+      const block = await api.getBlockV2()
+      this.block = block
     },
   },
 }
