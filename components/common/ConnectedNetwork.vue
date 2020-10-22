@@ -93,7 +93,6 @@ export default {
     },
   },
   mounted() {
-    this.loadBlock()
     setInterval(() => {
       this.loadBlock()
     }, 10000)
