@@ -28,11 +28,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
-  data: () => ({
-    address: undefined,
-  }),
+  computed: {
+    ...mapState(['address']),
+  },
   props: {
     loading: {
       type: Boolean,
@@ -62,14 +63,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  mounted() {
-    this.addressInterval = setInterval(() => {
-      this.address = this.$cookies.get('address')
-    }, 500)
-  },
-  destroyed() {
-    clearInterval(this.addressInterval)
   },
 }
 </script>

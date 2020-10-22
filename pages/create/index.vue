@@ -67,7 +67,7 @@ export default {
           network.HDPath,
           network.curve
         )
-        this.$cookies.set('address', wallet.cosmosAddress)
+        this.$store.dispatch('signIn', wallet.cosmosAddress)
         this.$router.push({
           name: 'portfolio',
         })
