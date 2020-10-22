@@ -10,7 +10,6 @@ export const mutations = {
 }
 
 export const actions = {
-  // TODO check if needed as store.state.address in asyncData is empty anyways
   nuxtServerInit({ commit }, { app: { $cookies } }) {
     const address = $cookies.get('address')
     commit('setAddress', address)

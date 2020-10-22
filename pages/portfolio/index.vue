@@ -24,13 +24,13 @@ export default {
     rewards: [],
     undelegations: [],
   }),
-  async asyncData({ $axios, $cookies }) {
-    const address = $cookies.get('address')
-    const currency = $cookies.get('currency') || 'USD'
+  async asyncData({ $axios, $cookies, store }) {
+    const address = store.state.address
+    const currency = $cookies.get('currency') || 'USD' // TODO move to store
     if (!address) return {}
 
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
+    const _store = {}
+    const api = new CosmosV2Source($axios, network, _store, null, null)
     const [delegations, balances, rewards, undelegations] = await Promise.all([
       api.getDelegationsForDelegatorAddress(address),
       api.getBalancesV2FromAddress(address, currency, network),
