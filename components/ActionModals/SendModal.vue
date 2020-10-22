@@ -154,6 +154,7 @@ import { SMALLEST } from '../../common/numbers'
 import b32 from '../../common/b32'
 import { formatAddress } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
+import network from '../../network'
 import config from '~/config'
 
 const defaultMemo = ''
@@ -239,7 +240,7 @@ export default {
       ]
       return (
         this.selectedToken === 'NGM' &&
-        this.network === 'emoney-mainnet' &&
+        network.id === 'emoney-mainnet' &&
         !(
           whitelistedAccount.includes(this.userAddress) ||
           whitelistedAccount.includes(this.address)

@@ -67,7 +67,7 @@
       />
     </TmFormGroup>
     <TmFormGroup
-      v-if="currentNetwork.network_type !== 'polkadot'"
+      v-if="network.network_type !== 'polkadot'"
       class="action-modal-form-group"
       field-id="to"
       field-label="To"
@@ -87,7 +87,7 @@
     </TmFormGroup>
     <TmFormGroup
       v-if="
-        currentNetwork.network_type === `polkadot`
+        network.network_type === `polkadot`
           ? !isUnnomination && session.addressRole !== `stash`
           : true
       "
@@ -158,9 +158,10 @@ import { SMALLEST } from '../../common/numbers'
 // import ActionModal from './ActionModal'
 import { formatAddress, validatorEntry } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
+import network from '../../network'
 
 export default {
-  name: `undelegation-modal`,
+  name: `unstake-modal`,
   components: {
     // ActionModal,
     // TmField,
@@ -199,7 +200,7 @@ export default {
     ...mapState([`session`]),
     ...mapGetters([`network`, `address`, `stakingDenom`, `currentNetwork`]),
     maximum() {
-      if (this.currentNetwork.network_type === `polkadot`) {
+      if (network.network_type === `polkadot`) {
         const totalStaked = this.balance.total - this.balance.available
         return totalStaked.toFixed(6) || 0
       } else {
@@ -234,7 +235,7 @@ export default {
         if (
           isNaN(this.amount) ||
           (!this.sourceValidator.operatorAddress &&
-            this.currentNetwork.network_type !== `polkadot`) ||
+            network.network_type !== `polkadot`) ||
           !this.stakingDenom
         ) {
           return {}
@@ -320,7 +321,7 @@ export default {
       return this.toSelectedIndex !== `0`
     },
     undelegationPeriod() {
-      return this.currentNetwork.lockUpPeriod
+      return network.lockUpPeriod
     },
     enhancedSourceValidator() {
       return validatorEntry(this.sourceValidator)
@@ -334,7 +335,7 @@ export default {
           // stash accounts can't do anything else but unbond so we make it required
           // none accounts can't access this modal
           if (
-            this.currentNetwork.network_type === 'polkadot' &&
+            network.network_type === 'polkadot' &&
             ['controller', 'stash/controller'].includes(
               this.session.addressRole
             )
@@ -348,7 +349,7 @@ export default {
         min: (x) => {
           // see required
           if (
-            this.currentNetwork.network_type === 'polkadot' &&
+            network.network_type === 'polkadot' &&
             ['controller', 'stash/controller'].includes(
               this.session.addressRole
             )

@@ -118,7 +118,7 @@
     </TmFormGroup>
     <TmFormGroup
       v-if="
-        currentNetwork.network_type === `polkadot`
+        network.network_type === `polkadot`
           ? (!isNomination || stakedBalance.total === 0) &&
             session.addressRole !== `controller`
           : true
@@ -126,7 +126,7 @@
       class="action-modal-form-group"
       field-id="amount"
       :field-label="`Amount${
-        currentNetwork.network_type === 'polkadot' &&
+        network.network_type === 'polkadot' &&
         Object.keys(targetValidator).length > 0 &&
         balance.total > 0 &&
         session.addressRole !== `stash`
@@ -134,9 +134,7 @@
           : ''
       }`"
     >
-      <span class="input-suffix max-button">{{
-        currentNetwork.stakingDenom
-      }}</span>
+      <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
       <TmFieldGroup>
         <TmField
           id="amount"
@@ -158,7 +156,7 @@
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
-        {{ currentNetwork.stakingDenom }}s
+        {{ network.stakingDenom }}s
       </span>
       <!-- <TmFormMsg
         v-if="balance.available === '0'"
@@ -208,9 +206,10 @@ import { SMALLEST } from '../../common/numbers'
 // import ActionModal from './ActionModal'
 import { formatAddress, validatorEntry } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
+import network from '../../network'
 
 export default {
-  name: `delegation-modal`,
+  name: `stake-modal`,
   components: {
     // TmField,
     // TmFieldGroup,
@@ -259,7 +258,7 @@ export default {
       if (!this.balance) {
         return {
           total: 0,
-          denom: this.currentNetwork.stakingDenom,
+          denom: network.stakingDenom,
         }
       }
       let stakedAmount =
@@ -273,7 +272,7 @@ export default {
       }
       return {
         total: Number(stakedAmount),
-        denom: this.currentNetwork.stakingDenom,
+        denom: network.stakingDenom,
       }
     },
     toOptions() {
@@ -340,7 +339,7 @@ export default {
               : '',
           amount: {
             amount: this.amount,
-            denom: this.currentNetwork.stakingDenom,
+            denom: network.stakingDenom,
           },
           addressRole: this.session.addressRole,
         }
@@ -353,7 +352,7 @@ export default {
               : '',
           amount: {
             amount: this.amount,
-            denom: this.currentNetwork.stakingDenom,
+            denom: network.stakingDenom,
           },
           addressRole: this.session.addressRole,
         }
@@ -363,12 +362,12 @@ export default {
       if (this.isRedelegation) {
         return {
           title: `Successfully restaked!`,
-          body: `You have successfully restaked your ${this.currentNetwork.stakingDenom}s`,
+          body: `You have successfully restaked your ${network.stakingDenom}s`,
         }
       } else {
         return {
           title: `Successfully staked!`,
-          body: `You have successfully staked your ${this.currentNetwork.stakingDenom}s`,
+          body: `You have successfully staked your ${network.stakingDenom}s`,
         }
       }
     },
@@ -379,7 +378,7 @@ export default {
       return this.fromSelectedIndex !== 0 && this.fromSelectedIndex !== '0' // where are these 0 strings comming from?
     },
     undelegationPeriod() {
-      return this.currentNetwork.lockUpPeriod
+      return network.lockUpPeriod
     },
     enhancedTargetValidator() {
       return validatorEntry(this.targetValidator)
@@ -387,7 +386,7 @@ export default {
     hasNoNominations() {
       // TODO: only temporary. Need to create a query to know if the address has any nomination
       return (
-        this.currentNetwork.network_type === `polkadot` &&
+        network.network_type === `polkadot` &&
         this.session.addressRole === `none`
       )
     },
@@ -420,10 +419,10 @@ export default {
       // update registered topics for emails as the validator set changed
       this.$store.dispatch('updateNotificationRegistrations')
       // update the role of the user as it might change after bonding the first time
-      if (this.currentNetwork.network_type === 'polkadot') {
+      if (network.network_type === 'polkadot') {
         this.$store.dispatch('checkAddressRole', {
           address: this.address,
-          networkId: this.currentNetwork.id,
+          networkId: network.id,
         })
       }
     },
@@ -435,7 +434,7 @@ export default {
   //         // In Polkadot we don't need to bond extra, the user may just want to nominate a new validator
   //         // stash accounts or new accounts that haven't bonded tokens yet, need to specify an amount to bond
   //         if (
-  //           this.currentNetwork.network_type === 'polkadot' &&
+  //           network.network_type === 'polkadot' &&
   //           ['controller', 'stash/controller'].includes(
   //             this.session.addressRole
   //           )
@@ -449,7 +448,7 @@ export default {
   //       min: (x) => {
   //         // see required
   //         if (
-  //           this.currentNetwork.network_type === 'polkadot' &&
+  //           network.network_type === 'polkadot' &&
   //           ['controller', 'stash/controller'].includes(
   //             this.session.addressRole
   //           )

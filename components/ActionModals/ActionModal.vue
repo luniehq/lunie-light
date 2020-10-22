@@ -249,7 +249,7 @@ import { mapState, mapGetters } from 'vuex'
 import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '../../common/numbers'
 import { track, sendEvent } from '../../common/google-analytics'
-
+import network from '../../network'
 import config from '~/config'
 
 class TransactionManager {} // TODO
@@ -395,13 +395,9 @@ export default {
     checkFeatureAvailable() {
       const action = `action_` + this.featureFlag
       // DEPRECATE to support the upgrade of the old Boolean value to the new ENUM capability model, we support here temporarily the upgrade from the Boolean model to the ENUM model
-      return typeof this.network[action] === `boolean` ||
-        this.network[action] === null
-        ? networkCapabilityDictionary[this.network[action]] === 'ENABLED'
-        : this.network[action] === 'ENABLED'
-    },
-    network() {
-      return this.networks.find(({ id }) => id === this.networkId)
+      return typeof network[action] === `boolean` || network[action] === null
+        ? networkCapabilityDictionary[network[action]] === 'ENABLED'
+        : network[action] === 'ENABLED'
     },
     requiresSignIn() {
       return (
@@ -413,10 +409,8 @@ export default {
       return this.featureFlag === 'undelegate' ? 0 : this.amount
     },
     invoiceTotal() {
-      if (this.networkFeesLoaded) {
-        return (
-          Number(this.subTotal) + Number(this.networkFees.transactionFee.amount)
-        )
+      if (networkFeesLoaded) {
+        return Number(this.subTotal) + Number(networkFees.transactionFee.amount)
       } else {
         return 0
       }
@@ -463,17 +457,17 @@ export default {
       }
     },
     getDenom() {
-      return this.selectedDenom || this.network.stakingDenom
+      return this.selectedDenom || network.stakingDenom
     },
     selectedBalance() {
       const defaultBalance = {
         amount: 0,
       }
-      if (this.balances.length === 0 || !this.network) {
+      if (this.balances.length === 0 || !network) {
         return defaultBalance
       }
       // default to the staking denom for fees
-      const feeDenom = this.selectedDenom || this.network.stakingDenom
+      const feeDenom = this.selectedDenom || network.stakingDenom
       let balance = this.balances.find(({ denom }) => denom === feeDenom)
       if (!balance) {
         balance = defaultBalance
@@ -489,11 +483,6 @@ export default {
         if (signMethods.length === 1) {
           this.selectedSignMethod = signMethods[0].value
         }
-      },
-    },
-    currentNetwork: {
-      handler() {
-        this.close()
       },
     },
   },
@@ -522,7 +511,7 @@ export default {
           this.$store.commit(`setCurrrentModalOpen`, false)
           // clearing request query
           this.transactionManager.cancel(
-            { userAddress: this.session.address, networkId: this.network.id },
+            { userAddress: this.session.address, networkId: network.id },
             this.selectedSignMethod
           )
           this.queueEmpty = true
@@ -552,7 +541,7 @@ export default {
       if (this.step === 'sign') {
         // remove the request from any sign method to avoid orphaned transactions in the sign methods
         this.transactionManager.cancel(
-          { userAddress: this.session.address, networkId: this.network.id },
+          { userAddress: this.session.address, networkId: network.id },
           this.selectedSignMethod
         )
       }
@@ -563,7 +552,7 @@ export default {
       this.show = false
       this.sending = false
       this.includedHeight = undefined
-      this.networkFeesLoaded = false
+      networkFeesLoaded = false
 
       // reset form
       // in some cases $v is not yet set
@@ -581,7 +570,7 @@ export default {
     goToSession() {
       this.close()
 
-      this.$store.dispatch(`signOut`, this.network)
+      this.$store.dispatch(`signOut`, network)
       if (this.$route.name !== `portfolio`)
         this.$router.push({ name: 'portfolio' })
     },
@@ -646,38 +635,38 @@ export default {
       try {
         let transactionData
         // Polkadot loads transaction data automatic
-        if (this.network.network_type === 'cosmos') {
+        if (network.network_type === 'cosmos') {
           transactionData = await this.transactionManager.getCosmosTransactionData(
             {
               memo,
-              gasEstimate: this.networkFees.gasEstimate,
+              gasEstimate: networkFees.gasEstimate,
               // convert fee to chain values
-              fee: [this.networkFees.transactionFee],
+              fee: [networkFees.transactionFee],
               senderAddress: this.session.address,
-              network: this.network,
+              network,
             }
           )
         }
         let polkadotAPI
-        if (this.network.network_type === 'polkadot') {
+        if (network.network_type === 'polkadot') {
           transactionData = {
             fee: {
-              amount: this.networkFees.transactionFee.amount,
+              amount: networkFees.transactionFee.amount,
               denom: this.getDenom,
             },
             addressRole: this.session.addressRole,
           }
-          polkadotAPI = await getPolkadotAPI(this.network)
+          polkadotAPI = await getPolkadotAPI(network)
         }
-        const HDPath = this.session.HDPath || this.network.defaultHDPath
-        const curve = this.session.curve || this.network.defaultCurve
+        const HDPath = this.session.HDPath || network.defaultHDPath
+        const curve = this.session.curve || network.defaultCurve
 
         const hashResult = await this.transactionManager.createSignBroadcast({
           messageType: type,
           message,
           transactionData,
           senderAddress: this.session.address,
-          network: this.network,
+          network,
           signingType: this.selectedSignMethod,
           password: this.password,
           polkadotAPI,
@@ -704,7 +693,7 @@ export default {
       // sending to ga
       this.sendEvent(
         {
-          network: this.network.id,
+          network: network.id,
           address: this.session.address,
         },
         'Action',
@@ -722,7 +711,7 @@ export default {
       // Sentry.withScope((scope) => {
       //   scope.setExtra('signMethod', this.selectedSignMethod)
       //   scope.setExtra('transactionData', this.transactionData)
-      //   scope.setExtra('gasEstimate', this.networkFees.gasEstimate)
+      //   scope.setExtra('gasEstimate', networkFees.gasEstimate)
       //   Sentry.captureException(error)
       // })
       this.step = signStep
@@ -744,8 +733,8 @@ export default {
       },
       invoiceTotal: {
         max: (x) =>
-          this.networkFeesLoaded &&
-          this.networkFees.transactionFee.denom !== this.selectedDenom
+          networkFeesLoaded &&
+          networkFees.transactionFee.denom !== this.selectedDenom
             ? true
             : Number(x) <= this.selectedBalance.amount,
       },
