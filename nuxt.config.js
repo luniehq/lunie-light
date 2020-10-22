@@ -11,13 +11,15 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@/styles/app.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '@/plugins/copy.client.js',
     '@/plugins/infinite-scroll.client.js',
     '@/plugins/tooltip.client.js',
+    '@/plugins/validate.client.js',
+    '@/plugins/focus.client.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

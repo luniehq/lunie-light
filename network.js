@@ -11,6 +11,9 @@ export default {
   ],
   network_type: 'cosmos',
   address_prefix: 'cosmos',
+  HDPath: `m/44'/118'/0'/0/0`,
+  curve: 'ed25519',
+  bech32Prefix: 'cosmos',
 
   // utility functions
   getCoinLookup(network, denom, coinLookupDenomType = `chainDenom`) {
