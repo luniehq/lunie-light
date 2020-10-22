@@ -6,7 +6,7 @@
     :amount="amount"
     title="Send"
     submission-error-prefix="Sending tokens failed"
-    :transaction-type="messageType.SEND"
+    :transaction-type="lunieMessageTypes.SEND"
     :transaction-data="transactionData"
     :selected-denom="selectedToken"
     :notify-message="notifyMessage"
@@ -16,7 +16,6 @@
     @txIncluded="onSuccess"
   >
     <TmFormGroup
-      :error="$v.address.$error && $v.address.$invalid"
       class="action-modal-form-group"
       field-id="send-address"
       field-label="Send To"
@@ -31,21 +30,18 @@
         @change.native="trimSendAddress"
         @keyup.enter.native="refocusOnAmount"
       />
-      <TmFormMsg
-        v-if="$v.address.$error && !$v.address.required"
+      <!-- <TmFormMsg
         name="Address"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.address.$error && !$v.address.validAddress"
         name="Address"
         type="custom"
         msg="doesn't have a format known by Lunie"
-      />
+      /> -->
     </TmFormGroup>
     <TmFormGroup
       id="form-group-amount"
-      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
@@ -76,48 +72,41 @@
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>
-      <TmFormMsg
+      <!-- <TmFormMsg
         v-if="selectedBalance.amount === 0"
         :msg="`doesn't have any ${selectedToken}s`"
         name="Wallet"
         type="custom"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${selectedToken}s to proceed.`"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
       <TmFormMsg
-        v-else-if="isMaxAmount()"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc max-message"
-      />
+      /> -->
     </TmFormGroup>
     <TmFormGroup
       id="memo"
-      :error="$v.memo.$error && $v.memo.$invalid"
       class="action-modal-group"
       field-id="memo"
       field-label="Memo"
@@ -137,8 +126,7 @@
           >our guide</a
         >.</span
       >
-      <TmFormMsg
-        v-if="$v.memo.$error && !$v.memo.maxLength"
+      <!-- <TmFormMsg
         name="Memo"
         type="maxLength"
         :max="max_memo_characters"
@@ -147,13 +135,13 @@
         v-if="sendingNgm"
         type="custom"
         msg="Sending NGM is currently disabled."
-      />
+      /> -->
     </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
-import { required, decimal, maxLength } from 'vuelidate/lib/validators'
+// import { required, decimal, maxLength } from 'vuelidate/lib/validators'
 import { mapGetters } from 'vuex'
 // import TmFormGroup from 'src/components/common/TmFormGroup'
 // import TmField from 'src/components/common/TmField'
@@ -165,15 +153,15 @@ import BigNumber from 'bignumber.js'
 import { SMALLEST } from '../../common/numbers'
 import b32 from '../../common/b32'
 import { formatAddress } from '../../common/address'
-import { messageType } from '../../common/cosmosV2-reducers'
+import { lunieMessageTypes } from '../../common/lunie-message-types'
 import config from '~/config'
 
 const defaultMemo = ''
 
-const isPolkadotAddress = (address) => {
-  const polkadotRegexp = /^(([0-9a-zA-Z]{47})|([0-9a-zA-Z]{48}))$/
-  return polkadotRegexp.test(address)
-}
+// const isPolkadotAddress = (address) => {
+//   const polkadotRegexp = /^(([0-9a-zA-Z]{47})|([0-9a-zA-Z]{48}))$/
+//   return polkadotRegexp.test(address)
+// }
 
 export default {
   name: `send-modal`,
@@ -199,7 +187,7 @@ export default {
     isFirstLoad: true,
     selectedToken: undefined,
     balances: [],
-    messageType,
+    lunieMessageTypes,
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
   }),
@@ -218,7 +206,7 @@ export default {
         return {}
       }
       return {
-        type: messageType.SEND,
+        type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.userAddress],
         amount: {
@@ -307,13 +295,13 @@ export default {
     onSuccess(event) {
       this.$emit(`success`, event)
     },
-    validateForm() {
-      this.$v.$touch()
+    // validateForm() {
+    //   this.$v.$touch()
 
-      return !this.$v.$invalid
-    },
+    //   return !this.$v.$invalid
+    // },
     clear() {
-      this.$v.$reset()
+      // this.$v.$reset()
 
       this.address = undefined
       this.amount = undefined
@@ -356,31 +344,31 @@ export default {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
   },
-  validations() {
-    return {
-      address: {
-        required,
-        validAddress: (address) =>
-          this.bech32Validate(address) || isPolkadotAddress(address),
-      },
-      amount: {
-        required: (x) => !!x && x !== `0`,
-        decimal,
-        max: (x) => Number(x) <= this.maxAmount,
-        min: (x) => Number(x) >= SMALLEST,
-        maxDecimals: (x) => {
-          return x.toString().split('.').length > 1
-            ? x.toString().split('.')[1].length <= 6
-            : true
-        },
-      },
-      denoms: { required },
-      selectedToken: { required },
-      memo: {
-        maxLength: maxLength(this.max_memo_characters),
-      },
-    }
-  },
+  // validations() {
+  //   return {
+  //     address: {
+  //       required,
+  //       validAddress: (address) =>
+  //         this.bech32Validate(address) || isPolkadotAddress(address),
+  //     },
+  //     amount: {
+  //       required: (x) => !!x && x !== `0`,
+  //       decimal,
+  //       max: (x) => Number(x) <= this.maxAmount,
+  //       min: (x) => Number(x) >= SMALLEST,
+  //       maxDecimals: (x) => {
+  //         return x.toString().split('.').length > 1
+  //           ? x.toString().split('.')[1].length <= 6
+  //           : true
+  //       },
+  //     },
+  //     denoms: { required },
+  //     selectedToken: { required },
+  //     memo: {
+  //       maxLength: maxLength(this.max_memo_characters),
+  //     },
+  //   }
+  // },
 }
 </script>
 <style scoped>

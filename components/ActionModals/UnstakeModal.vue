@@ -10,7 +10,9 @@
       isRedelegation ? 'Restaking failed' : 'Unstaking failed'
     "
     :transaction-type="
-      isRedelegation ? messageType.REDELEGATE : messageType.UNDELEGATE
+      isRedelegation
+        ? lunieMessageTypes.REDELEGATE
+        : lunieMessageTypes.UNDELEGATE
     "
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
@@ -76,12 +78,12 @@
         :options="toOptions"
         type="select"
       />
-      <TmFormMsg
+      <!-- <TmFormMsg
         v-if="targetValidator.status === 'INACTIVE' && isRedelegation"
         :msg="`You are about to restake to an inactive validator (${targetValidator.statusDetailed})`"
         type="custom"
         class="tm-form-msg--desc"
-      />
+      /> -->
     </TmFormGroup>
     <TmFormGroup
       v-if="
@@ -89,7 +91,6 @@
           ? !isUnnomination && session.addressRole !== `stash`
           : true
       "
-      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
@@ -115,38 +116,32 @@
       <span v-if="maximum > 0" class="form-message">
         Currently staked: {{ maximum }} {{ stakingDenom }}s
       </span>
-      <TmFormMsg
-        v-if="currentNetwork.network_type === 'cosmos' && maximum === 0"
+      <!-- <TmFormMsg
         :msg="`don't have any ${stakingDenom}s delegated to this validator`"
         name="You"
         type="custom"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${stakingDenom}s to proceed.`"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
-      />
+      /> -->
     </TmFormGroup>
   </ActionModal>
 </template>
@@ -162,7 +157,7 @@ import { SMALLEST } from '../../common/numbers'
 // import TmFormMsg from 'src/components/common/TmFormMsg'
 // import ActionModal from './ActionModal'
 import { formatAddress, validatorEntry } from '../../common/address'
-import { messageType } from '../../common/cosmosV2-reducers'
+import { lunieMessageTypes } from '../../common/lunie-message-types'
 
 export default {
   name: `undelegation-modal`,
@@ -196,7 +191,7 @@ export default {
       total: 0,
       available: 0,
     },
-    messageType,
+    lunieMessageTypes,
     smallestAmount: SMALLEST,
     isInElection: false, // Handle election period in Polkadot
   }),
@@ -226,7 +221,7 @@ export default {
           return {}
         }
         return {
-          type: messageType.RESTAKE,
+          type: lunieMessageTypes.RESTAKE,
           from: [this.sourceValidator.operatorAddress],
           to: [this.toSelectedIndex],
           amount: {
@@ -245,7 +240,7 @@ export default {
           return {}
         }
         return {
-          type: messageType.UNSTAKE,
+          type: lunieMessageTypes.UNSTAKE,
           from:
             this.sourceValidator && this.sourceValidator.operatorAddress
               ? [this.sourceValidator.operatorAddress]
@@ -374,13 +369,13 @@ export default {
     open() {
       this.$refs.actionModal.open()
     },
-    validateForm() {
-      this.$v.$touch()
+    // validateForm() {
+    //   this.$v.$touch()
 
-      return !this.$v.$invalid
-    },
+    //   return !this.$v.$invalid
+    // },
     clear() {
-      this.$v.$reset()
+      // this.$v.$reset()
 
       this.amount = 0
     },

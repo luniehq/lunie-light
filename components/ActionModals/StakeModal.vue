@@ -7,7 +7,9 @@
     :title="isRedelegation ? 'Restake' : 'Stake'"
     class="delegation-modal"
     submission-error-prefix="Staking failed"
-    :transaction-type="isRedelegation ? messageType.RESTAKE : messageType.STAKE"
+    :transaction-type="
+      isRedelegation ? lunieMessageTypes.RESTAKE : lunieMessageTypes.STAKE
+    "
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="delegate"
@@ -82,7 +84,7 @@
     >
       <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
       <template>
-        <TmFormMsg
+        <!-- <TmFormMsg
           v-if="targetValidator.status === 'INACTIVE' && !isRedelegation"
           :msg="`You are about to stake to an inactive validator (${targetValidator.statusDetailed})`"
           type="custom"
@@ -93,7 +95,7 @@
           :msg="`You are about to restake to an inactive validator (${targetValidator.statusDetailed})`"
           type="custom"
           class="tm-form-msg--desc"
-        />
+        /> -->
       </template>
     </TmFormGroup>
 
@@ -121,7 +123,6 @@
             session.addressRole !== `controller`
           : true
       "
-      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       :field-label="`Amount${
@@ -159,51 +160,45 @@
         {{ maxAmount }}
         {{ currentNetwork.stakingDenom }}s
       </span>
-      <TmFormMsg
+      <!-- <TmFormMsg
         v-if="balance.available === '0'"
         :msg="`doesn't have any ${currentNetwork.stakingDenom}s`"
         name="Wallet"
         type="custom"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${currentNetwork.stakingDenom}s to proceed.`"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
       <TmFormMsg
-        v-else-if="isMaxAmount() && !isRedelegation"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc"
-      />
+      /> -->
     </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { decimal } from 'vuelidate/lib/validators'
+// import { decimal } from 'vuelidate/lib/validators'
 import { SMALLEST } from '../../common/numbers'
 // import TmField from 'src/components/common/TmField'
 // import TmFieldGroup from 'src/components/common/TmFieldGroup'
@@ -212,7 +207,7 @@ import { SMALLEST } from '../../common/numbers'
 // import TmFormMsg from 'src/components/common/TmFormMsg'
 // import ActionModal from './ActionModal'
 import { formatAddress, validatorEntry } from '../../common/address'
-import { messageType } from '../../common/cosmosV2-reducers'
+import { lunieMessageTypes } from '../../common/lunie-message-types'
 
 export default {
   name: `delegation-modal`,
@@ -252,7 +247,7 @@ export default {
     delegations: [],
     undelegations: [],
     undelegationsLoaded: false,
-    messageType,
+    lunieMessageTypes,
     smallestAmount: SMALLEST,
     isInElection: false, // Handle election period in Polkadot
   }),
@@ -337,7 +332,7 @@ export default {
 
       if (this.isRedelegation) {
         return {
-          type: messageType.RESTAKE,
+          type: lunieMessageTypes.RESTAKE,
           from: [this.from],
           to:
             Object.keys(this.targetValidator).length > 0
@@ -351,7 +346,7 @@ export default {
         }
       } else {
         return {
-          type: messageType.STAKE,
+          type: lunieMessageTypes.STAKE,
           to:
             Object.keys(this.targetValidator).length > 0
               ? [this.targetValidator.operatorAddress]
@@ -401,12 +396,12 @@ export default {
     open() {
       this.$refs.actionModal.open()
     },
-    validateForm() {
-      this.$v.$touch()
-      return !this.$v.$invalid
-    },
+    // validateForm() {
+    //   this.$v.$touch()
+    //   return !this.$v.$invalid
+    // },
     clear() {
-      this.$v.$reset()
+      // this.$v.$reset()
       this.fromSelectedIndex = 0
       this.amount = 0
     },
@@ -433,43 +428,43 @@ export default {
       }
     },
   },
-  validations() {
-    return {
-      amount: {
-        required: (amount) => {
-          // In Polkadot we don't need to bond extra, the user may just want to nominate a new validator
-          // stash accounts or new accounts that haven't bonded tokens yet, need to specify an amount to bond
-          if (
-            this.currentNetwork.network_type === 'polkadot' &&
-            ['controller', 'stash/controller'].includes(
-              this.session.addressRole
-            )
-          ) {
-            return true
-          }
-          return !!amount && amount !== `0`
-        },
-        decimal,
-        max: (x) => Number(x) <= this.maxAmount,
-        min: (x) => {
-          // see required
-          if (
-            this.currentNetwork.network_type === 'polkadot' &&
-            ['controller', 'stash/controller'].includes(
-              this.session.addressRole
-            )
-          ) {
-            return true
-          }
-          return Number(x) >= SMALLEST
-        },
-        maxDecimals: (x) => {
-          return x.toString().split('.').length > 1
-            ? x.toString().split('.')[1].length <= 6
-            : true
-        },
-      },
-    }
-  },
+  // validations() {
+  //   return {
+  //     amount: {
+  //       required: (amount) => {
+  //         // In Polkadot we don't need to bond extra, the user may just want to nominate a new validator
+  //         // stash accounts or new accounts that haven't bonded tokens yet, need to specify an amount to bond
+  //         if (
+  //           this.currentNetwork.network_type === 'polkadot' &&
+  //           ['controller', 'stash/controller'].includes(
+  //             this.session.addressRole
+  //           )
+  //         ) {
+  //           return true
+  //         }
+  //         return !!amount && amount !== `0`
+  //       },
+  //       decimal,
+  //       max: (x) => Number(x) <= this.maxAmount,
+  //       min: (x) => {
+  //         // see required
+  //         if (
+  //           this.currentNetwork.network_type === 'polkadot' &&
+  //           ['controller', 'stash/controller'].includes(
+  //             this.session.addressRole
+  //           )
+  //         ) {
+  //           return true
+  //         }
+  //         return Number(x) >= SMALLEST
+  //       },
+  //       maxDecimals: (x) => {
+  //         return x.toString().split('.').length > 1
+  //           ? x.toString().split('.')[1].length <= 6
+  //           : true
+  //       },
+  //     },
+  //   }
+  // },
 }
 </script>

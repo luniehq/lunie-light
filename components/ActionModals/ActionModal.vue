@@ -60,11 +60,10 @@
             :fee="networkFees.transactionFee"
             :transaction-denom="getDenom"
           />
-          <TmFormMsg
-            v-if="$v.invoiceTotal.$invalid && !$v.invoiceTotal.max"
+          <!-- <TmFormMsg
             type="custom"
             :msg="`You don't have enough ${selectedDenom}s to proceed.`"
-          />
+          /> -->
         </div>
         <div v-else-if="step === signStep" class="action-modal-form">
           <TmFormGroup
@@ -126,7 +125,6 @@
             @submit.prevent="validateChangeStep"
           >
             <TmFormGroup
-              :error="$v.password.$error && $v.password.$invalid"
               class="action-modal-group"
               field-id="password"
               field-label="Password"
@@ -138,11 +136,10 @@
                 type="password"
                 placeholder="Password"
               />
-              <TmFormMsg
-                v-if="$v.password.$error && !$v.password.required"
+              <!-- <TmFormMsg
                 name="Password"
                 type="required"
-              />
+              /> -->
             </TmFormGroup>
           </form>
         </div>
@@ -212,7 +209,6 @@
                 :disabled="
                   disabled ||
                   !balancesLoaded ||
-                  (step === feeStep && $v.invoiceTotal.$invalid) ||
                   (step === feeStep && !networkFeesLoaded)
                 "
                 @click.native="validateChangeStep"
@@ -571,9 +567,9 @@ export default {
 
       // reset form
       // in some cases $v is not yet set
-      if (this.$v) {
-        this.$v.$reset()
-      }
+      // if (this.$v) {
+      //   this.$v.$reset()
+      // }
       this.$emit(`close`)
     },
     trackEvent(...args) {
@@ -589,11 +585,11 @@ export default {
       if (this.$route.name !== `portfolio`)
         this.$router.push({ name: 'portfolio' })
     },
-    isValidInput(property) {
-      this.$v[property].$touch()
+    // isValidInput(property) {
+    //   this.$v[property].$touch()
 
-      return !this.$v[property].$invalid
-    },
+    //   return !this.$v[property].$invalid
+    // },
     previousStep() {
       switch (this.step) {
         case signStep:

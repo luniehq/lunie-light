@@ -59,10 +59,10 @@
         :total-rewards-per-denom="totalRewardsPerDenom"
       />
 
-      <!-- <SendModal ref="SendModal" :denoms="getAllDenoms" />
+      <SendModal ref="SendModal" :denoms="getAllDenoms" />
       <ModalWithdrawRewards ref="ModalWithdrawRewards" />
       <StakeModal ref="StakeModal" />
-      <UnstakeModal ref="UnstakeModal" /> -->
+      <UnstakeModal ref="UnstakeModal" />
     </div>
   </div>
 </template>
