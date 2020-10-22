@@ -1,4 +1,26 @@
 export const state = () => ({
-  address: 'cosmos1mmu8hhkfpzh7jxrtjylmhceyt7hs3acr278u3v',
+  address: undefined,
   session: {},
 })
+
+export const mutations = {
+  setAddress(state, address) {
+    state.address = address
+  },
+}
+
+export const actions = {
+  nuxtServerInit({ commit }, { app: { $cookies } }) {
+    const address = $cookies.get('address')
+    commit('setAddress', address)
+  },
+  signIn({ commit }, address) {
+    // to be able to render the page for the user in SSR we need to set the address as a cookie
+    if (!address) {
+      this.$cookies.remove('address')
+    } else {
+      this.$cookies.set('address', address)
+    }
+    commit('setAddress', address)
+  },
+}

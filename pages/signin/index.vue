@@ -75,9 +75,10 @@ export default {
 
       try {
         testPassword(this.address, this.password)
-        this.$cookies.set('address', this.address)
+        this.$store.dispatch('signIn', this.address)
         this.$router.push('/portfolio')
       } catch (err) {
+        this.loading = false
         this.error = `The provided username or password is wrong.`
       }
     },

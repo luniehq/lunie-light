@@ -23,13 +23,17 @@
       <slot></slot>
       <TmDataLoading v-if="!loading && loadingMore" />
     </template>
-    <!-- <slot v-if="session.signedIn" name="signInRequired"></slot> -->
+    <slot v-if="address" name="signInRequired"></slot>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
+  computed: {
+    ...mapState(['address']),
+  },
   props: {
     loading: {
       type: Boolean,
@@ -64,12 +68,8 @@ export default {
     address: undefined,
   }),
   mounted() {
-    this.addressInterval = setInterval(() => {
-      this.address = this.$cookies.get('address')
-    }, 500)
-  },
-  destroyed() {
-    clearInterval(this.addressInterval)
+    const address = this.$cookies.get('address')
+    this.$store.dispatch('signIn', address)
   },
 }
 </script>

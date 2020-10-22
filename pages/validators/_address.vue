@@ -188,10 +188,10 @@ export default {
       default: () => 'returns',
     },
   },
-  async asyncData({ $axios, $cookies, params }) {
-    const address = $cookies.get('address')
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
+  async asyncData({ $axios, params, store }) {
+    const address = store.state.address
+    const _store = {}
+    const api = new CosmosV2Source($axios, network, _store, null, null)
     const [validator, delegations] = await Promise.all([
       api.getValidator(params.address),
       address

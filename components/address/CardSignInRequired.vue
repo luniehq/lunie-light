@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     signOut() {
-      this.$cookies.remove('address')
+      this.$store.dispatch('signIn', undefined)
       this.$router.push('/validators')
     },
   },
