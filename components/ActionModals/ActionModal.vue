@@ -236,24 +236,29 @@
 </template>
 
 <script>
-import * as Sentry from '@sentry/browser'
+// import * as Sentry from '@sentry/browser'
 import BigNumber from 'bignumber.js'
 import { mapState, mapGetters } from 'vuex'
-import HardwareState from 'src/components/common/TmHardwareState'
-import TmBtn from 'src/components/common/TmBtn'
-import TmField from 'src/components/common/TmField'
-import TmFormGroup from 'src/components/common/TmFormGroup'
-import TmFormMsg from 'src/components/common/TmFormMsg'
-import FeatureNotAvailable from 'src/components/common/FeatureNotAvailable'
-import TmDataMsg from 'common/TmDataMsg'
-import { prettyInt, SMALLEST } from 'src/scripts/num'
+// import HardwareState from 'src/components/common/TmHardwareState'
+// import TmBtn from 'src/components/common/TmBtn'
+// import TmField from 'src/components/common/TmField'
+// import TmFormGroup from 'src/components/common/TmFormGroup'
+// import TmFormMsg from 'src/components/common/TmFormMsg'
+// import FeatureNotAvailable from 'src/components/common/FeatureNotAvailable'
+// import TmDataMsg from 'src/components/common/TmDataMsg'
+// import TransactionManager from '../../signing/transaction-manager'
+// import { getPolkadotAPI } from '../../../../common/polkadotApiConnector'
+// import Steps from './Steps'
+// import TableInvoice from './TableInvoice'
 import { requiredIf } from 'vuelidate/lib/validators'
-import { track, sendEvent } from 'scripts/google-analytics'
-import config from 'src/../config'
-import TransactionManager from '../../signing/transaction-manager'
-import { getPolkadotAPI } from '../../../../common/polkadotApiConnector'
-import Steps from './Steps'
-import TableInvoice from './TableInvoice'
+import { prettyInt, SMALLEST } from '../../common/numbers'
+import { track, sendEvent } from '../../common/google-analytics'
+
+import config from '~/config'
+
+class TransactionManager {} // TODO
+
+const getPolkadotAPI = () => ({}) // TODO
 
 const defaultStep = `details`
 const feeStep = `fees`
@@ -298,15 +303,15 @@ const networkCapabilityDictionary = {
 export default {
   name: `action-modal`,
   components: {
-    HardwareState,
-    TmBtn,
-    TmField,
-    TmFormGroup,
-    TmFormMsg,
-    TmDataMsg,
-    TableInvoice,
-    Steps,
-    FeatureNotAvailable,
+    // HardwareState,
+    // TmBtn,
+    // TmField,
+    // TmFormGroup,
+    // TmFormMsg,
+    // TmDataMsg,
+    // TableInvoice,
+    // Steps,
+    // FeatureNotAvailable,
   },
   filters: {
     prettyInt,
@@ -718,12 +723,12 @@ export default {
     },
     onSendingFailed(error) {
       /* istanbul ignore next */
-      Sentry.withScope((scope) => {
-        scope.setExtra('signMethod', this.selectedSignMethod)
-        scope.setExtra('transactionData', this.transactionData)
-        scope.setExtra('gasEstimate', this.networkFees.gasEstimate)
-        Sentry.captureException(error)
-      })
+      // Sentry.withScope((scope) => {
+      //   scope.setExtra('signMethod', this.selectedSignMethod)
+      //   scope.setExtra('transactionData', this.transactionData)
+      //   scope.setExtra('gasEstimate', this.networkFees.gasEstimate)
+      //   Sentry.captureException(error)
+      // })
       this.step = signStep
       this.submissionError = `${this.submissionErrorPrefix}: ${error.message}.`
       this.trackEvent(`event`, `failed-submit`, this.title, error.message)

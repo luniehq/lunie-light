@@ -3,8 +3,8 @@
     <UserMenuAddress :address="address" />
     <TmBtn
       type="secondary"
-      @click.native="$router.push('/address')"
       :value="address ? 'Change Address' : 'View Address'"
+      @click.native="$router.push('/address')"
     />
   </div>
 </template>

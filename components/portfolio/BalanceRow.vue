@@ -69,9 +69,9 @@
       </div>
     </div>
 
-    <!-- <SendModal ref="SendModal" :denoms="[balance.denom]" />
-    <DelegationModal ref="StakeModal" />
-    <UndelegationModal ref="UnstakeModal" /> -->
+    <SendModal ref="SendModal" :denoms="[balance.denom]" />
+    <StakeModal ref="StakeModal" />
+    <UnstakeModal ref="UnstakeModal" />
 
     <!-- endTime span for Polkadot undelegations -->
     <div
@@ -87,6 +87,9 @@
   </div>
 </template>
 <script>
+import SendModal from '../ActionModals/SendModal'
+import StakeModal from '../ActionModals/StakeModal'
+import UnstakeModal from '../ActionModals/UnstakeModal'
 import { bigFigureOrShortDecimals } from '../../common/numbers'
 import { fromNow } from '../../common/time'
 
@@ -95,6 +98,11 @@ export default {
   filters: {
     bigFigureOrShortDecimals,
     fromNow,
+  },
+  components: {
+    SendModal,
+    StakeModal,
+    UnstakeModal,
   },
   props: {
     balance: {

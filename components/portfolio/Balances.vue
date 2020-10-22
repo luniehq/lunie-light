@@ -61,8 +61,8 @@
 
       <!-- <SendModal ref="SendModal" :denoms="getAllDenoms" />
       <ModalWithdrawRewards ref="ModalWithdrawRewards" />
-      <DelegationModal ref="StakeModal" />
-      <UndelegationModal ref="UnstakeModal" /> -->
+      <StakeModal ref="StakeModal" />
+      <UnstakeModal ref="UnstakeModal" /> -->
     </div>
   </div>
 </template>

@@ -30,9 +30,6 @@
 <script>
 export default {
   name: `tm-page`,
-  data: () => ({
-    address: undefined,
-  }),
   props: {
     loading: {
       type: Boolean,
@@ -63,6 +60,9 @@ export default {
       default: false,
     },
   },
+  data: () => ({
+    address: undefined,
+  }),
   mounted() {
     this.addressInterval = setInterval(() => {
       this.address = this.$cookies.get('address')

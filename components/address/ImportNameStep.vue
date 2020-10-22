@@ -56,9 +56,6 @@
 
 export default {
   name: `import-name-step`,
-  data: () => ({
-    fieldName: undefined,
-  }),
   props: {
     address: {
       type: String,
@@ -69,6 +66,9 @@ export default {
       default: undefined,
     },
   },
+  data: () => ({
+    fieldName: undefined,
+  }),
   mounted() {
     this.fieldName = this.name
   },

@@ -3,6 +3,7 @@
     <AppHeader />
     <div id="app-content">
       <UserMenu />
+      <Balances />
       <Nuxt />
     </div>
   </div>

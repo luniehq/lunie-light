@@ -153,26 +153,26 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { SMALLEST } from 'src/scripts/num'
 import { decimal } from 'vuelidate/lib/validators'
-import TmField from 'src/components/common/TmField'
-import TmFieldGroup from 'src/components/common/TmFieldGroup'
-import TmBtn from 'src/components/common/TmBtn'
-import TmFormGroup from 'src/components/common/TmFormGroup'
-import TmFormMsg from 'src/components/common/TmFormMsg'
-import { formatAddress, validatorEntry } from 'src/filters'
-import { messageType } from '../../components/transactions/messageTypes'
-import ActionModal from './ActionModal'
+import { SMALLEST } from '../../common/numbers'
+// import TmField from 'src/components/common/TmField'
+// import TmFieldGroup from 'src/components/common/TmFieldGroup'
+// import TmBtn from 'src/components/common/TmBtn'
+// import TmFormGroup from 'src/components/common/TmFormGroup'
+// import TmFormMsg from 'src/components/common/TmFormMsg'
+// import ActionModal from './ActionModal'
+import { formatAddress, validatorEntry } from '../../common/address'
+import { messageType } from '../../common/cosmosV2-reducers'
 
 export default {
   name: `undelegation-modal`,
   components: {
-    ActionModal,
-    TmField,
-    TmFieldGroup,
-    TmBtn,
-    TmFormGroup,
-    TmFormMsg,
+    // ActionModal,
+    // TmField,
+    // TmFieldGroup,
+    // TmBtn,
+    // TmFormGroup,
+    // TmFormMsg,
   },
   filters: {
     validatorEntry,

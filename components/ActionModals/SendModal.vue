@@ -153,20 +153,20 @@
 </template>
 
 <script>
-import b32 from 'scripts/b32'
 import { required, decimal, maxLength } from 'vuelidate/lib/validators'
-import { SMALLEST } from 'src/scripts/num'
 import { mapGetters } from 'vuex'
-import TmFormGroup from 'src/components/common/TmFormGroup'
-import TmField from 'src/components/common/TmField'
-import TmFieldGroup from 'src/components/common/TmFieldGroup'
-import TmBtn from 'src/components/common/TmBtn'
-import TmFormMsg from 'src/components/common/TmFormMsg'
-import config from 'src/../config'
+// import TmFormGroup from 'src/components/common/TmFormGroup'
+// import TmField from 'src/components/common/TmField'
+// import TmFieldGroup from 'src/components/common/TmFieldGroup'
+// import TmBtn from 'src/components/common/TmBtn'
+// import TmFormMsg from 'src/components/common/TmFormMsg'
+// import ActionModal from './ActionModal'
 import BigNumber from 'bignumber.js'
-import { formatAddress } from 'src/filters'
-import { messageType } from '../../components/transactions/messageTypes'
-import ActionModal from './ActionModal'
+import { SMALLEST } from '../../common/numbers'
+import b32 from '../../common/b32'
+import { formatAddress } from '../../common/address'
+import { messageType } from '../../common/cosmosV2-reducers'
+import config from '~/config'
 
 const defaultMemo = ''
 
@@ -178,12 +178,12 @@ const isPolkadotAddress = (address) => {
 export default {
   name: `send-modal`,
   components: {
-    TmField,
-    TmFieldGroup,
-    TmFormGroup,
-    TmFormMsg,
-    ActionModal,
-    TmBtn,
+    // TmField,
+    // TmFieldGroup,
+    // TmFormGroup,
+    // TmFormMsg,
+    // ActionModal,
+    // TmBtn,
   },
   props: {
     denoms: {

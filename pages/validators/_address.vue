@@ -151,13 +151,13 @@
         </li>
       </ul>
 
-      <!-- <DelegationModal
-        ref="delegationModal"
+      <!-- <StakeModal
+        ref="stakeModal"
         :target-validator="validator"
         :is-nomination="true"
       />
-      <UndelegationModal
-        ref="undelegationModal"
+      <UnstakeModal
+        ref="unstakeModal"
         :source-validator="validator"
         :is-unnomination="true"
       /> -->
@@ -227,11 +227,11 @@ export default {
     noBlanks,
     /* istanbul ignore next */
     onDelegation() {
-      this.$refs.delegationModal.open()
+      this.$refs.stakeModal.open()
     },
     /* istanbul ignore next */
     onUndelegation() {
-      this.$refs.undelegationModal.open()
+      this.$refs.unstakeModal.open()
     },
     /* istanbul ignore next */
     isBlankField(field, alternateFilter) {
