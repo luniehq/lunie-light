@@ -50,7 +50,10 @@ function setTransactionSuccess(transaction, index) {
 }
 
 function sendDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(network, message.amount[0].denom)
+  const coinLookup = network.getCoinLookup(
+    network,
+    message.amount ? message.amount[0].denom : network.stakingDenom
+  )
   return {
     from: [message.from_address],
     to: [message.to_address],

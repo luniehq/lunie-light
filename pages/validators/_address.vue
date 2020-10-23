@@ -151,16 +151,12 @@
         </li>
       </ul>
 
-      <!-- <DelegationModal
-        ref="delegationModal"
-        :target-validator="validator"
-        :is-nomination="true"
-      />
-      <UndelegationModal
-        ref="undelegationModal"
+      <StakeModal ref="stakeModal" :target-validator="validator" />
+      <UnstakeModal
+        ref="unstakeModal"
         :source-validator="validator"
         :is-unnomination="true"
-      /> -->
+      />
     </template>
   </TmPage>
 </template>
@@ -189,7 +185,9 @@ export default {
     },
   },
   async asyncData({ $axios, params, store }) {
-    const address = store.state.address
+    const address = store.state.session
+      ? store.state.session.address
+      : undefined
     const _store = {}
     const api = new CosmosV2Source($axios, network, _store, null, null)
     const [validator, delegations] = await Promise.all([
@@ -227,11 +225,11 @@ export default {
     noBlanks,
     /* istanbul ignore next */
     onDelegation() {
-      this.$refs.delegationModal.open()
+      this.$refs.stakeModal.open()
     },
     /* istanbul ignore next */
     onUndelegation() {
-      this.$refs.undelegationModal.open()
+      this.$refs.unstakeModal.open()
     },
     /* istanbul ignore next */
     isBlankField(field, alternateFilter) {

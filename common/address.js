@@ -57,5 +57,8 @@ module.exports = {
     const words = bech32.toWords(Buffer.from(value, type))
     return bech32.encode(prefix, words)
   },
+  validatorEntry(validator) {
+    return `${validator.name} - ${formatAddress(validator.operatorAddress, 20)}`
+  },
   pubkeyToAddress,
 }

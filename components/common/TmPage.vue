@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <CardSignInRequired v-if="signInRequired && !address" />
+    <CardSignInRequired v-if="signInRequired && !session" />
 
     <TmDataLoading v-if="loading && !loaderPath" />
     <template v-if="loading && loaderPath" class="loading-image-container">
@@ -23,7 +23,7 @@
       <slot></slot>
       <TmDataLoading v-if="!loading && loadingMore" />
     </template>
-    <slot v-if="address" name="signInRequired"></slot>
+    <slot v-if="session" name="signInRequired"></slot>
   </div>
 </template>
 
@@ -31,9 +31,6 @@
 import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
-  computed: {
-    ...mapState(['address']),
-  },
   props: {
     loading: {
       type: Boolean,
@@ -64,9 +61,12 @@ export default {
       default: false,
     },
   },
+  computed: {
+    ...mapState(['session']),
+  },
   mounted() {
-    const address = this.$cookies.get('address')
-    this.$store.dispatch('signIn', address)
+    const session = this.$cookies.get('lunie-session')
+    this.$store.dispatch('signIn', session)
   },
 }
 </script>

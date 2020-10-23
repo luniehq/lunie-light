@@ -26,7 +26,7 @@
           }}!
         </div>
       </TmDataMsg>
-      <!-- <UndelegationModal ref="UnstakeModal" /> -->
+      <!-- <UnstakeModal ref="UnstakeModal" /> -->
     </div>
   </div>
 </template>

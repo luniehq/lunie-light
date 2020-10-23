@@ -1,5 +1,6 @@
 export default {
   id: 'cosmos-hub-mainnet',
+  name: 'Cosmos Hub',
   api_url: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
   coinLookup: [
@@ -14,8 +15,10 @@ export default {
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   bech32Prefix: 'cosmos',
+  lockUpPeriod: `21 days`,
 
   // utility functions
+  // TODO put in a wrapper outside this file
   getCoinLookup(network, denom, coinLookupDenomType = `chainDenom`) {
     return network.coinLookup.find(
       (coin) => coin[coinLookupDenomType] === denom
