@@ -151,11 +151,7 @@
         </li>
       </ul>
 
-      <StakeModal
-        ref="stakeModal"
-        :target-validator="validator"
-        :is-nomination="true"
-      />
+      <StakeModal ref="stakeModal" :target-validator="validator" />
       <UnstakeModal
         ref="unstakeModal"
         :source-validator="validator"

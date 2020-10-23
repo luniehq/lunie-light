@@ -133,7 +133,7 @@
           : ''
       }`"
     >
-      <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
+      <span class="input-suffix max-button">{{ stakingDenom }}</span>
       <TmFieldGroup>
         <TmField
           id="amount"
@@ -155,7 +155,7 @@
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
-        {{ network.stakingDenom }}s
+        {{ stakingDenom }}s
       </span>
       <!-- <TmFormMsg
         v-if="balance.available === '0'"
@@ -249,7 +249,7 @@ export default {
         }
       }
       let stakedAmount =
-        Number(this.balance.total) - Number(this.balance.available)
+        Number(this.balance.total) - Number(this.balance.amount)
       // substract the already unbonding balance in the case of Substrate networks.
       if (this.undelegationsLoaded && this.undelegations.length > 0) {
         stakedAmount = this.undelegations.reduce(
@@ -283,7 +283,7 @@ export default {
         // from wallet
         {
           address: this.address,
-          maximum: Number(this.balance.available),
+          maximum: Number(this.balance.amount),
           key: `My Wallet - ${formatAddress(this.address)}`,
           value: 0,
         },
@@ -366,6 +366,9 @@ export default {
     },
     undelegationPeriod() {
       return network.lockUpPeriod
+    },
+    stakingDenom() {
+      return network.stakingDenom
     },
     enhancedTargetValidator() {
       return validatorEntry(this.targetValidator)
