@@ -31,9 +31,6 @@
 import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
-  computed: {
-    ...mapState(['session']),
-  },
   props: {
     loading: {
       type: Boolean,
@@ -63,6 +60,9 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  computed: {
+    ...mapState(['session']),
   },
   mounted() {
     const session = this.$cookies.get('lunie-session')
