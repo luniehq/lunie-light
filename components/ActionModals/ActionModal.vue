@@ -302,6 +302,27 @@ export default {
   created() {
     this.transactionManager = new TransactionManager() // TODO: we don't have apollo here
   },
+  // validations() {
+  //   return {
+  //     password: {
+  //       required: requiredIf(
+  //         () =>
+  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+  //           this.step === signStep
+  //       ),
+  //     },
+  //     invoiceTotal: {
+  //       max: (x) =>
+  //         networkFeesLoaded &&
+  //         networkFees.transactionFee.denom !== this.selectedDenom
+  //           ? true
+  //           : Number(x) <= this.selectedBalance.amount,
+  //     },
+  //   }
+  // },
+  mounted() {
+    this.loadData()
+  },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
@@ -460,27 +481,6 @@ export default {
         this.balancesLoaded = true
       }
     },
-  },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
-  mounted() {
-    this.loadData()
   },
 }
 </script>
