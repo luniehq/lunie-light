@@ -45,21 +45,8 @@
           /> -->
       </div>
       <div v-else-if="step === signStep" class="action-modal-form">
-        <TmFormGroup
-          v-if="signMethods.length > 1"
-          class="action-modal-form-group"
-          field-id="sign-method"
-          field-label="Signing Method"
-        >
-          <TmField
-            id="sign-method"
-            v-model="selectedSignMethod"
-            :options="signMethods"
-            type="select"
-          />
-        </TmFormGroup>
         <form
-          v-else-if="selectedSignMethod === SIGN_METHODS.LOCAL"
+          v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
           @submit.prevent="validateChangeStep"
         >
           <TmFormGroup
@@ -140,8 +127,8 @@
               ref="next"
               type="primary"
               value="Next"
-              :loading="step === feeStep"
-              :disabled="disabled || !balancesLoaded || step === feeStep"
+              :loading="!balancesLoaded"
+              :disabled="disabled || !balancesLoaded"
               @click.native="validateChangeStep"
             />
             <TmBtn
@@ -164,6 +151,7 @@ import { mapState } from 'vuex'
 import { prettyInt, SMALLEST } from '~/common/numbers'
 import network from '~/network'
 import fees from '~/fees'
+import CosmosV2Source from '~/common/cosmosV2-source'
 
 class TransactionManager {} // TODO
 
@@ -266,7 +254,7 @@ export default {
       return sessionType.LOCAL
     },
     requiresSignIn() {
-      return !this.session || this.session.type === sessionType.EXPLORE
+      return false // !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
       return this.transactionType === 'UnstakeTx' ? 0 : this.amount
@@ -357,11 +345,12 @@ export default {
 
       this.$router.push('/address')
     },
-    // isValidInput(property) {
-    //   this.$v[property].$touch()
+    isValidInput(property) {
+      //   this.$v[property].$touch()
 
-    //   return !this.$v[property].$invalid
-    // },
+      //   return !this.$v[property].$invalid
+      return true
+    },
     previousStep() {
       switch (this.step) {
         case signStep:
@@ -452,10 +441,24 @@ export default {
     onSendingFailed(error) {
       this.step = signStep
       this.submissionError = `${this.submissionErrorPrefix}: ${error.message}.`
-      this.trackEvent(`event`, `failed-submit`, this.title, error.message)
     },
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
+    },
+    async loadData() {
+      const address = this.session ? this.session.address : undefined
+      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
+      if (address) {
+        const _store = {}
+        const api = new CosmosV2Source(this.$axios, network, _store, null, null)
+        const balances = await api.getBalancesV2FromAddress(
+          address,
+          currency,
+          network
+        )
+        this.balances = balances
+        this.balancesLoaded = true
+      }
     },
   },
   // validations() {
@@ -476,6 +479,9 @@ export default {
   //     },
   //   }
   // },
+  mounted() {
+    this.loadData()
+  },
 }
 </script>
 
