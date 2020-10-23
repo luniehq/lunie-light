@@ -57,7 +57,9 @@ function sendDetailsReducer(message, reducers, network) {
   return {
     from: [message.from_address],
     to: [message.to_address],
-    amount: reducers.coinReducer(message.amount[0], coinLookup, network),
+    amount: message.amount
+      ? reducers.coinReducer(message.amount[0], coinLookup, network)
+      : 0,
   }
 }
 
