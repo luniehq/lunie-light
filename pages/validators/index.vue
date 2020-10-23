@@ -59,6 +59,18 @@ import network from '../../network'
 
 export default {
   name: `page-validators`,
+  async asyncData({ $axios, store }) {
+    const address = store.state.address
+    const _store = {}
+    const api = new CosmosV2Source($axios, network, _store, null, null)
+    const [validators, delegations] = await Promise.all([
+      api.getAllValidators(),
+      address
+        ? api.getDelegationsForDelegatorAddress(address)
+        : Promise.resolve([]),
+    ])
+    return { validators, delegations }
+  },
   data: () => ({
     searchTerm: '',
     activeOnly: true,
@@ -91,19 +103,6 @@ export default {
         return this.validators.filter(({ status }) => status === 'ACTIVE')
       }
     },
-  },
-
-  async asyncData({ $axios, store }) {
-    const address = store.state.address
-    const _store = {}
-    const api = new CosmosV2Source($axios, network, _store, null, null)
-    const [validators, delegations] = await Promise.all([
-      api.getAllValidators(),
-      address
-        ? api.getDelegationsForDelegatorAddress(address)
-        : Promise.resolve([]),
-    ])
-    return { validators, delegations }
   },
   methods: {
     defaultSelectorsController(selector) {

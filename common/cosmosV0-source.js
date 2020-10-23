@@ -49,6 +49,7 @@ class CosmosV0API {
     } catch (error) {
       // give up
       if (intent >= 3) {
+        // eslint-disable-next-line
         console.error(
           `Error for query ${url} in network ${this.networkId} (tried 3 times)`
         )
