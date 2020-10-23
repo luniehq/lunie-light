@@ -141,6 +141,7 @@ import { SMALLEST } from '~/common/numbers'
 import { formatAddress, decodeB32 } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/network'
+import CosmosV2Source from '~/common/cosmosV2-source'
 
 const defaultMemo = ''
 
@@ -205,11 +206,12 @@ export default {
     maxAmount() {
       if (this.networkFeesLoaded) {
         return this.maxDecimals(
-          this.selectedBalance.amount - this.networkFees.transactionFee.amount,
+          this.selectedBalance.available -
+            this.networkFees.transactionFee.amount,
           6
         )
       } else {
-        return this.maxDecimals(this.selectedBalance.amount, 6)
+        return this.maxDecimals(this.selectedBalance.available, 6)
       }
     },
   },
@@ -234,6 +236,9 @@ export default {
         this.selectedToken = balances[0].denom
       }
     },
+  },
+  mounted() {
+    this.loadData()
   },
   methods: {
     open(denom = undefined) {
@@ -267,7 +272,7 @@ export default {
       this.amount = this.maxAmount
     },
     isMaxAmount() {
-      if (this.selectedBalance.amount === 0) {
+      if (this.selectedBalance.available === 0) {
         return false
       } else {
         return parseFloat(this.amount) === this.maxAmount
@@ -297,6 +302,20 @@ export default {
     },
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
+    },
+    async loadData() {
+      const address = this.session ? this.session.address : undefined
+      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
+      if (!address) return {}
+
+      const _store = {}
+      const api = new CosmosV2Source(this.$axios, network, _store, null, null)
+      const balances = await api.getBalancesV2FromAddress(
+        address,
+        currency,
+        network
+      )
+      this.balances = balances
     },
   },
   // validations() {
