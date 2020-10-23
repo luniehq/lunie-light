@@ -500,7 +500,7 @@ export default {
       let txFound = false
       try {
         await fetch(`${network.api_url}/txs/${hash}`).then((res) => {
-          if (res.status !== 200) {
+          if (res.status === 200) {
             txFound = true
           }
         })

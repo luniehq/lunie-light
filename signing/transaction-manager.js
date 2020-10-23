@@ -31,7 +31,7 @@ export default class TransactionManager {
 
   async getTransactionMetaData(transactionType, memo, senderAddress) {
     const { gasEstimate, fee } = fees[transactionType]
-    const { accountNumber, accountSequence } = await this.api.getAccountInfo(
+    const { accountNumber, sequence } = await this.api.getAccountInfo(
       senderAddress
     )
     const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
@@ -46,7 +46,7 @@ export default class TransactionManager {
     ]
     return {
       accountNumber,
-      accountSequence,
+      accountSequence: sequence,
       chainId: network.chain_id,
       gasEstimate: String(gasEstimate),
       fee: convertedFee,
@@ -131,7 +131,7 @@ export default class TransactionManager {
       mode: 'sync',
     }
     const result = await this.broadcastAPIRequest(txPayload)
-    if (result.raw_log) {
+    if (result.code) {
       throw new Error('Broadcast was not successful: ' + result.raw_log)
     } else if (result.txhash) {
       return { hash: result.txhash }
