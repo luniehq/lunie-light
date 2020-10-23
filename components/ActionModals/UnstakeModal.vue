@@ -2,7 +2,6 @@
   <ActionModal
     id="undelegation-modal"
     ref="actionModal"
-    :validate="validateForm"
     :amount="amount"
     :title="isRedelegation ? 'Restake' : 'Unstake'"
     class="undelegation-modal"
@@ -147,29 +146,15 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { decimal } from 'vuelidate/lib/validators'
 import { SMALLEST } from '../../common/numbers'
-// import TmField from 'src/components/common/TmField'
-// import TmFieldGroup from 'src/components/common/TmFieldGroup'
-// import TmBtn from 'src/components/common/TmBtn'
-// import TmFormGroup from 'src/components/common/TmFormGroup'
-// import TmFormMsg from 'src/components/common/TmFormMsg'
-// import ActionModal from './ActionModal'
 import { formatAddress, validatorEntry } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
 import network from '../../network'
 
 export default {
   name: `unstake-modal`,
-  components: {
-    // ActionModal,
-    // TmField,
-    // TmFieldGroup,
-    // TmBtn,
-    // TmFormGroup,
-    // TmFormMsg,
-  },
   filters: {
     validatorEntry,
   },
@@ -184,7 +169,9 @@ export default {
     },
   },
   data: () => ({
+    address: ``,
     amount: 0,
+    currentNetwork: {},
     delegations: [],
     validators: [],
     toSelectedIndex: `0`,
@@ -193,12 +180,13 @@ export default {
       available: 0,
     },
     lunieMessageTypes,
+    network: ``,
     smallestAmount: SMALLEST,
+    stakingDenom: ``,
     isInElection: false, // Handle election period in Polkadot
   }),
   computed: {
     ...mapState([`session`]),
-    ...mapGetters([`network`, `address`, `stakingDenom`, `currentNetwork`]),
     maximum() {
       if (network.network_type === `polkadot`) {
         const totalStaked = this.balance.total - this.balance.available

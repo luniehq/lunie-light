@@ -151,7 +151,7 @@
         </li>
       </ul>
 
-      <!-- <StakeModal
+      <StakeModal
         ref="stakeModal"
         :target-validator="validator"
         :is-nomination="true"
@@ -160,7 +160,7 @@
         ref="unstakeModal"
         :source-validator="validator"
         :is-unnomination="true"
-      /> -->
+      />
     </template>
   </TmPage>
 </template>
