@@ -57,9 +57,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import orderBy from 'lodash.orderby'
-import network from '../../network'
+import network from '~/network'
 
 export default {
   name: `table-validators`,
@@ -92,7 +91,6 @@ export default {
     stakingDenom: network.stakingDenom,
   }),
   computed: {
-    ...mapState([`address`]),
     sortedEnrichedValidators() {
       const orderedValidators = orderBy(
         this.validators.map((validator) => ({
@@ -130,15 +128,6 @@ export default {
           tooltip: `Percentage of voting shares`,
         },
       ]
-    },
-  },
-  watch: {
-    address: {
-      handler() {
-        if (!this.address) {
-          this.rewards = []
-        }
-      },
     },
   },
   methods: {

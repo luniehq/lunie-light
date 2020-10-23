@@ -20,7 +20,7 @@
         >
         <div class="session">
           <div class="session-header">
-            <a :class="{ invisible: hideBack }" @click="onBack">
+            <a :class="{ invisible: hideBack }" @click="goBack">
               <i class="material-icons notranslate circle back">arrow_back</i>
             </a>
             <div class="session-close">
@@ -51,12 +51,16 @@ export default {
     },
     onBack: {
       type: Function,
-      default: () => this.$router.go(`-1`),
+      default: undefined,
     },
   },
   methods: {
     closeModal() {
       this.$router.push(`/validators`) // TODO redirect back to where we come from
+    },
+    goBack() {
+      if (this.onBack) this.onBack()
+      else this.$router.go(`-1`)
     },
   },
 }

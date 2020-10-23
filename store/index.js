@@ -1,26 +1,29 @@
 export const state = () => ({
-  address: undefined,
-  session: {},
+  session: undefined,
+  currrentModalOpen: false,
 })
 
 export const mutations = {
-  setAddress(state, address) {
-    state.address = address
+  setSession(state, session) {
+    state.session = session
+  },
+  setCurrrentModalOpen(state, modal) {
+    state.currrentModalOpen = modal
   },
 }
 
 export const actions = {
   nuxtServerInit({ commit }, { app: { $cookies } }) {
-    const address = $cookies.get('address')
-    commit('setAddress', address)
+    const session = $cookies.get('lunie-session')
+    commit('setSession', session)
   },
-  signIn({ commit }, address) {
+  signIn({ commit }, session) {
     // to be able to render the page for the user in SSR we need to set the address as a cookie
-    if (!address) {
-      this.$cookies.remove('address')
+    if (!session) {
+      this.$cookies.remove('lunie-session')
     } else {
-      this.$cookies.set('address', address)
+      this.$cookies.set('lunie-session', session)
     }
-    commit('setAddress', address)
+    commit('setSession', session)
   },
 }
