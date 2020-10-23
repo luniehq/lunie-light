@@ -200,6 +200,7 @@ import { SMALLEST } from '../../common/numbers'
 import { formatAddress, validatorEntry } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
 import network from '../../network'
+import CosmosV2Source from '~/common/cosmosV2-source'
 
 export default {
   name: `stake-modal`,
@@ -359,7 +360,7 @@ export default {
       }
     },
     maxAmount() {
-      return this.fromOptions[this.fromSelectedIndex].maximum
+      return this.balance.available
     },
     isRedelegation() {
       return this.fromSelectedIndex !== 0 && this.fromSelectedIndex !== '0' // where are these 0 strings comming from?
@@ -380,6 +381,9 @@ export default {
         this.session.addressRole === `none`
       )
     },
+  },
+  mounted() {
+    this.loadData()
   },
   methods: {
     open() {
@@ -414,6 +418,22 @@ export default {
           address: this.address,
           networkId: network.id,
         })
+      }
+    },
+    async loadData() {
+      const address = this.session ? this.session.address : undefined
+      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
+      if (address) {
+        const _store = {}
+        const api = new CosmosV2Source(this.$axios, network, _store, null, null)
+        const balances = await api.getBalancesV2FromAddress(
+          address,
+          currency,
+          network
+        )
+        this.balance = balances.find(
+          ({ denom }) => denom === network.stakingDenom
+        )
       }
     },
   },

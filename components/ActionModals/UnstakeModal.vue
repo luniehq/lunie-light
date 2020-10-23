@@ -152,6 +152,7 @@ import { SMALLEST } from '../../common/numbers'
 import { formatAddress, validatorEntry } from '../../common/address'
 import { lunieMessageTypes } from '../../common/lunie-message-types'
 import network from '../../network'
+import CosmosV2Source from '~/common/cosmosV2-source'
 
 export default {
   name: `unstake-modal`,
@@ -315,6 +316,9 @@ export default {
       return validatorEntry(this.sourceValidator)
     },
   },
+  mounted() {
+    this.loadData()
+  },
   validations() {
     return {
       amount: {
@@ -379,6 +383,22 @@ export default {
 
       // update registered topics for emails as the validator set changed
       this.$store.dispatch('updateNotificationRegistrations')
+    },
+    async loadData() {
+      const address = this.session ? this.session.address : undefined
+      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
+      if (address) {
+        const _store = {}
+        const api = new CosmosV2Source(this.$axios, network, _store, null, null)
+        const balances = await api.getBalancesV2FromAddress(
+          address,
+          currency,
+          network
+        )
+        this.balance = balances.find(
+          ({ denom }) => denom === network.stakingDenom
+        )
+      }
     },
   },
 }
