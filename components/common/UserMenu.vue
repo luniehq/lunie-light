@@ -1,9 +1,9 @@
 <template>
   <div class="user-menu">
-    <UserMenuAddress :address="address" />
+    <UserMenuAddress :address="session ? session.address : undefined" />
     <TmBtn
       type="secondary"
-      :value="address ? 'Change Address' : 'View Address'"
+      :value="session ? 'Change Address' : 'View Address'"
       @click.native="$router.push('/address')"
     />
   </div>
@@ -15,7 +15,7 @@ import { mapState } from 'vuex'
 export default {
   name: `user-menu`,
   computed: {
-    ...mapState(['address']),
+    ...mapState(['session']),
   },
 }
 </script>

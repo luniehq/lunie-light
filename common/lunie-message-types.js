@@ -10,6 +10,4 @@ const lunieMessageTypes = {
   UNKNOWN: `UnknownTx`,
 }
 
-module.exports = {
-  ...lunieMessageTypes,
-}
+module.exports = { lunieMessageTypes }

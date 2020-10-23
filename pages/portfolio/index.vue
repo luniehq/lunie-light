@@ -19,7 +19,9 @@ import CosmosV2Source from '~/common/cosmosV2-source'
 export default {
   name: `page-portfolio`,
   async asyncData({ $axios, $cookies, store }) {
-    const address = store.state.address
+    const address = store.state.session
+      ? store.state.session.address
+      : undefined
     const currency = $cookies.get('currency') || 'USD' // TODO move to store
     if (!address) return {}
 

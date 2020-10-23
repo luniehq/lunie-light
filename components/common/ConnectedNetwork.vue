@@ -21,26 +21,13 @@
         id="tm-connected-network__block"
         class="tm-connected-network__string"
       >
-        <nuxt-link
+        <span
           v-if="block.height"
           v-tooltip.top="'Block Height'"
-          :class="
-            `block-number` && {
-              noClickable: true,
-            }
-          "
-          :to="
-            false
-              ? ``
-              : {
-                  name: `block`,
-                  params: { height: block.height, networkId: networkSlug },
-                }
-          "
-          @click.native="handleClick()"
+          class="block-number"
         >
           #{{ block.height | prettyInt }}
-        </nuxt-link>
+        </span>
         <template v-else> -- </template>
       </div>
     </div>
@@ -94,10 +81,6 @@ export default {
     }, 10000)
   },
   methods: {
-    handleClick() {
-      this.$emit(`close-menu`)
-      window.scrollTo(0, 0)
-    },
     async loadBlock() {
       const store = {}
       const api = new CosmosV2Source(this.$axios, network, store, null, null)
