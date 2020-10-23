@@ -153,8 +153,6 @@ import network from '~/network'
 import fees from '~/fees'
 import CosmosV2Source from '~/common/cosmosV2-source'
 
-class TransactionManager {} // TODO
-
 const defaultStep = `details`
 const feeStep = `fees`
 const signStep = `sign`
@@ -299,8 +297,26 @@ export default {
       this.$refs.next.$el.focus()
     }
   },
-  created() {
-    this.transactionManager = new TransactionManager() // TODO: we don't have apollo here
+  // validations() {
+  //   return {
+  //     password: {
+  //       required: requiredIf(
+  //         () =>
+  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+  //           this.step === signStep
+  //       ),
+  //     },
+  //     invoiceTotal: {
+  //       max: (x) =>
+  //         networkFeesLoaded &&
+  //         networkFees.transactionFee.denom !== this.selectedDenom
+  //           ? true
+  //           : Number(x) <= this.selectedBalance.amount,
+  //     },
+  //   }
+  // },
+  mounted() {
+    this.loadData()
   },
   methods: {
     confirmModalOpen() {
@@ -392,6 +408,8 @@ export default {
     },
     async submit() {
       this.submissionError = null
+
+      // TODO is this check really needed?
       if (
         Object.entries(this.transactionData).length === 0 &&
         this.transactionData.constructor === Object
@@ -403,15 +421,28 @@ export default {
       const { type, memo, ...message } = this.transactionData
 
       try {
-        const transactionData = await this.transactionManager.getCosmosTransactionData(
-          {
-            memo,
-            gasEstimate: this.networkFee.gasEstimate,
-            fee: [this.networkFee.fee],
-            senderAddress: this.address,
+        if (!this.transactionManager) {
+          // Lazy import as a bunch of big libraries are imported here
+          const TransactionManager = await import(
+            '~/signing/transaction-manager'
+          )
+          const _store = {}
+          const api = new CosmosV2Source(
+            this.$axios,
             network,
-          }
+            _store,
+            null,
+            null
+          )
+          this.transactionManager = new TransactionManager(api)
+        }
+
+        const transactionData = await this.transactionManager.getTransactionMetaData(
+          type,
+          memo,
+          this.session.address
         )
+        // TODO currently not respected
         const HDPath = network.HDPath
         const curve = network.curve
 
@@ -430,6 +461,8 @@ export default {
         const { hash } = hashResult
         this.txHash = hash
         this.step = inclusionStep
+
+        this.pollTxInclusion(hash)
       } catch (error) {
         this.onSendingFailed(error)
       }
@@ -445,12 +478,13 @@ export default {
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
-    async loadData() {
+    async loadData(api) {
       const address = this.session ? this.session.address : undefined
       const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
       if (address) {
         const _store = {}
         const api = new CosmosV2Source(this.$axios, network, _store, null, null)
+
         const balances = await api.getBalancesV2FromAddress(
           address,
           currency,
@@ -460,27 +494,25 @@ export default {
         this.balancesLoaded = true
       }
     },
-  },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
-  mounted() {
-    this.loadData()
+    async pollTxInclusion(hash, iteration = 0) {
+      const MAX_POLL_ITERATIONS = 30
+      await fetch(`${network.api_url}/txs/${hash}`).then(async (res) => {
+        if (res.status !== 200) {
+          if (iteration < MAX_POLL_ITERATIONS) {
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            this.pollTxInclusion(hash, iteration + 1)
+          } else {
+            this.onSendingFailed(
+              new Error(
+                `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
+              )
+            )
+          }
+        } else {
+          this.onTxIncluded()
+        }
+      })
+    },
   },
 }
 </script>

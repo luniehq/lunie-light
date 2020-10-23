@@ -1,5 +1,6 @@
 export default {
   id: 'cosmos-hub-mainnet',
+  chain_id: 'cosmos-hub-3', // TODO get from chain?
   name: 'Cosmos Hub',
   api_url: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
