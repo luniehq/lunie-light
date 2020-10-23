@@ -15,6 +15,7 @@ export default {
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   bech32Prefix: 'cosmos',
+  lockUpPeriod: `21 days`,
 
   // utility functions
   getCoinLookup(network, denom, coinLookupDenomType = `chainDenom`) {
