@@ -423,7 +423,7 @@ export default {
       try {
         if (!this.transactionManager) {
           // Lazy import as a bunch of big libraries are imported here
-          const TransactionManager = await import(
+          const { default: TransactionManager } = await import(
             '~/signing/transaction-manager'
           )
           const _store = {}
@@ -442,6 +442,7 @@ export default {
           memo,
           this.session.address
         )
+        debugger
         // TODO currently not respected
         const HDPath = network.HDPath
         const curve = network.curve
@@ -496,22 +497,28 @@ export default {
     },
     async pollTxInclusion(hash, iteration = 0) {
       const MAX_POLL_ITERATIONS = 30
-      await fetch(`${network.api_url}/txs/${hash}`).then(async (res) => {
-        if (res.status !== 200) {
-          if (iteration < MAX_POLL_ITERATIONS) {
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            this.pollTxInclusion(hash, iteration + 1)
-          } else {
-            this.onSendingFailed(
-              new Error(
-                `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
-              )
-            )
+      let txFound = false
+      try {
+        await fetch(`${network.api_url}/txs/${hash}`).then((res) => {
+          if (res.status !== 200) {
+            txFound = true
           }
-        } else {
-          this.onTxIncluded()
-        }
-      })
+        })
+      } catch (err) {
+        // ignore error
+      }
+      if (txFound) {
+        this.onTxIncluded()
+      } else if (iteration < MAX_POLL_ITERATIONS) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        this.pollTxInclusion(hash, iteration + 1)
+      } else {
+        this.onSendingFailed(
+          new Error(
+            `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
+          )
+        )
+      }
     },
   },
 }

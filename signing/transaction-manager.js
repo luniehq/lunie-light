@@ -16,7 +16,10 @@ export default class TransactionManager {
   async broadcastAPIRequest(payload) {
     const options = {
       method: 'POST',
-      body: JSON.stringify({ payload }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     }
 
     const response = await fetch(
@@ -31,11 +34,11 @@ export default class TransactionManager {
     const { accountNumber, accountSequence } = await this.api.getAccountInfo(
       senderAddress
     )
-    const coinLookup = network.getCoinLookup(network, fee.denom)
+    const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
     // converting view fee to on chain fee
     const convertedFee = [
       {
-        amount: BigNumber(fee.find(({ amount }) => amount).amount)
+        amount: BigNumber(fee.amount)
           .div(coinLookup.chainToViewConversionFactor)
           .toNumber(),
         denom: coinLookup.chainDenom,
@@ -125,11 +128,13 @@ export default class TransactionManager {
   async broadcastTransaction(broadcastableObject) {
     const txPayload = {
       tx: broadcastableObject,
-      mode: 'async',
+      mode: 'sync',
     }
     const result = await this.broadcastAPIRequest(txPayload)
-    if (result.success) {
-      return { hash: result.hash }
+    if (result.raw_log) {
+      throw new Error('Broadcast was not successful: ' + result.raw_log)
+    } else if (result.txhash) {
+      return { hash: result.txhash }
     } else {
       throw new Error('Broadcast was not successful: ' + result.error)
     }
