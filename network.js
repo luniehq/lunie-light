@@ -17,6 +17,7 @@ export default {
   bech32Prefix: 'cosmos',
 
   // utility functions
+  // TODO put in a wrapper outside this file
   getCoinLookup(network, denom, coinLookupDenomType = `chainDenom`) {
     return network.coinLookup.find(
       (coin) => coin[coinLookupDenomType] === denom
