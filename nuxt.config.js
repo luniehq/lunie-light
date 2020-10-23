@@ -1,5 +1,6 @@
 export default {
   // Build the app as a static site instead of SSR
+  ssr: false,
   target: 'static',
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
