@@ -2,9 +2,10 @@ export default {
   // Build the app as a static site instead of SSR
   ssr: false,
   target: 'static',
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'lunie3',
+    title: 'Lunie 3',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

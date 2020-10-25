@@ -302,6 +302,9 @@ export default {
   created() {
     this.transactionManager = new TransactionManager() // TODO: we don't have apollo here
   },
+  mounted() {
+    this.loadData()
+  },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
@@ -479,9 +482,6 @@ export default {
   //     },
   //   }
   // },
-  mounted() {
-    this.loadData()
-  },
 }
 </script>
 
