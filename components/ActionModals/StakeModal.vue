@@ -12,184 +12,9 @@
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="delegate"
-    :disabled="
-      isInElection ||
-      (hasNoNominations && Object.keys(targetValidator).length === 0)
-    "
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
-      v-if="session.addressRole === `stash`"
-      class="action-modal-form-group"
-    >
-      <div class="form-message notice">
-        <span>
-          This is a stash account, you can increase the amount to stake but you
-          need to sign in with your controller account to set or change your
-          validators.
-        </span>
-      </div>
-    </TmFormGroup>
-    <TmFormGroup
-      v-if="session.addressRole === `controller`"
-      class="action-modal-form-group"
-    >
-      <div class="form-message notice">
-        <span>
-          This is a controller account, you can set or change your validators
-          but to increase the amount to stake you need to sign in with your
-          stash account.
-        </span>
-      </div>
-    </TmFormGroup>
-    <TmFormGroup class="action-modal-form-group">
-      <div class="form-message notice">
-        <span v-if="isInElection">
-          There is currently an ongoing election for new validator candidates.
-          Stake is not allowed by now.
-        </span>
-        <span
-          v-if="hasNoNominations && Object.keys(targetValidator).length === 0"
-        >
-          Before staking any tokens you need to select some validators to start
-          getting rewards. Select one by going to its profile page and clicking
-          on "Select"
-        </span>
-        <span v-else-if="!isRedelegation && !isNomination">
-          It will take {{ undelegationPeriod }} to unlock your tokens after they
-          are staked. There is a risk that some tokens will be lost depending on
-          the behaviour of the validator you choose.
-        </span>
-        <span v-else-if="!isNomination && !isUnnomination">
-          Voting power and rewards will change instantly upon restaking — but
-          your tokens will still be subject to the risks associated with the
-          original stake for the duration of the unstaking period.
-        </span>
-        <span v-else-if="isNomination">
-          The validator will appear within your validator set once the next era
-          begins.
-        </span>
-      </div>
-    </TmFormGroup>
-    <TmFormGroup
-      v-if="
-        Object.keys(targetValidator).length > 0 &&
-        session.addressRole !== `stash`
-      "
-      class="action-modal-form-group"
-      field-id="to"
-      field-label="To"
-    >
-      <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
-      <template>
-        <!-- <TmFormMsg
-          v-if="targetValidator.status === 'INACTIVE' && !isRedelegation"
-          :msg="`You are about to stake to an inactive validator (${targetValidator.statusDetailed})`"
-          type="custom"
-          class="tm-form-msg--desc"
-        />
-        <TmFormMsg
-          v-if="targetValidator.status === 'INACTIVE' && isRedelegation"
-          :msg="`You are about to restake to an inactive validator (${targetValidator.statusDetailed})`"
-          type="custom"
-          class="tm-form-msg--desc"
-        /> -->
-      </template>
-    </TmFormGroup>
-
-    <TmFormGroup
-      v-if="
-        Object.keys(targetValidator).length > 0 &&
-        session.addressRole !== `stash`
-      "
-      class="action-modal-form-group"
-      field-id="from"
-      field-label="From"
-    >
-      <TmField
-        id="from"
-        v-model="fromSelectedIndex"
-        :title="from"
-        :options="fromOptions"
-        type="select"
-      />
-    </TmFormGroup>
-    <TmFormGroup
-      v-if="
-        network.network_type === `polkadot`
-          ? (!isNomination || stakedBalance.total === 0) &&
-            session.addressRole !== `controller`
-          : true
-      "
-      class="action-modal-form-group"
-      field-id="amount"
-      :field-label="`Amount${
-        network.network_type === 'polkadot' &&
-        Object.keys(targetValidator).length > 0 &&
-        balance.total > 0 &&
-        session.addressRole !== `stash`
-          ? ' (Optional)'
-          : ''
-      }`"
-    >
-      <span class="input-suffix max-button">{{ stakingDenom }}</span>
-      <TmFieldGroup>
-        <TmField
-          id="amount"
-          v-model="amount"
-          v-focus
-          placeholder="0"
-          class="tm-field-addon"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <TmBtn
-          type="button"
-          class="secondary addon-max"
-          value="Set Max"
-          :disabled="session.addressRole === `controller`"
-          @click.native="setMaxAmount()"
-        />
-      </TmFieldGroup>
-      <span class="form-message">
-        Available to stake:
-        {{ maxAmount }}
-        {{ stakingDenom }}s
-      </span>
-      <!-- <TmFormMsg
-        v-if="balance.available === '0'"
-        :msg="`doesn't have any ${currentNetwork.stakingDenom}s`"
-        name="Wallet"
-        type="custom"
-      />
-      <TmFormMsg
-        name="Amount"
-        type="numeric"
-      />
-      <TmFormMsg
-        name="Amount"
-        type="required"
-      />
-      <TmFormMsg
-        type="custom"
-        :msg="`You don't have enough ${currentNetwork.stakingDenom}s to proceed.`"
-      />
-      <TmFormMsg
-        :min="smallestAmount"
-        name="Amount"
-        type="min"
-      />
-      <TmFormMsg
-        name="Amount"
-        type="maxDecimals"
-      />
-      <TmFormMsg
-        msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
-        type="custom"
-        class="tm-form-msg--desc"
-      /> -->
-    </TmFormGroup>
   </ActionModal>
 </template>
 
@@ -211,14 +36,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    isNomination: {
-      type: Boolean,
-      default: false,
-    },
-    isUnnomination: {
-      type: Boolean,
-      default: false,
-    },
   },
   data: () => ({
     address: ``,
@@ -236,7 +53,6 @@ export default {
     lunieMessageTypes,
     network: ``,
     smallestAmount: SMALLEST,
-    isInElection: false, // Handle election period in Polkadot
   }),
   computed: {
     ...mapState([`session`]),
@@ -328,7 +144,6 @@ export default {
             amount: this.amount,
             denom: network.stakingDenom,
           },
-          addressRole: this.session.addressRole,
         }
       } else {
         return {
@@ -341,7 +156,6 @@ export default {
             amount: this.amount,
             denom: network.stakingDenom,
           },
-          addressRole: this.session.addressRole,
         }
       }
     },
@@ -373,13 +187,6 @@ export default {
     enhancedTargetValidator() {
       return validatorEntry(this.targetValidator)
     },
-    hasNoNominations() {
-      // TODO: only temporary. Need to create a query to know if the address has any nomination
-      return (
-        network.network_type === `polkadot` &&
-        this.session.addressRole === `none`
-      )
-    },
   },
   methods: {
     open() {
@@ -408,13 +215,6 @@ export default {
 
       // update registered topics for emails as the validator set changed
       this.$store.dispatch('updateNotificationRegistrations')
-      // update the role of the user as it might change after bonding the first time
-      if (network.network_type === 'polkadot') {
-        this.$store.dispatch('checkAddressRole', {
-          address: this.address,
-          networkId: network.id,
-        })
-      }
     },
   },
   // validations() {
@@ -423,28 +223,11 @@ export default {
   //       required: (amount) => {
   //         // In Polkadot we don't need to bond extra, the user may just want to nominate a new validator
   //         // stash accounts or new accounts that haven't bonded tokens yet, need to specify an amount to bond
-  //         if (
-  //           network.network_type === 'polkadot' &&
-  //           ['controller', 'stash/controller'].includes(
-  //             this.session.addressRole
-  //           )
-  //         ) {
-  //           return true
-  //         }
   //         return !!amount && amount !== `0`
   //       },
   //       decimal,
   //       max: (x) => Number(x) <= this.maxAmount,
   //       min: (x) => {
-  //         // see required
-  //         if (
-  //           network.network_type === 'polkadot' &&
-  //           ['controller', 'stash/controller'].includes(
-  //             this.session.addressRole
-  //           )
-  //         ) {
-  //           return true
-  //         }
   //         return Number(x) >= SMALLEST
   //       },
   //       maxDecimals: (x) => {
