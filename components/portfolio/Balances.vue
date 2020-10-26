@@ -59,7 +59,7 @@
         :total-rewards-per-denom="totalRewardsPerDenom"
       />
 
-      <SendModal ref="SendModal" :denoms="getAllDenoms" />
+      <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
       <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
       <StakeModal ref="StakeModal" />
       <UnstakeModal ref="UnstakeModal" /> -->

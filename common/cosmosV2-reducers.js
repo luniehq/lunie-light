@@ -338,6 +338,7 @@ function transactionReducerV2(network, transaction, reducers) {
     }))
     return returnedMessages
   } catch (error) {
+    // eslint-disable-next-line
     console.error(error)
     return [] // must return something differ from undefined
   }

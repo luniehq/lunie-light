@@ -58,7 +58,6 @@ import network from '~/network'
 
 export default {
   name: `page-validators`,
-
   async asyncData({ $axios, store }) {
     const address = store.state.session
       ? store.state.session.address

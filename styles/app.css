@@ -146,6 +146,16 @@ input.tm-field {
   animation: fade 1.5s infinite;
 }
 
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.2s;
+}
+
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
 @keyframes fade {
   0% {
     opacity: 0.4;
