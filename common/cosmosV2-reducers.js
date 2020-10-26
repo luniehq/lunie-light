@@ -51,7 +51,6 @@ function setTransactionSuccess(transaction, index) {
 
 function sendDetailsReducer(message, reducers, network) {
   const coinLookup = network.getCoinLookup(
-    network,
     message.amount ? message.amount[0].denom : network.stakingDenom
   )
   return {
@@ -62,7 +61,7 @@ function sendDetailsReducer(message, reducers, network) {
 }
 
 function stakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(network, message.amount.denom)
+  const coinLookup = network.getCoinLookup(message.amount.denom)
   return {
     to: [message.validator_address],
     amount: reducers.coinReducer(message.amount, coinLookup, network),
@@ -70,7 +69,7 @@ function stakeDetailsReducer(message, reducers, network) {
 }
 
 function restakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(network, message.amount.denom)
+  const coinLookup = network.getCoinLookup(message.amount.denom)
   return {
     from: [message.validator_src_address],
     to: [message.validator_dst_address],
@@ -79,7 +78,7 @@ function restakeDetailsReducer(message, reducers, network) {
 }
 
 function unstakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(network, message.amount.denom)
+  const coinLookup = network.getCoinLookup(message.amount.denom)
   return {
     from: [message.validator_address],
     amount: reducers.coinReducer(message.amount, coinLookup, network),
@@ -136,10 +135,7 @@ function claimRewardsAmountReducer(transaction, reducers, network) {
 }
 
 function submitProposalDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(
-    network,
-    message.initial_deposit[0].denom
-  )
+  const coinLookup = network.getCoinLookup(message.initial_deposit[0].denom)
   return {
     proposalType: message.content.type,
     proposalTitle: message.content.value.title,
@@ -160,7 +156,7 @@ function voteProposalDetailsReducer(message) {
 }
 
 function depositDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(network, message.amount[0].denom)
+  const coinLookup = network.getCoinLookup(message.amount[0].denom)
   return {
     proposalId: message.proposal_id,
     amount: reducers.coinReducer(message.amount[0], coinLookup, network),
@@ -277,12 +273,11 @@ function transactionReducerV2(network, transaction, reducers) {
       Array.isArray(transaction.tx.value.fee.amount)
     ) {
       fees = transaction.tx.value.fee.amount.map((coin) => {
-        const coinLookup = network.getCoinLookup(network, coin.denom)
+        const coinLookup = network.getCoinLookup(coin.denom)
         return coinReducer(coin, coinLookup, network)
       })
     } else {
       const coinLookup = network.getCoinLookup(
-        network,
         transaction.tx.value.fee.amount.denom
       )
       fees = [coinReducer(transaction.tx.value.fee.amount, coinLookup, network)]

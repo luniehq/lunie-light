@@ -545,7 +545,7 @@ class CosmosV0API {
     ])
     const balances = balancesResponse || []
     const coins = balances.map((coin) => {
-      const coinLookup = network.getCoinLookup(network, coin.denom)
+      const coinLookup = network.getCoinLookup(coin.denom)
       return this.reducers.coinReducer(coin, coinLookup)
     })
     // also check if there are any balances as rewards
@@ -658,7 +658,6 @@ class CosmosV0API {
       `staking/delegators/${delegatorAddress}/delegations/${operatorAddress}`
     ).catch(() => {
       const coinLookup = this.network.getCoinLookup(
-        this.network,
         this.network.stakingDenom,
         'viewDenom'
       )

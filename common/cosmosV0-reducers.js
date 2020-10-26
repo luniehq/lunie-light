@@ -374,7 +374,7 @@ function rewardCoinReducer(reward, network) {
   const multiDenomRewardsArray = reward.split(`,`)
   const mappedMultiDenomRewardsArray = multiDenomRewardsArray.map((reward) => {
     const denom = denomLookup(network.coinLookup, reward.match(/[a-z]+/gi)[0])
-    const coinLookup = network.getCoinLookup(network, denom, `viewDenom`)
+    const coinLookup = network.getCoinLookup(denom, `viewDenom`)
     return {
       denom,
       amount: BigNumber(reward.match(/[0-9]+/gi)).times(
@@ -488,7 +488,7 @@ async function reduceFormattedRewards(
 ) {
   await Promise.all(
     reward.map(async (denomReward) => {
-      const coinLookup = network.getCoinLookup(network, denomReward.denom)
+      const coinLookup = network.getCoinLookup(denomReward.denom)
       const lunieCoin = reducers.coinReducer(denomReward, coinLookup)
       if (lunieCoin.amount < 0.000001) return
 
