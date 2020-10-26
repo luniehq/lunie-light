@@ -1,12 +1,8 @@
 <template>
-  <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-html="svg" />
+  <div :style="{ background: gradient }"></div>
 </template>
 
 <script>
-import Avatars from '@dicebear/avatars'
-import regularSprites from '@dicebear/avatars-jdenticon-sprites'
-
 export default {
   name: `avatar`,
   props: {
@@ -16,11 +12,11 @@ export default {
     },
   },
   computed: {
-    svg() {
-      const sprites = regularSprites
-      const options = { mood: [`happy`] }
-      const avatars = new Avatars(sprites, options)
-      return avatars.create(this.address)
+    gradient() {
+      const hex1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+      const hex2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
+
+      return 'linear-gradient(130deg, ' + hex1 + ' 0%, ' + hex2 + ' 100%)'
     },
   },
 }

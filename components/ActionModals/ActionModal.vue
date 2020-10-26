@@ -318,9 +318,6 @@ export default {
   mounted() {
     this.loadData()
   },
-  mounted() {
-    this.loadData()
-  },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
@@ -445,7 +442,7 @@ export default {
           memo,
           this.session.address
         )
-        debugger
+
         // TODO currently not respected
         const HDPath = network.HDPath
         const curve = network.curve
@@ -498,24 +495,24 @@ export default {
         this.balancesLoaded = true
       }
     },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
+    // validations() {
+    //   return {
+    //     password: {
+    //       required: requiredIf(
+    //         () =>
+    //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+    //           this.step === signStep
+    //       ),
+    //     },
+    //     invoiceTotal: {
+    //       max: (x) =>
+    //         networkFeesLoaded &&
+    //         networkFees.transactionFee.denom !== this.selectedDenom
+    //           ? true
+    //           : Number(x) <= this.selectedBalance.amount,
+    //     },
+    //   }
+    // },
     async pollTxInclusion(hash, iteration = 0) {
       const MAX_POLL_ITERATIONS = 30
       let txFound = false
