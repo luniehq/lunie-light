@@ -151,8 +151,8 @@
         </li>
       </ul>
 
-      <StakeModal ref="stakeModal" :target-validator="validator" />
-      <UnstakeModal
+      <LazyStakeModal ref="stakeModal" :target-validator="validator" />
+      <LazyUnstakeModal
         ref="unstakeModal"
         :source-validator="validator"
         :is-unnomination="true"

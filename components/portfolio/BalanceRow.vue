@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <SendModal ref="SendModal" :denoms="[balance.denom]" />
+    <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
     <!-- <StakeModal ref="StakeModal" />
     <UnstakeModal ref="UnstakeModal" /> -->
 
