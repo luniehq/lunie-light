@@ -50,24 +50,16 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { prettyInt } from '../../common/numbers'
-import network from '../../network'
-import CosmosV2Source from '../../common/cosmosV2-source'
 
 export default {
   name: `connected-network`,
   filters: {
     prettyInt,
   },
-  data: () => ({ block: undefined }),
-  // TODO doesn't work as not a page
-  // async asyncData({ $axios }) {
-  //   const store = {}
-  //   const api = new CosmosV2Source($axios, network, store, null, null)
-  //   const block = await api.getBlockV2()
-  //   return { block }
-  // },
   computed: {
+    ...mapState('data', ['block']),
     networkTooltip() {
       return this.block
         ? `You're connected to ${this.block.chainId}.`
@@ -81,11 +73,8 @@ export default {
     }, 10000)
   },
   methods: {
-    async loadBlock() {
-      const store = {}
-      const api = new CosmosV2Source(this.$axios, network, store, null, null)
-      const block = await api.getBlockV2()
-      this.block = block
+    loadBlock() {
+      this.$store.dispatch('data/getBlock')
     },
   },
 }

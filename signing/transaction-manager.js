@@ -5,14 +5,10 @@ import {
   getBroadcastableObject,
 } from './transaction-generation.js'
 import messageCreators from './messages.js'
-import fees from '~/fees'
-import network from '~/network'
+import fees from '~/common/fees'
+import network from '~/common/network'
 
 export default class TransactionManager {
-  constructor(api) {
-    this.api = api
-  }
-
   async broadcastAPIRequest(payload) {
     const options = {
       method: 'POST',
@@ -29,11 +25,8 @@ export default class TransactionManager {
     return response
   }
 
-  async getTransactionMetaData(transactionType, memo, senderAddress) {
-    const { gasEstimate, fee } = fees[transactionType]
-    const { accountNumber, sequence } = await this.api.getAccountInfo(
-      senderAddress
-    )
+  getTransactionMetaData(transactionType, memo, { accountNumber, sequence }) {
+    const { gasEstimate, fee } = fees.getFees(transactionType)
     const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
     // converting view fee to on chain fee
     const convertedFee = [
@@ -62,7 +55,6 @@ export default class TransactionManager {
     network,
     signingType,
     password,
-    polkadotAPI,
     HDPath,
     curve,
   }) {
@@ -74,7 +66,6 @@ export default class TransactionManager {
       network,
       signingType,
       password,
-      polkadotAPI,
       HDPath,
       curve
     )
