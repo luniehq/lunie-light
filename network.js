@@ -16,10 +16,4 @@ export default {
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
-
-  // utility functions
-  // TODO put in a wrapper outside this file
-  getCoinLookup(denom, coinLookupDenomType = `chainDenom`) {
-    return this.coinLookup.find((coin) => coin[coinLookupDenomType] === denom)
-  },
 }

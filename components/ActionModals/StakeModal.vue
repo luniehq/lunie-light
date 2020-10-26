@@ -15,16 +15,117 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
+    <TmFormGroup class="action-modal-form-group">
+      <div class="form-message notice">
+        <span v-if="isRedelegation">
+          Voting power and rewards will change instantly upon restaking — but
+          your tokens will still be subject to the risks associated with the
+          original stake for the duration of the unstaking period.
+        </span>
+      </div>
+    </TmFormGroup>
+    <TmFormGroup
+      v-if="Object.keys(targetValidator).length > 0"
+      class="action-modal-form-group"
+      field-id="to"
+      field-label="To"
+    >
+      <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
+      <template>
+        <!-- <TmFormMsg
+          v-if="targetValidator.status === 'INACTIVE' && !isRedelegation"
+          :msg="`You are about to stake to an inactive validator (${targetValidator.statusDetailed})`"
+          type="custom"
+          class="tm-form-msg--desc"
+        />
+        <TmFormMsg
+          v-if="targetValidator.status === 'INACTIVE' && isRedelegation"
+          :msg="`You are about to restake to an inactive validator (${targetValidator.statusDetailed})`"
+          type="custom"
+          class="tm-form-msg--desc"
+        /> -->
+      </template>
+    </TmFormGroup>
+
+    <!-- :error="$v.amount.$error && $v.amount.$invalid" -->
+    <TmFormGroup
+      class="action-modal-form-group"
+      field-id="amount"
+      field-label="Amount"
+    >
+      <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
+      <TmFieldGroup>
+        <TmField
+          id="amount"
+          v-model="amount"
+          v-focus
+          placeholder="0"
+          class="tm-field-addon"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <TmBtn
+          type="button"
+          class="secondary addon-max"
+          value="Set Max"
+          :disabled="session.addressRole === `controller`"
+          @click.native="setMaxAmount()"
+        />
+      </TmFieldGroup>
+      <span class="form-message">
+        Available to stake:
+        {{ maxAmount }}
+        {{ network.stakingDenom }}s
+      </span>
+      <TmFormMsg
+        v-if="balance.available === '0'"
+        :msg="`doesn't have any ${network.stakingDenom}s`"
+        name="Wallet"
+        type="custom"
+      />
+      <!-- <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.decimal"
+        name="Amount"
+        type="numeric"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
+        name="Amount"
+        type="required"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.max"
+        type="custom"
+        :msg="`You don't have enough ${currentNetwork.stakingDenom}s to proceed.`"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.min"
+        :min="smallestAmount"
+        name="Amount"
+        type="min"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
+        name="Amount"
+        type="maxDecimals"
+      />
+      <TmFormMsg
+        v-else-if="isMaxAmount() && !isRedelegation"
+        msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
+        type="custom"
+        class="tm-form-msg--desc"
+      /> -->
+    </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 // import { decimal } from 'vuelidate/lib/validators'
-import { SMALLEST } from '../../common/numbers'
-import { formatAddress, validatorEntry } from '../../common/address'
-import { lunieMessageTypes } from '../../common/lunie-message-types'
-import network from '../../network'
+import { SMALLEST } from '~/common/numbers'
+import { formatAddress, validatorEntry } from '~/common/address'
+import { lunieMessageTypes } from '~/common/lunie-message-types'
+import network from '~/common/network'
 
 export default {
   name: `stake-modal`,
@@ -38,41 +139,29 @@ export default {
     },
   },
   data: () => ({
-    address: ``,
     amount: 0,
     fromSelectedIndex: 0,
-    balance: {
-      amount: null,
-      denom: ``,
-    },
-    currentNetwork: {},
-    validators: [],
-    delegations: [],
-    undelegations: [],
-    undelegationsLoaded: false,
     lunieMessageTypes,
-    network: ``,
+    network,
     smallestAmount: SMALLEST,
   }),
   computed: {
     ...mapState([`session`]),
-    stakedBalance() {
-      // balances not loaded yet
-      if (!this.balance) {
-        return {
-          total: 0,
+    ...mapState(`data`, [`balances`]),
+    address() {
+      return this.session ? this.session.address : ''
+    },
+    balance() {
+      return (
+        this.balances.find(({ denom }) => denom === network.stakingDenom) || {
+          available: 0,
           denom: network.stakingDenom,
         }
-      }
-      let stakedAmount =
+      )
+    },
+    stakedBalance() {
+      const stakedAmount =
         Number(this.balance.total) - Number(this.balance.amount)
-      // substract the already unbonding balance in the case of Substrate networks.
-      if (this.undelegationsLoaded && this.undelegations.length > 0) {
-        stakedAmount = this.undelegations.reduce(
-          (stakedAmount, { amount }) => stakedAmount - Number(amount),
-          stakedAmount
-        )
-      }
       return {
         total: Number(stakedAmount),
         denom: network.stakingDenom,
@@ -95,32 +184,15 @@ export default {
         })
     },
     fromOptions() {
-      let options = [
+      const options = [
         // from wallet
         {
           address: this.address,
-          maximum: Number(this.balance.amount),
+          maximum: Number(this.balance.available),
           key: `My Wallet - ${formatAddress(this.address)}`,
           value: 0,
         },
       ]
-      options = options.concat(
-        this.delegations
-          // exclude target validator
-          .filter(
-            (delegation) =>
-              delegation.validator.operatorAddress !==
-              this.targetValidator.operatorAddress
-          )
-          .map((delegation, index) => {
-            return {
-              address: delegation.validator.operatorAddress,
-              maximum: Number(delegation.amount),
-              key: validatorEntry(delegation.validator),
-              value: index + 1,
-            }
-          })
-      )
 
       return options
     },
@@ -212,9 +284,6 @@ export default {
     },
     onSuccess(event) {
       this.$emit(`success`, event)
-
-      // update registered topics for emails as the validator set changed
-      this.$store.dispatch('updateNotificationRegistrations')
     },
   },
   // validations() {

@@ -149,9 +149,8 @@ import BigNumber from 'bignumber.js'
 import { mapState } from 'vuex'
 // import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '~/common/numbers'
-import network from '~/network'
-import fees from '~/fees'
-import CosmosV2Source from '~/common/cosmosV2-source'
+import network from '~/common/network'
+import fees from '~/common/fees'
 
 const defaultStep = `details`
 const feeStep = `fees`
@@ -229,7 +228,7 @@ export default {
     sending: false,
     submissionError: null,
     show: false,
-    loaded: false,
+    balancesLoaded: false,
     txHash: null,
     defaultStep,
     feeStep,
@@ -239,14 +238,13 @@ export default {
     SIGN_METHODS,
     includedHeight: undefined,
     smallestAmount: SMALLEST,
-    balances: [],
-    balancesLoaded: false,
     network,
   }),
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
+    ...mapState(['data', ['balances']]),
     networkFee() {
-      return fees[this.transactionData.type]
+      return fees.getFees(this.transactionData.type)
     },
     selectedSignMethod() {
       return sessionType.LOCAL
@@ -316,7 +314,7 @@ export default {
   //   }
   // },
   mounted() {
-    this.loadData()
+    this.loadBalances()
   },
   methods: {
     confirmModalOpen() {
@@ -426,23 +424,18 @@ export default {
           const { default: TransactionManager } = await import(
             '~/signing/transaction-manager'
           )
-          const _store = {}
-          const api = new CosmosV2Source(
-            this.$axios,
-            network,
-            _store,
-            null,
-            null
-          )
-          this.transactionManager = new TransactionManager(api)
+          this.transactionManager = new TransactionManager()
         }
 
+        const accountInfo = await this.$store.dispatch(
+          'data/getAccountInfo',
+          this.session.address
+        )
         const transactionData = await this.transactionManager.getTransactionMetaData(
           type,
           memo,
-          this.session.address
+          accountInfo
         )
-        debugger
         // TODO currently not respected
         const HDPath = network.HDPath
         const curve = network.curve
@@ -471,6 +464,9 @@ export default {
     onTxIncluded() {
       this.step = successStep
       this.$emit(`txIncluded`)
+
+      // after we do any successful tx refresh the data as balances etc could have been updated
+      this.refreshData()
     },
     onSendingFailed(error) {
       this.step = signStep
@@ -478,22 +474,6 @@ export default {
     },
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
-    },
-    async loadData(api) {
-      const address = this.session ? this.session.address : undefined
-      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
-      if (address) {
-        const _store = {}
-        const api = new CosmosV2Source(this.$axios, network, _store, null, null)
-
-        const balances = await api.getBalancesV2FromAddress(
-          address,
-          currency,
-          network
-        )
-        this.balances = balances
-        this.balancesLoaded = true
-      }
     },
     async pollTxInclusion(hash, iteration = 0) {
       const MAX_POLL_ITERATIONS = 30
@@ -519,6 +499,21 @@ export default {
           )
         )
       }
+    },
+    async loadBalances() {
+      const session = this.$cookies.get('lunie-session')
+      const currency = this.$cookies.get('currency') || 'USD'
+      if (session) {
+        // do we need to refetch the data?
+        await this.$store.dispatch('data/getBalances', {
+          address: session.address,
+          currency,
+        })
+        this.balancesLoaded = true
+      }
+    },
+    refreshData() {
+      this.$store.dispatch('data/refresh')
     },
   },
 }

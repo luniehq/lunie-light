@@ -193,7 +193,7 @@ class CosmosV0API {
     validator.signing_info = signingInfos[consensusAddress]
 
     return this.reducers.validatorReducer(
-      this.network.id,
+      this.network,
       signedBlocksWindow,
       validator,
       annualProvision
@@ -250,7 +250,7 @@ class CosmosV0API {
 
     return validators.map((validator) =>
       this.reducers.validatorReducer(
-        this.network.id,
+        this.network,
         signedBlocksWindow,
         validator,
         annualProvision
