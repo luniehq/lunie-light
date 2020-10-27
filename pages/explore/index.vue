@@ -10,7 +10,7 @@
             placeholder
             vue-focus="vue-focus"
           />
-          <!-- <TmFormMsg
+          <TmFormMsg
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
@@ -19,8 +19,8 @@
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
-          /> -->
-          <!-- <TmFormMsg v-if="error" :name="error" type="custom" /> -->
+          />
+          <TmFormMsg v-if="error" :name="error" type="custom" />
         </TmFormGroup>
       </div>
       <div class="session-footer">
@@ -31,23 +31,23 @@
 </template>
 
 <script>
-// import { required } from "vuelidate/lib/validators"
-import { formatAddress } from '~/common/address'
+import { startsWith } from 'lodash'
+import { required } from 'vuelidate/lib/validators'
+import { decodeB32 } from '~/common/address'
+import network from '~/common/network'
 
 export default {
   name: `session-explore`,
-  filters: {
-    formatAddress,
-  },
   data: () => ({
     address: ``,
     error: ``,
+    network,
   }),
   methods: {
     onSubmit() {
       this.error = null
-      // this.$v.$touch()
-      // if (this.$v.$error) return
+      this.$v.$touch()
+      if (this.$v.$error) return
 
       this.$store.dispatch('signIn', {
         address: this.address,
@@ -55,15 +55,33 @@ export default {
       })
       this.$router.push('/portfolio')
     },
+    bech32Validation(address) {
+      try {
+        decodeB32(address)
+        return true
+      } catch (error) {
+        this.addressError = String(error).slice(7)
+        return false
+      }
+    },
+    prefixValidation(address) {
+      if (address.startsWith(this.network.address_prefix)) {
+        return true
+      } else {
+        this.addressError = `Address prefix does not match this network's prefix`
+        return false
+      }
+    },
   },
-  // validations() {
-  //   return {
-  //     address: {
-  //       required,
-  //       addressValidate: this.addressValidate,
-  //     },
-  //   }
-  // },
+  validations() {
+    return {
+      address: {
+        required,
+        bech32Validation: this.bech32Validation,
+        prefixValidation: this.prefixValidation,
+      },
+    }
+  },
 }
 </script>
 <style scoped>
