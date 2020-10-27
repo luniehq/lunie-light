@@ -2,6 +2,7 @@
   "name": "lunie3",
   "version": "1.0.0",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
@@ -22,8 +23,6 @@
     }
   },
   "dependencies": {
-    "@dicebear/avatars": "^4.2.5",
-    "@dicebear/avatars-jdenticon-sprites": "^4.2.5",
     "@lunie/cosmos-keys": "^0.3.2",
     "@nuxtjs/axios": "^5.12.2",
     "autosize": "^4.0.2",

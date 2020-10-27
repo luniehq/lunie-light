@@ -1,12 +1,3 @@
-@import "./themes/akash.css";
-@import "./themes/cosmos.css";
-@import "./themes/e-money.css";
-@import "./themes/terra.css";
-@import "./themes/kava.css";
-@import "./themes/kusama.css";
-@import "./themes/polkadot.css";
-@import "./themes/polkadot-testnet.css";
-@import "./themes/lunie-dark.css";
 @import "./themes/lunie-light.css";
 
 :root {
@@ -47,8 +38,7 @@
   --h4: 1.125rem;
   --h5: 1rem;
   --h6: 0.75rem;
-  --sidebar-width: 14rem;
-  --sidebar-plus-width: 292px;
+  --sidebar-width: 224px;
   --z-modalError: 1002;
   --z-modal: 1000;
   --z-appHeader: 100;
