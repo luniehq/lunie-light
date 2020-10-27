@@ -58,7 +58,7 @@
 
 <script>
 import orderBy from 'lodash.orderby'
-import network from '~/network'
+import network from '~/common/network'
 
 export default {
   name: `table-validators`,
@@ -72,6 +72,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    rewards: {
+      type: Array,
+      default: () => [],
+    },
     showOnMobile: {
       type: String,
       default: () => 'returns',
@@ -82,7 +86,6 @@ export default {
     },
   },
   data: () => ({
-    rewards: [],
     sort: {
       property: ``,
       order: `desc`,

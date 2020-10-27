@@ -140,7 +140,7 @@ import BigNumber from 'bignumber.js'
 import { SMALLEST } from '~/common/numbers'
 import { formatAddress, decodeB32 } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
-import network from '~/network'
+import network from '~/common/network'
 
 const defaultMemo = ''
 

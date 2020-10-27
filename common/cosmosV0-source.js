@@ -49,6 +49,7 @@ class CosmosV0API {
     } catch (error) {
       // give up
       if (intent >= 3) {
+        // eslint-disable-next-line
         console.error(
           `Error for query ${url} in network ${this.networkId} (tried 3 times)`
         )
@@ -193,7 +194,7 @@ class CosmosV0API {
     validator.signing_info = signingInfos[consensusAddress]
 
     return this.reducers.validatorReducer(
-      this.network.id,
+      this.network,
       signedBlocksWindow,
       validator,
       annualProvision
@@ -250,7 +251,7 @@ class CosmosV0API {
 
     return validators.map((validator) =>
       this.reducers.validatorReducer(
-        this.network.id,
+        this.network,
         signedBlocksWindow,
         validator,
         annualProvision
@@ -544,7 +545,7 @@ class CosmosV0API {
     ])
     const balances = balancesResponse || []
     const coins = balances.map((coin) => {
-      const coinLookup = network.getCoinLookup(network, coin.denom)
+      const coinLookup = network.getCoinLookup(coin.denom)
       return this.reducers.coinReducer(coin, coinLookup)
     })
     // also check if there are any balances as rewards
@@ -657,7 +658,6 @@ class CosmosV0API {
       `staking/delegators/${delegatorAddress}/delegations/${operatorAddress}`
     ).catch(() => {
       const coinLookup = this.network.getCoinLookup(
-        this.network,
         this.network.stakingDenom,
         'viewDenom'
       )

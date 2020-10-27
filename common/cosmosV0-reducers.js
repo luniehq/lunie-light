@@ -137,9 +137,10 @@ function tallyReducer(proposal, tally, totalBondedTokens) {
 }
 
 function depositReducer(deposit, network, store) {
+  const coinLookup = network.getCoinLookup(network.stakingDenom)
   return {
     id: deposit.depositor,
-    amount: [coinReducer(deposit.amount[0], undefined, network)],
+    amount: [coinReducer(deposit.amount[0], coinLookup)],
     depositer: networkAccountReducer(deposit.depositor, store.validators),
   }
 }
@@ -256,7 +257,7 @@ function getValidatorStatus(validator) {
   }
 }
 
-function validatorReducer(networkId, signedBlocksWindow, validator) {
+function validatorReducer(network, signedBlocksWindow, validator) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
   if (!websiteURL || websiteURL === '[do-not-modify]') {
@@ -267,7 +268,6 @@ function validatorReducer(networkId, signedBlocksWindow, validator) {
 
   return {
     id: validator.operator_address,
-    networkId,
     operatorAddress: validator.operator_address,
     consensusPubkey: validator.consensus_pubkey,
     jailed: validator.jailed,
@@ -327,18 +327,20 @@ function denomLookup(coinLookup, denom) {
   return coinLookup.viewDenom ? coinLookup.viewDenom : denom.toUpperCase()
 }
 
-function coinReducer(coin, coinLookup, network) {
+function coinReducer(coin, coinLookup) {
   if (!coin) {
     return {
       amount: 0,
       denom: '',
     }
   }
-  coinLookup =
-    coinLookup ||
-    network.coinLookup.find(
-      ({ viewDenom }) => viewDenom === network.stakingDenom
-    )
+
+  if (!coinLookup) {
+    return {
+      amount: -1,
+      denom: '[UNSUPPORTED] ' + coin.denom,
+    }
+  }
 
   // we want to show only atoms as this is what users know
   const denom = denomLookup(coinLookup, coin.denom)
@@ -374,7 +376,7 @@ function rewardCoinReducer(reward, network) {
   const multiDenomRewardsArray = reward.split(`,`)
   const mappedMultiDenomRewardsArray = multiDenomRewardsArray.map((reward) => {
     const denom = denomLookup(network.coinLookup, reward.match(/[a-z]+/gi)[0])
-    const coinLookup = network.getCoinLookup(network, denom, `viewDenom`)
+    const coinLookup = network.getCoinLookup(denom, `viewDenom`)
     return {
       denom,
       amount: BigNumber(reward.match(/[0-9]+/gi)).times(
@@ -488,7 +490,7 @@ async function reduceFormattedRewards(
 ) {
   await Promise.all(
     reward.map(async (denomReward) => {
-      const coinLookup = network.getCoinLookup(network, denomReward.denom)
+      const coinLookup = network.getCoinLookup(denomReward.denom)
       const lunieCoin = reducers.coinReducer(denomReward, coinLookup)
       if (lunieCoin.amount < 0.000001) return
 
