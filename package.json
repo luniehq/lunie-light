@@ -41,16 +41,16 @@
     "v-tooltip": "^2.0.3",
     "vue-clipboard2": "^0.3.1",
     "vue-infinite-scroll": "^2.0.2",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^3.1.0",
+    "@nuxtjs/eslint-config": "^4.0.0",
     "@nuxtjs/eslint-module": "^3.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@wdio/cli": "^6.5.2",
     "@wdio/local-runner": "^6.6.7",
     "@wdio/mocha-framework": "^6.5.0",
-    "@wdio/spec-reporter": "^6.4.7",
+    "@wdio/spec-reporter": "^6.7.0",
     "@wdio/sync": "^6.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
