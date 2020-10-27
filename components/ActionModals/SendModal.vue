@@ -35,10 +35,16 @@
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.address.$error && !$v.address.validAddress"
+        v-else-if="$v.address.$error && !$v.address.bech32Validation"
         name="Address"
         type="custom"
-        msg="doesn't have a known format"
+        msg="is invalid"
+      />
+      <TmFormMsg
+        v-else-if="$v.address.$error && !$v.address.prefixValidation"
+        name="Address"
+        type="custom"
+        msg="is not valid for this network"
       />
     </TmFormGroup>
     <TmFormGroup
@@ -131,6 +137,7 @@
 </template>
 
 <script>
+import { startsWith } from 'lodash'
 import { required, decimal, maxLength } from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'
@@ -160,6 +167,7 @@ export default {
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
+    network,
   }),
   computed: {
     ...mapState([`session`]),
@@ -284,6 +292,14 @@ export default {
         return false
       }
     },
+    prefixValidation(address) {
+      if (address.startsWith(this.network.address_prefix)) {
+        return true
+      } else {
+        this.addressError = `Address prefix does not match this network's prefix`
+        return false
+      }
+    },
     enterPressed() {
       this.$refs.actionModal.validateChangeStep()
     },
@@ -302,15 +318,16 @@ export default {
       address: {
         required,
         bech32Validation: this.bech32Validation,
+        prefixValidation: this.prefixValidation,
       },
       amount: {
-        required: (x) => !!x && x !== `0`,
+        required,
         decimal,
         max: (x) => Number(x) <= this.maxAmount,
         min: (x) => Number(x) >= SMALLEST,
         maxDecimals: (x) => {
-          return x.toString().split('.').length > 1
-            ? x.toString().split('.')[1].length <= 6
+          return Number(x).toString().split('.').length > 1
+            ? Number(x).toString().split('.')[1].length <= 6
             : true
         },
       },
