@@ -106,4 +106,10 @@ export const actions = {
     const transactions = await api.getTransactionsV2(address, pageNumber)
     commit('setTransactions', { transactions, pageNumber })
   },
+  async getValidatorSelfStake(store, address) {
+    const _store = {}
+    const api = new DataSource(this.$axios, network, _store, null, null)
+    const selfStake = await api.getSelfStake(address)
+    return selfStake
+  },
 }
