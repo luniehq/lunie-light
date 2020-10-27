@@ -9,6 +9,9 @@ export const state = () => ({
   undelegations: [],
   validators: [],
   accountInfo: undefined,
+  transactions: [],
+  transactionsLoaded: undefined,
+  moreTransactionsAvailable: true,
 })
 
 export const mutations = {
@@ -23,6 +26,15 @@ export const mutations = {
       ]
     })
   ),
+  setTransactions(state, { transactions, pageNumber }) {
+    if (pageNumber > 0) {
+      state.transactions = state.transactions.concat(transactions)
+    } else {
+      state.transactions = transactions
+    }
+    state.transactionsLoaded = true
+    state.moreTransactionsAvailable = transactions.length > 0
+  },
 }
 
 export const actions = {
@@ -87,5 +99,11 @@ export const actions = {
     const { accountNumber, sequence } = await api.getAccountInfo(address)
     commit('setAccountInfo', { accountNumber, sequence })
     return { accountNumber, sequence }
+  },
+  async getTransactions({ commit }, { address, pageNumber = 0 }) {
+    const _store = {}
+    const api = new DataSource(this.$axios, network, _store, null, null)
+    const transactions = await api.getTransactionsV2(address, pageNumber)
+    commit('setTransactions', { transactions, pageNumber })
   },
 }
