@@ -3,8 +3,9 @@
     <h2 class="session-title">Backup code</h2>
     <div class="session-main bottom-indent reorder">
       <Seed :value="fieldSeed" />
-      <!-- :error="$v.fieldWarning.$error" -->
+
       <TmFormGroup
+        :error="$v.fieldWarning.$error"
         class="field-checkbox"
         field-id="sign-up-warning"
         field-label
@@ -20,11 +21,11 @@
             I understand that lost seeds cannot be recovered.</label
           >
         </div>
-        <!-- <TmFormMsg
+        <TmFormMsg
           v-if="$v.fieldWarning.$error && !$v.fieldWarning.required"
           name="Recovery confirmation"
           type="required"
-        /> -->
+        />
       </TmFormGroup>
     </div>
     <div class="session-footer">
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-// import { sameAs } from 'vuelidate/lib/validators'
+import { sameAs } from 'vuelidate/lib/validators'
 
 export default {
   name: `new-seed-step`,
@@ -61,13 +62,13 @@ export default {
       }
     },
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.$error) return
+      this.$v.$touch()
+      if (this.$v.$error) return
       this.$emit('submit', this.fieldSeed)
     },
   },
-  // validations: () => ({
-  //   fieldWarning: { required: sameAs(() => true) },
-  // }),
+  validations: () => ({
+    fieldWarning: { required: sameAs(() => true) },
+  }),
 }
 </script>

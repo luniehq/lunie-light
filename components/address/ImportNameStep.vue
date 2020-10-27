@@ -7,8 +7,12 @@
           {{ address }}
         </p>
       </TmFormGroup>
-      <!-- :error="$v.$error && $v.name.$invalid" -->
-      <TmFormGroup field-id="import-name" field-label="Account Name">
+
+      <TmFormGroup
+        :error="$v.$error && $v.name.$invalid"
+        field-id="import-name"
+        field-label="Account Name"
+      >
         <TmField
           id="import-name"
           v-model.trim="fieldName"
@@ -16,7 +20,7 @@
           placeholder="Must have at least 3 characters"
           vue-focus="vue-focus"
         />
-        <!-- <TmFormMsg
+        <TmFormMsg
           v-if="$v.name.$error && !$v.name.required"
           name="Name"
           type="required"
@@ -32,7 +36,7 @@
           name="Name"
           type="custom"
           msg="already exists"
-        /> -->
+        />
       </TmFormGroup>
     </div>
     <div class="session-footer">
@@ -42,7 +46,7 @@
 </template>
 
 <script>
-// import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 // import { getWalletIndex } from '@lunie/cosmos-keys'
 
 // const nameExists = (value) => {
@@ -74,14 +78,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.name.$invalid) return
+      this.$v.$touch()
+      if (this.$v.name.$invalid) return
       this.$emit('submit', this.fieldName)
     },
   },
-  // validations: () => ({
-  //   name: { required, minLength: minLength(3), nameExists },
-  // }),
+  validations: () => ({
+    name: { required, minLength: minLength(3), nameExists },
+  }),
 }
 </script>
 <style scoped>

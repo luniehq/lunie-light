@@ -3,8 +3,12 @@
     <h2 class="session-title">Create a new address</h2>
     <div class="session-main bottom-indent">
       <DangerZoneWarning />
-      <!-- :error="$v.fieldName.$error" -->
-      <TmFormGroup field-id="sign-up-name" field-label="Account Name">
+
+      <TmFormGroup
+        :error="$v.fieldName.$error"
+        field-id="sign-up-name"
+        field-label="Account Name"
+      >
         <TmField
           id="sign-up-name"
           v-model.trim="fieldName"
@@ -13,7 +17,7 @@
           placeholder="Must be at least 3 characters"
           vue-focus="vue-focus"
         />
-        <!-- <TmFormMsg
+        <TmFormMsg
           v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
@@ -29,7 +33,7 @@
           name="Name"
           type="custom"
           msg="already exists"
-        /> -->
+        />
       </TmFormGroup>
     </div>
     <div class="session-footer">
@@ -39,7 +43,7 @@
 </template>
 
 <script>
-// import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 // import { getWalletIndex } from '@lunie/cosmos-keys'
 
 // const nameExists = (value) => {
@@ -67,13 +71,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.$error) return
+      this.$v.$touch()
+      if (this.$v.$error) return
+
       this.$emit('submit', this.fieldName)
     },
   },
-  // validations: () => ({
-  //   fieldName: { required, minLength: minLength(3), nameExists },
-  // }),
+  validations: () => ({
+    fieldName: { required, minLength: minLength(3), nameExists },
+  }),
 }
 </script>

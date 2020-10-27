@@ -12,16 +12,19 @@
             placeholder="Select account…"
             vue-focus="vue-focus"
           />
-          <!-- <TmFormMsg
+          <TmFormMsg
             v-if="$v.signInAddress.$error && !$v.signInAddress.required"
             name="Name"
             type="required"
-          /> -->
+          />
         </TmFormGroup>
-        <!-- :error="$v.signInPassword.$error" -->
-        <TmFormGroup field-id="sign-in-password" field-label="Password">
+
+        <TmFormGroup
+          :error="$v.signInPassword.$error"
+          field-id="sign-in-password"
+          field-label="Password"
+        >
           <TmField id="sign-in-password" v-model="password" type="password" />
-          <!-- 
           <TmFormMsg
             v-if="$v.signInPassword.$error && !$v.signInPassword.required"
             name="Password"
@@ -32,7 +35,7 @@
             name="Password"
             type="minLength"
             min="10"
-          /> -->
+          />
           <TmFormMsg v-if="error" type="custom" :msg="error" />
         </TmFormGroup>
       </div>
@@ -45,7 +48,7 @@
 
 <script>
 import { getWalletIndex, testPassword } from '@lunie/cosmos-keys'
-// import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: `sign-in`,
@@ -69,8 +72,8 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.$error) return
+      this.$v.$touch()
+      if (this.$v.$error) return
       this.loading = true
 
       try {
@@ -86,11 +89,11 @@ export default {
       }
     },
   },
-  // validations() {
-  //   return {
-  //     signInAddress: { required },
-  //     signInPassword: { required, minLength: minLength(10) },
-  //   }
-  // },
+  validations() {
+    return {
+      signInAddress: { required },
+      signInPassword: { required, minLength: minLength(10) },
+    }
+  },
 }
 </script>
