@@ -282,10 +282,9 @@ span {
 }
 
 .li-validator-image {
-  border-radius: 0.25rem;
+  border-radius: 50%;
   height: 4rem;
   width: 4rem;
-  border: 1px solid var(--bc-dim);
 }
 
 .li-validator-name {

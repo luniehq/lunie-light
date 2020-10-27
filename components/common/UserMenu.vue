@@ -19,3 +19,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.user-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 1em;
+}
+</style>

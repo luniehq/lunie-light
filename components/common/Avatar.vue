@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ background: gradient }"></div>
+  <div :style="{ background: hex }"></div>
 </template>
 
 <script>
@@ -12,11 +12,16 @@ export default {
     },
   },
   computed: {
-    gradient() {
-      const hex1 = '#' + Math.floor(Math.random() * 16777215).toString(16)
-      const hex2 = '#' + Math.floor(Math.random() * 16777215).toString(16)
-
-      return 'linear-gradient(130deg, ' + hex1 + ' 0%, ' + hex2 + ' 100%)'
+    hash() {
+      let hash = 0
+      for (let i = 0; i < this.address.length; i++) {
+        hash = this.address.charCodeAt(i) + ((hash << 5) - hash)
+      }
+      return hash
+    },
+    hex() {
+      const x = (this.hash & 0x00ffffff).toString(16).toUpperCase() // eslint-disable-line
+      return '#' + '00000'.substring(0, 6 - x.length) + x
     },
   },
 }
