@@ -1,5 +1,5 @@
 const { reverse, sortBy, uniq, uniqWith } = require('lodash')
-const lunieMessageTypes = require('./lunie-message-types')
+const { lunieMessageTypes } = require('./lunie-message-types')
 const cosmosV0Reducers = require('./cosmosV0-reducers')
 const {
   proposalBeginTime,
@@ -56,7 +56,7 @@ function sendDetailsReducer(message, reducers, network) {
   return {
     from: [message.from_address],
     to: [message.to_address],
-    amount: reducers.coinReducer(message.amount[0], coinLookup, network),
+    amount: reducers.coinReducer(message.amount[0], coinLookup),
   }
 }
 
@@ -64,7 +64,7 @@ function stakeDetailsReducer(message, reducers, network) {
   const coinLookup = network.getCoinLookup(message.amount.denom)
   return {
     to: [message.validator_address],
-    amount: reducers.coinReducer(message.amount, coinLookup, network),
+    amount: reducers.coinReducer(message.amount, coinLookup),
   }
 }
 
@@ -73,7 +73,7 @@ function restakeDetailsReducer(message, reducers, network) {
   return {
     from: [message.validator_src_address],
     to: [message.validator_dst_address],
-    amount: reducers.coinReducer(message.amount, coinLookup, network),
+    amount: reducers.coinReducer(message.amount, coinLookup),
   }
 }
 
@@ -81,7 +81,7 @@ function unstakeDetailsReducer(message, reducers, network) {
   const coinLookup = network.getCoinLookup(message.amount.denom)
   return {
     from: [message.validator_address],
-    amount: reducers.coinReducer(message.amount, coinLookup, network),
+    amount: reducers.coinReducer(message.amount, coinLookup),
   }
 }
 
@@ -142,8 +142,7 @@ function submitProposalDetailsReducer(message, reducers, network) {
     proposalDescription: message.content.value.description,
     initialDeposit: reducers.coinReducer(
       message.initial_deposit[0],
-      coinLookup,
-      network
+      coinLookup
     ),
   }
 }
@@ -159,7 +158,7 @@ function depositDetailsReducer(message, reducers, network) {
   const coinLookup = network.getCoinLookup(message.amount[0].denom)
   return {
     proposalId: message.proposal_id,
-    amount: reducers.coinReducer(message.amount[0], coinLookup, network),
+    amount: reducers.coinReducer(message.amount[0], coinLookup),
   }
 }
 
@@ -274,13 +273,13 @@ function transactionReducerV2(network, transaction, reducers) {
     ) {
       fees = transaction.tx.value.fee.amount.map((coin) => {
         const coinLookup = network.getCoinLookup(coin.denom)
-        return coinReducer(coin, coinLookup, network)
+        return coinReducer(coin, coinLookup)
       })
     } else {
       const coinLookup = network.getCoinLookup(
         transaction.tx.value.fee.amount.denom
       )
-      fees = [coinReducer(transaction.tx.value.fee.amount, coinLookup, network)]
+      fees = [coinReducer(transaction.tx.value.fee.amount, coinLookup)]
     }
     // We do display only the transactions we support in Lunie
     const filteredMessages = transaction.tx.value.msg.filter(
@@ -367,7 +366,7 @@ function delegationReducer(delegation, validator, active) {
   }
 }
 
-function validatorReducer(networkId, signedBlocksWindow, validator) {
+function validatorReducer(network, signedBlocksWindow, validator) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
   if (!websiteURL || websiteURL === '[do-not-modify]') {
@@ -378,7 +377,6 @@ function validatorReducer(networkId, signedBlocksWindow, validator) {
 
   return {
     id: validator.operator_address,
-    networkId,
     operatorAddress: validator.operator_address,
     consensusPubkey: validator.consensus_pubkey,
     jailed: validator.jailed,
@@ -470,6 +468,7 @@ module.exports = {
   restakeDetailsReducer,
   unstakeDetailsReducer,
   claimRewardsDetailsReducer,
+  claimRewardsMessagesAggregator,
   submitProposalDetailsReducer,
   voteProposalDetailsReducer,
   depositDetailsReducer,

@@ -32,10 +32,6 @@ import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     loadingMore: {
       type: Boolean,
       default: false,
@@ -61,12 +57,27 @@ export default {
       default: false,
     },
   },
+  data: () => ({
+    loading: true,
+  }),
   computed: {
     ...mapState(['session']),
+    ...mapState(['data', ['validators']]),
   },
   mounted() {
     const session = this.$cookies.get('lunie-session')
     this.$store.dispatch('signIn', session)
+
+    this.loadData()
+  },
+  methods: {
+    async loadData() {
+      // somehow on mounted the mapState is not yet called
+      if (this.$store.state.data.validators.length === 0) {
+        await this.$store.dispatch('data/refresh')
+      }
+      this.loading = false
+    },
   },
 }
 </script>

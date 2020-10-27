@@ -30,8 +30,6 @@
     "bignumber.js": "^9.0.1",
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.11.0",
     "lodash": "^4.17.20",
     "lodash.orderby": "^4.6.0",
     "moment": "^2.29.1",
@@ -40,20 +38,20 @@
     "v-tooltip": "^2.0.3",
     "vue-clipboard2": "^0.3.1",
     "vue-infinite-scroll": "^2.0.2",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^3.1.0",
-    "@nuxtjs/eslint-module": "^2.0.0",
+    "@nuxtjs/eslint-config": "^4.0.0",
+    "@nuxtjs/eslint-module": "^3.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@wdio/cli": "^6.5.2",
     "@wdio/local-runner": "^6.6.7",
     "@wdio/mocha-framework": "^6.5.0",
-    "@wdio/spec-reporter": "^6.4.7",
-    "@wdio/sync": "^6.5.0",
+    "@wdio/spec-reporter": "^6.7.0",
+    "@wdio/sync": "^6.7.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
-    "eslint-config-prettier": "^6.12.0",
+    "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-wdio": "^6.0.12",
@@ -63,6 +61,6 @@
     "stylelint": "^13.7.2",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
-    "webdriverio": "^6.5.2"
+    "webdriverio": "^6.7.0"
   }
 }

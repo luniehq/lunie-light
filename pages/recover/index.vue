@@ -19,7 +19,7 @@
 
 <script>
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
-import network from '~/network'
+import network from '~/common/network'
 
 const steps = [`Recover`, `Name`, `Password`]
 
