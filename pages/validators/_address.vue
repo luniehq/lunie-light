@@ -149,6 +149,10 @@
             isBlankField(validator.commissionUpdateTime, fromNow)
           }}</span>
         </li>
+        <li>
+          <h4>Staker</h4>
+          <span>{{ validatorDelegations.length }}</span>
+        </li>
       </ul>
 
       <LazyStakeModal ref="stakeModal" :target-validator="validator" />
@@ -187,6 +191,7 @@ export default {
   data: () => ({
     loading: true,
     selfStake: undefined,
+    validatorDelegations: [],
   }),
   computed: {
     ...mapState('data', ['validators', 'delegations', 'rewards']),
@@ -213,6 +218,7 @@ export default {
     validator(validator) {
       if (validator) {
         this.getSelfStake()
+        this.getValidatorDelegations()
       }
     },
   },
@@ -245,6 +251,12 @@ export default {
     async getSelfStake() {
       this.selfStake = await this.$store.dispatch(
         'data/getValidatorSelfStake',
+        this.validator
+      )
+    },
+    async getValidatorDelegations() {
+      this.validatorDelegations = await this.$store.dispatch(
+        'data/getValidatorDelegations',
         this.validator
       )
     },

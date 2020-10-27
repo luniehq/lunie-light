@@ -106,10 +106,16 @@ export const actions = {
     const transactions = await api.getTransactionsV2(address, pageNumber)
     commit('setTransactions', { transactions, pageNumber })
   },
-  async getValidatorSelfStake(store, address) {
+  async getValidatorSelfStake(store, validator) {
     const _store = {}
     const api = new DataSource(this.$axios, network, _store, null, null)
-    const selfStake = await api.getSelfStake(address)
+    const selfStake = await api.getSelfStake(validator)
     return selfStake
+  },
+  async getValidatorDelegations(store, validator) {
+    const _store = {}
+    const api = new DataSource(this.$axios, network, _store, null, null)
+    const delegations = await api.getValidatorDelegations(validator)
+    return delegations
   },
 }
