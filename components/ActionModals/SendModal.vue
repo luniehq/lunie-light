@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import { startsWith } from 'lodash'
 import { required, decimal, maxLength } from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'

@@ -180,7 +180,6 @@ function transactionReducerV2(network, transaction, reducers) {
     }))
     return returnedMessages
   } catch (error) {
-    console.error(error)
     return [] // must return something differ from undefined
   }
 }

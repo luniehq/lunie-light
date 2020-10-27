@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { startsWith } from 'lodash'
 import { required } from 'vuelidate/lib/validators'
 import { decodeB32 } from '~/common/address'
 import network from '~/common/network'
