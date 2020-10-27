@@ -178,7 +178,7 @@ class CosmosV0API {
     // create a dictionary to reduce array lookups
     const consensusValidators = _.keyBy(validatorSet.validators, 'address')
     const totalVotingPower = validatorSet.validators.reduce(
-      (sum, { voting_power: votingPower }) => sum.plus(votingPower),
+      (sum, { votingPower }) => sum.plus(votingPower),
       BigNumber(0)
     )
 
@@ -192,8 +192,8 @@ class CosmosV0API {
       validator.consensus_pubkey,
       this.validatorConsensusBech32Prefix
     )
-    validator.voting_power = consensusValidators[consensusAddress]
-      ? BigNumber(consensusValidators[consensusAddress].voting_power)
+    validator.votingPower = consensusValidators[consensusAddress]
+      ? BigNumber(consensusValidators[consensusAddress].votingPower)
           .div(totalVotingPower)
           .toNumber()
       : 0
@@ -203,7 +203,8 @@ class CosmosV0API {
       this.network,
       signedBlocksWindow,
       validator,
-      annualProvision
+      annualProvision,
+      this.reducers
     )
   }
 
@@ -247,7 +248,7 @@ class CosmosV0API {
         validator.consensus_pubkey,
         this.validatorConsensusBech32Prefix
       )
-      validator.voting_power = consensusValidators[consensusAddress]
+      validator.votingPower = consensusValidators[consensusAddress]
         ? BigNumber(consensusValidators[consensusAddress].voting_power)
             .div(totalVotingPower)
             .toNumber()
@@ -260,7 +261,8 @@ class CosmosV0API {
         this.network,
         signedBlocksWindow,
         validator,
-        annualProvision
+        annualProvision,
+        this.reducers
       )
     )
   }

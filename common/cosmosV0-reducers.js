@@ -86,7 +86,7 @@ const expectedRewardsPerToken = (validator, commission, annualProvision) => {
   const annualDelegatorRewardsPerToken = totalAnnualDelegatorRewards.times(
     delegatorSharePerToken
   )
-  return annualDelegatorRewardsPerToken.div(1000000)
+  return annualDelegatorRewardsPerToken
 }
 
 // reduce deposits to one number
@@ -257,7 +257,13 @@ function getValidatorStatus(validator) {
   }
 }
 
-function validatorReducer(network, signedBlocksWindow, validator) {
+function validatorReducer(
+  network,
+  signedBlocksWindow,
+  validator,
+  annualProvision,
+  reducers
+) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
   if (!websiteURL || websiteURL === '[do-not-modify]') {
@@ -275,7 +281,7 @@ function validatorReducer(network, signedBlocksWindow, validator) {
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: validator.voting_power.toFixed(6),
+    votingPower: validator.votingPower.toFixed(6),
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
@@ -300,6 +306,9 @@ function validatorReducer(network, signedBlocksWindow, validator) {
     statusDetailed: statusInfo.status_detailed,
     delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
     popularity: validator.popularity,
+    expectedReturns: reducers
+      .expectedRewardsPerToken(validator, validator.commission, annualProvision)
+      .toFixed(6),
   }
 }
 

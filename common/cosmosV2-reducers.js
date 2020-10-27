@@ -366,7 +366,13 @@ function delegationReducer(delegation, validator, active) {
   }
 }
 
-function validatorReducer(network, signedBlocksWindow, validator) {
+function validatorReducer(
+  network,
+  signedBlocksWindow,
+  validator,
+  annualProvision,
+  reducers
+) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
   if (!websiteURL || websiteURL === '[do-not-modify]') {
@@ -384,7 +390,7 @@ function validatorReducer(network, signedBlocksWindow, validator) {
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: validator.voting_power.toFixed(6),
+    votingPower: validator.votingPower.toFixed(6),
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
@@ -407,8 +413,13 @@ function validatorReducer(network, signedBlocksWindow, validator) {
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: statusInfo.status,
     statusDetailed: statusInfo.status_detailed,
-    delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
-    popularity: validator.popularity,
+    expectedReturns: reducers
+      .expectedRewardsPerToken(
+        validator,
+        validator.commission.commission_rates.rate,
+        annualProvision
+      )
+      .toFixed(6),
   }
 }
 
