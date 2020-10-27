@@ -68,7 +68,7 @@ export default {
       if (address.startsWith(this.network.address_prefix)) {
         return true
       } else {
-        this.addressError = `Address prefix does not match this network's prefix`
+        this.addressError = `Address is not valid for this network`
         return false
       }
     },
