@@ -3,31 +3,97 @@
     id="undelegation-modal"
     ref="actionModal"
     :amount="amount"
-    :title="isRedelegation ? 'Restake' : 'Unstake'"
+    title="Unstake"
     class="undelegation-modal"
-    :submission-error-prefix="
-      isRedelegation ? 'Restaking failed' : 'Unstaking failed'
-    "
-    :transaction-type="
-      isRedelegation
-        ? lunieMessageTypes.REDELEGATE
-        : lunieMessageTypes.UNDELEGATE
-    "
+    submission-error-prefix="Unstaking failed"
+    :transaction-type="lunieMessageTypes.UNDELEGATE"
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="undelegate"
     @close="clear"
     @txIncluded="onSuccess"
   >
+    <TmFormGroup
+      class="action-modal-form-group"
+      field-id="from"
+      field-label="From"
+    >
+      <TmField
+        id="from"
+        :value="enhancedSourceValidator"
+        type="text"
+        readonly
+      />
+    </TmFormGroup>
+    <!-- :error="$v.amount.$error && $v.amount.$invalid" -->
+    <TmFormGroup
+      class="action-modal-form-group"
+      field-id="amount"
+      field-label="Amount"
+    >
+      <span class="input-suffix max-button">{{ stakingDenom }}</span>
+      <TmFieldGroup>
+        <TmField
+          id="amount"
+          v-model="amount"
+          v-focus
+          class="tm-field-addon"
+          placeholder="0"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <TmBtn
+          type="button"
+          class="secondary addon-max"
+          value="Set Max"
+          @click.native="setMaxAmount()"
+        />
+      </TmFieldGroup>
+      <span v-if="maximum > 0" class="form-message">
+        Currently staked: {{ maximum }} {{ stakingDenom }}s
+      </span>
+      <TmFormMsg
+        v-if="maximum === 0"
+        :msg="`don't have any ${stakingDenom}s delegated to this validator`"
+        name="You"
+        type="custom"
+      />
+      <!-- <TmFormMsg
+        v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
+        name="Amount"
+        type="required"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.decimal"
+        name="Amount"
+        type="numeric"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.max"
+        type="custom"
+        :msg="`You don't have enough ${stakingDenom}s to proceed.`"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.min"
+        :min="smallestAmount"
+        name="Amount"
+        type="min"
+      />
+      <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
+        name="Amount"
+        type="maxDecimals"
+      /> -->
+    </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { SMALLEST } from '../../common/numbers'
-import { formatAddress, validatorEntry } from '../../common/address'
-import { lunieMessageTypes } from '../../common/lunie-message-types'
-import network from '../../network'
+import { SMALLEST } from '~/common/numbers'
+import { validatorEntry } from '~/common/address'
+import { lunieMessageTypes } from '~/common/lunie-message-types'
+import network from '~/common/network'
 
 export default {
   name: `unstake-modal`,
@@ -41,23 +107,13 @@ export default {
     },
   },
   data: () => ({
-    address: ``,
     amount: 0,
-    currentNetwork: {},
-    delegations: [],
-    validators: [],
-    toSelectedIndex: `0`,
-    balance: {
-      total: 0,
-      available: 0,
-    },
     lunieMessageTypes,
-    network: ``,
     smallestAmount: SMALLEST,
-    stakingDenom: ``,
+    stakingDenom: network.stakingDenom,
   }),
   computed: {
-    ...mapState([`session`]),
+    ...mapState(`data`, [`delegations`]),
     maximum() {
       const delegation = this.delegations.find(
         ({ validator }) =>
@@ -66,103 +122,23 @@ export default {
       return delegation ? Number(delegation.amount) : 0
     },
     transactionData() {
-      if (this.isRedelegation) {
-        if (
-          isNaN(this.amount) ||
-          !this.sourceValidator.operatorAddress ||
-          !this.toSelectedIndex ||
-          !this.stakingDenom
-        ) {
-          return {}
-        }
-        return {
-          type: lunieMessageTypes.RESTAKE,
-          from: [this.sourceValidator.operatorAddress],
-          to: [this.toSelectedIndex],
-          amount: {
-            amount: this.amount,
-            denom: this.stakingDenom,
-          },
-        }
-      } else {
-        return {
-          type: lunieMessageTypes.UNSTAKE,
-          from:
-            this.sourceValidator && this.sourceValidator.operatorAddress
-              ? [this.sourceValidator.operatorAddress]
-              : null,
-          amount: {
-            amount: this.amount,
-            denom: this.stakingDenom,
-          },
-        }
+      return {
+        type: lunieMessageTypes.UNSTAKE,
+        from:
+          this.sourceValidator && this.sourceValidator.operatorAddress
+            ? [this.sourceValidator.operatorAddress]
+            : null,
+        amount: {
+          amount: this.amount,
+          denom: this.stakingDenom,
+        },
       }
     },
     notifyMessage() {
-      if (this.isRedelegation) {
-        return {
-          title: `Successfully restaked!`,
-          body: `You have successfully restaked ${this.amount} ${this.stakingDenom}s.`,
-        }
-      } else {
-        return {
-          title: `Successfully unstaked!`,
-          body: `You have successfully unstaked ${this.amount} ${this.stakingDenom}s.`,
-        }
+      return {
+        title: `Successfully unstaked!`,
+        body: `You have successfully unstaked ${this.amount} ${this.stakingDenom}s.`,
       }
-    },
-    fromOptions() {
-      let options = []
-      options = options.concat(
-        this.delegations.map((delegation, index) => {
-          return {
-            address: delegation.validator.operatorAddress,
-            maximum: Number(delegation.amount),
-            key: `${delegation.validator.name} - ${formatAddress(
-              delegation.validator.operatorAddress
-            )}`,
-            value: index + 1,
-          }
-        })
-      )
-      return options
-    },
-    toOptions() {
-      let options = [
-        // from wallet
-        {
-          address: this.address,
-          maximum: Number(this.balance.amount),
-          key: `My Wallet - ${formatAddress(this.address)}`,
-          value: 0,
-        },
-      ]
-      options = options.concat(
-        this.validators
-          // exclude the validator we are redelegating from
-          .filter(
-            (validator) =>
-              validator.operatorAddress !== this.sourceValidator.operatorAddress
-          )
-          .map((validator) => {
-            return {
-              address: validator.operatorAddress,
-              key: validatorEntry(validator),
-              value: validator.operatorAddress,
-            }
-          })
-      )
-      return options
-    },
-    targetValidator() {
-      return (
-        this.validators.find(
-          (validator) => validator.operatorAddress === this.toSelectedIndex
-        ) || { status: `` }
-      )
-    },
-    isRedelegation() {
-      return this.toSelectedIndex !== `0`
     },
     undelegationPeriod() {
       return network.lockUpPeriod
@@ -215,9 +191,6 @@ export default {
     },
     onSuccess(event) {
       this.$emit(`success`, event)
-
-      // update registered topics for emails as the validator set changed
-      this.$store.dispatch('updateNotificationRegistrations')
     },
   },
 }

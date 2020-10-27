@@ -10,6 +10,26 @@ export default {
       chainDenom: 'uluna',
       chainToViewConversionFactor: 1e-6,
     },
+    {
+      viewDenom: 'KRT',
+      chainDenom: 'ukrw',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'MNT',
+      chainDenom: 'umnt',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'UST',
+      chainDenom: 'uusd',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'SDT',
+      chainDenom: 'usdr',
+      chainToViewConversionFactor: 1e-6,
+    },
   ],
   network_type: 'cosmos',
   address_prefix: 'terra',

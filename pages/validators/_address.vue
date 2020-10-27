@@ -191,8 +191,11 @@ export default {
     ...mapState('data', ['validators', 'delegations', 'rewards']),
     validator() {
       return this.validators.find(
-        ({ operatorAddress }) => operatorAddress === this.$route.params.address
+        ({ operatorAddress }) => operatorAddress === this.address
       )
+    },
+    address() {
+      return this.$route.params.address
     },
     delegation() {
       return this.delegations.find(
@@ -200,7 +203,7 @@ export default {
       )
     },
     rewardsForValidator() {
-      return this.rewards.find(
+      return this.rewards.filter(
         ({ validator: { operatorAddress } }) => operatorAddress === this.address
       )
     },
