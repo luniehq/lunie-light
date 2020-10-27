@@ -2,6 +2,7 @@
   <ActionModal
     id="undelegation-modal"
     ref="actionModal"
+    :validate="validateForm"
     :amount="amount"
     title="Unstake"
     class="undelegation-modal"
@@ -25,8 +26,8 @@
         readonly
       />
     </TmFormGroup>
-    <!-- :error="$v.amount.$error && $v.amount.$invalid" -->
     <TmFormGroup
+      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
@@ -54,11 +55,11 @@
       </span>
       <TmFormMsg
         v-if="maximum === 0"
-        :msg="`don't have any ${stakingDenom}s delegated to this validator`"
+        :msg="`don't have any ${stakingDenom} delegated to this validator`"
         name="You"
         type="custom"
       />
-      <!-- <TmFormMsg
+      <TmFormMsg
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
@@ -71,7 +72,7 @@
       <TmFormMsg
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
-        :msg="`You don't have enough ${stakingDenom}s to proceed.`"
+        :msg="`You don't have enough ${stakingDenom} to proceed.`"
       />
       <TmFormMsg
         v-else-if="$v.amount.$error && !$v.amount.min"
@@ -83,13 +84,14 @@
         v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
-      /> -->
+      />
     </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { required, decimal } from 'vuelidate/lib/validators'
 import { SMALLEST } from '~/common/numbers'
 import { validatorEntry } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
@@ -111,6 +113,7 @@ export default {
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     stakingDenom: network.stakingDenom,
+    network,
   }),
   computed: {
     ...mapState(`data`, [`delegations`]),
@@ -137,7 +140,7 @@ export default {
     notifyMessage() {
       return {
         title: `Successfully unstaked!`,
-        body: `You have successfully unstaked ${this.amount} ${this.stakingDenom}s.`,
+        body: `You have successfully unstaked ${this.amount} ${this.stakingDenom}.`,
       }
     },
     undelegationPeriod() {
@@ -147,39 +150,31 @@ export default {
       return validatorEntry(this.sourceValidator)
     },
   },
-  // validations() {
-  //   return {
-  //     amount: {
-  //       required: (amount) => {
-  //         // In Polkadot we don't need to unbond tokens, the user may just want to unnominate a validator
-  //         // stash accounts can't do anything else but unbond so we make it required
-  //         // none accounts can't access this modal
-  //         return !!amount && amount !== `0`
-  //       },
-  //       decimal,
-  //       max: (x) => Number(x) <= this.maximum,
-  //       min: (x) => {
-  //         return Number(x) >= SMALLEST
-  //       },
-  //       maxDecimals: (x) => {
-  //         return x.toString().split('.').length > 1
-  //           ? x.toString().split('.')[1].length <= 6
-  //           : true
-  //       },
-  //     },
-  //   }
-  // },
+  validations() {
+    return {
+      amount: {
+        required,
+        decimal,
+        max: (x) => Number(x) <= this.maximum,
+        min: (x) => Number(x) >= SMALLEST,
+        maxDecimals: (x) => {
+          return Number(x).toString().split('.').length > 1
+            ? Number(x).toString().split('.')[1].length <= 6
+            : true
+        },
+      },
+    }
+  },
   methods: {
     open() {
       this.$refs.actionModal.open()
     },
-    // validateForm() {
-    //   this.$v.$touch()
-
-    //   return !this.$v.$invalid
-    // },
+    validateForm() {
+      this.$v.$touch()
+      return !this.$v.$invalid
+    },
     clear() {
-      // this.$v.$reset()
+      this.$v.$reset()
 
       this.amount = 0
     },
