@@ -14,7 +14,7 @@
 
 <script>
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
-import network from '~/network'
+import network from '~/common/network'
 
 const steps = [`Name`, `Password`, `Backup`]
 
@@ -55,7 +55,7 @@ export default {
       try {
         const wallet = getNewWalletFromSeed(
           this.seed,
-          network.bech32Prefix,
+          network.address_prefix,
           network.HDPath,
           network.curve
         )

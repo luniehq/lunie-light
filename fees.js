@@ -1,9 +1,16 @@
 export default {
   SendTx: {
-    gasEstimate: 10000,
+    gasEstimate: 350000,
     fee: {
-      denom: 'ATOM',
-      amount: 1e-5,
+      denom: 'LUNA',
+      amount: 0.1,
+    },
+  },
+  default: {
+    gasEstimate: 350000,
+    fee: {
+      denom: 'LUNA',
+      amount: 0.1,
     },
   },
 }
