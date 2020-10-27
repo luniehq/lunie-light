@@ -30,7 +30,7 @@ export default {
   cursor: default;
   padding: 0.5rem 0.5rem 0.5rem 0;
   margin-right: 0.75rem;
-  border-bottom: 2px solid var(--bc);
+  border-bottom: 2px solid var(--dim);
   color: var(--dim);
 }
 
