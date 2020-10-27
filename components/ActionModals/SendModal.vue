@@ -14,6 +14,7 @@
     @txIncluded="onSuccess"
   >
     <TmFormGroup
+      :error="$v.address.$error && $v.address.$invalid"
       class="action-modal-form-group"
       field-id="send-address"
       field-label="Send To"
@@ -28,18 +29,21 @@
         @change.native="trimSendAddress"
         @keyup.enter.native="refocusOnAmount"
       />
-      <!-- <TmFormMsg
+      <TmFormMsg
+        v-if="$v.address.$error && !$v.address.required"
         name="Address"
         type="required"
       />
       <TmFormMsg
+        v-else-if="$v.address.$error && !$v.address.validAddress"
         name="Address"
         type="custom"
-        msg="doesn't have a format known by Lunie"
-      /> -->
+        msg="doesn't have a known format"
+      />
     </TmFormGroup>
     <TmFormGroup
       id="form-group-amount"
+      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
@@ -70,41 +74,42 @@
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>
-      <!-- <TmFormMsg
-        v-if="selectedBalance.amount === 0"
-        :msg="`doesn't have any ${selectedToken}s`"
-        name="Wallet"
-        type="custom"
-      />
       <TmFormMsg
+        v-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
       <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
-        :msg="`You don't have enough ${selectedToken}s to proceed.`"
+        :msg="`You don't have enough ${selectedToken} to proceed.`"
       />
       <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
+        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
       <TmFormMsg
+        v-else-if="isMaxAmount()"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc max-message"
-      /> -->
+      />
     </TmFormGroup>
     <TmFormGroup
       id="memo"
+      :error="$v.memo.$error && $v.memo.$invalid"
       class="action-modal-group"
       field-id="memo"
       field-label="Memo"
@@ -115,26 +120,18 @@
         type="text"
         @keyup.enter.native="enterPressed"
       />
-      <span class="memo-span"
-        >To learn more about how to use the memo field, read
-        <a
-          href=" https://intercom.help/lunie/en/articles/3776563-using-the-memo-option-when-sending-tokens-to-and-from-exchanges"
-          rel="noopener norefferer"
-          target="_blank"
-          >our guide</a
-        >.</span
-      >
-      <!-- <TmFormMsg
+      <TmFormMsg
+        v-if="$v.memo.$error && !$v.memo.maxLength"
         name="Memo"
         type="maxLength"
         :max="max_memo_characters"
-      /> -->
+      />
     </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
-// import { required, decimal, maxLength } from 'vuelidate/lib/validators'
+import { required, decimal, maxLength } from 'vuelidate/lib/validators'
 import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'
 import { SMALLEST } from '~/common/numbers'
@@ -251,12 +248,12 @@ export default {
       this.$emit(`success`, event)
     },
     validateForm() {
-      // this.$v.$touch()
-      // return !this.$v.$invalid
+      this.$v.$touch()
+      return !this.$v.$invalid
       return true
     },
     clear() {
-      // this.$v.$reset()
+      this.$v.$reset()
 
       this.address = undefined
       this.amount = undefined
@@ -278,11 +275,12 @@ export default {
 
       return this.selectedToken
     },
-    bech32Validate(param) {
+    bech32Validation(address) {
       try {
-        decodeB32(param)
+        decodeB32(address)
         return true
       } catch (error) {
+        this.addressError = String(error).slice(7)
         return false
       }
     },
@@ -299,31 +297,30 @@ export default {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
   },
-  // validations() {
-  //   return {
-  //     address: {
-  //       required,
-  //       validAddress: (address) =>
-  //         this.bech32Validate(address) || isPolkadotAddress(address),
-  //     },
-  //     amount: {
-  //       required: (x) => !!x && x !== `0`,
-  //       decimal,
-  //       max: (x) => Number(x) <= this.maxAmount,
-  //       min: (x) => Number(x) >= SMALLEST,
-  //       maxDecimals: (x) => {
-  //         return x.toString().split('.').length > 1
-  //           ? x.toString().split('.')[1].length <= 6
-  //           : true
-  //       },
-  //     },
-  //     denoms: { required },
-  //     selectedToken: { required },
-  //     memo: {
-  //       maxLength: maxLength(this.max_memo_characters),
-  //     },
-  //   }
-  // },
+  validations() {
+    return {
+      address: {
+        required,
+        bech32Validation: this.bech32Validation,
+      },
+      amount: {
+        required: (x) => !!x && x !== `0`,
+        decimal,
+        max: (x) => Number(x) <= this.maxAmount,
+        min: (x) => Number(x) >= SMALLEST,
+        maxDecimals: (x) => {
+          return x.toString().split('.').length > 1
+            ? x.toString().split('.')[1].length <= 6
+            : true
+        },
+      },
+      denoms: { required },
+      selectedToken: { required },
+      memo: {
+        maxLength: maxLength(this.max_memo_characters),
+      },
+    }
+  },
 }
 </script>
 <style scoped>
