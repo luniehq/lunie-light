@@ -35,17 +35,23 @@ class CosmosV0API {
   // hacky way to get error text
   async getError(url) {
     try {
-      return await this.get(url)
+      return await this.axios(
+        this.baseURL + (url.startsWith('/') ? url : '/' + url)
+      )
     } catch (error) {
-      return error.extensions.response.body.error
+      return error.response.body.error
     }
+  }
+
+  async get(url) {
+    return await this.axios(
+      this.baseURL + (url.startsWith('/') ? url : '/' + url)
+    ).then((res) => res.data)
   }
 
   async getRetry(url, intent = 0) {
     try {
-      return await this.axios(
-        this.baseURL + (url.startsWith('/') ? url : '/' + url)
-      ).then((res) => res.data)
+      return await this.get(url)
     } catch (error) {
       // give up
       if (intent >= 3) {
@@ -727,30 +733,6 @@ class CosmosV0API {
     return _.uniqBy(allDelegations, 'delegator_address').map(
       ({ delegator_address: delegatorAddress }) => delegatorAddress
     )
-  }
-
-  async getTransactions(address) {
-    this.checkAddress(address)
-
-    const txs = await Promise.all([
-      this.loadPaginatedTxs(`/txs?sender=${address}`),
-      this.loadPaginatedTxsget(`/txs?recipient=${address}`),
-      this.loadPaginatedTxs(`/txs?action=submit_proposal&proposer=${address}`),
-      this.loadPaginatedTxs(`/txs?action=deposit&depositor=${address}`),
-      this.loadPaginatedTxs(`/txs?action=vote&voter=${address}`),
-      this.loadPaginatedTxs(`/txs?action=delegate&delegator=${address}`),
-      this.loadPaginatedTxs(
-        `/txs?action=begin_redelegate&delegator=${address}`
-      ),
-      this.loadPaginatedTxs(`/txs?action=begin_unbonding&delegator=${address}`),
-      this.loadPaginatedTxs(
-        `/txs?action=withdraw_delegator_reward&delegator=${address}`
-      ),
-      this.loadPaginatedTxs(
-        `/txs?action=withdraw_validator_rewards_all&source-validator=${address}`
-      ),
-    ]).then((transactionGroups) => [].concat(...transactionGroups))
-    return this.reducers.formatTransactionsReducer(txs, this.reducers)
   }
 
   async loadPaginatedTxs(url, page = 1, totalAmount = 0) {
