@@ -3,8 +3,8 @@
   --primary: hsl(7, 88%, 70%);
   --primary-hover: hsl(7, 88%, 65%);
   --highlight: hsl(252, 100%, 75%);
-  --link: hsl(217, 100%, 70%);
-  --link-hover: hsl(217, 100%, 65%);
+  --link: hsl(217, 95%, 62%);
+  --link-hover: hsl(217, 95%, 65%);
 
   /* background-colors */
   --app-fg: hsl(229, 100%, 98%);
