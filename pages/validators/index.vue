@@ -1,8 +1,5 @@
 <template>
-  <TmPage
-    :loading="!validators"
-    :loader-path="`/img/validator-list-loading.svg`"
-  >
+  <TmPage :loading="!validators" :loader-path="loaderImage">
     <template>
       <div class="filterContainer">
         <TmField
@@ -39,6 +36,7 @@
       <TableValidators
         :validators="filteredValidators"
         :delegations="delegations"
+        :rewards="rewards"
         :show-mobile-sorting="showMobileSorting"
         show-on-mobile="expectedReturns"
       />
@@ -54,22 +52,18 @@
 
 <script>
 import { mapState } from 'vuex'
-import CosmosV2Source from '../../common/cosmosV2-source'
-import network from '../../network'
 
 export default {
   name: `page-validators`,
   data: () => ({
+    loaderImage: require('~/assets/images/validator-list-loading.svg'),
     searchTerm: '',
     activeOnly: true,
     allValidators: false,
-    popularSort: true,
-    validators: [],
-    loaded: false,
     showMobileSorting: false,
   }),
   computed: {
-    ...mapState([`address`]),
+    ...mapState('data', ['validators', 'delegations', 'rewards']),
     filteredValidators() {
       if (this.searchTerm) {
         return this.sortedValidators.filter(({ name, operatorAddress }) => {
@@ -91,19 +85,6 @@ export default {
         return this.validators.filter(({ status }) => status === 'ACTIVE')
       }
     },
-  },
-
-  async asyncData({ $axios, $cookies }) {
-    const address = $cookies.get('address')
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const [validators, delegations] = await Promise.all([
-      api.getAllValidators(),
-      address
-        ? api.getDelegationsForDelegatorAddress(address)
-        : Promise.resolve([]),
-    ])
-    return { validators, delegations }
   },
   methods: {
     defaultSelectorsController(selector) {

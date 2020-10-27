@@ -1,10 +1,6 @@
 <template>
   <div class="sidebar-bottom">
-    <div
-      v-if="!block.chainId"
-      id="tm-connected-network"
-      class="tm-connected-network"
-    >
+    <div v-if="block" id="tm-connected-network" class="tm-connected-network">
       <div class="tm-connected-network__connection">
         <div id="tm-connected-network__icon" class="tm-connected-network__icon">
           <span
@@ -25,26 +21,13 @@
         id="tm-connected-network__block"
         class="tm-connected-network__string"
       >
-        <nuxt-link
+        <span
           v-if="block.height"
           v-tooltip.top="'Block Height'"
-          :class="
-            `block-number` && {
-              noClickable: true,
-            }
-          "
-          :to="
-            false
-              ? ``
-              : {
-                  name: `block`,
-                  params: { height: block.height, networkId: networkSlug },
-                }
-          "
-          @click.native="handleClick()"
+          class="block-number"
         >
           #{{ block.height | prettyInt }}
-        </nuxt-link>
+        </span>
         <template v-else> -- </template>
       </div>
     </div>
@@ -67,25 +50,16 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { prettyInt } from '../../common/numbers'
-import network from '../../network'
-import CosmosV2Source from '../../common/cosmosV2-source'
 
 export default {
   name: `connected-network`,
   filters: {
     prettyInt,
   },
-  async asyncData({ $axios }) {
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const block = await api.getBlockV2()
-    return { block }
-  },
-  data: () => ({
-    block: {},
-  }),
   computed: {
+    ...mapState('data', ['block']),
     networkTooltip() {
       return this.block
         ? `You're connected to ${this.block.chainId}.`
@@ -93,20 +67,14 @@ export default {
     },
   },
   mounted() {
+    if (!this.block) this.loadBlock()
     setInterval(() => {
       this.loadBlock()
     }, 10000)
   },
   methods: {
-    handleClick() {
-      this.$emit(`close-menu`)
-      window.scrollTo(0, 0)
-    },
-    async loadBlock() {
-      const store = {}
-      const api = new CosmosV2Source(this.$axios, network, store, null, null)
-      const block = await api.getBlockV2()
-      this.block = block
+    loadBlock() {
+      this.$store.dispatch('data/getBlock')
     },
   },
 }

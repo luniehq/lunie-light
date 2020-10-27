@@ -61,15 +61,15 @@ export default {
   data: () => ({
     fieldSeed: undefined,
   }),
+  mounted() {
+    this.fieldSeed = this.seed
+  },
   methods: {
     onSubmit() {
       // this.$v.$touch()
       // if (this.$v.seed.$invalid || this.$v.seed.$invalid) return
       this.$emit('submit', this.fieldSeed)
     },
-  },
-  mounted() {
-    this.fieldSeed = this.seed
   },
   // validations() {
   //   return {

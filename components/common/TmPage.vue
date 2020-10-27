@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <CardSignInRequired v-if="signInRequired && !address" />
+    <CardSignInRequired v-if="signInRequired && !session" />
 
     <TmDataLoading v-if="loading && !loaderPath" />
     <template v-if="loading && loaderPath" class="loading-image-container">
@@ -23,21 +23,15 @@
       <slot></slot>
       <TmDataLoading v-if="!loading && loadingMore" />
     </template>
-    <!-- <slot v-if="session.signedIn" name="signInRequired"></slot> -->
+    <slot v-if="session" name="signInRequired"></slot>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: `tm-page`,
-  data: () => ({
-    address: undefined,
-  }),
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
     loadingMore: {
       type: Boolean,
       default: false,
@@ -63,13 +57,27 @@ export default {
       default: false,
     },
   },
-  mounted() {
-    this.addressInterval = setInterval(() => {
-      this.address = this.$cookies.get('address')
-    }, 500)
+  data: () => ({
+    loading: true,
+  }),
+  computed: {
+    ...mapState(['session']),
+    ...mapState(['data', ['validators']]),
   },
-  destroyed() {
-    clearInterval(this.addressInterval)
+  mounted() {
+    const session = this.$cookies.get('lunie-session')
+    this.$store.dispatch('signIn', session)
+
+    this.loadData()
+  },
+  methods: {
+    async loadData() {
+      // somehow on mounted the mapState is not yet called
+      if (this.$store.state.data.validators.length === 0) {
+        await this.$store.dispatch('data/refresh')
+      }
+      this.loading = false
+    },
   },
 }
 </script>

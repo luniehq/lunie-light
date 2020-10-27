@@ -69,9 +69,9 @@
       </div>
     </div>
 
-    <!-- <SendModal ref="SendModal" :denoms="[balance.denom]" />
-    <DelegationModal ref="StakeModal" />
-    <UndelegationModal ref="UnstakeModal" /> -->
+    <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
+    <!-- <StakeModal ref="StakeModal" />
+    <UnstakeModal ref="UnstakeModal" /> -->
 
     <!-- endTime span for Polkadot undelegations -->
     <div
@@ -87,8 +87,8 @@
   </div>
 </template>
 <script>
-import { bigFigureOrShortDecimals } from '../../common/numbers'
-import { fromNow } from '../../common/time'
+import { bigFigureOrShortDecimals } from '~/common/numbers'
+import { fromNow } from '~/common/time'
 
 export default {
   name: `balance-row`,

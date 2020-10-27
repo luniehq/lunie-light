@@ -13,31 +13,17 @@
 </template>
 
 <script>
-import network from '~/network'
-import CosmosV2Source from '~/common/cosmosV2-source'
+import { mapState } from 'vuex'
 
 export default {
   name: `page-portfolio`,
-  data: () => ({
-    delegations: [],
-    balances: [],
-    rewards: [],
-    undelegations: [],
-  }),
-  async asyncData({ $axios, $cookies }) {
-    const address = $cookies.get('address')
-    const currency = $cookies.get('currency') || 'USD'
-    if (!address) return {}
-
-    const store = {}
-    const api = new CosmosV2Source($axios, network, store, null, null)
-    const [delegations, balances, rewards, undelegations] = await Promise.all([
-      api.getDelegationsForDelegatorAddress(address),
-      api.getBalancesV2FromAddress(address, currency, network),
-      api.getRewards(address, currency, network),
-      api.getUndelegationsForDelegatorAddress(address),
-    ])
-    return { delegations, balances, rewards, undelegations }
+  computed: {
+    ...mapState('data', [
+      'delegations',
+      'undelegations',
+      'balances',
+      'rewards',
+    ]),
   },
 }
 </script>

@@ -1,24 +1,21 @@
 <template>
   <div class="user-menu">
-    <UserMenuAddress :address="address" />
+    <UserMenuAddress :address="session ? session.address : undefined" />
     <TmBtn
       type="secondary"
+      :value="session ? 'Change Address' : 'View Address'"
       @click.native="$router.push('/address')"
-      :value="address ? 'Change Address' : 'View Address'"
     />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: `user-menu`,
-  data: () => ({
-    address: undefined,
-  }),
-  mounted() {
-    setInterval(() => {
-      this.address = this.$cookies.get('address')
-    }, 500)
+  computed: {
+    ...mapState(['session']),
   },
 }
 </script>
