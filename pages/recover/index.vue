@@ -21,12 +21,10 @@
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
 import network from '~/common/network'
 
-const steps = [`Recover`, `Name`, `Password`]
-
 export default {
   name: `recover`,
   data: () => ({
-    steps,
+    steps: [`Recover`, `Name`, `Password`],
     step: 'Recover',
     name: undefined,
     password: undefined,
@@ -36,10 +34,10 @@ export default {
   }),
   methods: {
     onBack() {
-      const stepIndex = steps.find((step) => step === this.step)
+      const stepIndex = this.steps.findIndex((step) => step === this.step)
       if (stepIndex === 0) this.$router.go(-1)
       this.errorMessage = undefined
-      this.step = stepIndex[stepIndex - 1]
+      this.step = this.steps[stepIndex - 1]
     },
     setName(name) {
       this.name = name

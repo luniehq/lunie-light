@@ -7,8 +7,12 @@
           {{ address }}
         </p>
       </TmFormGroup>
-      <!-- :error="$v.$error && $v.name.$invalid" -->
-      <TmFormGroup field-id="import-name" field-label="Account Name">
+
+      <TmFormGroup
+        :error="$v.$error && $v.fieldName.$invalid"
+        field-id="import-name"
+        field-label="Account Name"
+      >
         <TmField
           id="import-name"
           v-model.trim="fieldName"
@@ -16,23 +20,23 @@
           placeholder="Must have at least 3 characters"
           vue-focus="vue-focus"
         />
-        <!-- <TmFormMsg
-          v-if="$v.name.$error && !$v.name.required"
+        <TmFormMsg
+          v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
         />
         <TmFormMsg
-          v-if="$v.name.$error && !$v.name.minLength"
+          v-if="$v.fieldName.$error && !$v.fieldName.minLength"
           name="Name"
           type="minLength"
           min="3"
         />
         <TmFormMsg
-          v-if="$v.name.$error && !$v.name.nameExists"
+          v-if="$v.fieldName.$error && !$v.fieldName.nameExists"
           name="Name"
           type="custom"
           msg="already exists"
-        /> -->
+        />
       </TmFormGroup>
     </div>
     <div class="session-footer">
@@ -42,17 +46,17 @@
 </template>
 
 <script>
-// import { required, minLength } from 'vuelidate/lib/validators'
-// import { getWalletIndex } from '@lunie/cosmos-keys'
+import { required, minLength } from 'vuelidate/lib/validators'
+import { getWalletIndex } from '@lunie/cosmos-keys'
 
-// const nameExists = (value) => {
-//   const walletIndex = getWalletIndex()
-//   if (walletIndex.some((e) => e.name === value)) {
-//     return false
-//   } else {
-//     return true
-//   }
-// }
+const nameExists = (value) => {
+  const walletIndex = getWalletIndex()
+  if (walletIndex.some((e) => e.name === value)) {
+    return false
+  } else {
+    return true
+  }
+}
 
 export default {
   name: `import-name-step`,
@@ -74,14 +78,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.name.$invalid) return
+      this.$v.$touch()
+      if (this.$v.fieldName.$invalid) return
       this.$emit('submit', this.fieldName)
     },
   },
-  // validations: () => ({
-  //   name: { required, minLength: minLength(3), nameExists },
-  // }),
+  validations: () => ({
+    fieldName: { required, minLength: minLength(3), nameExists },
+  }),
 }
 </script>
 <style scoped>

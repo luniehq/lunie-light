@@ -41,7 +41,7 @@
         />
         <!-- <TmFormMsg
             type="custom"
-            :msg="`You don't have enough ${selectedDenom}s to proceed.`"
+            :msg="`You don't have enough ${selectedDenom} to proceed.`"
           /> -->
       </div>
       <div v-else-if="step === signStep" class="action-modal-form">

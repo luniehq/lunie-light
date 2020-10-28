@@ -2,28 +2,18 @@
   <ActionModal
     id="delegation-modal"
     ref="actionModal"
-    :amount="isRedelegation ? 0 : amount"
-    :title="isRedelegation ? 'Restake' : 'Stake'"
+    :validate="validateForm"
+    :amount="amount"
+    title="Stake"
     class="delegation-modal"
     submission-error-prefix="Staking failed"
-    :transaction-type="
-      isRedelegation ? lunieMessageTypes.RESTAKE : lunieMessageTypes.STAKE
-    "
+    :transaction-type="lunieMessageTypes.STAKE"
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="delegate"
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup class="action-modal-form-group">
-      <div class="form-message notice">
-        <span v-if="isRedelegation">
-          Voting power and rewards will change instantly upon restaking — but
-          your tokens will still be subject to the risks associated with the
-          original stake for the duration of the unstaking period.
-        </span>
-      </div>
-    </TmFormGroup>
     <TmFormGroup
       v-if="Object.keys(targetValidator).length > 0"
       class="action-modal-form-group"
@@ -31,24 +21,10 @@
       field-label="To"
     >
       <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
-      <template>
-        <!-- <TmFormMsg
-          v-if="targetValidator.status === 'INACTIVE' && !isRedelegation"
-          :msg="`You are about to stake to an inactive validator (${targetValidator.statusDetailed})`"
-          type="custom"
-          class="tm-form-msg--desc"
-        />
-        <TmFormMsg
-          v-if="targetValidator.status === 'INACTIVE' && isRedelegation"
-          :msg="`You are about to restake to an inactive validator (${targetValidator.statusDetailed})`"
-          type="custom"
-          class="tm-form-msg--desc"
-        /> -->
-      </template>
     </TmFormGroup>
 
-    <!-- :error="$v.amount.$error && $v.amount.$invalid" -->
     <TmFormGroup
+      :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
@@ -83,7 +59,7 @@
         name="Wallet"
         type="custom"
       />
-      <!-- <TmFormMsg
+      <TmFormMsg
         v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
@@ -96,7 +72,7 @@
       <TmFormMsg
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
-        :msg="`You don't have enough ${currentNetwork.stakingDenom}s to proceed.`"
+        :msg="`You don't have enough ${network.stakingDenom} to proceed.`"
       />
       <TmFormMsg
         v-else-if="$v.amount.$error && !$v.amount.min"
@@ -110,18 +86,18 @@
         type="maxDecimals"
       />
       <TmFormMsg
-        v-else-if="isMaxAmount() && !isRedelegation"
+        v-else-if="isMaxAmount()"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc"
-      /> -->
+      />
     </TmFormGroup>
   </ActionModal>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-// import { decimal } from 'vuelidate/lib/validators'
+import { required, decimal } from 'vuelidate/lib/validators'
 import { SMALLEST } from '~/common/numbers'
 import { formatAddress, validatorEntry } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
@@ -139,7 +115,7 @@ export default {
     },
   },
   data: () => ({
-    amount: 0,
+    amount: null,
     fromSelectedIndex: 0,
     lunieMessageTypes,
     network,
@@ -204,51 +180,26 @@ export default {
     transactionData() {
       if (isNaN(this.amount)) return {}
 
-      if (this.isRedelegation) {
-        return {
-          type: lunieMessageTypes.RESTAKE,
-          from: [this.from],
-          to:
-            Object.keys(this.targetValidator).length > 0
-              ? [this.targetValidator.operatorAddress]
-              : '',
-          amount: {
-            amount: this.amount,
-            denom: network.stakingDenom,
-          },
-        }
-      } else {
-        return {
-          type: lunieMessageTypes.STAKE,
-          to:
-            Object.keys(this.targetValidator).length > 0
-              ? [this.targetValidator.operatorAddress]
-              : '',
-          amount: {
-            amount: this.amount,
-            denom: network.stakingDenom,
-          },
-        }
+      return {
+        type: lunieMessageTypes.STAKE,
+        to:
+          Object.keys(this.targetValidator).length > 0
+            ? [this.targetValidator.operatorAddress]
+            : '',
+        amount: {
+          amount: this.amount,
+          denom: network.stakingDenom,
+        },
       }
     },
     notifyMessage() {
-      if (this.isRedelegation) {
-        return {
-          title: `Successfully restaked!`,
-          body: `You have successfully restaked your ${network.stakingDenom}s`,
-        }
-      } else {
-        return {
-          title: `Successfully staked!`,
-          body: `You have successfully staked your ${network.stakingDenom}s`,
-        }
+      return {
+        title: `Successfully staked!`,
+        body: `You have successfully staked your ${network.stakingDenom}s`,
       }
     },
     maxAmount() {
       return this.balance.available
-    },
-    isRedelegation() {
-      return this.fromSelectedIndex !== 0 && this.fromSelectedIndex !== '0' // where are these 0 strings comming from?
     },
     undelegationPeriod() {
       return network.lockUpPeriod
@@ -264,12 +215,13 @@ export default {
     open() {
       this.$refs.actionModal.open()
     },
-    // validateForm() {
-    //   this.$v.$touch()
-    //   return !this.$v.$invalid
-    // },
+    validateForm() {
+      this.$v.$touch()
+      return !this.$v.$invalid
+    },
     clear() {
-      // this.$v.$reset()
+      this.$v.$reset()
+
       this.fromSelectedIndex = 0
       this.amount = 0
     },
@@ -277,7 +229,11 @@ export default {
       this.amount = this.maxAmount
     },
     isMaxAmount() {
-      return parseFloat(this.amount) === parseFloat(this.maxAmount)
+      if (this.balance.amount === 0) {
+        return false
+      } else {
+        return parseFloat(this.amount) === this.maxAmount
+      }
     },
     enterPressed() {
       this.$refs.actionModal.validateChangeStep()
@@ -286,26 +242,20 @@ export default {
       this.$emit(`success`, event)
     },
   },
-  // validations() {
-  //   return {
-  //     amount: {
-  //       required: (amount) => {
-  //         // In Polkadot we don't need to bond extra, the user may just want to nominate a new validator
-  //         // stash accounts or new accounts that haven't bonded tokens yet, need to specify an amount to bond
-  //         return !!amount && amount !== `0`
-  //       },
-  //       decimal,
-  //       max: (x) => Number(x) <= this.maxAmount,
-  //       min: (x) => {
-  //         return Number(x) >= SMALLEST
-  //       },
-  //       maxDecimals: (x) => {
-  //         return x.toString().split('.').length > 1
-  //           ? x.toString().split('.')[1].length <= 6
-  //           : true
-  //       },
-  //     },
-  //   }
-  // },
+  validations() {
+    return {
+      amount: {
+        required,
+        decimal,
+        max: (x) => Number(x) <= this.maxAmount,
+        min: (x) => Number(x) >= SMALLEST,
+        maxDecimals: (x) => {
+          return Number(x).toString().split('.').length > 1
+            ? Number(x).toString().split('.')[1].length <= 6
+            : true
+        },
+      },
+    }
+  },
 }
 </script>

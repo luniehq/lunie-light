@@ -3,13 +3,7 @@
     <h2>DANGER ZONE</h2>
     <p>
       Did you know that creating your address in the browser is considered
-      unsafe? We offer a more secure way to do this with our
-      <a
-        href="http://bit.ly/lunie-ext"
-        target="_blank"
-        rel="noopener norefferer"
-        >browser extension</a
-      >. Check it out in a quiet minute.
+      unsafe? This option is only for testing and development.
     </p>
   </div>
 </template>

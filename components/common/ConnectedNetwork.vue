@@ -157,14 +157,6 @@ export default {
   background: var(--success);
 }
 
-.block-number {
-  color: var(--menu-link);
-}
-
-.block-number:hover {
-  color: var(--menu-link-hover);
-}
-
 @media screen and (max-width: 1023px) {
   .sidebar-bottom {
     max-width: 100%;

@@ -6,22 +6,29 @@
         <TmFormGroup field-id="sign-in-name" field-label="Select Account">
           <TmField
             id="sign-in-name"
-            v-model="address"
+            v-model="signInAddress"
             :options="accounts"
             type="select"
             placeholder="Select account…"
             vue-focus="vue-focus"
           />
-          <!-- <TmFormMsg
+          <TmFormMsg
             v-if="$v.signInAddress.$error && !$v.signInAddress.required"
             name="Name"
             type="required"
-          /> -->
+          />
         </TmFormGroup>
-        <!-- :error="$v.signInPassword.$error" -->
-        <TmFormGroup field-id="sign-in-password" field-label="Password">
-          <TmField id="sign-in-password" v-model="password" type="password" />
-          <!-- 
+
+        <TmFormGroup
+          :error="$v.signInPassword.$error"
+          field-id="sign-in-password"
+          field-label="Password"
+        >
+          <TmField
+            id="sign-in-password"
+            v-model="signInPassword"
+            type="password"
+          />
           <TmFormMsg
             v-if="$v.signInPassword.$error && !$v.signInPassword.required"
             name="Password"
@@ -32,7 +39,7 @@
             name="Password"
             type="minLength"
             min="10"
-          /> -->
+          />
           <TmFormMsg v-if="error" type="custom" :msg="error" />
         </TmFormGroup>
       </div>
@@ -45,13 +52,13 @@
 
 <script>
 import { getWalletIndex, testPassword } from '@lunie/cosmos-keys'
-// import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: `sign-in`,
   data: () => ({
-    address: undefined,
-    password: ``,
+    signInAddress: undefined,
+    signInPassword: ``,
     error: ``,
     loading: false,
   }),
@@ -69,14 +76,14 @@ export default {
   },
   methods: {
     onSubmit() {
-      // this.$v.$touch()
-      // if (this.$v.$error) return
+      this.$v.$touch()
+      if (this.$v.$error) return
       this.loading = true
 
       try {
-        testPassword(this.address, this.password)
+        testPassword(this.signInAddress, this.signInPassword)
         this.$store.dispatch('signIn', {
-          address: this.address,
+          address: this.signInAddress,
           type: 'local',
         })
         this.$router.push('/portfolio')
@@ -86,11 +93,11 @@ export default {
       }
     },
   },
-  // validations() {
-  //   return {
-  //     signInAddress: { required },
-  //     signInPassword: { required, minLength: minLength(10) },
-  //   }
-  // },
+  validations() {
+    return {
+      signInAddress: { required },
+      signInPassword: { required, minLength: minLength(10) },
+    }
+  },
 }
 </script>
