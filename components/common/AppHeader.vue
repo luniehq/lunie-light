@@ -1,7 +1,7 @@
 <template>
   <nav class="app-header">
-    <div class="container" :class="{ open: open }">
-      <div class="header-item" :class="{ open: open }">
+    <div class="container" :class="{ open: isOpen }">
+      <div class="header-item" :class="{ open: isOpen }">
         <a href="https://lunie.io">
           <svg
             class="header-item-logo"
@@ -34,23 +34,31 @@
           </svg>
           Lunie
         </a>
+        <div class="header-menu-section">
+          <template v-if="!desktop">
+            <div v-if="isOpen" class="close-menu" @click="close()">
+              <i class="material-icons notranslate mobile-menu-action">close</i>
+            </div>
+            <div v-if="!isOpen" class="open-menu" @click="open()">
+              <i class="material-icons notranslate mobile-menu-action"
+                >more_vert</i
+              >
+            </div>
+          </template>
+        </div>
       </div>
-      <AppMenu v-if="open || desktop" @close="close" />
+      <AppMenu v-if="isOpen || desktop" @close="close" />
     </div>
   </nav>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
   name: `app-header`,
   data: () => ({
-    open: false,
+    isOpen: false,
     desktop: false,
   }),
-  computed: {
-    ...mapState([`session`]),
-  },
   mounted() {
     this.watchWindowSize()
     window.onresize = this.watchWindowSize
@@ -61,13 +69,10 @@ export default {
   },
   methods: {
     close() {
-      this.open = false
+      this.isOpen = false
     },
-    show() {
-      if (this.session.currrentModalOpen) {
-        this.session.currrentModalOpen.close()
-      }
-      this.open = true
+    open() {
+      this.isOpen = true
     },
     watchWindowSize() {
       const w = Math.max(
@@ -188,20 +193,6 @@ export default {
     height: 100%;
     overflow: auto;
     background: var(--app-nav);
-  }
-}
-
-/* iPhone X and Xs Max */
-@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  .app-header > .container {
-    padding-top: 2.2rem;
-  }
-}
-
-/* iPhone XR */
-@media only screen and (min-device-width: 414px) and (min-device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
-  .app-header > .container {
-    padding-top: 2.2rem;
   }
 }
 </style>
