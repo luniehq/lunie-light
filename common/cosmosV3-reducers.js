@@ -21,7 +21,8 @@ function validatorReducer(
   network,
   signedBlocksWindow,
   validator,
-  fiatValuesResponse
+  annualProvision,
+  reducers
 ) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
@@ -40,7 +41,7 @@ function validatorReducer(
     website: websiteURL,
     identity: validator.description.identity,
     name: validator.description.moniker,
-    votingPower: validator.voting_power.toFixed(6),
+    votingPower: validator.votingPower.toFixed(6),
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
@@ -54,10 +55,13 @@ function validatorReducer(
     statusDetailed: statusInfo.status_detailed,
     delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
     popularity: validator.popularity,
-    // totalStakedAssets: {
-    //   ...fiatValuesResponse[network.stakingDenom],
-    //   amount: fiatValuesResponse[network.stakingDenom].amount.toFixed(2),
-    // },
+    expectedReturns: reducers
+      .expectedRewardsPerToken(
+        validator,
+        validator.commission.commission_rates.rate,
+        annualProvision
+      )
+      .toFixed(6),
   }
 }
 
