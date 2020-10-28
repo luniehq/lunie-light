@@ -1,11 +1,9 @@
 <template>
   <div class="user-menu">
     <UserMenuAddress :address="session ? session.address : undefined" />
-    <TmBtn
-      type="secondary"
-      :value="session ? 'Change Address' : 'View Address'"
-      @click.native="$router.push('/address')"
-    />
+    <button class="icon-button" @click="$router.push('/address')">
+      <i class="material-icons">person</i>
+    </button>
   </div>
 </template>
 
@@ -25,6 +23,31 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin: 1em;
+  padding: 1rem;
+  width: 100%;
+}
+
+.icon-button {
+  border-radius: 50%;
+  background: var(--app-fg);
+  border: none;
+  outline: none;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  margin-left: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.25s ease;
+}
+
+.icon-button:hover {
+  cursor: pointer;
+}
+
+.icon-button i {
+  font-size: 18px;
+  color: var(--link);
+  font-weight: 900;
 }
 </style>
