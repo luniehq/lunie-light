@@ -34,18 +34,6 @@
           </svg>
           Lunie
         </a>
-        <!-- <router-link
-          v-else
-          :to="{ name: 'portfolio', params: { networkId: networkSlug } }"
-          exact="exact"
-          title="Portfolio"
-        >
-          <img
-            class="header-item-logo"
-            src="~assets/images/lunie-logo-white.svg"
-            alt="Lunie sharing circle - dots on the left outline of the cirle, line on the right side"
-          />
-        </router-link> -->
         <div class="header-menu-section">
           <template v-if="!desktop">
             <div v-if="open" class="close-menu" @click="close()">
