@@ -316,24 +316,6 @@ export default {
   mounted() {
     this.loadBalances()
   },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
