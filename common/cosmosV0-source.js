@@ -658,6 +658,18 @@ class CosmosV0API {
     )
   }
 
+  async getValidatorDelegations(validator) {
+    const delegations = await this.query(
+      `staking/validators/${validator.operatorAddress}/delegations`
+    ).catch(() => {
+      return []
+    })
+
+    return delegations.map((delegation) =>
+      this.reducers.delegationReducer(delegation, validator)
+    )
+  }
+
   async getDelegationForValidator(delegatorAddress, validator) {
     this.checkAddress(delegatorAddress)
 
