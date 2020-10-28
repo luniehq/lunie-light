@@ -1,7 +1,7 @@
 <template>
   <nav class="app-header">
-    <div class="container" :class="{ open: open }">
-      <div class="header-item" :class="{ open: open }">
+    <div class="container" :class="{ open: isOpen }">
+      <div class="header-item" :class="{ open: isOpen }">
         <a href="https://lunie.io">
           <svg
             class="header-item-logo"
@@ -36,10 +36,10 @@
         </a>
         <div class="header-menu-section">
           <template v-if="!desktop">
-            <div v-if="open" class="close-menu" @click="close()">
+            <div v-if="isOpen" class="close-menu" @click="close()">
               <i class="material-icons notranslate mobile-menu-action">close</i>
             </div>
-            <div v-if="!open" class="open-menu" @click="open()">
+            <div v-if="!isOpen" class="open-menu" @click="open()">
               <i class="material-icons notranslate mobile-menu-action"
                 >more_vert</i
               >
@@ -47,7 +47,7 @@
           </template>
         </div>
       </div>
-      <AppMenu v-if="open || desktop" @close="close" />
+      <AppMenu v-if="isOpen || desktop" @close="close" />
     </div>
   </nav>
 </template>
@@ -56,7 +56,7 @@
 export default {
   name: `app-header`,
   data: () => ({
-    open: false,
+    isOpen: false,
     desktop: false,
   }),
   mounted() {
@@ -69,10 +69,10 @@ export default {
   },
   methods: {
     close() {
-      this.open = false
+      this.isOpen = false
     },
     open() {
-      this.open = true
+      this.isOpen = true
     },
     watchWindowSize() {
       const w = Math.max(
