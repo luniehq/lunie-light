@@ -7,17 +7,6 @@
       @keyup.esc="closeModal()"
     >
       <div class="session-outer-container">
-        <div
-          v-if="icon.startsWith(`/img`) || icon.startsWith(`https`)"
-          class="icon-circle"
-        >
-          <img class="icon-image" :src="icon" />
-        </div>
-        <i
-          v-else-if="icon.length > 0"
-          class="material-icons notranslate circle modal-icon"
-          >{{ icon }}</i
-        >
         <div class="session">
           <div class="session-header">
             <a :class="{ invisible: hideBack }" @click="goBack">

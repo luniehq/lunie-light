@@ -9,7 +9,7 @@
         }}
       </p>
       <p v-if="transaction.memo">
-        <i class="material-icons notranslate">message</i> Memo:&nbsp;
+        Memo:&nbsp;
         {{ transaction.memo }}
       </p>
       <p>

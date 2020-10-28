@@ -2,7 +2,7 @@
   <nav class="app-header">
     <div class="container" :class="{ open: open }">
       <div class="header-item" :class="{ open: open }">
-        <a href="https://lunie.io">
+        <nuxt-link to="/">
           <svg
             class="header-item-logo"
             width="324"
@@ -33,7 +33,7 @@
             />
           </svg>
           Lunie
-        </a>
+        </nuxt-link>
       </div>
       <AppMenu v-if="open || desktop" @close="close" />
     </div>
