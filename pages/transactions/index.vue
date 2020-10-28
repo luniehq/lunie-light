@@ -23,6 +23,14 @@
             />
           </template>
         </EventList>
+
+        <template v-if="!loading">
+          <p class="message">
+            *If this transaction list looks incomplete, it's possible the
+            transactions may have occured on a previous version of this
+            blockchain.
+          </p>
+        </template>
       </template>
     </template>
   </TmPage>
@@ -77,3 +85,11 @@ export default {
   },
 }
 </script>
+<style scoped>
+.message {
+  font-size: 11px;
+  color: var(--txt);
+  text-align: center;
+  padding: 2rem;
+}
+</style>
