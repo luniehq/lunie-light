@@ -14,20 +14,20 @@
 <script>
 import groupBy from 'lodash.groupby'
 import orderBy from 'lodash.orderby'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const categories = [
   {
     section: 'Today',
     matcher: (event) => {
       // tests if the timestamp has the same day as today
-      return moment(event.timestamp).isSame(moment(), 'day')
+      return dayjs(event.timestamp).isSame(dayjs(), 'day')
     },
   },
   {
     section: 'Yesterday',
     matcher: (event) => {
-      return moment(event.timestamp).isSame(moment().subtract(1, 'days'), 'day')
+      return dayjs(event.timestamp).isSame(dayjs().subtract(1, 'days'), 'day')
     },
   },
 ]
@@ -63,7 +63,7 @@ export default {
       return this.showingEvents.map((event) => {
         // check if the tx is in Today, Yesterday or Last Week
         const dateString =
-          ` (` + moment(event.timestamp).format('MMMM Do') + `)`
+          ` (` + dayjs(event.timestamp).format('MMMM D, YYYY') + `)`
         const category = categories.find(({ matcher }) => matcher(event))
         if (category) {
           return {
@@ -73,18 +73,18 @@ export default {
         }
 
         // check if tx is in a month this year
-        const date = moment(event.timestamp)
-        const today = moment()
+        const date = dayjs(event.timestamp)
+        const today = dayjs()
         if (date.year() === today.year()) {
           return {
-            section: date.format('MMMM Do'),
+            section: date.format('MMMM D, YYYY'),
             event,
           }
         }
 
         // tx is in a month another year
         return {
-          section: date.format('MMMM Do, YYYY'),
+          section: date.format('MMMM D, YYYY'),
           event,
         }
       })
