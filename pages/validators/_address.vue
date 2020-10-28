@@ -19,11 +19,6 @@
           >
             {{ validator.status }}
           </span>
-          <span
-            v-if="validator.statusDetailed"
-            class="validator-status-detailed"
-            >{{ validator.statusDetailed }}</span
-          >
         </div>
       </div>
       <tr class="li-validator">
