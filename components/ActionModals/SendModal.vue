@@ -159,14 +159,13 @@ export default {
     max_memo_characters: 256,
     isFirstLoad: true,
     selectedToken: undefined,
-    balances: [],
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
   }),
   computed: {
     ...mapState([`session`]),
-    ...mapState([`balances`]),
+    ...mapState(`data`, [`balances`]),
     selectedBalance() {
       return (
         this.balances.find(({ denom }) => denom === this.selectedToken) || {
