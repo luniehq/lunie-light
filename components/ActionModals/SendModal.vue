@@ -35,16 +35,10 @@
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.address.$error && !$v.address.bech32Validation"
+        v-else-if="$v.address.$error && !$v.address.addressValidate"
         name="Address"
         type="custom"
-        msg="is invalid"
-      />
-      <TmFormMsg
-        v-else-if="$v.address.$error && !$v.address.prefixValidation"
-        name="Address"
-        type="custom"
-        msg="is not valid for this network"
+        :msg="addressError"
       />
     </TmFormGroup>
     <TmFormGroup
@@ -158,6 +152,7 @@ export default {
   data: () => ({
     address: ``,
     amount: null,
+    addressError: ``,
     memo: defaultMemo,
     max_memo_characters: 256,
     isFirstLoad: true,
@@ -299,6 +294,14 @@ export default {
         return false
       }
     },
+    validatorAddressValidation(address) {
+      if (address.includes('valoper')) {
+        this.addressError = `Validator addresses are not supported`
+        return false
+      } else {
+        return true
+      }
+    },
     enterPressed() {
       this.$refs.actionModal.validateChangeStep()
     },
@@ -318,6 +321,7 @@ export default {
         required,
         bech32Validation: this.bech32Validation,
         prefixValidation: this.prefixValidation,
+        validatorAddressValidation: this.validatorAddressValidation,
       },
       amount: {
         required,
