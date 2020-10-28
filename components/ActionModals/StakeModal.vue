@@ -199,7 +199,7 @@ export default {
       }
     },
     maxAmount() {
-      return this.fromOptions[this.fromSelectedIndex].maximum
+      return this.balance.available
     },
     undelegationPeriod() {
       return network.lockUpPeriod

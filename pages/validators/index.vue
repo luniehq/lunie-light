@@ -1,5 +1,5 @@
 <template>
-  <TmPage :loading="!validators" :loader-path="loaderImage">
+  <TmPage :loading="!validators">
     <template>
       <div class="filterContainer">
         <TmField
@@ -40,12 +40,6 @@
         :show-mobile-sorting="showMobileSorting"
         show-on-mobile="expectedReturns"
       />
-      <div
-        v-if="validators && validators.length === 0 && searchTerm"
-        class="no-results"
-      >
-        No results for these search terms
-      </div>
     </template>
   </TmPage>
 </template>
@@ -56,7 +50,6 @@ import { mapState } from 'vuex'
 export default {
   name: `page-validators`,
   data: () => ({
-    loaderImage: require('~/assets/images/validator-list-loading.svg'),
     searchTerm: '',
     activeOnly: true,
     allValidators: false,
@@ -166,12 +159,6 @@ export default {
 
 .filter-toggle {
   margin-left: 1em;
-}
-
-.no-results {
-  text-align: center;
-  margin: 3em;
-  color: var(--dim);
 }
 
 @media screen and (max-width: 768px) {

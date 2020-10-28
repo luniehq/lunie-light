@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { prettyInt } from '~/common/numbers'
 
 export default {
@@ -54,8 +54,7 @@ export default {
   },
   computed: {
     date() {
-      const momentTime = moment(this.transaction.timestamp)
-      return momentTime.format(`HH:mm:ss`)
+      return dayjs(this.transaction.timestamp).format(`HH:mm:ss`)
     },
   },
 }

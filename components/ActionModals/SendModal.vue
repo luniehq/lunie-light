@@ -162,7 +162,6 @@ export default {
     max_memo_characters: 256,
     isFirstLoad: true,
     selectedToken: undefined,
-    balances: [],
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
@@ -170,6 +169,7 @@ export default {
   }),
   computed: {
     ...mapState([`session`]),
+    ...mapState(`data`, [`balances`]),
     selectedBalance() {
       return (
         this.balances.find(({ denom }) => denom === this.selectedToken) || {
@@ -209,11 +209,12 @@ export default {
     maxAmount() {
       if (this.networkFeesLoaded) {
         return this.maxDecimals(
-          this.selectedBalance.amount - this.networkFees.transactionFee.amount,
+          this.selectedBalance.available -
+            this.networkFees.transactionFee.amount,
           6
         )
       } else {
-        return this.maxDecimals(this.selectedBalance.amount, 6)
+        return this.maxDecimals(this.selectedBalance.available, 6)
       }
     },
   },
@@ -270,7 +271,7 @@ export default {
       this.amount = this.maxAmount
     },
     isMaxAmount() {
-      if (this.selectedBalance.amount === 0) {
+      if (this.selectedBalance.available === 0) {
         return false
       } else {
         return parseFloat(this.amount) === this.maxAmount

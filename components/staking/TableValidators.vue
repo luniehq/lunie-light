@@ -53,6 +53,7 @@
         />
       </tbody>
     </table>
+    <div v-if="!showingValidators.length" class="no-results">No results</div>
   </div>
 </template>
 
@@ -169,6 +170,12 @@ export default {
 }
 </script>
 <style scoped>
+.no-results {
+  text-align: center;
+  margin: 3em;
+  color: var(--dim);
+}
+
 @media screen and (max-width: 550px) {
   .data-table td {
     overflow: hidden;

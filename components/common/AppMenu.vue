@@ -2,7 +2,7 @@
   <menu class="app-menu">
     <div>
       <nuxt-link
-        class="app-menu-item hide-s"
+        class="app-menu-item"
         to="/portfolio"
         exact="exact"
         title="Portfolio"
@@ -12,7 +12,7 @@
         <i class="material-icons notranslate">chevron_right</i>
       </nuxt-link>
       <nuxt-link
-        class="app-menu-item hide-s"
+        class="app-menu-item"
         to="/validators"
         title="Validators"
         @click.native="handleClick()"
@@ -22,7 +22,7 @@
       </nuxt-link>
 
       <!-- <nuxt-link
-        class="app-menu-item hide-s"
+        class="app-menu-item "
         to="/proposals"
         title="Proposals"
         @click.native="handleClick()"
@@ -32,7 +32,7 @@
       </nuxt-link> -->
 
       <nuxt-link
-        class="app-menu-item hide-s"
+        class="app-menu-item"
         to="/transactions"
         exact="exact"
         title="Transactions"
@@ -40,16 +40,6 @@
       >
         <h2 class="app-menu-title">Transactions</h2>
         <i class="material-icons notranslate">chevron_right</i>
-      </nuxt-link>
-
-      <nuxt-link
-        class="app-menu-item hide-m"
-        to="/about"
-        exact="exact"
-        title="About"
-        @click.native="handleClick()"
-      >
-        <h2 class="app-menu-title">About</h2>
       </nuxt-link>
     </div>
     <ConnectedNetwork @close-menu="handleClick" />

@@ -19,11 +19,6 @@
           >
             {{ validator.status }}
           </span>
-          <span
-            v-if="validator.statusDetailed"
-            class="validator-status-detailed"
-            >{{ validator.statusDetailed }}</span
-          >
         </div>
       </div>
       <tr class="li-validator">
@@ -115,8 +110,8 @@
         <li>
           <h4>Self Stake</h4>
           <span id="page-profile__self-bond">
-            {{ validator.selfStake | shortDecimals }} /
-            {{ (validator.selfStake / validator.tokens || 0) | percent }}
+            {{ selfStake | shortDecimals }} /
+            {{ (selfStake / validator.tokens || 0) | percent }}
           </span>
         </li>
         <li>
@@ -186,6 +181,7 @@ export default {
   },
   data: () => ({
     loading: true,
+    selfStake: undefined,
   }),
   computed: {
     ...mapState('data', ['validators', 'delegations', 'rewards']),
@@ -206,6 +202,13 @@ export default {
       return this.rewards.filter(
         ({ validator: { operatorAddress } }) => operatorAddress === this.address
       )
+    },
+  },
+  watch: {
+    validator(validator) {
+      if (validator) {
+        this.getSelfStake()
+      }
     },
   },
   methods: {
@@ -233,6 +236,13 @@ export default {
         )
         return stakingDenomRewards ? stakingDenomRewards.amount : 0
       }
+    },
+    async getSelfStake() {
+      debugger
+      this.selfStake = await this.$store.dispatch(
+        'data/getValidatorSelfStake',
+        this.validator
+      )
     },
   },
 }
