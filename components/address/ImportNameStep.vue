@@ -9,7 +9,7 @@
       </TmFormGroup>
 
       <TmFormGroup
-        :error="$v.$error && $v.name.$invalid"
+        :error="$v.$error && $v.fieldName.$invalid"
         field-id="import-name"
         field-label="Account Name"
       >
@@ -21,18 +21,18 @@
           vue-focus="vue-focus"
         />
         <TmFormMsg
-          v-if="$v.name.$error && !$v.name.required"
+          v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
         />
         <TmFormMsg
-          v-if="$v.name.$error && !$v.name.minLength"
+          v-if="$v.fieldName.$error && !$v.fieldName.minLength"
           name="Name"
           type="minLength"
           min="3"
         />
         <TmFormMsg
-          v-if="$v.name.$error && !$v.name.nameExists"
+          v-if="$v.fieldName.$error && !$v.fieldName.nameExists"
           name="Name"
           type="custom"
           msg="already exists"
@@ -79,12 +79,12 @@ export default {
   methods: {
     onSubmit() {
       this.$v.$touch()
-      if (this.$v.name.$invalid) return
+      if (this.$v.fieldName.$invalid) return
       this.$emit('submit', this.fieldName)
     },
   },
   validations: () => ({
-    name: { required, minLength: minLength(3), nameExists },
+    fieldName: { required, minLength: minLength(3), nameExists },
   }),
 }
 </script>
