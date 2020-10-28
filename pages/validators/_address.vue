@@ -150,7 +150,7 @@
           }}</span>
         </li>
         <li>
-          <h4>Staker</h4>
+          <h4>Number of Stakers</h4>
           <span>{{ validatorDelegations.length }}</span>
         </li>
       </ul>
