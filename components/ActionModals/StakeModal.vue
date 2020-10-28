@@ -245,7 +245,7 @@ export default {
       }
     },
     maxAmount() {
-      return this.fromOptions[this.fromSelectedIndex].maximum
+      return this.balance.available
     },
     isRedelegation() {
       return this.fromSelectedIndex !== 0 && this.fromSelectedIndex !== '0' // where are these 0 strings comming from?

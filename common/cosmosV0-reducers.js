@@ -347,9 +347,9 @@ function coinReducer(coin, coinLookup) {
 
   return {
     denom,
-    amount: BigNumber(coin.amount).times(
-      coinLookup.chainToViewConversionFactor || 6
-    ),
+    amount: BigNumber(coin.amount)
+      .times(coinLookup.chainToViewConversionFactor || 6)
+      .toNumber(),
   }
 }
 
