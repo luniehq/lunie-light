@@ -2,7 +2,6 @@
   <div class="page">
     <CardSignInRequired v-if="signInRequired && !session" />
 
-    <TmDataLoading v-if="loading && !loaderPath" />
     <template v-if="loading && loaderPath" class="loading-image-container">
       <img
         class="loading-image"
@@ -21,7 +20,6 @@
 
     <template v-else-if="!loading && !empty">
       <slot></slot>
-      <TmDataLoading v-if="!loading && loadingMore" />
     </template>
     <slot v-if="session" name="signInRequired"></slot>
   </div>

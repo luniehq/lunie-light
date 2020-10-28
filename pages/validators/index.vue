@@ -1,5 +1,5 @@
 <template>
-  <TmPage :loading="!validators" :loader-path="loaderImage">
+  <TmPage :loading="!validators">
     <template>
       <div class="filterContainer">
         <TmField
@@ -56,7 +56,6 @@ import { mapState } from 'vuex'
 export default {
   name: `page-validators`,
   data: () => ({
-    loaderImage: require('~/assets/images/validator-list-loading.svg'),
     searchTerm: '',
     activeOnly: true,
     allValidators: false,
