@@ -34,6 +34,30 @@
           </svg>
           Lunie
         </a>
+        <!-- <router-link
+          v-else
+          :to="{ name: 'portfolio', params: { networkId: networkSlug } }"
+          exact="exact"
+          title="Portfolio"
+        >
+          <img
+            class="header-item-logo"
+            src="~assets/images/lunie-logo-white.svg"
+            alt="Lunie sharing circle - dots on the left outline of the cirle, line on the right side"
+          />
+        </router-link> -->
+        <div class="header-menu-section">
+          <template v-if="!desktop">
+            <div v-if="open" class="close-menu" @click="close()">
+              <i class="material-icons notranslate mobile-menu-action">close</i>
+            </div>
+            <div v-if="!open" class="open-menu" @click="show()">
+              <i class="material-icons notranslate mobile-menu-action"
+                >more_vert</i
+              >
+            </div>
+          </template>
+        </div>
       </div>
       <AppMenu v-if="open || desktop" @close="close" />
     </div>
@@ -42,6 +66,7 @@
 
 <script>
 import { mapState } from 'vuex'
+
 export default {
   name: `app-header`,
   data: () => ({
@@ -49,9 +74,15 @@ export default {
     desktop: false,
   }),
   computed: {
-    ...mapState([`session`]),
+    ...mapState([`session`, `connection`]),
+    networkSlug() {
+      return this.connection.networkSlug
+    },
+    hideSidebarMenu() {
+      return !this.$route.meta.networkSpecificRoute && this.desktop
+    },
   },
-  mounted() {
+  mounted: async function () {
     this.watchWindowSize()
     window.onresize = this.watchWindowSize
   },
@@ -78,6 +109,7 @@ export default {
       if (w >= 1024) {
         this.close()
         this.desktop = true
+        return
       } else {
         this.desktop = false
       }
@@ -93,6 +125,10 @@ export default {
   width: var(--sidebar-width);
   display: flex;
   flex-direction: row;
+}
+
+.app-header.hideSidebarMenu {
+  width: 4rem;
 }
 
 .container {
@@ -188,20 +224,6 @@ export default {
     height: 100%;
     overflow: auto;
     background: var(--app-nav);
-  }
-}
-
-/* iPhone X and Xs Max */
-@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  .app-header > .container {
-    padding-top: 2.2rem;
-  }
-}
-
-/* iPhone XR */
-@media only screen and (min-device-width: 414px) and (min-device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
-  .app-header > .container {
-    padding-top: 2.2rem;
   }
 }
 </style>

@@ -23,24 +23,6 @@
             />
           </template>
         </EventList>
-
-        <TmDataMsg v-if="!loading" icon="calendar_today">
-          <div slot="title">Looking for older transactions?</div>
-          <div slot="subtitle">
-            <p>
-              Lunie cannot display transactions from previous chains in your
-              activity page.
-            </p>
-            <p>
-              If you would like to view information from previous chain upgrades
-              please visit our
-              <a
-                href="https://intercom.help/lunie/en/articles/3787014-how-to-get-blockchain-data-from-previous-chain-upgrades"
-                >Help Center.</a
-              >
-            </p>
-          </div>
-        </TmDataMsg>
       </template>
     </template>
   </TmPage>
