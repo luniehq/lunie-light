@@ -3,7 +3,7 @@
     <h2 class="session-title">Recover with backup code</h2>
     <div class="session-main bottom-indent">
       <TmFormGroup
-        :error="$v.$error && $v.seed.$invalid"
+        :error="$v.$error && $v.fieldSeed.$invalid"
         field-id="import-seed"
         field-label="Backup code"
       >
@@ -14,17 +14,19 @@
           @input="(val) => (fieldSeed = val)"
         />
         <TmFormMsg
-          v-if="$v.seed.$error && !$v.seed.required"
+          v-if="$v.fieldSeed.$error && !$v.fieldSeed.required"
           name="Seed"
           type="required"
         />
         <TmFormMsg
-          v-else-if="$v.seed.$error && !$v.seed.seedHasCorrectLength"
+          v-else-if="$v.fieldSeed.$error && !$v.fieldSeed.seedHasCorrectLength"
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'words12or24'"
         />
         <TmFormMsg
-          v-else-if="$v.seed.$error && !$v.seed.seedIsLowerCaseAndSpaces"
+          v-else-if="
+            $v.fieldSeed.$error && !$v.fieldSeed.seedIsLowerCaseAndSpaces
+          "
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'lowercaseAndSpaces'"
         />
@@ -70,13 +72,13 @@ export default {
   methods: {
     onSubmit() {
       this.$v.$touch()
-      if (this.$v.seed.$invalid || this.$v.seed.$invalid) return
+      if (this.$v.fieldSeed.$invalid || this.$v.fieldSeed.$invalid) return
       this.$emit('submit', this.fieldSeed)
     },
   },
   validations() {
     return {
-      seed: {
+      fieldSeed: {
         required,
         seedIsLowerCaseAndSpaces: (param) => lowerCaseAndSpaces(param),
         seedHasCorrectLength: (param) => has12or24words(param),
