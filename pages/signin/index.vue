@@ -6,7 +6,7 @@
         <TmFormGroup field-id="sign-in-name" field-label="Select Account">
           <TmField
             id="sign-in-name"
-            v-model="address"
+            v-model="signInAddress"
             :options="accounts"
             type="select"
             placeholder="Select account…"
@@ -24,7 +24,11 @@
           field-id="sign-in-password"
           field-label="Password"
         >
-          <TmField id="sign-in-password" v-model="password" type="password" />
+          <TmField
+            id="sign-in-password"
+            v-model="signInPassword"
+            type="password"
+          />
           <TmFormMsg
             v-if="$v.signInPassword.$error && !$v.signInPassword.required"
             name="Password"
@@ -53,8 +57,8 @@ import { required, minLength } from 'vuelidate/lib/validators'
 export default {
   name: `sign-in`,
   data: () => ({
-    address: undefined,
-    password: ``,
+    signInAddress: undefined,
+    signInPassword: ``,
     error: ``,
     loading: false,
   }),
@@ -77,9 +81,9 @@ export default {
       this.loading = true
 
       try {
-        testPassword(this.address, this.password)
+        testPassword(this.signInAddress, this.signInPassword)
         this.$store.dispatch('signIn', {
-          address: this.address,
+          address: this.signInAddress,
           type: 'local',
         })
         this.$router.push('/portfolio')
