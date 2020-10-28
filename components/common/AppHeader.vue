@@ -70,7 +70,7 @@ export default {
       return !this.$route.meta.networkSpecificRoute && this.desktop
     },
   },
-  mounted: async function () {
+  mounted() {
     this.watchWindowSize()
     window.onresize = this.watchWindowSize
   },
@@ -97,7 +97,6 @@ export default {
       if (w >= 1024) {
         this.close()
         this.desktop = true
-        return
       } else {
         this.desktop = false
       }
