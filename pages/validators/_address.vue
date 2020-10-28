@@ -238,7 +238,6 @@ export default {
       }
     },
     async getSelfStake() {
-      debugger
       this.selfStake = await this.$store.dispatch(
         'data/getValidatorSelfStake',
         this.validator
