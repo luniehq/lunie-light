@@ -25,7 +25,6 @@
   "dependencies": {
     "@lunie/cosmos-keys": "^0.3.2",
     "@nuxtjs/axios": "^5.12.2",
-    "autosize": "^4.0.2",
     "bech32": "^1.1.4",
     "bignumber.js": "^9.0.1",
     "cookie-universal-nuxt": "^2.1.4",
