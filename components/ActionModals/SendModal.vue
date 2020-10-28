@@ -140,8 +140,7 @@ import BigNumber from 'bignumber.js'
 import { SMALLEST } from '~/common/numbers'
 import { formatAddress, decodeB32 } from '~/common/address'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
-import network from '~/network'
-import CosmosV2Source from '~/common/cosmosV2-source'
+import network from '~/common/network'
 
 const defaultMemo = ''
 
@@ -167,6 +166,7 @@ export default {
   }),
   computed: {
     ...mapState([`session`]),
+    ...mapState([`balances`]),
     selectedBalance() {
       return (
         this.balances.find(({ denom }) => denom === this.selectedToken) || {
@@ -237,9 +237,6 @@ export default {
       }
     },
   },
-  mounted() {
-    this.loadData()
-  },
   methods: {
     open(denom = undefined) {
       if (denom) {
@@ -302,20 +299,6 @@ export default {
     },
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
-    },
-    async loadData() {
-      const address = this.session ? this.session.address : undefined
-      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
-      if (!address) return {}
-
-      const _store = {}
-      const api = new CosmosV2Source(this.$axios, network, _store, null, null)
-      const balances = await api.getBalancesV2FromAddress(
-        address,
-        currency,
-        network
-      )
-      this.balances = balances
     },
   },
   // validations() {

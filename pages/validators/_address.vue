@@ -1,13 +1,13 @@
 <template>
   <TmPage
     data-title="Validator"
-    :empty="!validator.operatorAddress"
-    :loading="!validator"
+    :empty="!validator"
+    :loading="loading"
     :empty-title="`Validator not found`"
     :empty-subtitle="`There must be a typo somewhere.`"
     class="readable-width"
   >
-    <template v-if="validator.operatorAddress">
+    <template v-if="validator">
       <div class="button-container">
         <BackButton />
       </div>
@@ -43,7 +43,7 @@
             />
             <div class="validator-info">
               <h3 class="li-validator-name">{{ validator.name }}</h3>
-              <div v-if="delegation.amount">
+              <div v-if="delegation && delegation.amount">
                 <h4>{{ delegation.amount | fullDecimals }}</h4>
                 <h5 v-if="rewards && rewards.length > 0">
                   +{{ filterStakingDenomReward() | noBlanks }}
@@ -63,7 +63,7 @@
         <TmBtn
           id="undelegation-btn"
           class="undelegation-btn"
-          :disabled="!hasDelegation"
+          :disabled="!delegation"
           :value="`Unstake`"
           type="secondary"
           @click.native="onUndelegation"
@@ -115,8 +115,8 @@
         <li>
           <h4>Self Stake</h4>
           <span id="page-profile__self-bond">
-            {{ validator.selfStake | shortDecimals }} /
-            {{ (validator.selfStake / validator.tokens || 0) | percent }}
+            {{ selfStake | shortDecimals }} /
+            {{ (selfStake / validator.tokens || 0) | percent }}
           </span>
         </li>
         <li>
@@ -151,8 +151,8 @@
         </li>
       </ul>
 
-      <StakeModal ref="stakeModal" :target-validator="validator" />
-      <UnstakeModal
+      <LazyStakeModal ref="stakeModal" :target-validator="validator" />
+      <LazyUnstakeModal
         ref="unstakeModal"
         :source-validator="validator"
         :is-unnomination="true"
@@ -162,11 +162,11 @@
 </template>
 
 <script>
-import { shortDecimals, fullDecimals, percent } from '../../common/numbers'
-import { noBlanks } from '../../common/strings'
-import { fromNow } from '../../common/time'
-import CosmosV2Source from '../../common/cosmosV2-source'
-import network from '../../network'
+import { mapState } from 'vuex'
+import { shortDecimals, fullDecimals, percent } from '~/common/numbers'
+import { noBlanks } from '~/common/strings'
+import { fromNow } from '~/common/time'
+import network from '~/common/network'
 
 export default {
   name: `page-validator`,
@@ -184,37 +184,36 @@ export default {
       default: () => 'returns',
     },
   },
-  async asyncData({ $axios, params, store }) {
-    const address = store.state.session
-      ? store.state.session.address
-      : undefined
-    const _store = {}
-    const api = new CosmosV2Source($axios, network, _store, null, null)
-    const [validator, delegations] = await Promise.all([
-      api.getValidator(params.address),
-      address
-        ? api.getDelegationsForDelegatorAddress(address)
-        : Promise.resolve([]),
-    ])
-    return { validator, delegations }
-  },
   data: () => ({
-    validator: {},
-    rewards: 0,
-    delegation: {},
-    error: false,
-    loaded: false,
-    isMostRelevantRewardSelected: false,
-    mostRelevantReward: ``,
-    delegations: [],
+    loading: true,
+    selfStake: undefined,
   }),
   computed: {
-    hasDelegation() {
-      return !!this.delegations.find(
-        (delegation) =>
-          delegation.validator.operatorAddress ===
-          this.validator.operatorAddress
+    ...mapState('data', ['validators', 'delegations', 'rewards']),
+    validator() {
+      return this.validators.find(
+        ({ operatorAddress }) => operatorAddress === this.address
       )
+    },
+    address() {
+      return this.$route.params.address
+    },
+    delegation() {
+      return this.delegations.find(
+        ({ validator: { operatorAddress } }) => operatorAddress === this.address
+      )
+    },
+    rewardsForValidator() {
+      return this.rewards.filter(
+        ({ validator: { operatorAddress } }) => operatorAddress === this.address
+      )
+    },
+  },
+  watch: {
+    validator(validator) {
+      if (validator) {
+        this.getSelfStake()
+      }
     },
   },
   methods: {
@@ -236,14 +235,19 @@ export default {
       return field ? alternateFilter(field) : noBlanks(field)
     },
     filterStakingDenomReward() {
-      if (this.rewards && this.rewards.length > 0) {
-        const stakingDenomRewards = this.rewards.filter(
+      if (this.rewardsForValidator) {
+        const stakingDenomRewards = this.rewardsForValidator.find(
           (reward) => reward.denom === network.stakingDenom
         )
-        return stakingDenomRewards.length > 0
-          ? stakingDenomRewards[0].amount
-          : 0
+        return stakingDenomRewards ? stakingDenomRewards.amount : 0
       }
+    },
+    async getSelfStake() {
+      debugger
+      this.selfStake = await this.$store.dispatch(
+        'data/getValidatorSelfStake',
+        this.validator
+      )
     },
   },
 }
@@ -296,10 +300,9 @@ span {
 }
 
 .li-validator-image {
-  border-radius: 0.25rem;
+  border-radius: 50%;
   height: 4rem;
   width: 4rem;
-  border: 1px solid var(--bc-dim);
 }
 
 .li-validator-name {

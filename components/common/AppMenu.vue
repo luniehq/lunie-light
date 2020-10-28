@@ -31,7 +31,7 @@
         <i class="material-icons notranslate">chevron_right</i>
       </nuxt-link> -->
 
-      <!-- <nuxt-link
+      <nuxt-link
         class="app-menu-item hide-s"
         to="/transactions"
         exact="exact"
@@ -40,7 +40,7 @@
       >
         <h2 class="app-menu-title">Transactions</h2>
         <i class="material-icons notranslate">chevron_right</i>
-      </nuxt-link> -->
+      </nuxt-link>
 
       <nuxt-link
         class="app-menu-item hide-m"

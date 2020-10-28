@@ -149,11 +149,8 @@ import BigNumber from 'bignumber.js'
 import { mapState } from 'vuex'
 // import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '~/common/numbers'
-import network from '~/network'
-import fees from '~/fees'
-import CosmosV2Source from '~/common/cosmosV2-source'
-
-class TransactionManager {} // TODO
+import network from '~/common/network'
+import fees from '~/common/fees'
 
 const defaultStep = `details`
 const feeStep = `fees`
@@ -231,7 +228,7 @@ export default {
     sending: false,
     submissionError: null,
     show: false,
-    loaded: false,
+    balancesLoaded: false,
     txHash: null,
     defaultStep,
     feeStep,
@@ -241,14 +238,13 @@ export default {
     SIGN_METHODS,
     includedHeight: undefined,
     smallestAmount: SMALLEST,
-    balances: [],
-    balancesLoaded: false,
     network,
   }),
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
+    ...mapState(['data', ['balances']]),
     networkFee() {
-      return fees[this.transactionData.type]
+      return fees.getFees(this.transactionData.type)
     },
     selectedSignMethod() {
       return sessionType.LOCAL
@@ -299,9 +295,6 @@ export default {
       this.$refs.next.$el.focus()
     }
   },
-  created() {
-    this.transactionManager = new TransactionManager() // TODO: we don't have apollo here
-  },
   // validations() {
   //   return {
   //     password: {
@@ -321,8 +314,26 @@ export default {
   //   }
   // },
   mounted() {
-    this.loadData()
+    this.loadBalances()
   },
+  // validations() {
+  //   return {
+  //     password: {
+  //       required: requiredIf(
+  //         () =>
+  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+  //           this.step === signStep
+  //       ),
+  //     },
+  //     invoiceTotal: {
+  //       max: (x) =>
+  //         networkFeesLoaded &&
+  //         networkFees.transactionFee.denom !== this.selectedDenom
+  //           ? true
+  //           : Number(x) <= this.selectedBalance.amount,
+  //     },
+  //   }
+  // },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
@@ -413,6 +424,8 @@ export default {
     },
     async submit() {
       this.submissionError = null
+
+      // TODO is this check really needed?
       if (
         Object.entries(this.transactionData).length === 0 &&
         this.transactionData.constructor === Object
@@ -424,15 +437,24 @@ export default {
       const { type, memo, ...message } = this.transactionData
 
       try {
-        const transactionData = await this.transactionManager.getCosmosTransactionData(
-          {
-            memo,
-            gasEstimate: this.networkFee.gasEstimate,
-            fee: [this.networkFee.fee],
-            senderAddress: this.address,
-            network,
-          }
+        if (!this.transactionManager) {
+          // Lazy import as a bunch of big libraries are imported here
+          const { default: TransactionManager } = await import(
+            '~/signing/transaction-manager'
+          )
+          this.transactionManager = new TransactionManager()
+        }
+
+        const accountInfo = await this.$store.dispatch(
+          'data/getAccountInfo',
+          this.session.address
         )
+        const transactionData = await this.transactionManager.getTransactionMetaData(
+          type,
+          memo,
+          accountInfo
+        )
+        // TODO currently not respected
         const HDPath = network.HDPath
         const curve = network.curve
 
@@ -451,6 +473,8 @@ export default {
         const { hash } = hashResult
         this.txHash = hash
         this.step = inclusionStep
+
+        this.pollTxInclusion(hash)
       } catch (error) {
         this.onSendingFailed(error)
       }
@@ -458,6 +482,9 @@ export default {
     onTxIncluded() {
       this.step = successStep
       this.$emit(`txIncluded`)
+
+      // after we do any successful tx refresh the data as balances etc could have been updated
+      this.refreshData()
     },
     onSendingFailed(error) {
       this.step = signStep
@@ -466,20 +493,45 @@ export default {
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
-    async loadData() {
-      const address = this.session ? this.session.address : undefined
-      const currency = this.$cookies.get('currency') || 'USD' // TODO move to store
-      if (address) {
-        const _store = {}
-        const api = new CosmosV2Source(this.$axios, network, _store, null, null)
-        const balances = await api.getBalancesV2FromAddress(
-          address,
-          currency,
-          network
+    async pollTxInclusion(hash, iteration = 0) {
+      const MAX_POLL_ITERATIONS = 30
+      let txFound = false
+      try {
+        await fetch(`${network.api_url}/txs/${hash}`).then((res) => {
+          if (res.status === 200) {
+            txFound = true
+          }
+        })
+      } catch (err) {
+        // ignore error
+      }
+      if (txFound) {
+        this.onTxIncluded()
+      } else if (iteration < MAX_POLL_ITERATIONS) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        this.pollTxInclusion(hash, iteration + 1)
+      } else {
+        this.onSendingFailed(
+          new Error(
+            `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
+          )
         )
-        this.balances = balances
+      }
+    },
+    async loadBalances() {
+      const session = this.$cookies.get('lunie-session')
+      const currency = this.$cookies.get('currency') || 'USD'
+      if (session) {
+        // do we need to refetch the data?
+        await this.$store.dispatch('data/getBalances', {
+          address: session.address,
+          currency,
+        })
         this.balancesLoaded = true
       }
+    },
+    refreshData() {
+      this.$store.dispatch('data/refresh')
     },
   },
 }

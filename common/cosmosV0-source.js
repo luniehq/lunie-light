@@ -35,20 +35,27 @@ class CosmosV0API {
   // hacky way to get error text
   async getError(url) {
     try {
-      return await this.get(url)
+      return await this.axios(
+        this.baseURL + (url.startsWith('/') ? url : '/' + url)
+      )
     } catch (error) {
-      return error.extensions.response.body.error
+      return error.response.body.error
     }
+  }
+
+  async get(url) {
+    return await this.axios(
+      this.baseURL + (url.startsWith('/') ? url : '/' + url)
+    ).then((res) => res.data)
   }
 
   async getRetry(url, intent = 0) {
     try {
-      return await this.axios(
-        this.baseURL + (url.startsWith('/') ? url : '/' + url)
-      ).then((res) => res.data)
+      return await this.get(url)
     } catch (error) {
       // give up
       if (intent >= 3) {
+        // eslint-disable-next-line
         console.error(
           `Error for query ${url} in network ${this.networkId} (tried 3 times)`
         )
@@ -193,7 +200,7 @@ class CosmosV0API {
     validator.signing_info = signingInfos[consensusAddress]
 
     return this.reducers.validatorReducer(
-      this.network.id,
+      this.network,
       signedBlocksWindow,
       validator,
       annualProvision
@@ -250,7 +257,7 @@ class CosmosV0API {
 
     return validators.map((validator) =>
       this.reducers.validatorReducer(
-        this.network.id,
+        this.network,
         signedBlocksWindow,
         validator,
         annualProvision
@@ -544,7 +551,7 @@ class CosmosV0API {
     ])
     const balances = balancesResponse || []
     const coins = balances.map((coin) => {
-      const coinLookup = network.getCoinLookup(network, coin.denom)
+      const coinLookup = network.getCoinLookup(coin.denom)
       return this.reducers.coinReducer(coin, coinLookup)
     })
     // also check if there are any balances as rewards
@@ -657,7 +664,6 @@ class CosmosV0API {
       `staking/delegators/${delegatorAddress}/delegations/${operatorAddress}`
     ).catch(() => {
       const coinLookup = this.network.getCoinLookup(
-        this.network,
         this.network.stakingDenom,
         'viewDenom'
       )
@@ -727,30 +733,6 @@ class CosmosV0API {
     return _.uniqBy(allDelegations, 'delegator_address').map(
       ({ delegator_address: delegatorAddress }) => delegatorAddress
     )
-  }
-
-  async getTransactions(address) {
-    this.checkAddress(address)
-
-    const txs = await Promise.all([
-      this.loadPaginatedTxs(`/txs?sender=${address}`),
-      this.loadPaginatedTxsget(`/txs?recipient=${address}`),
-      this.loadPaginatedTxs(`/txs?action=submit_proposal&proposer=${address}`),
-      this.loadPaginatedTxs(`/txs?action=deposit&depositor=${address}`),
-      this.loadPaginatedTxs(`/txs?action=vote&voter=${address}`),
-      this.loadPaginatedTxs(`/txs?action=delegate&delegator=${address}`),
-      this.loadPaginatedTxs(
-        `/txs?action=begin_redelegate&delegator=${address}`
-      ),
-      this.loadPaginatedTxs(`/txs?action=begin_unbonding&delegator=${address}`),
-      this.loadPaginatedTxs(
-        `/txs?action=withdraw_delegator_reward&delegator=${address}`
-      ),
-      this.loadPaginatedTxs(
-        `/txs?action=withdraw_validator_rewards_all&source-validator=${address}`
-      ),
-    ]).then((transactionGroups) => [].concat(...transactionGroups))
-    return this.reducers.formatTransactionsReducer(txs, this.reducers)
   }
 
   async loadPaginatedTxs(url, page = 1, totalAmount = 0) {

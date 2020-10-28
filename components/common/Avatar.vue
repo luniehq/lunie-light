@@ -1,12 +1,8 @@
 <template>
-  <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-html="svg" />
+  <div :style="{ background: hex }"></div>
 </template>
 
 <script>
-import Avatars from '@dicebear/avatars'
-import regularSprites from '@dicebear/avatars-jdenticon-sprites'
-
 export default {
   name: `avatar`,
   props: {
@@ -16,11 +12,16 @@ export default {
     },
   },
   computed: {
-    svg() {
-      const sprites = regularSprites
-      const options = { mood: [`happy`] }
-      const avatars = new Avatars(sprites, options)
-      return avatars.create(this.address)
+    hash() {
+      let hash = 0
+      for (let i = 0; i < this.address.length; i++) {
+        hash = this.address.charCodeAt(i) + ((hash << 5) - hash)
+      }
+      return hash
+    },
+    hex() {
+      const x = (this.hash & 0x00ffffff).toString(16).toUpperCase() // eslint-disable-line
+      return '#' + '00000'.substring(0, 6 - x.length) + x
     },
   },
 }
