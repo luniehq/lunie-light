@@ -39,7 +39,7 @@
             <div v-if="open" class="close-menu" @click="close()">
               <i class="material-icons notranslate mobile-menu-action">close</i>
             </div>
-            <div v-if="!open" class="open-menu" @click="show()">
+            <div v-if="!open" class="open-menu" @click="open()">
               <i class="material-icons notranslate mobile-menu-action"
                 >more_vert</i
               >
@@ -61,15 +61,6 @@ export default {
     open: false,
     desktop: false,
   }),
-  computed: {
-    ...mapState([`session`, `connection`]),
-    networkSlug() {
-      return this.connection.networkSlug
-    },
-    hideSidebarMenu() {
-      return !this.$route.meta.networkSpecificRoute && this.desktop
-    },
-  },
   mounted() {
     this.watchWindowSize()
     window.onresize = this.watchWindowSize
@@ -82,10 +73,7 @@ export default {
     close() {
       this.open = false
     },
-    show() {
-      if (this.session.currrentModalOpen) {
-        this.session.currrentModalOpen.close()
-      }
+    open() {
       this.open = true
     },
     watchWindowSize() {
@@ -112,10 +100,6 @@ export default {
   width: var(--sidebar-width);
   display: flex;
   flex-direction: row;
-}
-
-.app-header.hideSidebarMenu {
-  width: 4rem;
 }
 
 .container {
