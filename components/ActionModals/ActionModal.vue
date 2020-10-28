@@ -250,7 +250,7 @@ export default {
       return sessionType.LOCAL
     },
     requiresSignIn() {
-      return false // !this.session || this.session.type === sessionType.EXPLORE
+      return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
       return this.transactionType === 'UnstakeTx' ? 0 : this.amount
