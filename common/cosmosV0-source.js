@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const _ = require('lodash')
+const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
 const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
@@ -23,7 +23,7 @@ class CosmosV0API {
 
     this.setReducers()
     this.loadValidors().then((validators) => {
-      this.store.validators = _.keyBy(validators, 'operatorAddress')
+      this.store.validators = keyBy(validators, 'operatorAddress')
       this.resolveReady()
     })
   }
@@ -92,11 +92,11 @@ class CosmosV0API {
     const txs = await this.loadPaginatedTxs(`txs?tx.height=${height}`)
     return Array.isArray(txs)
       ? this.reducers.transactionsReducerV2(
-          this.network,
-          txs,
-          this.reducers,
-          this.network.stakingDenom
-        )
+        this.network,
+        txs,
+        this.reducers,
+        this.network.stakingDenom
+      )
       : []
   }
 
@@ -176,14 +176,14 @@ class CosmosV0API {
     ])
 
     // create a dictionary to reduce array lookups
-    const consensusValidators = _.keyBy(validatorSet.validators, 'address')
+    const consensusValidators = keyBy(validatorSet.validators, 'address')
     const totalVotingPower = validatorSet.validators.reduce(
       (sum, { votingPower }) => sum.plus(votingPower),
       BigNumber(0)
     )
 
     // query for signing info
-    const signingInfos = _.keyBy(
+    const signingInfos = keyBy(
       await this.getValidatorSigningInfos([validator]),
       'address'
     )
@@ -194,8 +194,8 @@ class CosmosV0API {
     )
     validator.votingPower = consensusValidators[consensusAddress]
       ? BigNumber(consensusValidators[consensusAddress].votingPower)
-          .div(totalVotingPower)
-          .toNumber()
+        .div(totalVotingPower)
+        .toNumber()
       : 0
     validator.signing_info = signingInfos[consensusAddress]
 
@@ -231,14 +231,14 @@ class CosmosV0API {
     ])
 
     // create a dictionary to reduce array lookups
-    const consensusValidators = _.keyBy(validatorSet.validators, 'address')
+    const consensusValidators = keyBy(validatorSet.validators, 'address')
     const totalVotingPower = validatorSet.validators.reduce(
       (sum, { voting_power: votingPower }) => sum.plus(votingPower),
       BigNumber(0)
     )
 
     // query for signing info
-    const signingInfos = _.keyBy(
+    const signingInfos = keyBy(
       await this.getValidatorSigningInfos(validators),
       'address'
     )
@@ -250,8 +250,8 @@ class CosmosV0API {
       )
       validator.votingPower = consensusValidators[consensusAddress]
         ? BigNumber(consensusValidators[consensusAddress].voting_power)
-            .div(totalVotingPower)
-            .toNumber()
+          .div(totalVotingPower)
+          .toNumber()
         : 0
       validator.signing_info = signingInfos[consensusAddress]
     })
@@ -290,26 +290,26 @@ class CosmosV0API {
       .plus(tally.no_with_veto)
     const formattedDeposits = deposits
       ? deposits.map((deposit) =>
-          this.reducers.depositReducer(deposit, this.network, this.store)
-        )
+        this.reducers.depositReducer(deposit, this.network, this.store)
+      )
       : undefined
     const depositsSum = formattedDeposits
       ? formattedDeposits.reduce((depositAmountAggregator, deposit) => {
-          return (depositAmountAggregator += Number(deposit.amount[0].amount))
-        }, 0)
+        return (depositAmountAggregator += Number(deposit.amount[0].amount))
+      }, 0)
       : undefined
     return {
       deposits: formattedDeposits,
       depositsSum: deposits ? Number(depositsSum).toFixed(6) : undefined,
       percentageDepositsNeeded: deposits
         ? (
-            (depositsSum * 100) /
-            fixDecimalsAndRoundUpBigNumbers(
-              depositParameters.min_deposit[0].amount,
-              6,
-              this.network
-            )
-          ).toFixed(2)
+          (depositsSum * 100) /
+          fixDecimalsAndRoundUpBigNumbers(
+            depositParameters.min_deposit[0].amount,
+            6,
+            this.network
+          )
+        ).toFixed(2)
         : undefined,
       votes: votes
         ? votes.map((vote) => this.reducers.voteReducer(vote, this.store))
@@ -320,19 +320,19 @@ class CosmosV0API {
       votingPercentageYes:
         totalVotingParticipation.toNumber() > 0
           ? BigNumber(tally.yes)
-              .times(100)
-              .div(totalVotingParticipation)
-              .toNumber()
-              .toFixed(2)
+            .times(100)
+            .div(totalVotingParticipation)
+            .toNumber()
+            .toFixed(2)
           : 0,
       votingPercentageNo:
         totalVotingParticipation.toNumber() > 0
           ? BigNumber(tally.no)
-              .plus(tally.no_with_veto)
-              .times(100)
-              .div(totalVotingParticipation)
-              .toNumber()
-              .toFixed(2)
+            .plus(tally.no_with_veto)
+            .times(100)
+            .div(totalVotingParticipation)
+            .toNumber()
+            .toFixed(2)
           : 0,
       links,
       timeline: [
@@ -341,33 +341,33 @@ class CosmosV0API {
           : undefined,
         proposal.deposit_end_time
           ? {
-              title: `Deposit Period Ends`,
-              // the deposit period can end before the time as the limit is reached already
-              time:
-                proposal.voting_start_time !== `0001-01-01T00:00:00Z` &&
+            title: `Deposit Period Ends`,
+            // the deposit period can end before the time as the limit is reached already
+            time:
+              proposal.voting_start_time !== `0001-01-01T00:00:00Z` &&
                 new Date(proposal.voting_start_time) <
-                  new Date(proposal.deposit_end_time)
-                  ? proposal.voting_start_time
-                  : proposal.deposit_end_time,
-            }
+                new Date(proposal.deposit_end_time)
+                ? proposal.voting_start_time
+                : proposal.deposit_end_time,
+          }
           : undefined,
         proposal.voting_start_time
           ? {
-              title: `Voting Period Starts`,
-              time:
-                proposal.voting_start_time !== `0001-01-01T00:00:00Z`
-                  ? proposal.voting_start_time
-                  : undefined,
-            }
+            title: `Voting Period Starts`,
+            time:
+              proposal.voting_start_time !== `0001-01-01T00:00:00Z`
+                ? proposal.voting_start_time
+                : undefined,
+          }
           : undefined,
         proposal.voting_end_time
           ? {
-              title: `Voting Period Ends`,
-              time:
-                proposal.voting_end_time !== `0001-01-01T00:00:00Z`
-                  ? proposal.voting_end_time
-                  : undefined,
-            }
+            title: `Voting Period Ends`,
+            time:
+              proposal.voting_end_time !== `0001-01-01T00:00:00Z`
+                ? proposal.voting_end_time
+                : undefined,
+          }
           : undefined,
       ].filter((x) => !!x),
     }
@@ -425,7 +425,7 @@ class CosmosV0API {
       })
     )
 
-    return _.orderBy(proposals, 'id', 'desc')
+    return orderBy(proposals, 'id', 'desc')
   }
 
   async getProposalById(proposalId, validators) {
@@ -459,9 +459,9 @@ class CosmosV0API {
   async getTopVoters() {
     await this.dataReady
     // for now defaulting to pick the 10 largest voting powers
-    return _.take(
-      _.reverse(
-        _.sortBy(this.store.validators, [
+    return take(
+      reverse(
+        sortBy(this.store.validators, [
           (validator) => {
             return validator.votingPower
           },
@@ -744,7 +744,7 @@ class CosmosV0API {
       },
       []
     )
-    return _.uniqBy(allDelegations, 'delegator_address').map(
+    return uniqBy(allDelegations, 'delegator_address').map(
       ({ delegator_address: delegatorAddress }) => delegatorAddress
     )
   }

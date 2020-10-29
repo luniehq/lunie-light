@@ -31,8 +31,6 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.9.4",
     "lodash": "^4.17.20",
-    "lodash.groupby": "^4.6.0",
-    "lodash.orderby": "^4.6.0",
     "nuxt": "^2.14.7",
     "nuxt-material-design-icons": "^1.0.4",
     "v-tooltip": "^2.0.3",
