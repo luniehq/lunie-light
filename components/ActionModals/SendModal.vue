@@ -70,7 +70,7 @@
         <TmBtn
           type="button"
           class="addon-max"
-          value="Set Max"
+          value="Max"
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>
