@@ -26,8 +26,7 @@
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
         <p class="form-message notice">
-          You're in explore mode. Sign in or create an account to
-          get started.
+          You're in explore mode. Sign in or create an account to get started.
         </p>
       </div>
       <div v-else-if="step === defaultStep" class="action-modal-form">
