@@ -29,7 +29,11 @@
       </TmFormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Create" />
+      <TmBtn
+        :loading="isCreatingSeed && !fieldSeed"
+        value="Create"
+        @click="isCreatingSeed = true"
+      />
     </div>
   </TmFormStruct>
 </template>
@@ -48,6 +52,7 @@ export default {
   data: () => ({
     fieldSeed: undefined,
     fieldWarning: false,
+    isCreatingSeed: false,
   }),
   mounted() {
     this.getSeed()
