@@ -317,7 +317,7 @@ function blockReducer(networkId, block, transactions, data = {}) {
     id: block.block_meta.block_id.hash,
     networkId,
     height: block.block_meta.header.height,
-    chainId: block.block_meta.header.chainId,
+    chainId: block.block_meta.header.chain_id,
     hash: block.block_meta.block_id.hash,
     time: block.block_meta.header.time,
     transactions,
