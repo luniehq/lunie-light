@@ -190,7 +190,7 @@ export default {
       default: `Transaction failed`,
     },
     amount: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: `0`,
     },
     rewards: {
@@ -214,7 +214,7 @@ export default {
       default: false,
     },
     selectedDenom: {
-      type: String,
+      type: [String, Array],
       default: ``,
     },
     transactionType: {
