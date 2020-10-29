@@ -45,7 +45,7 @@
       v-for="(amount, index) in amounts"
       id="form-group-amount"
       :key="`${amount.amount}-${amount.denom}-${index}`"
-      :error="$v.amount.$error && $v.amount.$invalid"
+      :error="$v.amounts.$error && $v.amounts.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
@@ -78,28 +78,28 @@
       </TmFieldGroup>
 
       <TmFormMsg
-        v-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
+        v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.decimal"
+        v-else-if="$v.amounts.$error && !$v.amounts.decimal"
         name="Amount"
         type="numeric"
       />
       <!-- <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.max"
+        v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
         :msg="`You don't have enough ${selectedTokens} to proceed.`"
       /> -->
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.min"
+        v-else-if="$v.amounts.$error && !$v.amounts.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
+        v-else-if="$v.amounts.$error && !$v.amounts.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
@@ -322,13 +322,24 @@ export default {
         prefixValidation: this.prefixValidation,
         validatorAddressValidation: this.validatorAddressValidation,
       },
-      amount: {
-        required,
-        decimal,
-        min: (x) => Number(x) >= SMALLEST,
+      amounts: {
+        required: (x) =>
+          this.amounts.filter(({ amount }) => required(amount)).length ===
+          this.amounts.length,
+        decimal: (x) =>
+          this.amounts.filter(({ amount }) => decimal(amount)).length ===
+          this.amounts.length,
+        min: (x) =>
+          this.amounts.filter(({ amount }) => Number(amount) >= SMALLEST)
+            .length === this.amounts.length,
         maxDecimals: (x) => {
-          return Number(x).toString().split('.').length > 1
-            ? Number(x).toString().split('.')[1].length <= 6
+          return this.amounts.find(
+            ({ amount }) => Number(amount).toString().split('.').length > 1
+          )
+            ? this.amounts.filter(
+                ({ amount }) =>
+                  Number(amount).toString().split('.')[1].length <= 6
+              ).length === this.amounts.length
             : true
         },
       },
