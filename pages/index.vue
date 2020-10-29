@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import network from '~/common/network'
 export default {
   name: `home`,
 }
