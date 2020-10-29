@@ -13,9 +13,7 @@ export async function getSigner(signingType, { address, password, network }) {
   //   return await getCosmosLedgerSigner({}) // gets config
   // }
 
-  throw new Error(
-    `Signing via ${signingType} is not supported`
-  )
+  throw new Error(`Signing via ${signingType} is not supported`)
 }
 
 async function getCosmosLocalSigner(wallet) {
