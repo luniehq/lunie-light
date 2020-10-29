@@ -204,6 +204,13 @@ export default {
         : []
     },
   },
+  watch: {
+    selectedTokens() {
+      this.amounts.map(
+        (amount, index) => (amount.denom = this.selectedTokens[index])
+      )
+    },
+  },
   methods: {
     open(denom = undefined) {
       if (denom) {
