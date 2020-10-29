@@ -20,7 +20,9 @@ export const actions = {
     const session = $cookies.get('lunie-session')
     commit('setSession', session)
   },
-  signIn({ commit }, session) {
+  signIn({ commit, dispatch }, session) {
+    // remove data from old address
+    dispatch(`reset`)
     // to be able to render the page for the user in SSR we need to set the address as a cookie
     if (!session) {
       this.$cookies.remove('lunie-session')
