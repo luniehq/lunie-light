@@ -377,4 +377,12 @@ export default {
   color: var(--primary);
   cursor: pointer;
 }
+
+.add-amount-button i {
+  font-size: 1.75rem;
+}
+
+.add-amount-button:hover {
+  color: var(--secondary);
+}
 </style>
