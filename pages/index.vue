@@ -3,26 +3,19 @@
     <img class="network-icon" src="~/assets/images/currencies/atom.png" />
     <h1>{{ network.name }}</h1>
     <h2>{{ network.description }}</h2>
-    <span class="learn-more"
-      ><a :href="network.website" target="_blank"
-        >Learn more about this project</a
-      ></span
-    >
+    <TmBtn value="Get Started" @click.native="$router.push('/address')" />
     <div class="list-container">
       <ul>
-        <h3>Social</h3>
-        <li><a href="">Twitter</a></li>
-        <li><a href="">Telegram</a></li>
-        <li><a href="">Github</a></li>
-      </ul>
-      <ul>
-        <h3>More...</h3>
+        <h3>Helpful Links</h3>
+        <li>
+          <a :href="network.website" target="_blank">Project Website</a>
+        </li>
         <li>
           <a :href="network.api_url + '/node_info'" target="_blank"
             >Node Info</a
           >
         </li>
-        <li>
+        <!-- <li>
           <a
             href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
             target="_blank"
@@ -33,7 +26,7 @@
           <a href="https://www.ledger.com/" target="_blank"
             >Ledger Hardware Wallet</a
           >
-        </li>
+        </li> -->
       </ul>
     </div>
     <div class="disclaimer">
@@ -66,7 +59,7 @@ export default {
 .network-icon {
   height: 3rem;
   width: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 h1 {
@@ -77,7 +70,7 @@ h1 {
 
 h2 {
   font-size: 18px;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
 }
 
 h3 {
@@ -98,7 +91,7 @@ ul {
 
 .list-container {
   display: flex;
-  padding-bottom: 6rem;
+  padding: 6rem 0 4rem;
 }
 
 span {

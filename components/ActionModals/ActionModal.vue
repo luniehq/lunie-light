@@ -26,7 +26,7 @@
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
         <p class="form-message notice">
-          You're using Lunie in explore mode. Sign in or create an account to
+          You're in explore mode. Sign in or create an account to
           get started.
         </p>
       </div>

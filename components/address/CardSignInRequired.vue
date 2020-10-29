@@ -1,7 +1,7 @@
 <template>
   <SessionFrame icon="account_box">
     <div class="card-sign-in">
-      <h2>Welcome to Lunie 👋</h2>
+      <h2>Welcome 👋</h2>
       <h3>How would you like to get started?</h3>
 
       <div class="session-list">
