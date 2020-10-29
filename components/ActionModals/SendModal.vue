@@ -62,7 +62,7 @@
         />
         <TmField
           id="token"
-          v-model="selectedTokens"
+          v-model="selectedTokens[index]"
           :title="`Select the token you wish to use`"
           :options="getDenoms"
           class="tm-field-token-selector"
