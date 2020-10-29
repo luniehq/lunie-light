@@ -1,33 +1,13 @@
 export default {
-  id: 'terra-mainnet',
+  id: 'cosmos-mainnet',
   chain_id: 'cosmos-hub-3', // TODO get from chain?
-  name: 'Terra Testnet',
+  name: 'Cosmos',
   api_url: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
   coinLookup: [
     {
       viewDenom: 'ATOM',
       chainDenom: 'uatom',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'KRT',
-      chainDenom: 'ukrw',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'MNT',
-      chainDenom: 'umnt',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'UST',
-      chainDenom: 'uusd',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'SDT',
-      chainDenom: 'usdr',
       chainToViewConversionFactor: 1e-6,
     },
   ],
