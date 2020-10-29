@@ -36,7 +36,7 @@
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
           :amount="Number(subTotal)"
-          :fee="networkFee.fee"
+          :fee="networkFees.find(({ fee }) => fee.denom === getDenom).fee"
           :transaction-denom="getDenom"
         />
         <!-- <TmFormMsg
@@ -243,7 +243,7 @@ export default {
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
     ...mapState(['data', ['balances']]),
-    networkFee() {
+    networkFees() {
       return fees.getFees(this.transactionData.type)
     },
     selectedSignMethod() {
@@ -253,7 +253,10 @@ export default {
       return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
-      return this.transactionType === 'UnstakeTx' ? 0 : this.amount
+      if (this.transactionType === 'UnstakeTx') return 0
+      return Array.isArray(this.amount)
+        ? this.amount.find(({ denom }) => denom === this.getDenom).amount
+        : this.amount
     },
     invoiceTotal() {
       return (
@@ -269,7 +272,9 @@ export default {
       return true
     },
     getDenom() {
-      return this.selectedDenom || network.stakingDenom
+      return this.selectedDenom || Array.isArray(this.selectedDenom)
+        ? this.selectedDenom[0]
+        : network.stakingDenom
     },
     selectedBalance() {
       const defaultBalance = {
