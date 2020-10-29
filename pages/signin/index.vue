@@ -62,10 +62,9 @@ export default {
     loading: false,
   }),
   computed: {
-    async accounts() {
+    accounts() {
       if (process.client) {
-        const { getWalletIndex } = await import('@lunie/cosmos-keys')
-        const accounts = getWalletIndex()
+        getAccounts()
         return accounts.map(({ name, address }) => ({
           value: address,
           key: name,
@@ -75,6 +74,11 @@ export default {
     },
   },
   methods: {
+    async getAccounts() {
+      const { getWalletIndex } = await import('@lunie/cosmos-keys')
+      const accounts = getWalletIndex()
+      return accounts
+    },
     async onSubmit() {
       this.$v.$touch()
       if (this.$v.$error) return

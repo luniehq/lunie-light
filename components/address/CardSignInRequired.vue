@@ -49,12 +49,6 @@ export default {
   data: () => ({
     loaded: false,
   }),
-  computed: {
-    async accountExists() {
-      const { getWalletIndex } = await import('@lunie/cosmos-keys')
-      return getWalletIndex().length > 0
-    },
-  },
   methods: {
     signOut() {
       this.$store.dispatch('signIn', undefined)
