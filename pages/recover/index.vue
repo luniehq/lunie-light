@@ -46,8 +46,9 @@ export default {
       this.password = password
       this.onSubmit()
     },
-    setSeed(seed) {
+    async setSeed(seed) {
       this.seed = seed
+      const { getNewWalletFromSeed } = await import('@lunie/cosmos-keys')
       const wallet = getNewWalletFromSeed(
         this.seed,
         network.address_prefix,

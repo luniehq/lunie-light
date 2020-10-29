@@ -64,7 +64,7 @@ export default {
   computed: {
     accounts() {
       if (process.client) {
-        getAccounts()
+        const accounts = this.getAccounts()
         return accounts.map(({ name, address }) => ({
           value: address,
           key: name,
