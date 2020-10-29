@@ -50,7 +50,7 @@ export default {
     loaded: false,
   }),
   computed: {
-    accountExists() {
+    async accountExists() {
       const { getWalletIndex } = await import('@lunie/cosmos-keys')
       return getWalletIndex().length > 0
     },

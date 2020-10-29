@@ -46,7 +46,7 @@ export default {
       this.seed = seed
       this.onSubmit()
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.loading) return
 
       this.loading = true

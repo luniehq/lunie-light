@@ -57,7 +57,7 @@ export default {
       this.address = wallet.cosmosAddress
       this.step = `Name`
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.loading) return
 
       this.errorMessage = undefined
