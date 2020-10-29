@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
 import network from '~/common/network'
 
 export default {
@@ -64,12 +63,14 @@ export default {
       this.errorMessage = undefined
       this.loading = true
       try {
+        const { getNewWalletFromSeed } = await import('@lunie/cosmos-keys')
         const wallet = getNewWalletFromSeed(
           this.seed,
           network.address_prefix,
           network.HDPath,
           network.curve
         )
+        const { storeWallet } = await import('@lunie/cosmos-keys')
         storeWallet(
           wallet,
           this.name,

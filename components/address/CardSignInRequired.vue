@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import { getWalletIndex } from '@lunie/cosmos-keys'
-
 export default {
   name: `card-sign-in-required`,
   data: () => ({
@@ -53,6 +51,7 @@ export default {
   }),
   computed: {
     accountExists() {
+      const { getWalletIndex } = await import('@lunie/cosmos-keys')
       return getWalletIndex().length > 0
     },
   },

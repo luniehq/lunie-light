@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import { getWalletIndex, testPassword } from '@lunie/cosmos-keys'
 import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
@@ -65,6 +64,7 @@ export default {
   computed: {
     accounts() {
       if (process.client) {
+        const { getWalletIndex } = await import('@lunie/cosmos-keys')
         const accounts = getWalletIndex()
         return accounts.map(({ name, address }) => ({
           value: address,
@@ -81,6 +81,7 @@ export default {
       this.loading = true
 
       try {
+        const { testPassword } = await import('@lunie/cosmos-keys')
         testPassword(this.signInAddress, this.signInPassword)
         this.$store.dispatch('signIn', {
           address: this.signInAddress,

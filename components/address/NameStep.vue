@@ -44,9 +44,9 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
-import { getWalletIndex } from '@lunie/cosmos-keys'
 
 const nameExists = (value) => {
+  const { getWalletIndex } = await import('@lunie/cosmos-keys')
   const walletIndex = getWalletIndex()
   if (walletIndex.some((e) => e.name === value)) {
     return false
