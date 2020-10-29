@@ -439,6 +439,7 @@ export default {
         const transactionData = await this.transactionManager.getTransactionMetaData(
           type,
           memo,
+          this.getDenom,
           accountInfo
         )
         // TODO currently not respected

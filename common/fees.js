@@ -5,6 +5,7 @@ export default {
   ...network.fees,
   getFees(transactionType) {
     const fees = this[transactionType] || this.default
+    // convert fees amounts to view denom amounts
     return fees.map((fee) => {
       return {
         ...fee,

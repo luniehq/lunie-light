@@ -9,7 +9,9 @@ export function SendTx(senderAddress, { to, amount }, network) {
     value: {
       from_address: senderAddress,
       to_address: to[0],
-      amount: [Coin(amount, network.coinLookup)],
+      amount: Array.isArray(amount)
+        ? amount.map((amount) => amount[Coin(amount, network.coinLookup)])
+        : amount[Coin(amount, network.coinLookup)],
     },
   }
 }
