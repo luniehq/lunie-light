@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import orderBy from 'lodash/orderby'
+import { orderBy } from 'lodash'
 import network from '~/common/network'
 
 export default {
