@@ -1,9 +1,12 @@
+const { mutations: dataMutations } = require('./data')
+
 export const state = () => ({
   session: undefined,
   currrentModalOpen: false,
 })
 
 export const mutations = {
+  ...dataMutations,
   setSession(state, session) {
     state.session = session
   },
@@ -25,5 +28,13 @@ export const actions = {
       this.$cookies.set('lunie-session', session)
     }
     commit('setSession', session)
+  },
+  reset({ commit }) {
+    commit('setBalances', [])
+    commit('setDelegations', [])
+    commit('setUndelegations', [])
+    commit('setRewards', [])
+    commit('setAccountInfo', undefined)
+    commit('setTransactions', { transactions: [] })
   },
 }
