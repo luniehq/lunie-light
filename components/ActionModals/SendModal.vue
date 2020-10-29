@@ -54,7 +54,7 @@
         <TmField
           id="amount"
           ref="amount"
-          :v-model="`${amount}-${index}`"
+          v-model="amounts[index].amount"
           class="tm-field-addon"
           placeholder="0"
           type="number"
@@ -235,28 +235,29 @@ export default {
       this.sending = false
     },
     setMaxAmount(index) {
-      this.amounts[index].amount = this.maxAmount
+      this.amounts[index].amount = this.getMaxAmount(index)
     },
     isMaxAmount(index) {
       const selectedBalance = this.getSelectedBalance(this.denoms[index])
       if (selectedBalance.available === 0) {
         return false
       } else {
-        return parseFloat(this.amounts[index].amount) === this.maxAmount
+        return (
+          parseFloat(this.amounts[index].amount) === this.getMaxAmount(index)
+        )
       }
     },
-    // getMaxAmount(index) {
-    //   const selectedBalance = this.getSelectedBalance(this.denoms[index])
-    //   if (this.networkFeesLoaded) {
-    //     return this.maxDecimals(
-    //       selectedBalance.available -
-    //         this.networkFees.transactionFee.amount,
-    //       6
-    //     )
-    //   } else {
-    //     return this.maxDecimals(selectedBalance.available, 6)
-    //   }
-    // },
+    getMaxAmount(index) {
+      const selectedBalance = this.getSelectedBalance(this.denoms[index])
+      if (this.networkFeesLoaded) {
+        return this.maxDecimals(
+          selectedBalance.available - this.networkFees.transactionFee.amount,
+          6
+        )
+      } else {
+        return this.maxDecimals(selectedBalance.available, 6)
+      }
+    },
     token() {
       if (!this.selectedTokens) return ``
 
