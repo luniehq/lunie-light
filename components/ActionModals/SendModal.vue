@@ -48,7 +48,7 @@
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
-      field-label="Amount"
+      :field-label="index === 0 ? `Amount` : ``"
     >
       <TmFieldGroup>
         <TmField
