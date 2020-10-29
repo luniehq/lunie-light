@@ -33,7 +33,7 @@
         <h3 class="li-validator-name">
           {{ validator.name }}
         </h3>
-        <div class="stake-amount" v-if="delegation.amount > 0">
+        <div v-if="delegation.amount > 0" class="stake-amount">
           <h4>
             {{ delegation.amount | bigFigureOrShortDecimals }}
           </h4>
