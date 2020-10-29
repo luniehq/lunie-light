@@ -19,14 +19,14 @@ export default class TransactionManager {
     }
 
     const response = await fetch(
-      `${network.api_url}/txs`,
+      `${network.apiURL}/txs`,
       options
     ).then((result) => result.json())
     return response
   }
 
   getTransactionMetaData(transactionType, memo, { accountNumber, sequence }) {
-    const { gasEstimate, fee } = fees.getFees(transactionType)
+    const { gasEstimate, fee } = network.getFees(transactionType)
     const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
     // converting view fee to on chain fee
     const convertedFee = [
@@ -40,7 +40,7 @@ export default class TransactionManager {
     return {
       accountNumber,
       accountSequence: sequence,
-      chainId: network.chain_id,
+      chainId: network.chainId,
       gasEstimate: String(gasEstimate),
       fee: convertedFee,
       memo,

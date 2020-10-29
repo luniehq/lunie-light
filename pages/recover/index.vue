@@ -51,7 +51,7 @@ export default {
       this.seed = seed
       const wallet = getNewWalletFromSeed(
         this.seed,
-        network.address_prefix,
+        network.addressPrefix,
         network.HDPath,
         network.curve
       )
@@ -66,7 +66,7 @@ export default {
       try {
         const wallet = getNewWalletFromSeed(
           this.seed,
-          network.address_prefix,
+          network.addressPrefix,
           network.HDPath,
           network.curve
         )

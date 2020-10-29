@@ -64,7 +64,7 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith(this.network.address_prefix)) {
+      if (address.startsWith(this.network.addressPrefix)) {
         return true
       } else {
         this.addressError = `Address is not valid for this network`

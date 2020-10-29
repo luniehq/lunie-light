@@ -8,7 +8,7 @@ function blockReducer(networkId, block, transactions, data = {}) {
     id: block.block_id.hash,
     networkId,
     height: block.block.header.height,
-    chainId: block.block.header.chain_id,
+    chainId: block.block.header.chainId,
     hash: block.block_id.hash,
     time: block.block.header.time,
     transactions,
@@ -47,15 +47,15 @@ function validatorReducer(
       : undefined,
     uptimePercentage:
       validator.signing_info &&
-      validator.signing_info.missed_blocks_counter &&
-      signedBlocksWindow
+        validator.signing_info.missed_blocks_counter &&
+        signedBlocksWindow
         ? 1 -
-          Number(
-            validator.signing_info
-              ? validator.signing_info.missed_blocks_counter
-              : 0
-          ) /
-            Number(signedBlocksWindow)
+        Number(
+          validator.signing_info
+            ? validator.signing_info.missed_blocks_counter
+            : 0
+        ) /
+        Number(signedBlocksWindow)
         : 1,
     tokens: atoms(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
@@ -185,12 +185,12 @@ function transactionReducerV2(network, transaction, reducers) {
           : JSON.parse(JSON.stringify(transaction.raw_log)).message,
       involvedAddresses: Array.isArray(transaction.logs)
         ? uniq(
-            reducers.extractInvolvedAddresses(
-              transaction.logs.find(
-                ({ msg_index: msgIndex }) => msgIndex === index
-              ).events
-            )
+          reducers.extractInvolvedAddresses(
+            transaction.logs.find(
+              ({ msg_index: msgIndex }) => msgIndex === index
+            ).events
           )
+        )
         : [],
     }))
     return returnedMessages

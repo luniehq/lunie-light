@@ -14,7 +14,7 @@ export async function getSigner(signingType, { address, password, network }) {
   // }
 
   throw new Error(
-    `Lunie doesn't support signing via ${signingType} for network type ${network.network_type}`
+    `Lunie doesn't support signing via ${signingType} for this network type`
   )
 }
 
