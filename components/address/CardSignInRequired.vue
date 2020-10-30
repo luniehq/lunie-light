@@ -59,7 +59,7 @@ export default {
   methods: {
     signOut() {
       this.$store.dispatch('signIn', undefined)
-      this.$store.dispatch('reset', undefined)
+      this.$store.dispatch('data/reset')
       this.$router.push('/validators')
     },
   },
