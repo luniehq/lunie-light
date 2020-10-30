@@ -1,5 +1,5 @@
 const BigNumber = require('bignumber.js')
-const _ = require('lodash')
+const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
 const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
@@ -23,7 +23,7 @@ class CosmosV0API {
 
     this.setReducers()
     this.loadValidors().then((validators) => {
-      this.store.validators = _.keyBy(validators, 'operatorAddress')
+      this.store.validators = keyBy(validators, 'operatorAddress')
       this.resolveReady()
     })
   }
@@ -176,14 +176,14 @@ class CosmosV0API {
     ])
 
     // create a dictionary to reduce array lookups
-    const consensusValidators = _.keyBy(validatorSet.validators, 'address')
+    const consensusValidators = keyBy(validatorSet.validators, 'address')
     const totalVotingPower = validatorSet.validators.reduce(
       (sum, { votingPower }) => sum.plus(votingPower),
       BigNumber(0)
     )
 
     // query for signing info
-    const signingInfos = _.keyBy(
+    const signingInfos = keyBy(
       await this.getValidatorSigningInfos([validator]),
       'address'
     )
@@ -231,14 +231,14 @@ class CosmosV0API {
     ])
 
     // create a dictionary to reduce array lookups
-    const consensusValidators = _.keyBy(validatorSet.validators, 'address')
+    const consensusValidators = keyBy(validatorSet.validators, 'address')
     const totalVotingPower = validatorSet.validators.reduce(
       (sum, { voting_power: votingPower }) => sum.plus(votingPower),
       BigNumber(0)
     )
 
     // query for signing info
-    const signingInfos = _.keyBy(
+    const signingInfos = keyBy(
       await this.getValidatorSigningInfos(validators),
       'address'
     )
@@ -425,7 +425,7 @@ class CosmosV0API {
       })
     )
 
-    return _.orderBy(proposals, 'id', 'desc')
+    return orderBy(proposals, 'id', 'desc')
   }
 
   async getProposalById(proposalId, validators) {
@@ -459,9 +459,9 @@ class CosmosV0API {
   async getTopVoters() {
     await this.dataReady
     // for now defaulting to pick the 10 largest voting powers
-    return _.take(
-      _.reverse(
-        _.sortBy(this.store.validators, [
+    return take(
+      reverse(
+        sortBy(this.store.validators, [
           (validator) => {
             return validator.votingPower
           },
@@ -744,7 +744,7 @@ class CosmosV0API {
       },
       []
     )
-    return _.uniqBy(allDelegations, 'delegator_address').map(
+    return uniqBy(allDelegations, 'delegator_address').map(
       ({ delegator_address: delegatorAddress }) => delegatorAddress
     )
   }
