@@ -33,7 +33,6 @@ export default {
       const session = this.$cookies.get('lunie-session')
       if (session) {
         await this.refreshData()
-        // this.balancesLoaded = true
       }
     },
     refreshData() {
