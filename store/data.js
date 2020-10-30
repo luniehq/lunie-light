@@ -54,9 +54,17 @@ export const mutations = {
 
 export const actions = {
   async refresh({ dispatch }) {
+    const calls = [
+      dispatch('getValidators'),
+      dispatch('getBlock'),
+      dispatch('refreshSession'),
+    ]
+    await Promise.all(calls)
+  },
+  async refreshSession({ dispatch }) {
+    const calls = []
     const session = this.$cookies.get('lunie-session')
     const currency = this.$cookies.get('currency') || 'USD'
-    const calls = [dispatch('getValidators'), dispatch('getBlock')]
     if (session) {
       const address = session.address
       calls.push(

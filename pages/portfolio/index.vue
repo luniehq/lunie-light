@@ -36,7 +36,7 @@ export default {
       }
     },
     refreshData() {
-      this.$store.dispatch('data/refresh')
+      this.$store.dispatch('data/refreshSession')
     },
   },
 }
