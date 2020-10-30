@@ -33,7 +33,7 @@
         <h3 class="li-validator-name">
           {{ validator.name }}
         </h3>
-        <div v-if="delegation.amount > 0">
+        <div class="stake-amount" v-if="delegation.amount > 0">
           <h4>
             {{ delegation.amount | bigFigureOrShortDecimals }}
           </h4>
@@ -189,6 +189,10 @@ export default {
 .validator-status.active {
   color: var(--success);
   border-color: var(--success);
+}
+
+.stake-amount {
+  line-height: 16px;
 }
 
 @media screen and (max-width: 768px) {

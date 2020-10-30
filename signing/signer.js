@@ -13,9 +13,7 @@ export async function getSigner(signingType, { address, password, network }) {
   //   return await getCosmosLedgerSigner({}) // gets config
   // }
 
-  throw new Error(
-    `Lunie doesn't support signing via ${signingType} for network type ${network.network_type}`
-  )
+  throw new Error(`Signing via ${signingType} is not supported`)
 }
 
 async function getCosmosLocalSigner(wallet) {
