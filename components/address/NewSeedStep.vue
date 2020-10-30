@@ -30,7 +30,7 @@
     </div>
     <div class="session-footer">
       <TmBtn
-        :loading="isCreatingSeed"
+        :disabled="isCreatingSeed"
         value="Create"
         @click="isCreatingSeed = true"
       />
@@ -70,7 +70,9 @@ export default {
       this.$v.$touch()
       if (this.$v.$error) return
       this.$emit('submit', this.fieldSeed)
-      this.isCreatingSeed = false
+      this.$on('submit', () => {
+        this.isCreatingSeed = false
+      })
     },
   },
   validations: () => ({
