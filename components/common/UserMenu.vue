@@ -50,4 +50,10 @@ export default {
   color: var(--link);
   font-weight: 900;
 }
+
+@media screen and (max-width: 1023px) {
+  .user-menu {
+    justify-content: center;
+  }
+}
 </style>
