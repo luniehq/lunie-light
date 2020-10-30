@@ -19,7 +19,7 @@ export default class TransactionManager {
     }
 
     const response = await fetch(
-      `${network.api_url}/txs`,
+      `${network.apiURL}/txs`,
       options
     ).then((result) => result.json())
     return response
@@ -40,7 +40,7 @@ export default class TransactionManager {
     return {
       accountNumber,
       accountSequence: sequence,
-      chainId: network.chain_id,
+      chainId: network.chainId,
       gasEstimate: String(gasEstimate),
       fee: convertedFee,
       memo,

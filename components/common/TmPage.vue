@@ -79,8 +79,8 @@ export default {
   methods: {
     async loadData() {
       // somehow on mounted the mapState is not yet called
-      if (this.$store.state.data.validators.length === 0) {
-        await this.$store.dispatch('data/refresh')
+      if (!this.$store.state.data.api) {
+        await this.$store.dispatch('data/init')
       }
       this.loading = false
     },

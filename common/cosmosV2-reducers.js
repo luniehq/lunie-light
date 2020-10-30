@@ -405,7 +405,7 @@ function validatorReducer(
               : 0
           ) /
             Number(signedBlocksWindow)
-        : undefined,
+        : 1,
     tokens: atoms(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
     commission: Number(validator.commission.commission_rates.rate).toFixed(6),

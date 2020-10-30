@@ -12,6 +12,7 @@ export const state = () => ({
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
+  api: undefined,
 })
 
 export const mutations = {
@@ -38,6 +39,11 @@ export const mutations = {
 }
 
 export const actions = {
+  async init({ commit, dispatch }) {
+    const _store = {}
+    commit('setApi', new DataSource(this.$axios, network, _store, null, null))
+    await dispatch('refresh')
+  },
   async refresh({ dispatch }) {
     const session = this.$cookies.get('lunie-session')
     const currency = this.$cookies.get('currency') || 'USD'
@@ -53,11 +59,9 @@ export const actions = {
     }
     await Promise.all(calls)
   },
-  async getBlock({ commit }) {
+  async getBlock({ commit, state: { api } }) {
     try {
-      const _store = {}
-      const api = new DataSource(this.$axios, network, _store, null, null)
-      const block = await api.getBlockV2()
+      const block = await api.getBlockHeader()
       commit('setBlock', block)
     } catch (err) {
       commit('addNotification', {
@@ -66,63 +70,108 @@ export const actions = {
       })
     }
   },
-  async getBalances({ commit }, { address, currency }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const balances = await api.getBalancesV2FromAddress(
-      address,
-      currency,
-      network
-    )
-    commit('setBalances', balances)
+  async getBalances({ commit, state: { api } }, { address, currency }) {
+    try {
+      const balances = await api.getBalancesV2FromAddress(
+        address,
+        currency,
+        network
+      )
+      commit('setBalances', balances)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting balances failed:' + err.message,
+      })
+    }
   },
-  async getValidators({ commit }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const validators = await api.getAllValidators()
-    commit('setValidators', validators)
+  async getValidators({ commit, state: { api } }) {
+    try {
+      const validators = await api.getAllValidators()
+      commit('setValidators', validators)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting validators failed:' + err.message,
+      })
+    }
   },
-  async getDelegations({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const delegations = await api.getDelegationsForDelegatorAddress(address)
-    commit('setDelegations', delegations)
+  async getDelegations({ commit, state: { api } }, address) {
+    try {
+      const delegations = await api.getDelegationsForDelegatorAddress(address)
+      commit('setDelegations', delegations)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting delegations failed:' + err.message,
+      })
+    }
   },
-  async getUndelegations({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const undelegations = await api.getUndelegationsForDelegatorAddress(address)
-    commit('setUndelegations', undelegations)
+  async getUndelegations({ commit, state: { api } }, address) {
+    try {
+      const undelegations = await api.getUndelegationsForDelegatorAddress(
+        address
+      )
+      commit('setUndelegations', undelegations)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting undelegations failed:' + err.message,
+      })
+    }
   },
-  async getRewards({ commit }, { address, currency }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const rewards = await api.getRewards(address, currency, network)
-    commit('setRewards', rewards)
+  async getRewards({ commit, state: { api } }, { address, currency }) {
+    try {
+      const rewards = await api.getRewards(address, currency, network)
+      commit('setRewards', rewards)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting rewards failed:' + err.message,
+      })
+    }
   },
-  async getAccountInfo({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getAccountInfo({ commit, state: { api } }, address) {
     const { accountNumber, sequence } = await api.getAccountInfo(address)
     commit('setAccountInfo', { accountNumber, sequence })
     return { accountNumber, sequence }
   },
-  async getTransactions({ commit }, { address, pageNumber = 0 }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const transactions = await api.getTransactionsV2(address, pageNumber)
-    commit('setTransactions', { transactions, pageNumber })
+  async getTransactions(
+    { commit, state: { api } },
+    { address, pageNumber = 0 }
+  ) {
+    try {
+      const transactions = await api.getTransactionsV2(address, pageNumber)
+      commit('setTransactions', { transactions, pageNumber })
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting transactions failed:' + err.message,
+      })
+    }
   },
-  async getValidatorSelfStake(store, validator) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const selfStake = await api.getSelfStake(validator)
-    return selfStake
+  async getValidatorSelfStake({ commit, state: { api } }, validator) {
+    try {
+      const selfStake = await api.getSelfStake(validator)
+      return selfStake
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting validator self stake failed:' + err.message,
+      })
+      return 0
+    }
   },
-  async getValidatorDelegations(store, validator) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const delegations = await api.getValidatorDelegations(validator)
-    return delegations
+  async getValidatorDelegations({ commit, state: { api } }, validator) {
+    try {
+      const delegations = await api.getValidatorDelegations(validator)
+      return delegations
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting delegations to validator failed:' + err.message,
+      })
+    }
+    return []
   },
 }

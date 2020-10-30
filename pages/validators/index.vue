@@ -105,7 +105,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  margin: 0.5em 2em 1em;
+  margin: 0.5rem 1rem 1rem 2rem;
 }
 
 .filterContainer .toggles {

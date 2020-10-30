@@ -1,7 +1,16 @@
 .tooltip {
   display: block !important;
   z-index: 10000;
-  font-family: var(--sans);
+  font-family: -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
   font-size: 12px;
 }
 

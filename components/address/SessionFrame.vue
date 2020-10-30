@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$router.push(`/validators`) // TODO redirect back to where we come from
+      this.$router.go(`-1`)
     },
     goBack() {
       if (this.onBack) this.onBack()
