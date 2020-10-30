@@ -5,7 +5,7 @@ export default {
   description:
     'Terra aims to make its stablecoins available to every developer on every blockchain.',
   website: 'https://terra.money',
-  apiUrl: 'https://tequila-lcd.terra.dev',
+  apiURL: 'https://tequila-lcd.terra.dev',
   stakingDenom: 'LUNA',
   coinLookup: [
     {
