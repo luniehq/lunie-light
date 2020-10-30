@@ -1,12 +1,9 @@
-const { mutations: dataMutations } = require('./data')
-
 export const state = () => ({
   session: undefined,
   currrentModalOpen: false,
 })
 
 export const mutations = {
-  ...dataMutations,
   setSession(state, session) {
     state.session = session
   },
@@ -20,9 +17,7 @@ export const actions = {
     const session = $cookies.get('lunie-session')
     commit('setSession', session)
   },
-  signIn({ commit, dispatch }, session) {
-    // remove data from old address
-    dispatch(`reset`)
+  signIn({ commit }, session) {
     // to be able to render the page for the user in SSR we need to set the address as a cookie
     if (!session) {
       this.$cookies.remove('lunie-session')
@@ -30,13 +25,5 @@ export const actions = {
       this.$cookies.set('lunie-session', session)
     }
     commit('setSession', session)
-  },
-  reset({ commit }) {
-    commit('setBalances', [])
-    commit('setDelegations', [])
-    commit('setUndelegations', [])
-    commit('setRewards', [])
-    commit('setAccountInfo', undefined)
-    commit('setTransactions', [])
   },
 }
