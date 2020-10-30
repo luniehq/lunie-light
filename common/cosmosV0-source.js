@@ -6,7 +6,7 @@ const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
 class CosmosV0API {
   constructor(axios, network, store, fiatValuesAPI, db) {
-    this.baseURL = network.api_url
+    this.baseURL = network.apiUrl
     this.axios = axios
     this.network = network
     this.networkId = network.id
