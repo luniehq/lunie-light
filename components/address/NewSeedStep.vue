@@ -30,7 +30,7 @@
     </div>
     <div class="session-footer">
       <TmBtn
-        :loading="isCreatingSeed && !fieldSeed"
+        :loading="isCreatingSeed"
         value="Create"
         @click="isCreatingSeed = true"
       />
@@ -64,6 +64,7 @@ export default {
         this.fieldSeed = getSeed()
       } else {
         this.fieldSeed = this.seed
+        this.isCreatingSeed = false
       }
     },
     onSubmit() {
