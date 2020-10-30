@@ -24,7 +24,6 @@ class CosmosV0API {
 
     this.setReducers()
     this.loadValidators().then(async (validators) => {
-      await updateValidatorImages(validators)
       const validatorsWithImages = await updateValidatorImages(validators)
       this.store.validators = keyBy(validatorsWithImages, 'operatorAddress')
       this.resolveReady()
