@@ -76,12 +76,14 @@ export default {
       }
     },
   },
-  validations: () => ({
-    fieldName: {
-      required,
-      minLength: minLength(3),
-      nameExists: this.nameExists,
-    },
-  }),
+  validations() {
+    return {
+      fieldName: {
+        required,
+        minLength: minLength(3),
+        nameExists: this.nameExists,
+      },
+    }
+  },
 }
 </script>
