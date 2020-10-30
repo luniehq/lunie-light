@@ -64,13 +64,13 @@ export default {
         this.fieldSeed = getSeed()
       } else {
         this.fieldSeed = this.seed
-        this.isCreatingSeed = false
       }
     },
     onSubmit() {
       this.$v.$touch()
       if (this.$v.$error) return
       this.$emit('submit', this.fieldSeed)
+      this.isCreatingSeed = false
     },
   },
   validations: () => ({
