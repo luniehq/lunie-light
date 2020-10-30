@@ -45,6 +45,16 @@
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
 
+const nameExists = async (value) => {
+  const { getWalletIndex } = await import('@lunie/cosmos-keys')
+  const walletIndex = getWalletIndex()
+  if (walletIndex.some((e) => e.name === value)) {
+    return false
+  } else {
+    return true
+  }
+}
+
 export default {
   name: `name-step`,
   props: {
@@ -66,24 +76,9 @@ export default {
 
       this.$emit('submit', this.fieldName)
     },
-    async nameExists(fieldName) {
-      const { getWalletIndex } = await import('@lunie/cosmos-keys')
-      const walletIndex = getWalletIndex()
-      if (walletIndex.some((e) => e.name === fieldName)) {
-        return false
-      } else {
-        return true
-      }
-    },
   },
-  validations() {
-    return {
-      fieldName: {
-        required,
-        minLength: minLength(3),
-        nameExists: this.nameExists,
-      },
-    }
-  },
+  validations: () => ({
+    fieldName: { required, minLength: minLength(3), nameExists },
+  }),
 }
 </script>
