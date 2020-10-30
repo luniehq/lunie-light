@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
 import { getWalletIndex, testPassword } from '@lunie/cosmos-keys'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: `sign-in`,
