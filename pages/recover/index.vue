@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import network from '~/common/network'
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
+import network from '~/common/network'
 
 export default {
   name: `recover`,
@@ -47,7 +47,7 @@ export default {
       this.password = password
       this.onSubmit()
     },
-    async setSeed(seed) {
+    setSeed(seed) {
       this.seed = seed
       const wallet = getNewWalletFromSeed(
         this.seed,
