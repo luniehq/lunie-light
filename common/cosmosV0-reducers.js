@@ -326,6 +326,18 @@ function blockReducer(networkId, block, transactions, data = {}) {
   }
 }
 
+function blockHeaderReducer(networkId, block) {
+  return {
+    id: block.block_meta.block_id.hash,
+    networkId,
+    height: block.block_meta.header.height,
+    chainId: block.block_meta.header.chain_id,
+    hash: block.block_meta.block_id.hash,
+    time: block.block_meta.header.time,
+    proposer_address: block.block_meta.header.proposer_address,
+  }
+}
+
 function denomLookup(coinLookup, denom) {
   if (
     Array.isArray(coinLookup) &&
@@ -573,6 +585,7 @@ module.exports = {
   voteReducer,
   validatorReducer,
   blockReducer,
+  blockHeaderReducer,
   delegationReducer,
   coinReducer,
   gasPriceReducer,

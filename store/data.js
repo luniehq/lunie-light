@@ -60,7 +60,7 @@ export const actions = {
     await Promise.all(calls)
   },
   async getBlock({ commit, state: { api } }) {
-    const block = await api.getBlockV2()
+    const block = await api.getBlockHeader()
     commit('setBlock', block)
   },
   async getBalances({ commit, state: { api } }, { address, currency }) {
