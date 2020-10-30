@@ -313,9 +313,6 @@ export default {
   //     },
   //   }
   // },
-  mounted() {
-    this.loadBalances()
-  },
   methods: {
     confirmModalOpen() {
       let confirmResult = false
@@ -499,16 +496,6 @@ export default {
           )
         )
       }
-    },
-    async loadBalances() {
-      const session = this.$cookies.get('lunie-session')
-      if (session) {
-        await this.refreshData()
-        this.balancesLoaded = true
-      }
-    },
-    refreshData() {
-      this.$store.dispatch('data/refresh')
     },
   },
 }

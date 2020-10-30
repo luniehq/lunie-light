@@ -25,5 +25,20 @@ export default {
       'rewards',
     ]),
   },
+  mounted() {
+    this.loadSessionData()
+  },
+  methods: {
+    async loadSessionData() {
+      const session = this.$cookies.get('lunie-session')
+      if (session) {
+        await this.refreshData()
+        // this.balancesLoaded = true
+      }
+    },
+    refreshData() {
+      this.$store.dispatch('data/refresh')
+    },
+  },
 }
 </script>
