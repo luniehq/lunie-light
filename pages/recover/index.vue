@@ -51,7 +51,7 @@ export default {
       const { getNewWalletFromSeed } = await import('@lunie/cosmos-keys')
       const wallet = getNewWalletFromSeed(
         this.seed,
-        network.address_prefix,
+        network.addressPrefix,
         network.HDPath,
         network.curve
       )
@@ -67,7 +67,7 @@ export default {
         const { getNewWalletFromSeed } = await import('@lunie/cosmos-keys')
         const wallet = getNewWalletFromSeed(
           this.seed,
-          network.address_prefix,
+          network.addressPrefix,
           network.HDPath,
           network.curve
         )
