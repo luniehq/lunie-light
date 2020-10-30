@@ -18,11 +18,13 @@ async function queryKeybaseImages(keybaseImageRecords) {
             updated: new Date(),
           }
         }
+        // no profile found
         return {
           keybaseHash,
           updated: new Date(),
         }
       } catch (error) {
+        // error, try again next time
         return {
           keybaseHash,
         }
