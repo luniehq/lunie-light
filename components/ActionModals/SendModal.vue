@@ -280,7 +280,7 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address && address.startsWith(this.network.address_prefix)) {
+      if (address && address.startsWith(this.network.addressPrefix)) {
         return true
       } else {
         this.addressError = `Address prefix does not match this network's prefix`
