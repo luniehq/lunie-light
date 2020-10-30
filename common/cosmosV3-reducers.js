@@ -8,7 +8,7 @@ function blockReducer(networkId, block, transactions, data = {}) {
     id: block.block_id.hash,
     networkId,
     height: block.block.header.height,
-    chainId: block.block.header.chain_id,
+    chainId: block.block.header.chainId,
     hash: block.block_id.hash,
     time: block.block.header.time,
     transactions,
@@ -45,7 +45,18 @@ function validatorReducer(
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
-    uptimePercentage: 0, // TODO
+    uptimePercentage:
+      validator.signing_info &&
+      validator.signing_info.missed_blocks_counter &&
+      signedBlocksWindow
+        ? 1 -
+          Number(
+            validator.signing_info
+              ? validator.signing_info.missed_blocks_counter
+              : 0
+          ) /
+            Number(signedBlocksWindow)
+        : 1,
     tokens: atoms(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
     commission: Number(validator.commission.commission_rates.rate).toFixed(6),

@@ -271,7 +271,6 @@ export default {
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-family: var(--sans);
 }
 
 .back-button i {

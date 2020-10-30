@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import autosize from 'autosize'
 export default {
   name: `field-seed`,
   props: {
@@ -21,13 +20,8 @@ export default {
     value: {
       async handler() {
         await this.$nextTick()
-        autosize.update(this.$el)
       },
     },
-  },
-  mounted() {
-    // adjust the textarea element height to match content
-    autosize(this.$el)
   },
   methods: {
     update(value) {

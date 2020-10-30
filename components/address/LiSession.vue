@@ -1,6 +1,6 @@
 <template>
-  <nuxt-link :to="route" class="tm-li-session">
-    <div class="tm-li-session-icon">
+  <nuxt-link :to="route" class="tm-li-session" :class="{ card }">
+    <div v-if="icon" class="tm-li-session-icon">
       <i class="material-icons notranslate circle">{{ icon }}</i>
     </div>
     <div class="tm-li-session-text">
@@ -22,10 +22,6 @@ export default {
       type: String,
       default: ``,
     },
-    img: {
-      type: String,
-      default: ``,
-    },
     title: {
       type: String,
       required: true,
@@ -33,6 +29,10 @@ export default {
     route: {
       type: String,
       default: ``,
+    },
+    card: {
+      type: Boolean,
+      default: false,
     },
   },
 }
@@ -46,6 +46,14 @@ export default {
   background-color: var(--app-fg);
   border-radius: 0.25rem;
   transition: background-color 0.2s ease;
+}
+
+.tm-li-session.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 12rem;
+  margin: 0;
 }
 
 .tm-li-session:hover {
@@ -73,12 +81,6 @@ export default {
   font-size: 1.25rem;
 }
 
-.tm-li-session-icon img {
-  max-height: 100%;
-  max-width: 52px;
-  display: block;
-}
-
 .tm-li-session-title {
   color: var(--bright);
   font-size: var(--h4);
@@ -91,6 +93,14 @@ export default {
   justify-content: center;
   flex-flow: column nowrap;
   padding: 0 1rem;
+}
+
+.card .tm-li-session-text {
+  padding: 0 2rem 0 0;
+}
+
+.card .tm-li-session-icon {
+  align-self: flex-end;
 }
 
 .material-icons.circle {

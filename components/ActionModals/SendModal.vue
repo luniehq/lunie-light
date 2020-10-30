@@ -61,7 +61,7 @@
         <TmField
           id="token"
           v-model="selectedToken"
-          :title="`Select the token you wish to operate with`"
+          :title="`Select the token you wish to use`"
           :options="getDenoms"
           class="tm-field-token-selector"
           placeholder="Select the token"
@@ -74,6 +74,7 @@
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>
+
       <TmFormMsg
         v-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
@@ -287,7 +288,7 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith(this.network.address_prefix)) {
+      if (address.startsWith(this.network.addressPrefix)) {
         return true
       } else {
         this.addressError = `Address prefix does not match this network's prefix`
