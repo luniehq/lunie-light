@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
 import network from '~/common/network'
 
 const steps = [`Name`, `Password`, `Backup`]
@@ -46,20 +47,18 @@ export default {
       this.seed = seed
       this.onSubmit()
     },
-    async onSubmit() {
+    onSubmit() {
       if (this.loading) return
 
       this.loading = true
       this.errorMessage = undefined
       try {
-        const { getNewWalletFromSeed } = await import('@lunie/cosmos-keys')
         const wallet = getNewWalletFromSeed(
           this.seed,
           network.addressPrefix,
           network.HDPath,
           network.curve
         )
-        const { storeWallet } = await import('@lunie/cosmos-keys')
         storeWallet(
           wallet,
           this.name,
