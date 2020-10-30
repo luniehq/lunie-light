@@ -11,6 +11,9 @@ import { keyBy, uniqBy } from 'lodash'
  This allows to reuse the images also cross networks
 */
 
+const UPDATE_THROTTLE_PERIOD = 1000 * 60 * 60 * 24 * 2 // 2 days
+const LOCALSTORAGE_KEY = 'keybase'
+
 async function queryKeybaseImages(keybaseImageRecords) {
   const updatedKeybaseImages = await Promise.all(
     keybaseImageRecords.map(async ({ keybaseHash }) => {
@@ -46,7 +49,9 @@ async function queryKeybaseImages(keybaseImageRecords) {
 }
 
 function loadKeybaseImages() {
-  const keybaseImages = JSON.parse(localStorage.getItem('keybase') || '{}')
+  const keybaseImages = JSON.parse(
+    localStorage.getItem(LOCALSTORAGE_KEY) || '{}'
+  )
   return keybaseImages
 }
 
@@ -56,7 +61,7 @@ function saveKeybaseImages(keybaseImages) {
     ...oldKeybaseImages,
     ...keybaseImages,
   }
-  localStorage.setItem('keybase', JSON.stringify(mergedKeybaseImages))
+  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(mergedKeybaseImages))
 }
 
 // get not yet loaded validators and outdated validators
@@ -65,7 +70,7 @@ function getUpdateableKeybaseEntries(currentValidators) {
   const updateableKeybaseImages = Object.values(keybaseImages).filter(
     ({ updated }) =>
       !updated ||
-      Date.now() - new Date(updated).getTime() > 1000 * 60 * 60 * 24 * 2
+      Date.now() - new Date(updated).getTime() > UPDATE_THROTTLE_PERIOD
   ) // update every 2 days
   return uniqBy(
     updateableKeybaseImages.concat(
