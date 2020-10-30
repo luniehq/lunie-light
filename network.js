@@ -1,39 +1,25 @@
 export default {
   id: 'terra-mainnet',
-  chain_id: 'cosmos-hub-3', // TODO get from chain?
-  name: 'Terra Testnet',
-  api_url: 'https://lcd.nylira.net',
-  stakingDenom: 'ATOM',
+  chain_id: 'akashnet-1', // TODO get from chain?
+  name: 'Akash Mainnet',
+  api_url: 'http://localhost:9999/lcd.akash.forbole.com',
+  rpc_url: 'http://localhost:9999/rpc.akash.forbole.com',
+  stakingDenom: 'AKT',
   coinLookup: [
     {
-      viewDenom: 'ATOM',
-      chainDenom: 'uatom',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'KRT',
-      chainDenom: 'ukrw',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'MNT',
-      chainDenom: 'umnt',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'UST',
-      chainDenom: 'uusd',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'SDT',
-      chainDenom: 'usdr',
+      viewDenom: 'AKT',
+      chainDenom: 'uakt',
       chainToViewConversionFactor: 1e-6,
     },
   ],
-  network_type: 'cosmos',
-  address_prefix: 'cosmos',
+  address_prefix: 'akash',
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
+
+  // utility functions
+  // TODO put in a wrapper outside this file
+  getCoinLookup(denom, coinLookupDenomType = `chainDenom`) {
+    return this.coinLookup.find((coin) => coin[coinLookupDenomType] === denom)
+  },
 }

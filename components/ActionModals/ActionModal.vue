@@ -250,7 +250,7 @@ export default {
       return sessionType.LOCAL
     },
     requiresSignIn() {
-      return !this.session || this.session.type === sessionType.EXPLORE
+      return false //! this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
       return this.transactionType === 'UnstakeTx' ? 0 : this.amount
@@ -426,6 +426,16 @@ export default {
           )
           this.transactionManager = new TransactionManager()
         }
+
+        debugger
+        await this.$store.dispatch('keplr/sign', {
+          senderAddress: this.session.address,
+          messages: message,
+          memo,
+          fee: this.transactionManager.getFees(type),
+          transactionType: type,
+        })
+        return
 
         const accountInfo = await this.$store.dispatch(
           'data/getAccountInfo',

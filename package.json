@@ -23,6 +23,7 @@
     }
   },
   "dependencies": {
+    "@cosmjs/launchpad": "^0.23.1",
     "@lunie/cosmos-keys": "^0.3.2",
     "@nuxtjs/axios": "^5.12.2",
     "autosize": "^4.0.2",

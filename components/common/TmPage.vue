@@ -59,7 +59,7 @@ export default {
     loading: true,
   }),
   computed: {
-    ...mapState(['session']),
+    ...mapState(['session', 'keplr']),
     ...mapState(['data', ['validators']]),
   },
   mounted() {
@@ -67,6 +67,10 @@ export default {
     this.$store.dispatch('signIn', session)
 
     this.loadData()
+
+    if (!this.keplr.initialized) {
+      this.$store.dispatch('keplr/init')
+    }
   },
   methods: {
     async loadData() {

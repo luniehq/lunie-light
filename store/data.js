@@ -1,5 +1,5 @@
 import network from '~/common/network'
-import DataSource from '~/common/cosmosV2-source'
+import DataSource from '~/common/akashV1-source'
 
 export const state = () => ({
   block: undefined,
