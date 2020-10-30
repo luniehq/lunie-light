@@ -23,12 +23,10 @@ class CosmosV0API {
     })
 
     this.setReducers()
-    this.loadValidators().then((validators) => {
-      updateValidatorImages(validators).then(async () => {
-        const validatorsWithImages = await updateValidatorImages(validators)
-        this.store.validators = _.keyBy(validatorsWithImages, 'operatorAddress')
-      })
-      this.store.validators = _.keyBy(validators, 'operatorAddress')
+    this.loadValidators().then(async (validators) => {
+      await updateValidatorImages(validators)
+      const validatorsWithImages = await updateValidatorImages(validators)
+      this.store.validators = _.keyBy(validatorsWithImages, 'operatorAddress')
       this.resolveReady()
     })
   }
