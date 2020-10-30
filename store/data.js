@@ -39,10 +39,10 @@ export const mutations = {
 }
 
 export const actions = {
-  init({ commit, dispatch }) {
+  async init({ commit, dispatch }) {
     const _store = {}
     commit('setApi', new DataSource(this.$axios, network, _store, null, null))
-    dispatch('refresh')
+    await dispatch('refresh')
   },
   async refresh({ dispatch }) {
     const session = this.$cookies.get('lunie-session')
