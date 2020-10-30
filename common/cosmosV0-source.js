@@ -6,12 +6,12 @@ const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
 class CosmosV0API {
   constructor(axios, network, store, fiatValuesAPI, db) {
-    this.baseURL = network.api_url
+    this.baseURL = network.apiURL
     this.axios = axios
     this.network = network
     this.networkId = network.id
-    this.delegatorBech32Prefix = network.address_prefix
-    this.validatorConsensusBech32Prefix = `${network.address_prefix}valcons`
+    this.delegatorBech32Prefix = network.addressPrefix
+    this.validatorConsensusBech32Prefix = `${network.addressPrefix}valcons`
     this.store = store // TODO remove store
     this.fiatValuesAPI = fiatValuesAPI
     this.db = db
@@ -599,7 +599,7 @@ class CosmosV0API {
   }
 
   async getAccountInfo(address) {
-    if (!address.startsWith(this.network.address_prefix)) {
+    if (!address.startsWith(this.network.addressPrefix)) {
       throw new Error("This address doesn't exist in this network")
     }
     const response = await this.query(`auth/accounts/${address}`)

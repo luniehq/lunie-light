@@ -8,7 +8,7 @@ function blockReducer(networkId, block, transactions, data = {}) {
     id: block.block_id.hash,
     networkId,
     height: block.block.header.height,
-    chainId: block.block.header.chain_id,
+    chainId: block.block.header.chainId,
     hash: block.block_id.hash,
     time: block.block.header.time,
     transactions,
