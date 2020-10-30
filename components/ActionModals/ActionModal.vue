@@ -502,13 +502,8 @@ export default {
     },
     async loadBalances() {
       const session = this.$cookies.get('lunie-session')
-      const currency = this.$cookies.get('currency') || 'USD'
       if (session) {
-        // do we need to refetch the data?
-        await this.$store.dispatch('data/getBalances', {
-          address: session.address,
-          currency,
-        })
+        await this.refreshData()
         this.balancesLoaded = true
       }
     },
