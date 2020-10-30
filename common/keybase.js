@@ -1,5 +1,16 @@
 import { keyBy, uniqBy } from 'lodash'
 
+/*
+ Images are stored in localstorage under 'keybase' in a dictionary:
+ {
+    keybaseHash: {
+        picture,
+        updated
+    }
+ }
+ This allows to reuse the images also cross networks
+*/
+
 async function queryKeybaseImages(keybaseImageRecords) {
   const updatedKeybaseImages = await Promise.all(
     keybaseImageRecords.map(async ({ keybaseHash }) => {
