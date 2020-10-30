@@ -15,4 +15,13 @@ export default {
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
+  fees: {
+    default: {
+      gasEstimate: 350000,
+      fee: {
+        denom: 'ATOM',
+        amount: 0.1,
+      },
+    },
+  },
 }
