@@ -37,6 +37,6 @@ export const actions = {
     commit('setUndelegations', [])
     commit('setRewards', [])
     commit('setAccountInfo', undefined)
-    commit('setTransactions', { transactions: [] })
+    commit('setTransactions', [])
   },
 }
