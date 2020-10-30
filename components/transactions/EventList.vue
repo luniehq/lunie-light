@@ -12,8 +12,7 @@
 </template>
 
 <script>
-import groupBy from 'lodash.groupby'
-import orderBy from 'lodash.orderby'
+import { groupBy, orderBy } from 'lodash'
 import dayjs from 'dayjs'
 
 const categories = [

@@ -1,7 +1,7 @@
 <template>
   <SessionFrame icon="account_box">
     <div class="card-sign-in">
-      <h2>Welcome to Lunie 👋</h2>
+      <h2>Welcome 👋</h2>
       <h3>How would you like to get started?</h3>
 
       <div class="session-list">
@@ -44,18 +44,11 @@
 </template>
 
 <script>
-import { getWalletIndex } from '@lunie/cosmos-keys'
-
 export default {
   name: `card-sign-in-required`,
   data: () => ({
     loaded: false,
   }),
-  computed: {
-    accountExists() {
-      return getWalletIndex().length > 0
-    },
-  },
   methods: {
     signOut() {
       this.$store.dispatch('signIn', undefined)

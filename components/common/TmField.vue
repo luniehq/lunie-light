@@ -225,7 +225,6 @@ textarea.tm-field {
 .tm-select select option {
   background: var(--app-bg);
   color: var(--txt);
-  font-family: var(--sans);
 }
 
 .tm-select .tm-field-select-addon {
