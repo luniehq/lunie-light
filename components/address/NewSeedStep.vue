@@ -29,11 +29,7 @@
       </TmFormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn
-        :disabled="isCreatingSeed"
-        value="Create"
-        @click="isCreatingSeed = true"
-      />
+      <TmBtn :disabled="disabled" value="Create" />
     </div>
   </TmFormStruct>
 </template>
@@ -48,11 +44,14 @@ export default {
       type: String,
       default: () => undefined,
     },
+    disabled: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data: () => ({
     fieldSeed: undefined,
     fieldWarning: false,
-    isCreatingSeed: false,
   }),
   mounted() {
     this.getSeed()
@@ -70,9 +69,6 @@ export default {
       this.$v.$touch()
       if (this.$v.$error) return
       this.$emit('submit', this.fieldSeed)
-      this.$on('submit', () => {
-        this.isCreatingSeed = false
-      })
     },
   },
   validations: () => ({

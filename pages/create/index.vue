@@ -7,7 +7,12 @@
       :password="password"
       @submit="setPassword"
     />
-    <NewSeedStep v-if="step === 'Backup'" :seed="seed" @submit="setSeed" />
+    <NewSeedStep
+      v-if="step === 'Backup'"
+      :disabled="loading"
+      :seed="seed"
+      @submit="setSeed"
+    />
     <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
@@ -27,6 +32,7 @@ export default {
     password: undefined,
     seed: undefined,
     errorMessage: undefined,
+    loading: false,
   }),
   methods: {
     onBack() {
