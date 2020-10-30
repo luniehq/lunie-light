@@ -1,6 +1,8 @@
 export const state = () => ({
   session: undefined,
   currrentModalOpen: false,
+  notificationIdCounter: 0,
+  notifications: [],
 })
 
 export const mutations = {
@@ -9,6 +11,18 @@ export const mutations = {
   },
   setCurrrentModalOpen(state, modal) {
     state.currrentModalOpen = modal
+  },
+  addNotification(state, { type, message }) {
+    state.notifications.push({
+      id: state.notificationIdCounter++,
+      type,
+      message,
+    })
+  },
+  removeNotification(state, id) {
+    state.notifications = state.notifications.filter(
+      (notification) => notification.id !== id
+    )
   },
 }
 

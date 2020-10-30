@@ -1,5 +1,13 @@
 <template>
   <div class="page">
+    <Bar
+      v-for="notification in notifications"
+      :key="notification.id"
+      :bar-type="notification.type"
+      @close="$store.commit('removeNotification', notification.id)"
+    >
+      {{ notification.message }}
+    </Bar>
     <CardSignInRequired v-if="signInRequired && !session" />
 
     <template v-if="loading && loaderPath" class="loading-image-container">
@@ -59,7 +67,7 @@ export default {
     loading: true,
   }),
   computed: {
-    ...mapState(['session']),
+    ...mapState(['session', 'notifications']),
     ...mapState(['data', ['validators']]),
   },
   mounted() {

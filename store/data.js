@@ -54,10 +54,17 @@ export const actions = {
     await Promise.all(calls)
   },
   async getBlock({ commit }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const block = await api.getBlockV2()
-    commit('setBlock', block)
+    try {
+      const _store = {}
+      const api = new DataSource(this.$axios, network, _store, null, null)
+      const block = await api.getBlockV2()
+      commit('setBlock', block)
+    } catch (err) {
+      commit('addNotification', {
+        type: 'error',
+        message: 'Getting block failed:' + err.message,
+      })
+    }
   },
   async getBalances({ commit }, { address, currency }) {
     const _store = {}
