@@ -4,7 +4,6 @@
     :class="
       customClass || {
         secondary: type === `secondary`,
-        small: size === `small`,
         active: type === `active`,
         sidebar: type === `sidebar`,
         centered: centered,
@@ -82,7 +81,7 @@ export default {
 <style scoped>
 .button {
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,31 +127,18 @@ export default {
   border-color: var(--primary);
 }
 
-.button.secondary:hover {
+.button.secondary:disabled {
+  color: var(--dim);
+  background: transparent;
+  border-color: var(--dim);
+}
+
+.button.secondary:hover:not(:disabled) {
   border-color: var(--primary-hover);
-}
-
-.button.small {
-  padding: 6px 10px;
-  font-size: 12px;
-  min-width: 0;
-  color: var(--menu-text);
-  border-color: var(--bc);
-  background-color: transparent;
-}
-
-.button.small:hover {
-  background: var(--app-nav-hover);
 }
 
 .button.centered {
   margin: 0 auto;
-}
-
-@media screen and (max-width: 1023px) {
-  .button.secondary.small {
-    padding: 10px 10px;
-  }
 }
 
 .addon-max {
@@ -176,17 +162,5 @@ export default {
 .addon-max:hover {
   background: transparent;
   border-color: var(--primary-hover);
-}
-
-.addon-max:disabled {
-  opacity: 0.5;
-  background: var(--primary);
-  border-color: var(--primary);
-  cursor: default;
-}
-
-.addon-max:disabled:hover {
-  background: var(--primary);
-  border-color: var(--primary);
 }
 </style>
