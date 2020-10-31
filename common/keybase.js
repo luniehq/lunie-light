@@ -8,7 +8,7 @@ import { keyBy, uniqBy } from 'lodash'
         updated
     }
  }
- This allows to reuse the images also cross networks
+ This allows us to reuse the images across networks
 */
 
 const UPDATE_THROTTLE_PERIOD = 1000 * 60 * 60 * 24 * 2 // 2 days
@@ -88,10 +88,10 @@ export async function updateValidatorImages(currentValidators) {
   const updateableKeybaseHashes = getUpdateableKeybaseEntries(currentValidators)
   const updatedKeybaseHashes = await queryKeybaseImages(updateableKeybaseHashes)
   saveKeybaseImages(updatedKeybaseHashes)
-  return enrichtValidatorsWithPicture(currentValidators)
+  return enrichedValidatorsWithPicture(currentValidators)
 }
 
-export function enrichtValidatorsWithPicture(validators) {
+export function enrichedValidatorsWithPicture(validators) {
   const validatorImageRecords = loadKeybaseImages()
   return validators.map((validator) => {
     const imageRecord = validatorImageRecords[validator.identity]
