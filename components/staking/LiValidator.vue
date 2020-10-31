@@ -6,15 +6,7 @@
   >
     <td>{{ index + 1 }}</td>
     <td class="hide-xs">
-      <div class="status-container">
-        <span
-          :class="validator.status | toLower"
-          class="validator-status"
-          :title="validator.statusDetailed"
-        >
-          {{ validator.status }}
-        </span>
-      </div>
+      <Status :label="validator.status" />
     </td>
     <td class="data-table__row__info">
       <Avatar
@@ -77,7 +69,6 @@ export default {
   name: `li-validator`,
   components: {},
   filters: {
-    toLower: (text) => text.toLowerCase(),
     bigFigureOrShortDecimals,
     bigFigureOrPercent,
   },
@@ -170,25 +161,7 @@ export default {
   border-radius: 50%;
   height: 2.5rem;
   width: 2.5rem;
-}
-
-.validator-status {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 600;
-  border: 2px solid;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
-
-.validator-status.inactive {
-  color: var(--warning);
-  border-color: var(--warning);
-}
-
-.validator-status.active {
-  color: var(--success);
-  border-color: var(--success);
+  min-width: 2.5rem;
 }
 
 .stake-amount {

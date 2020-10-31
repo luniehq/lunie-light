@@ -22,14 +22,6 @@
               @click.native="defaultSelectorsController(`activeOnly`)"
             />
           </div>
-          <div class="show-mobile-sorting">
-            <i
-              :class="{ active: showMobileSorting }"
-              class="filter-toggle material-icons notranslate"
-              @click="toggleMobileSorting"
-              >filter_list</i
-            >
-          </div>
         </div>
       </div>
 
@@ -101,7 +93,7 @@ export default {
 <style scoped>
 .filterContainer {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
@@ -123,12 +115,12 @@ export default {
 }
 
 .filterContainer .btn-radio:last-child {
-  border-radius: 0 0.5em 0.5em 0;
+  border-radius: 0 1rem 1rem 0;
   margin-left: -1px;
 }
 
 .filterContainer .btn-radio:first-child {
-  border-radius: 0.5em 0 0 0.5em;
+  border-radius: 1rem 0 0 1rem;
   margin-right: -1px;
 }
 
@@ -142,19 +134,7 @@ export default {
 }
 
 .filterOptions {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+  padding-left: 0.5rem;
 }
 
 .filter-toggle {
@@ -163,20 +143,11 @@ export default {
 
 @media screen and (max-width: 768px) {
   .filterContainer {
-    margin: 0.5rem 2rem 0 2rem;
+    margin: 0 0.75rem 1rem;
   }
 
   .filterContainer .btn-radio {
-    min-width: 75px;
-  }
-
-  .filterContainer input {
-    max-width: 100%;
-  }
-
-  .filterOptions {
-    padding: 1.5em 0.5em 0.5em;
-    width: 100%;
+    min-width: 64px;
   }
 
   .show-mobile-sorting {

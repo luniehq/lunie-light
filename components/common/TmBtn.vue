@@ -1,15 +1,11 @@
 <template>
   <button
     class="button"
-    :class="
-      customClass || {
-        secondary: type === `secondary`,
-        active: type === `active`,
-        sidebar: type === `sidebar`,
-        centered: centered,
-        loading: loading,
-      }
-    "
+    :class="{
+      secondary: type === `secondary`,
+      active: type === `active`,
+      loading: loading,
+    }"
     :disabled="disabled"
   >
     <svg
@@ -44,7 +40,7 @@
 
 <script>
 export default {
-  name: `TmBtn`,
+  name: `Button`,
   props: {
     value: {
       type: String,
@@ -54,25 +50,13 @@ export default {
       type: String,
       default: null,
     },
-    size: {
-      type: String,
-      default: null,
-    },
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    centered: {
       type: Boolean,
       default: false,
     },
     disabled: {
       type: Boolean,
       default: false,
-    },
-    customClass: {
-      type: String,
-      default: '',
     },
   },
 }
@@ -82,21 +66,18 @@ export default {
 .button {
   font-size: 14px;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: auto;
   min-width: 100px;
+  padding: 8px 10px;
   color: var(--menu-bright);
   margin: 0;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   cursor: pointer;
   background: var(--primary);
   border: 2px solid var(--primary);
   transition: all 0.5s ease;
   white-space: nowrap;
   outline: none;
-  height: 36px;
 }
 
 .button:hover {
@@ -135,10 +116,6 @@ export default {
 
 .button.secondary:hover:not(:disabled) {
   border-color: var(--primary-hover);
-}
-
-.button.centered {
-  margin: 0 auto;
 }
 
 .addon-max {
