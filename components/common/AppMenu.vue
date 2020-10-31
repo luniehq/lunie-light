@@ -102,15 +102,6 @@ export default {
   cursor: pointer;
 }
 
-.button.small.sidebar {
-  display: flex;
-  width: -webkit-fill-available;
-}
-
-.button.small {
-  border-color: var(--menu-border);
-}
-
 .app-menu .app-menu-item--link:hover {
   color: var(--menu-link-hover);
 }
