@@ -80,7 +80,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
   margin: 0.5rem 1rem;
   font-weight: 400;
   font-size: 14px;
@@ -89,22 +89,13 @@ export default {
   transition: all 0.5s ease;
 }
 
-.session-link {
-  margin: 2.5rem 1rem 1rem;
-}
-
-.show-on-ledger {
-  display: inline-block;
-  padding-top: 1rem;
-}
-
-.show-on-ledger:hover {
-  cursor: pointer;
-}
-
 .button.small.sidebar {
   display: flex;
   width: -webkit-fill-available;
+}
+
+.material-icons {
+  width: 1rem;
 }
 
 .button.small {
