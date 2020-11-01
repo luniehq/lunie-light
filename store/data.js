@@ -26,21 +26,6 @@ export const mutations = {
       ]
     })
   ),
-  setBalances(state, balances) {
-    state.balances = balances
-  },
-  setDelegations(state, delegations) {
-    state.delegations = delegations
-  },
-  setUndelegations(state, undelegations) {
-    state.undelegations = undelegations
-  },
-  setRewards(state, rewards) {
-    state.rewards = rewards
-  },
-  setAccountInfo(state, accountInfo) {
-    state.accountInfo = accountInfo
-  },
   setTransactions(state, { transactions, pageNumber }) {
     if (pageNumber > 0) {
       state.transactions = state.transactions.concat(transactions)
