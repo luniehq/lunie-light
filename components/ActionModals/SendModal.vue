@@ -355,6 +355,7 @@ export default {
           this.amounts.filter(({ amount }) => Number(amount) >= SMALLEST)
             .length === this.amounts.length,
         maxDecimals: (x) => {
+          if (this.amounts.find(({ amount }) => !amount)) return false
           return this.amounts.find(
             ({ amount }) => Number(amount).toString().split('.').length > 1
           )
