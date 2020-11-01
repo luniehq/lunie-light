@@ -1,7 +1,5 @@
 <template>
   <div class="page">
-    <CardSignInRequired v-if="signInRequired && !session" />
-
     <template v-if="initialLoad && loaderPath" class="loading-image-container">
       <img
         class="loading-image"
@@ -49,10 +47,6 @@ export default {
     emptySubtitle: {
       type: String,
       default: ``,
-    },
-    signInRequired: {
-      type: Boolean,
-      default: false,
     },
   },
   computed: {

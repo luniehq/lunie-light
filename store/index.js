@@ -13,7 +13,7 @@ export const mutations = {
 }
 
 export const actions = {
-  nuxtServerInit({ commit }, { app: { $cookies } }) {
+  nuxtClientInit({ commit }, { app: { $cookies } }) {
     const session = $cookies.get('lunie-session')
     commit('setSession', session)
   },
