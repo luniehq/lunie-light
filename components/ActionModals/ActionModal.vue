@@ -254,7 +254,11 @@ export default {
     subTotal() {
       if (this.transactionType === 'UnstakeTx') return 0
       return Array.isArray(this.amount)
-        ? this.amount.find(({ denom }) => denom === this.getDenom).amount
+        ? this.amount.reduce((amountAggregator, amount) => {
+            if (amount.denom === this.getDenom)
+              amountAggregator += Number(amount.amount)
+            return amountAggregator
+          }, 0)
         : this.amount
     },
     invoiceTotal() {
