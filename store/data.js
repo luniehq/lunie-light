@@ -41,7 +41,7 @@ export const mutations = {
   setAccountInfo(state, accountInfo) {
     state.accountInfo = accountInfo
   },
-  setTransactions(state, transactions, pageNumber) {
+  setTransactions(state, { transactions, pageNumber }) {
     if (pageNumber > 0) {
       state.transactions = state.transactions.concat(transactions)
     } else {
@@ -127,7 +127,7 @@ export const actions = {
     const _store = {}
     const api = new DataSource(this.$axios, network, _store, null, null)
     const transactions = await api.getTransactionsV2(address, pageNumber)
-    commit('setTransactions', transactions, pageNumber)
+    commit('setTransactions', { transactions, pageNumber })
   },
   async getValidatorSelfStake(store, validator) {
     const _store = {}
