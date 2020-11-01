@@ -12,6 +12,8 @@ export const state = () => ({
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
+  api: undefined,
+  initialLoad: false,
 })
 
 export const mutations = {
@@ -38,6 +40,12 @@ export const mutations = {
 }
 
 export const actions = {
+  async init({ commit, dispatch, state }) {
+    const _store = {}
+    commit('setApi', new DataSource(this.$axios, network, _store, null, null))
+    await dispatch('refresh')
+    commit('setInitialLoad', true)
+  },
   async refresh({ dispatch }) {
     const session = this.$cookies.get('lunie-session')
     const currency = this.$cookies.get('currency') || 'USD'
@@ -53,15 +61,11 @@ export const actions = {
     }
     await Promise.all(calls)
   },
-  async getBlock({ commit }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
-    const block = await api.getBlockV2()
+  async getBlock({ commit, state: { api } }) {
+    const block = await api.getBlockHeader()
     commit('setBlock', block)
   },
-  async getBalances({ commit }, { address, currency }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getBalances({ commit, state: { api } }, { address, currency }) {
     const balances = await api.getBalancesV2FromAddress(
       address,
       currency,
@@ -69,52 +73,39 @@ export const actions = {
     )
     commit('setBalances', balances)
   },
-  async getValidators({ commit }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getValidators({ commit, state: { api } }) {
     const validators = await api.getAllValidators()
     commit('setValidators', validators)
   },
-  async getDelegations({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getDelegations({ commit, state: { api } }, address) {
     const delegations = await api.getDelegationsForDelegatorAddress(address)
     commit('setDelegations', delegations)
   },
-  async getUndelegations({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getUndelegations({ commit, state: { api } }, address) {
     const undelegations = await api.getUndelegationsForDelegatorAddress(address)
     commit('setUndelegations', undelegations)
   },
-  async getRewards({ commit }, { address, currency }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getRewards({ commit, state: { api } }, { address, currency }) {
     const rewards = await api.getRewards(address, currency, network)
     commit('setRewards', rewards)
   },
-  async getAccountInfo({ commit }, address) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getAccountInfo({ commit, state: { api } }, address) {
     const { accountNumber, sequence } = await api.getAccountInfo(address)
     commit('setAccountInfo', { accountNumber, sequence })
     return { accountNumber, sequence }
   },
-  async getTransactions({ commit }, { address, pageNumber = 0 }) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getTransactions(
+    { commit, state: { api } },
+    { address, pageNumber = 0 }
+  ) {
     const transactions = await api.getTransactionsV2(address, pageNumber)
     commit('setTransactions', { transactions, pageNumber })
   },
-  async getValidatorSelfStake(store, validator) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getValidatorSelfStake({ state: { api } }, validator) {
     const selfStake = await api.getSelfStake(validator)
     return selfStake
   },
-  async getValidatorDelegations(store, validator) {
-    const _store = {}
-    const api = new DataSource(this.$axios, network, _store, null, null)
+  async getValidatorDelegations({ state: { api } }, validator) {
     const delegations = await api.getValidatorDelegations(validator)
     return delegations
   },

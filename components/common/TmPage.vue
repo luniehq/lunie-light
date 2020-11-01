@@ -2,7 +2,7 @@
   <div class="page">
     <CardSignInRequired v-if="signInRequired && !session" />
 
-    <template v-if="loading && loaderPath" class="loading-image-container">
+    <template v-if="initialLoad && loaderPath" class="loading-image-container">
       <img
         class="loading-image"
         :src="loaderPath"
@@ -11,14 +11,14 @@
     </template>
 
     <TmDataMsg
-      v-else-if="!loading && empty"
+      v-else-if="!initialLoad && empty"
       icon="error"
       icon-color="var(--dark-grey-blue)"
       :title="emptyTitle"
       :subtitle="emptySubtitle"
     />
 
-    <template v-else-if="!loading && !empty">
+    <template v-else-if="!initialLoad && !empty">
       <slot></slot>
     </template>
     <slot v-if="session" name="signInRequired"></slot>
@@ -55,27 +55,9 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-    loading: true,
-  }),
   computed: {
     ...mapState(['session']),
-    ...mapState(['data', ['validators']]),
-  },
-  mounted() {
-    const session = this.$cookies.get('lunie-session')
-    this.$store.dispatch('signIn', session)
-
-    this.loadData()
-  },
-  methods: {
-    async loadData() {
-      // somehow on mounted the mapState is not yet called
-      if (this.$store.state.data.validators.length === 0) {
-        await this.$store.dispatch('data/refresh')
-      }
-      this.loading = false
-    },
+    ...mapState(['data', ['initialLoad']]),
   },
 }
 </script>

@@ -114,7 +114,6 @@ export default {
 .header-item-logo {
   height: 2rem;
   width: 6.5rem;
-  fill: var(--menu-bright);
 }
 
 .header-menu-section {
@@ -132,7 +131,7 @@ export default {
 }
 
 .app-header .header-item {
-  padding: 1.75rem;
+  padding: 1.5rem 1.75rem;
   font-size: 0;
 }
 

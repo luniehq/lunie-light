@@ -537,11 +537,17 @@ class CosmosV0API {
   }
 
   async getBlockV2(blockHeight) {
-    if (blockHeight && this.store.height === blockHeight) {
-      return this.store.block
+    return await this.getBlockByHeightV2(blockHeight)
+  }
+
+  async getBlockHeader(blockHeight) {
+    let block
+    if (blockHeight) {
+      block = await this.getRetry(`blocks/${blockHeight}`)
     } else {
-      return await this.getBlockByHeightV2(blockHeight)
+      block = await this.getRetry(`blocks/latest`)
     }
+    return this.reducers.blockHeaderReducer(this.network.id, block)
   }
 
   async getBalancesV2FromAddress(address, fiatCurrency, network) {
