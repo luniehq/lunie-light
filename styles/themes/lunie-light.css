@@ -25,7 +25,7 @@
   --bright: hsl(227, 40%, 33%);
   --txt: hsl(227, 40%, 28%);
   --dim: hsl(227, 40%, 23%);
-  --bc: var(--app-fg);
-  --bc-dim: var(--app-bg);
+  --bc: hsl(0, 0%, 95%);
+  --bc-dim: hsl(0, 0%, 97%);
   --input-bc: var(--menu-border);
 }
