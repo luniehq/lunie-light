@@ -151,6 +151,12 @@ input.tm-field {
   opacity: 0;
 }
 
+h1 {
+  font-size: 24px;
+  color: var(--bright);
+  font-weight: 500;
+}
+
 @keyframes fade {
   0% {
     opacity: 0.4;
