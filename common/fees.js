@@ -17,6 +17,7 @@ export default {
                 ({ viewDenom }) => viewDenom === fee.fee.denom
               ).chainToViewConversionFactor || 1e-6
             )
+            .times(fee.gasEstimate)
             .toNumber(),
         },
       }
