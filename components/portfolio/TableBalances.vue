@@ -55,7 +55,6 @@ export default {
   display: flex;
   align-items: center;
   width: 20%;
-  font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   position: relative;
   white-space: nowrap;
 }

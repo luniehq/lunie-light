@@ -130,7 +130,7 @@ export default {
 @media screen and (min-width: 1254px) {
   .stake-button,
   .unstake-button,
-  .send-button {
+  .button.send-button {
     display: none;
   }
 }

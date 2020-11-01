@@ -101,9 +101,6 @@ export default {
     unstakingBalance() {
       return !!this.balance.endTime
     },
-    unstakeClaimable() {
-      return new Date(this.balance.endTime) <= new Date()
-    },
     image() {
       const fileName = this.balance.denom.toLowerCase() + '.png'
       return require(`../../assets/images/currencies/${fileName}`)
@@ -151,18 +148,8 @@ export default {
   color: var(--success);
 }
 
-.fiat {
-  color: var(--dim);
-  padding-left: 1rem;
-}
-
 .total {
   color: var(--bright);
-}
-
-.total-and-fiat {
-  display: flex;
-  flex-direction: row;
 }
 
 .token-icon {
@@ -250,7 +237,7 @@ export default {
 }
 
 @media screen and (min-width: 1254px) {
-  .send-button {
+  .button.send-button {
     display: none;
   }
 }
