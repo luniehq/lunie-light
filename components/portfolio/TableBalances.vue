@@ -5,7 +5,7 @@
     <div class="table-cell title available">Available</div>
     <div class="table-cell title actions"></div>
 
-    <div v-if="balances.length" class="loading-row"></div>
+    <div v-if="!balances.length" class="loading-row"></div>
     <table v-else class="data-table">
       <tbody>
         <BalanceRow
