@@ -109,10 +109,19 @@
         type="custom"
         class="tm-form-msg--desc max-message"
       />
+      <div v-if="index === amounts.length - 1" class="manage-amounts-container">
+        <div
+          v-if="amounts.length > 1"
+          class="add-amount-button"
+          @click="removeAmount(index)"
+        >
+          <i class="material-icons notranslate">remove_circle</i>
+        </div>
+        <div class="add-amount-button" @click="addAmount(index)">
+          <i class="material-icons notranslate">add_circle</i>
+        </div>
+      </div>
     </TmFormGroup>
-    <div class="add-amount-button" @click="addAmount()">
-      <i class="material-icons notranslate">add_circle</i>
-    </div>
     <TmFormGroup
       id="memo"
       :error="$v.memo.$error && $v.memo.$invalid"
@@ -314,6 +323,12 @@ export default {
         }
       )
     },
+    removeAmount(index) {
+      this.amounts.pop({
+        amount: 0,
+        denom: this.denoms[this.amounts.length - 1],
+      })
+    },
     addAmount(index) {
       this.amounts.push({
         amount: 0,
@@ -390,10 +405,17 @@ export default {
   font-style: italic;
 }
 
+.manage-amounts-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
 .add-amount-button {
   text-align: right;
   color: var(--primary);
   cursor: pointer;
+  margin-left: 1rem;
 }
 
 .add-amount-button i {
