@@ -17,6 +17,7 @@
   --menu-link: var(--link);
   --menu-link-hover: var(--link-hover);
   --menu-border: hsl(229, 20%, 26%);
+  --menu-text-dim: hsl(0, 0%, 65%);
 
   /* dark-theme typography */
   --bright: hsl(227, 40%, 33%);

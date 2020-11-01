@@ -80,26 +80,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
   margin: 0.5rem 1rem;
   font-weight: 400;
   font-size: 14px;
   color: var(--menu-text);
   border-radius: 0.25rem;
   transition: all 0.5s ease;
-}
-
-.session-link {
-  margin: 2.5rem 1rem 1rem;
-}
-
-.show-on-ledger {
-  display: inline-block;
-  padding-top: 1rem;
-}
-
-.show-on-ledger:hover {
-  cursor: pointer;
 }
 
 .app-menu .app-menu-item--link:hover {
