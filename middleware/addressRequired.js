@@ -1,5 +1,5 @@
 export default function ({ store, redirect }) {
-	if (!store.state.session) {
-		return redirect('/address')
-	}
+  if (!store.state.session) {
+    return redirect('/address')
+  }
 }
