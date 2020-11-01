@@ -168,7 +168,7 @@ export default {
     address: ``,
     amounts: [
       {
-        amount: 0,
+        amount: null,
         denom: ``,
       },
     ],
