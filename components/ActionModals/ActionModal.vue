@@ -34,7 +34,7 @@
       </div>
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
-          :amounts="Number(subTotal)"
+          :amounts="subTotal"
           :fee="networkFees.find(({ fee }) => fee.denom === getDenom).fee"
           :transaction-denom="getDenom"
         />

@@ -1,9 +1,11 @@
 <template>
   <div>
     <ul class="table-invoice">
-      <li v-if="subTotal > 0" class="sub-total">
-        <span>Subtotal</span>
-        <span> {{ subTotal | fullDecimals }} {{ transactionDenom }} </span>
+      <li v-for="amount in amounts" :key="amount.denom" class="sub-total">
+        <span v-if="amount.amount > 0">Subtotal</span>
+        <span v-if="amount.amount > 0">
+          {{ amount.amount | fullDecimals }} {{ amount.denom }}
+        </span>
       </li>
       <li class="fees">
         <span>Network Fee</span>
@@ -50,15 +52,13 @@ export default {
     info: `Estimated network fees based on simulation.`,
   }),
   computed: {
-    subTotal() {
-      return this.amounts
-    },
     total() {
       // if there is a feeDenom, it means that subTotal and estimatedFee are different currencies and
       // cannot be therefore added up together
-      return this.fee.denom !== this.transactionDenom
-        ? this.subTotal
-        : Number(this.fee.amount) + this.subTotal
+      // return this.fee.denom !== this.transactionDenom
+      //   ? this.subTotal
+      //   : Number(this.fee.amount) + this.subTotal
+      return 0
     },
   },
 }
