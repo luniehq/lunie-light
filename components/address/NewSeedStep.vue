@@ -29,7 +29,7 @@
       </TmFormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn :disabled="disabled" value="Create" />
+      <TmBtn :loading="loading" value="Create" />
     </div>
   </TmFormStruct>
 </template>
@@ -44,7 +44,7 @@ export default {
       type: String,
       default: () => undefined,
     },
-    disabled: {
+    loading: {
       type: Boolean,
       default: () => false,
     },

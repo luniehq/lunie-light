@@ -9,7 +9,7 @@
     />
     <NewSeedStep
       v-if="step === 'Backup'"
-      :disabled="loading"
+      :loading="loading"
       :seed="seed"
       @submit="setSeed"
     />
