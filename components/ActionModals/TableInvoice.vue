@@ -60,15 +60,15 @@ export default {
     totals: [],
   }),
   mounted() {
-    this.totals = this.amounts
-    this.subTotals = this.amounts.map((amount) => {
+    this.totals = this.amounts.map((amount) => {
       if (amount.denom === this.fee.denom) {
         amount.amount = BigNumber(amount.amount)
-          .minus(BigNumber(this.fee.amount))
+          .plus(BigNumber(this.fee.amount))
           .toNumber()
       }
       return amount
     })
+    this.subTotals = this.amounts
   },
 }
 </script>
