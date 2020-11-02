@@ -1,7 +1,7 @@
 <template>
   <TmPage :sign-in-required="true">
     <template slot="signInRequired">
-      <div v-if="!transactions.length" class="loading-bar">Loading...</div>
+      <div v-if="!transactions.length" class="loading-row">Loading...</div>
       <template v-else>
         <EventList
           :events="transactions"
@@ -57,5 +57,16 @@ export default {
   color: var(--txt);
   text-align: center;
   padding: 2rem;
+}
+
+.loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-fg);
+  height: 10rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 1rem 1rem 2rem;
+  animation: fade 2s infinite;
 }
 </style>
