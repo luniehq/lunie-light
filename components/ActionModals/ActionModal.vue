@@ -34,7 +34,7 @@
       </div>
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
-          :amount="Number(subTotal)"
+          :amounts="Number(subTotal)"
           :fee="networkFees.find(({ fee }) => fee.denom === getDenom).fee"
           :transaction-denom="getDenom"
         />
@@ -188,9 +188,9 @@ export default {
       type: String,
       default: `Transaction failed`,
     },
-    amount: {
-      type: [String, Number, Array],
-      default: `0`,
+    amounts: {
+      type: Array,
+      default: () => [],
     },
     rewards: {
       type: Array,
@@ -252,14 +252,7 @@ export default {
       return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
-      if (this.transactionType === 'UnstakeTx') return 0
-      return Array.isArray(this.amount)
-        ? this.amount.reduce((amountAggregator, amount) => {
-            if (amount.denom === this.getDenom)
-              amountAggregator += Number(amount.amount)
-            return amountAggregator
-          }, 0)
-        : this.amount
+      return this.transactionType === 'UnstakeTx' ? 0 : this.amounts
     },
     invoiceTotal() {
       return (

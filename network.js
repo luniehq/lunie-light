@@ -44,35 +44,35 @@ export default {
         gasEstimate: 350000,
         fee: {
           denom: 'LUNA',
-          amount: 0.15,
+          amount: 0.00000015,
         },
       },
       {
         gasEstimate: 350000,
         fee: {
           denom: 'KRT',
-          amount: 1.8,
+          amount: 0.0000018,
         },
       },
       {
         gasEstimate: 350000,
         fee: {
           denom: 'MNT',
-          amount: 4.5,
+          amount: 0.0000045,
         },
       },
       {
         gasEstimate: 350000,
         fee: {
           denom: 'SDT',
-          amount: 0.1,
+          amount: 0.0000001,
         },
       },
       {
         gasEstimate: 350000,
         fee: {
           denom: 'UST',
-          amount: 0.15,
+          amount: 0.00000015,
         },
       },
     ],

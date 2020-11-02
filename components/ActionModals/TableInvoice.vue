@@ -33,8 +33,8 @@ export default {
     fullDecimals,
   },
   props: {
-    amount: {
-      type: Number,
+    amounts: {
+      type: Array,
       required: true,
     },
     fee: {
@@ -51,7 +51,7 @@ export default {
   }),
   computed: {
     subTotal() {
-      return this.amount
+      return this.amounts
     },
     total() {
       // if there is a feeDenom, it means that subTotal and estimatedFee are different currencies and

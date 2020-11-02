@@ -3,7 +3,7 @@
     id="send-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amount="amounts"
+    :amounts="amounts"
     title="Send"
     submission-error-prefix="Sending tokens failed"
     :transaction-type="lunieMessageTypes.SEND"
@@ -200,11 +200,7 @@ export default {
     notifyMessage() {
       return {
         title: `Successful Send`,
-        body: `Successfully sent ${this.amounts.map(
-          ({ amount }) => amount
-        )} ${this.amounts.map(({ denom }) => denom)}s to ${formatAddress(
-          this.address
-        )}`,
+        body: `Successfully sent transaction to ${formatAddress(this.address)}`,
       }
     },
     getDenoms() {
