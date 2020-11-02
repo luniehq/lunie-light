@@ -55,6 +55,7 @@ export const actions = {
       calls.push(
         dispatch('getBalances', { address, currency }),
         dispatch('getRewards', { address, currency }),
+        dispatch('getTransactions', { address }),
         dispatch('getDelegations', address),
         dispatch('getUndelegations', address)
       )
@@ -94,9 +95,7 @@ export const actions = {
     commit('setAccountInfo', { accountNumber, sequence })
     return { accountNumber, sequence }
   },
-  async getTransactions(
-    { commit, state: { api } },
-    { address, pageNumber = 0 }
+  async getTransactions({ commit, state: { api } }, { address, pageNumber = 0 }
   ) {
     const transactions = await api.getTransactionsV2(address, pageNumber)
     commit('setTransactions', { transactions, pageNumber })

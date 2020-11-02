@@ -1,49 +1,73 @@
 <template>
   <div class="tx-container">
-    <div class="tx" @click="toggleDetail">
-      <component
-        :is="messageTypeComponent"
-        :transaction="transaction"
-        :validators="validators"
-        :session-address="address"
-        :show="show"
-      />
-      <div class="toggle" :class="{ up: show }">
-        <i class="material-icons notranslate toggle-icon"
-          >keyboard_arrow_down</i
-        >
+    <div class="transaction" @click="toggleDetail">
+      <h3>{{ txLabel }}</h3>
+      <div class="right">
+        <div class="amounts">
+          <template v-if="transaction.details.amounts">
+            <p
+              v-for="(amount, index) in transaction.details.amounts"
+              :key="index + amount"
+            >
+              {{ amount.amount }}
+              {{ amount.denom }}
+            </p>
+          </template>
+          <template v-if="transaction.details.amount">
+            <p>
+              {{ transaction.details.amount.amount }}
+              {{ transaction.details.amount.denom }}
+            </p>
+          </template>
+        </div>
+        <div class="toggle" :class="{ up: show }">
+          <i class="material-icons notranslate toggle-icon"
+            >keyboard_arrow_down</i
+          >
+        </div>
       </div>
     </div>
     <transition name="slide-out">
-      <div v-if="show" class="tx-details">
-        <TransactionMetadata v-if="showMetaData" :transaction="transaction" />
+      <div v-if="show" class="meta">
+        <p v-if="transaction.hash">Tx Hash: {{ transaction.hash }}</p>
+        <p v-if="transaction.height">Block Height: {{ transaction.height }}</p>
+        <p v-if="transaction.timestamp">Date: {{ timestamp }}</p>
+        <p v-if="transaction.memo">Memo: {{ transaction.memo }}</p>
+        <p
+          v-for="(amount, index) in transaction.fees"
+          :key="index + transaction.timestamp"
+        >
+          Fee: {{ amount.amount }}&nbsp;{{ amount.denom }}
+        </p>
+        <div class="addresses">
+          <p
+            v-for="(address, index) in transaction.details.to"
+            :key="index + transaction.hash"
+          >
+            To: {{ getValidatorName(address) }}
+          </p>
+          <p
+            v-for="(address, index) in transaction.details.from"
+            :key="index + transaction.height"
+          >
+            From: {{ getValidatorName(address) }}
+          </p>
+        </div>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import messageViews from './message-views'
-import { lunieMessageTypes } from '~/common/lunie-message-types'
+import { mapState } from 'vuex'
+import dayjs from 'dayjs'
 
 export default {
-  name: `tx-item`,
-  // need to be explicit here as the dynamic import doesn't seem to work for autoimporting the components by nuxt
-  components: {
-    ...messageViews,
-  },
+  name: `transaction`,
   props: {
     transaction: {
       type: Object,
       required: true,
-    },
-    validators: {
-      type: Object,
-      required: true,
-    },
-    address: {
-      type: String,
-      default: null,
     },
     showMetaData: {
       type: Boolean,
@@ -54,20 +78,14 @@ export default {
     show: false,
   }),
   computed: {
-    messageTypeComponent() {
-      switch (this.transaction.type) {
-        case lunieMessageTypes.SEND:
-          return `send-tx-details`
-        case lunieMessageTypes.STAKE:
-          return `stake-tx-details`
-        case lunieMessageTypes.UNSTAKE:
-          return `unstake-tx-details`
-        case lunieMessageTypes.UNKNOWN:
-          return `unknown-tx-details`
-        /* istanbul ignore next */
-        default:
-          return ``
-      }
+    ...mapState('data', ['validators']),
+    txLabel() {
+      const typeWithoutSuffix = this.transaction.type.replace('Tx', '')
+      const typeWithSpaces = typeWithoutSuffix.replace(/([A-Z])/g, ' $1').trim()
+      return typeWithSpaces
+    },
+    timestamp() {
+      return dayjs(this.transaction.timestamp)
     },
   },
   methods: {
@@ -76,155 +94,112 @@ export default {
         this.show = !this.show
       }
     },
+    getValidatorName(address) {
+      if (address.includes('valoper')) {
+        const validator = this.validators.find(
+          (validator) => validator.operatorAddress === address
+        )
+        return validator.name + ' (' + address + ')'
+      }
+      return address
+    },
   },
 }
 </script>
 
 <style>
-.tx {
+.transaction {
   position: relative;
   font-size: 14px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: var(--app-fg);
-  border: 1px solid var(--bc-dim);
   border-radius: 0.25rem;
   z-index: 90;
+  padding: 1.5rem 1rem;
+  margin: 1rem 1rem 0 1rem;
   cursor: pointer;
 }
 
-.tx a {
-  display: inline-block;
+.transaction:hover {
+  background: var(--app-fg-hover);
 }
 
-.validator-image {
-  margin: 0.25rem;
-  border-radius: 100%;
-  height: 1.25rem;
-  width: 1.25rem;
-  vertical-align: middle;
-  transition: transform 0.2s ease-in-out;
+.right {
+  display: flex;
+  flex-direction: row;
 }
 
-.validator-image svg {
-  border-radius: 100%;
-}
-
-.tx a:hover .validator-image {
-  transform: scale(1.1);
-}
-
-.tx h3 {
-  font-size: 14px;
-  font-weight: 400;
+h3 {
+  font-size: 16px;
+  font-weight: 500;
   color: var(--bright);
 }
 
-.tx .amount {
-  white-space: nowrap;
-}
-
-.tx-container {
-  margin: 0 1rem 0.5rem;
-}
-
-.tx-details {
+.meta {
   background: var(--app-fg);
   border-left: 1px solid var(--bc-dim);
   border-right: 1px solid var(--bc-dim);
   border-bottom: 1px solid var(--bc-dim);
   border-bottom-left-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
-  margin: 0 1rem 0.5rem 1rem;
+  margin: 0 auto 0.5rem auto;
   font-size: 14px;
   padding: 1rem;
   position: relative;
   z-index: 0;
+  width: 95%;
+  word-break: break-all;
 }
 
-.tx__content {
-  display: flex;
-  align-items: center;
-  position: relative;
-  z-index: 90;
-  width: 100%;
-}
-
-.tx__content__left {
-  padding: 1rem 1rem 1rem 0;
-}
-
-.tx__content__right {
-  padding-right: 2rem;
-  text-align: right;
-  flex: auto;
-}
-
-.slide-out-enter-active,
-.slide-out-leave-active {
-  transition: all 0.2s;
-}
-
-.slide-out-enter,
-.slide-out-leave-to {
-  opacity: 0;
-  transform: translateY(-100px);
-  margin-bottom: -100px;
+.addresses {
+  padding-top: 1rem;
 }
 
 .toggle {
-  position: relative;
-  right: 1rem;
   z-index: 91;
   cursor: pointer;
-  padding: 0.1rem;
   border-radius: 50%;
   background: var(--bc-dim);
-  height: 20px;
-  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
   transition: transform 0.2s ease;
+  margin-left: 1rem;
+}
+
+.toggle i {
+  font-size: 16px;
+  position: relative;
+  top: 1px;
 }
 
 .toggle.up {
   transform: rotate(180deg);
 }
 
-.toggle-icon {
-  font-size: 16px;
+.slide-out-enter-active,
+.slide-out-leave-active {
+  transition: all 0.1s;
 }
 
-.tx .copied {
-  position: absolute;
-  top: -0.5rem;
-  right: 0;
+.slide-out-enter,
+.slide-out-leave-to {
+  opacity: 0;
+  transform: translateY(-120px);
+  margin-bottom: -120px;
 }
 
 @media screen and (max-width: 767px) {
-  .tx__icon {
-    display: none;
-  }
-
-  .tx__content__left {
-    padding-left: 1rem;
-  }
-
   .toggle {
     display: none;
   }
 
-  .amount {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-  }
-
-  .tx-details {
-    margin: 0 0.25rem 0.25rem;
-  }
-
-  .validator-image {
-    height: 1rem;
-    width: 1rem;
+  .meta {
+    width: 90%;
   }
 }
 </style>

@@ -3,9 +3,11 @@
     <template v-for="group in groupedEvents">
       <div :key="group[0].section">
         <h3>{{ group[0].section }}</h3>
-        <template v-for="item in group">
-          <slot v-bind="item.event" />
-        </template>
+        <TransactionItem
+          v-for="event in events"
+          :key="event.key"
+          :transaction="event"
+        />
       </div>
     </template>
   </div>
@@ -109,9 +111,9 @@ export default {
 </script>
 <style scoped>
 h3 {
-  margin: 2rem 0 0.5rem 1.5rem;
-  color: var(--dim);
-  font-size: var(--sm);
-  font-weight: 500;
+  margin: 2rem 0 0.5rem 2rem;
+  color: var(--txt);
+  font-size: 12px;
+  font-weight: 400;
 }
 </style>
