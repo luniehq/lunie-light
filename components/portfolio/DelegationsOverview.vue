@@ -16,7 +16,11 @@
           show-on-mobile="expectedReturns"
         />
       </div>
-      <TmDataMsg v-if="delegations.length === 0" icon="sentiment_dissatisfied">
+      <div v-if="!delegations" class="loading-row">Loading...</div>
+      <TmDataMsg
+        v-else-if="delegations.length === 0"
+        icon="sentiment_dissatisfied"
+      >
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
@@ -84,10 +88,10 @@ export default {
     },
   },
   mounted() {
-    const persistedPreferredCurrency = this.session.preferredCurrency
-    if (persistedPreferredCurrency) {
-      this.preferredCurrency = persistedPreferredCurrency
-    }
+    // const persistedPreferredCurrency = this.session.preferredCurrency
+    // if (persistedPreferredCurrency) {
+    //   this.preferredCurrency = persistedPreferredCurrency
+    // }
   },
   methods: {
     goToValidators() {
@@ -100,10 +104,21 @@ export default {
 }
 </script>
 <style scoped>
+.loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-fg);
+  height: 10rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 1rem 1rem 2rem;
+  animation: fade 2s infinite;
+}
+
 h1 {
   font-size: 24px;
   color: var(--bright);
-  font-weight: 400;
+  font-weight: 500;
   padding-bottom: 2rem;
 }
 
