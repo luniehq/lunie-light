@@ -351,14 +351,14 @@ export default {
           this.amounts.filter(({ amount }) => Number(amount) >= SMALLEST)
             .length === this.amounts.length,
         maxDecimals: (x) => {
-          if (this.amounts.find(({ amount }) => !amount)) return false
-          return this.amounts.find(
+          const amountsWithDecimals = this.amounts.filter(
             ({ amount }) => Number(amount).toString().split('.').length > 1
           )
-            ? this.amounts.filter(
+          return amountsWithDecimals.length > 0
+            ? amountsWithDecimals.filter(
                 ({ amount }) =>
                   Number(amount).toString().split('.')[1].length <= 6
-              ).length === this.amounts.length
+              ).length === amountsWithDecimals.length
             : true
         },
       },
