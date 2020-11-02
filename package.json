@@ -42,7 +42,7 @@
     "@nuxtjs/eslint-config": "^4.0.0",
     "@nuxtjs/eslint-module": "^3.0.0",
     "@nuxtjs/stylelint-module": "^4.0.0",
-    "@wdio/cli": "^6.5.2",
+    "@wdio/cli": "^6.7.1",
     "@wdio/local-runner": "^6.7.1",
     "@wdio/mocha-framework": "^6.5.0",
     "@wdio/spec-reporter": "^6.7.0",
