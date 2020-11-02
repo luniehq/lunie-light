@@ -18,13 +18,13 @@ export const actions = {
     commit('setSession', session)
   },
   signIn({ commit, dispatch }, session) {
-    // to be able to render the page for the user in SSR we need to set the address as a cookie
+    commit('resetUserData')
     if (!session) {
       this.$cookies.remove('lunie-session')
     } else {
       this.$cookies.set('lunie-session', session)
     }
-    dispatch('data/refresh')
     commit('setSession', session)
+    dispatch('data/refresh')
   },
 }
