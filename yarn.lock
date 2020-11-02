@@ -1670,17 +1670,10 @@
   dependencies:
     "@types/puppeteer" "*"
 
-"@types/puppeteer@*":
+"@types/puppeteer@*", "@types/puppeteer@^3.0.1":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-3.0.4.tgz#ef42b97bc50cc8813a8055f93a092b60ccd27251"
   integrity sha512-wmkBg1Wn/wwgGDl9IrxwY9nJ/Hfv/YHFAqy6Dch9KYDSjA0lif8PA7j3Ls1iOfKWEMRIbHkpWIPoiw4r9Vq+3A==
-  dependencies:
-    "@types/node" "*"
-
-"@types/puppeteer@^3.0.1":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-3.0.2.tgz#20085220593b560c7332b6d46aecaf81ae263540"
-  integrity sha512-JRuHPSbHZBadOxxFwpyZPeRlpPTTeMbQneMdpFd8LXdyNfFSiX950CGewdm69g/ipzEAXAmMyFF1WOWJOL/nKw==
   dependencies:
     "@types/node" "*"
 
@@ -1958,13 +1951,6 @@
   integrity sha512-i6Ss+0S4G6Q/3xsvF8uV1WR4mvrVnO0hKmXSfH5ewPHd67MroqemyURmNNoX0R/euHwG3U7tBZQyaK2JGPI0GA==
   dependencies:
     "@wdio/utils" "6.6.0"
-
-"@wdio/repl@6.7.0":
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-6.7.0.tgz#1688910a4a1b70befaa69a272c67ddd414380cfe"
-  integrity sha512-Dykvn/cKbn6HN+jXqeQmokpXv+WH80KruFN3pj9q4QHfPpmRpp724XG5FCjPSTA5lrGZ27BHi5nhMyXm8SCk8g==
-  dependencies:
-    "@wdio/utils" "6.7.0"
 
 "@wdio/repl@6.7.1":
   version "6.7.1"
@@ -11241,19 +11227,6 @@ webdriver@6.6.2:
     got "^11.0.2"
     lodash.merge "^4.6.1"
 
-webdriver@6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-6.7.0.tgz#6b2f76119379a948b3cc81baeb8cd271355debd5"
-  integrity sha512-2eq2ZEx91o+AFETK+sjY/oUzzjGVKal9X7GCMGivEF5GRtmAQBfkSQkqAG3Z4t78JZyhhClemoAChCNGV2naOQ==
-  dependencies:
-    "@types/lodash.merge" "^4.6.6"
-    "@wdio/config" "6.6.3"
-    "@wdio/logger" "6.6.0"
-    "@wdio/protocols" "6.6.0"
-    "@wdio/utils" "6.7.0"
-    got "^11.0.2"
-    lodash.merge "^4.6.1"
-
 webdriver@6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-6.7.1.tgz#5333eb4094c719b6ad16246012b30c51dfed5f30"
@@ -11295,7 +11268,7 @@ webdriverio@6.6.2:
     serialize-error "^7.0.0"
     webdriver "6.6.2"
 
-webdriverio@6.7.1:
+webdriverio@6.7.1, webdriverio@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-6.7.1.tgz#f4710a4dc43d31c690651c2422f50e156b15009c"
   integrity sha512-fhFeu7UwCzXpDE0a0iD6cTqe3nZYFReux3NnzUEC4WegcAw4oAMxJrVLXVl2kv8b/5LQ+h7uBBMv0Fsze8Jjvg==
@@ -11327,36 +11300,6 @@ webdriverio@6.7.1:
     rgb2hex "^0.2.0"
     serialize-error "^7.0.0"
     webdriver "6.7.1"
-
-webdriverio@^6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-6.7.0.tgz#41001775608b83a93172d43b3f61dc298daf8869"
-  integrity sha512-B9jmtHEa8Di/db/MxIIf7kD5uopbgtUdKzgYRIt4Wq6edAOfq9rwV7Jz8yJfD7dJdAOD4GQGXEkFLmxEqPqMZQ==
-  dependencies:
-    "@types/atob" "^2.1.2"
-    "@types/fs-extra" "^9.0.2"
-    "@types/puppeteer" "^3.0.1"
-    "@wdio/config" "6.6.3"
-    "@wdio/logger" "6.6.0"
-    "@wdio/repl" "6.7.0"
-    "@wdio/utils" "6.7.0"
-    archiver "^5.0.0"
-    atob "^2.1.2"
-    css-value "^0.0.1"
-    devtools "6.7.0"
-    fs-extra "^9.0.1"
-    get-port "^5.1.1"
-    grapheme-splitter "^1.0.2"
-    lodash.clonedeep "^4.5.0"
-    lodash.isobject "^3.0.2"
-    lodash.isplainobject "^4.0.6"
-    lodash.zip "^4.2.0"
-    minimatch "^3.0.4"
-    puppeteer-core "^5.1.0"
-    resq "^1.9.1"
-    rgb2hex "^0.2.0"
-    serialize-error "^7.0.0"
-    webdriver "6.7.0"
 
 webpack-bundle-analyzer@^3.9.0:
   version "3.9.0"
