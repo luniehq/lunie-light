@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="data-table">
+    <table v-if="showingValidators.length" class="data-table">
       <thead>
         <PanelSort
           :sort="sort"
@@ -25,7 +25,8 @@
         />
       </tbody>
     </table>
-    <div v-if="!showingValidators.length" class="no-results">No results</div>
+    <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
+    <div v-else class="no-results">No results</div>
   </div>
 </template>
 
@@ -53,7 +54,7 @@ export default {
       type: String,
       default: () => 'returns',
     },
-    showMobileSorting: {
+    searchTerm: {
       type: Boolean,
       default: () => false,
     },
@@ -144,8 +145,19 @@ export default {
 <style scoped>
 .no-results {
   text-align: center;
-  margin: 3em;
+  margin: 3rem;
   color: var(--dim);
+}
+
+.loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-fg);
+  height: 10rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 1rem 1rem 2rem;
+  animation: fade 2s infinite;
 }
 
 @media screen and (max-width: 550px) {

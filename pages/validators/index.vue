@@ -29,7 +29,7 @@
         :validators="filteredValidators"
         :delegations="delegations"
         :rewards="rewards"
-        :show-mobile-sorting="showMobileSorting"
+        :search-term="searchTerm ? true : false"
         show-on-mobile="expectedReturns"
       />
     </template>
