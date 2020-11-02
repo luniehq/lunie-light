@@ -1,11 +1,11 @@
 export default {
   id: 'terra-testnet',
-  chainId: 'columbus-4', // TODO get from chain?
+  chainId: 'tequila-0004', // TODO get from chain?
   name: 'Terra Testnet',
   description:
     'Terra aims to make its stablecoins available to every developer on every blockchain.',
   website: 'https://terra.money',
-  apiURL: 'https://lcd-terra.p2p.org',
+  apiURL: 'https://tequila-lcd.terra.dev',
   stakingDenom: 'LUNA',
   coinLookup: [
     {
