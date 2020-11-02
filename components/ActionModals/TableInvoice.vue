@@ -2,13 +2,13 @@
   <div>
     <ul class="table-invoice">
       <li
-        v-for="amount in amounts"
-        :key="`${amount.denom}-subtotal`"
+        v-for="subTotal in subTotals"
+        :key="`${subTotal.denom}-subtotal`"
         class="sub-total"
       >
-        <span v-if="amount.amount > 0">Subtotal</span>
-        <span v-if="amount.amount > 0">
-          {{ amount.amount | fullDecimals }} {{ amount.denom }}
+        <span v-if="subTotal.amount > 0">Subtotal</span>
+        <span v-if="subTotal.amount > 0">
+          {{ subTotal.amount | fullDecimals }} {{ subTotal.denom }}
         </span>
       </li>
       <li class="fees">
@@ -56,26 +56,19 @@ export default {
   },
   data: () => ({
     info: `Estimated network fees based on simulation.`,
-    isTotalsCalculated: false,
+    subTotals: [],
+    totals: [],
   }),
-  computed: {
-    totals() {
-      return this.isTotalsCalculated
-        ? this.amounts
-        : this.amounts.map((amount) => {
-            if (amount.denom === this.fee.denom) {
-              amount.amount = BigNumber(amount.amount)
-                .plus(BigNumber(this.fee.amount))
-                .toNumber()
-            }
-            return amount
-          }) && this.setTotalsCalculated(true)
-    },
-  },
-  methods: {
-    setTotalsCalculated(boolean) {
-      this.isTotalsCalculated = boolean
-    },
+  mounted() {
+    this.totals = this.amounts
+    this.subTotals = this.amounts.map((amount) => {
+      if (amount.denom === this.fee.denom) {
+        amount.amount = BigNumber(amount.amount)
+          .minus(BigNumber(this.fee.amount))
+          .toNumber()
+      }
+      return amount
+    })
   },
 }
 </script>
