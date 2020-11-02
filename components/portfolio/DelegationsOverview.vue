@@ -86,12 +86,6 @@ export default {
       }, {})
     },
   },
-  mounted() {
-    // const persistedPreferredCurrency = this.session.preferredCurrency
-    // if (persistedPreferredCurrency) {
-    //   this.preferredCurrency = persistedPreferredCurrency
-    // }
-  },
   methods: {
     goToValidators() {
       this.$router.push('/validators')
