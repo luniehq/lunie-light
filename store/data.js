@@ -95,7 +95,9 @@ export const actions = {
     commit('setAccountInfo', { accountNumber, sequence })
     return { accountNumber, sequence }
   },
-  async getTransactions({ commit, state: { api } }, { address, pageNumber = 0 }
+  async getTransactions(
+    { commit, state: { api } },
+    { address, pageNumber = 0 }
   ) {
     const transactions = await api.getTransactionsV2(address, pageNumber)
     commit('setTransactions', { transactions, pageNumber })
