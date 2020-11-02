@@ -81,7 +81,6 @@ export default {
 
 <style scoped>
 .button {
-  font-family: var(--sans);
   font-size: 14px;
   font-weight: 400;
   display: flex;
@@ -157,7 +156,6 @@ export default {
 }
 
 .addon-max {
-  font-family: var(--sans);
   font-size: 14px;
   font-weight: 400;
   padding: 4px 16px;

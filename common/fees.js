@@ -1,7 +1,7 @@
-import fees from '~/fees'
+import network from '~/network'
 
 export default {
-  ...fees,
+  ...network.fees,
   getFees(transactionType) {
     return this[transactionType] || this.default
   },

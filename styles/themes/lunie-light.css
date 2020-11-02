@@ -10,6 +10,8 @@
   --app-fg: hsl(229, 100%, 98%);
   --app-fg-hover: hsl(229, 100%, 96%);
   --app-bg: #fff;
+  --primary-faded: hsla(7, 88%, 70%, 0.2);
+  --primary-faded-hover: hsla(7, 88%, 70%, 0.3);
 
   /* menu styles */
   --app-nav: hsl(229, 20%, 11%);
@@ -17,6 +19,7 @@
   --menu-link: var(--link);
   --menu-link-hover: var(--link-hover);
   --menu-border: hsl(229, 20%, 26%);
+  --menu-text-dim: hsl(0, 0%, 65%);
 
   /* dark-theme typography */
   --bright: hsl(227, 40%, 33%);

@@ -183,7 +183,6 @@ select {
 select option {
   background: var(--app-bg);
   color: var(--txt);
-  font-family: var(--sans);
 }
 
 .currency-selector {
@@ -194,7 +193,6 @@ select option {
   padding: 0.5rem 1rem;
   border: 2px solid var(--primary);
   border-radius: 0.5rem;
-  font-family: var(--sans);
   font-size: 14px;
   font-weight: 400;
   color: var(--bright);

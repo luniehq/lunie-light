@@ -1,15 +1,15 @@
 <template>
-  <nuxt-link :to="route" class="tm-li-session">
-    <div class="tm-li-session-icon">
+  <nuxt-link :to="route" class="li-session" :class="{ card }">
+    <div v-if="icon" class="icon">
       <i class="material-icons notranslate circle">{{ icon }}</i>
     </div>
-    <div class="tm-li-session-text">
-      <div class="tm-li-session-title">
-        <span>{{ title }}</span>
+    <div class="row">
+      <div class="text">
+        <div class="title">{{ title }}</div>
       </div>
-    </div>
-    <div class="tm-li-session-icon arrow">
-      <i class="material-icons notranslate">arrow_forward</i>
+      <div class="icon arrow">
+        <i class="material-icons notranslate">arrow_forward</i>
+      </div>
     </div>
   </nuxt-link>
 </template>
@@ -22,10 +22,6 @@ export default {
       type: String,
       default: ``,
     },
-    img: {
-      type: String,
-      default: ``,
-    },
     title: {
       type: String,
       required: true,
@@ -34,12 +30,16 @@ export default {
       type: String,
       default: ``,
     },
+    card: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
 
 <style scoped>
-.tm-li-session {
+.li-session {
   display: flex;
   padding: 1.5rem;
   margin: 0.5rem 0;
@@ -48,9 +48,22 @@ export default {
   transition: background-color 0.2s ease;
 }
 
-.tm-li-session:hover {
-  cursor: pointer;
-  background: var(--app-fg-hover);
+.li-session.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 12rem;
+  padding: 2rem;
+  margin: 0;
+}
+
+.li-session.card:first-child {
+  background-color: var(--primary-faded);
+}
+
+.li-session.card:first-child:hover {
+  background-color: var(--primary-faded-hover);
 }
 
 .arrow {
@@ -59,38 +72,51 @@ export default {
   position: relative;
 }
 
-.tm-li-session:hover .arrow {
+.card .arrow {
+  align-self: flex-end;
+}
+
+.li-session:hover {
+  cursor: pointer;
+  background: var(--app-fg-hover);
+}
+
+.li-session:hover .arrow {
   left: -2px;
 }
 
-.tm-li-session-icon {
+.icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.tm-li-session-icon i {
+.icon i {
   font-size: 1.25rem;
 }
 
-.tm-li-session-icon img {
-  max-height: 100%;
-  max-width: 52px;
-  display: block;
-}
-
-.tm-li-session-title {
-  color: var(--bright);
+.title {
+  color: var(--dim);
   font-size: var(--h4);
   font-weight: 400;
 }
 
-.tm-li-session-text {
+.text {
   flex: 1;
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
   padding: 0 1rem;
+}
+
+.card .text {
+  padding: 0 2rem 0 0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .material-icons.circle {

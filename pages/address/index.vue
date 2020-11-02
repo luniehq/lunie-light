@@ -1,7 +1,5 @@
 <template>
-  <TmPage>
-    <CardSignInRequired />
-  </TmPage>
+  <CardSignInRequired />
 </template>
 
 <script>

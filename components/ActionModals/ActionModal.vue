@@ -26,8 +26,7 @@
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
         <p class="form-message notice">
-          You're using Lunie in explore mode. Sign in or create an account to
-          get started.
+          You're in explore mode. Sign in or create an account to get started.
         </p>
       </div>
       <div v-else-if="step === defaultStep" class="action-modal-form">
@@ -654,20 +653,6 @@ export default {
 
   .tm-form-group__field {
     width: 100%;
-  }
-}
-
-/* iPhone X and Xs Max */
-@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  .action-modal-footer {
-    padding-bottom: 1.8rem;
-  }
-}
-
-/* iPhone XR */
-@media only screen and (min-device-width: 414px) and (min-device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
-  .action-modal-footer {
-    padding-bottom: 1.8rem;
   }
 }
 </style>

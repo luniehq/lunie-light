@@ -6,10 +6,18 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'Lunie 3',
+    htmlAttrs: {
+      lang: 'en',
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content:
+          'Lunie 3 is a simple forkable wallet and staking interface for proof-of-stake blockchains',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -20,10 +28,11 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '@/plugins/copy.client.js',
+    '@/plugins/focus.client.js',
     '@/plugins/infinite-scroll.client.js',
+    '@/plugins/init.client.js',
     '@/plugins/tooltip.client.js',
     '@/plugins/validate.client.js',
-    '@/plugins/focus.client.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -52,13 +61,4 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
-
-  router: {
-    extendRoutes(routes, resolve) {
-      routes.push({
-        path: '/',
-        redirect: `/validators`,
-      })
-    },
-  },
 }

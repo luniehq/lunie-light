@@ -39,5 +39,6 @@ export default {
       this.$store.dispatch('data/refreshSession')
     },
   },
+  middleware: 'addressRequired',
 }
 </script>
