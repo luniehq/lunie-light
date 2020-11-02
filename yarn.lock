@@ -1942,10 +1942,10 @@
     easy-table "^1.1.1"
     pretty-ms "^7.0.0"
 
-"@wdio/sync@^6.7.0":
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.7.0.tgz#cd9b0a2068f26136463758f8b22e96b47ca764f9"
-  integrity sha512-uVIidrYeCyEKGZfj1T7rvbDXh749Jm2g1UG0qQXby6PZaPJRsnCANUwNt8jegHZ17dKQJtJ8MuMgQa1b8NffwQ==
+"@wdio/sync@^6.7.1":
+  version "6.7.1"
+  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.7.1.tgz#8bf90b7a8e1595f9e83ba238dcda2fe505cb4625"
+  integrity sha512-e5r/ZgQWp0A8JQPchfHMPaeLSyZuQncRYMwdp0+Fb2SVOvQk1RJdi16YK6kenxE6f/8htUevObR7ObaKdfTNJA==
   dependencies:
     "@types/puppeteer" "^3.0.1"
     "@wdio/logger" "6.6.0"
@@ -2478,11 +2478,6 @@ autoprefixer@^9.6.1, autoprefixer@^9.8.6:
     num2fraction "^1.2.2"
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
-
-autosize@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/autosize/-/autosize-4.0.2.tgz#073cfd07c8bf45da4b9fd153437f5bafbba1e4c9"
-  integrity sha512-jnSyH2d+qdfPGpWlcuhGiHmqBJ6g3X+8T+iRwFrHPLVcdoGJE/x6Qicm6aDHfTsbgZKxyV8UU/YB2p4cjKDRRA==
 
 available-typed-arrays@^1.0.0, available-typed-arrays@^1.0.2:
   version "1.0.2"
@@ -6820,11 +6815,6 @@ lodash.get@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
-lodash.groupby@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.groupby/-/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"
-  integrity sha1-Cwih3PaDl8OXhVwyOXg4Mt90A9E=
-
 lodash.isobject@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
@@ -6849,11 +6839,6 @@ lodash.merge@^4.6.1:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
-
-lodash.orderby@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.orderby/-/lodash.orderby-4.6.0.tgz#e697f04ce5d78522f54d9338b32b81a3393e4eb3"
-  integrity sha1-5pfwTOXXhSL1TZM4syuBozk+TrM=
 
 lodash.pickby@^4.6.0:
   version "4.6.0"
