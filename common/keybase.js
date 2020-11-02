@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { keyBy, uniqBy } from 'lodash'
 
 /*
@@ -19,7 +20,7 @@ async function queryKeybaseImages(keybaseImageRecords) {
     keybaseImageRecords.map(async ({ keybaseHash }) => {
       const query = `https://keybase.io/_/api/1.0/user/user_search.json?q=${keybaseHash}&num_wanted=1`
       try {
-        const result = await fetch(query).then((res) => res.json())
+        const result = await axios.get(query).then((res) => res.json())
         if (result.list.length > 0) {
           return {
             keybaseHash,
