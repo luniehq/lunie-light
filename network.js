@@ -51,14 +51,14 @@ export default {
         gasEstimate: 350000,
         fee: {
           denom: 'KRT',
-          amount: 0.0000018,
+          amount: 0.000018,
         },
       },
       {
         gasEstimate: 350000,
         fee: {
           denom: 'MNT',
-          amount: 0.0000045,
+          amount: 0.000045,
         },
       },
       {
