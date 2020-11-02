@@ -1,6 +1,7 @@
 const BigNumber = require('bignumber.js')
 const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
 const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
+const { updateValidatorImages } = require('./keybase')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
@@ -22,8 +23,9 @@ class CosmosV0API {
     })
 
     this.setReducers()
-    this.loadValidors().then((validators) => {
-      this.store.validators = keyBy(validators, 'operatorAddress')
+    this.loadValidators().then(async (validators) => {
+      const validatorsWithImages = await updateValidatorImages(validators)
+      this.store.validators = keyBy(validatorsWithImages, 'operatorAddress')
       this.resolveReady()
     })
   }
@@ -143,8 +145,8 @@ class CosmosV0API {
     } catch (error) {
       // in some rare cases the validator has no self delegation so this query fails
 
-      if (error.extensions.response.status === 500) {
-        const parsedErrorLog = JSON.parse(error.extensions.response.body.error)
+      if (error.response.status === 500) {
+        const parsedErrorLog = JSON.parse(error.response.body.error)
         if (parsedErrorLog.message.startsWith('no delegation for this')) {
           return 0
         }
@@ -213,7 +215,7 @@ class CosmosV0API {
     return Object.values(this.store.validators)
   }
 
-  async loadValidors(height) {
+  async loadValidators(height) {
     const [
       validators,
       annualProvision,
