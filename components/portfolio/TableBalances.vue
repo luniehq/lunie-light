@@ -5,7 +5,7 @@
     <div class="table-cell title available">Available</div>
     <div class="table-cell title actions"></div>
 
-    <div v-if="!balances.length" class="loading-row"></div>
+    <div v-if="!balances.length" class="loading-row">Loading...</div>
     <table v-else class="data-table">
       <tbody>
         <BalanceRow
@@ -82,6 +82,9 @@ export default {
 }
 
 .loading-row {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
   background: var(--app-fg);
   height: 4.75rem;
   border-radius: 0.25rem;

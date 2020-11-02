@@ -16,7 +16,9 @@
           show-on-mobile="expectedReturns"
         />
       </div>
-      <div v-if="!delegations" class="loading-row">Loading...</div>
+      <div v-if="!delegations.length && !balances.length" class="loading-row">
+        Loading...
+      </div>
       <TmDataMsg
         v-else-if="delegations.length === 0"
         icon="sentiment_dissatisfied"
@@ -24,10 +26,7 @@
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
-          <a @click="goToValidators()">validator list</a>&nbsp;to
-          {{
-            stakedBalance.total > 0 ? `start earning rewards` : `get staking`
-          }}!
+          <a @click="goToValidators()">validator list</a>&nbsp;to start staking.
         </div>
       </TmDataMsg>
       <!-- <UnstakeModal ref="UnstakeModal" /> -->
