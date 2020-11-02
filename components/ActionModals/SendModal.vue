@@ -109,6 +109,12 @@
         type="custom"
         class="tm-form-msg--desc max-message"
       />
+      <TmFormMsg
+        v-else-if="duplicateDenoms()"
+        msg="It is only possible to send one amount per currency"
+        type="custom"
+        class="tm-form-msg--desc max-message"
+      />
       <div v-if="index === amounts.length - 1" class="manage-amounts-container">
         <div
           v-if="amounts.length > 1"
@@ -258,6 +264,12 @@ export default {
           parseFloat(this.amounts[index].amount) === this.getMaxAmount(index)
         )
       }
+    },
+    duplicateDenoms() {
+      const denomsArray = this.amounts.map(({ denom }) => denom)
+      return denomsArray.some((item, index) => {
+        return denomsArray.indexOf(item) !== index
+      })
     },
     getMaxAmount(index) {
       const selectedBalance = this.getSelectedBalance(this.denoms[index])
