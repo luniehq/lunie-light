@@ -37,7 +37,7 @@ export const mutations = {
     state.transactionsLoaded = true
     state.moreTransactionsAvailable = transactions.length > 0
   },
-  resetUserData(state) {
+  resetSessionData(state) {
     state.balances = []
     state.rewards = []
     state.delegations = []
@@ -46,8 +46,7 @@ export const mutations = {
     state.transactions = []
     state.transactionsLoaded = undefined
     state.moreTransactionsAvailable = true
-    console.log(state)
-  }
+  },
 }
 
 export const actions = {

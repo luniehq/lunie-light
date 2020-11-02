@@ -18,7 +18,7 @@ export const actions = {
     commit('setSession', session)
   },
   signIn({ commit, dispatch }, session) {
-    commit('resetUserData')
+    commit('resetSessionData')
     if (!session) {
       this.$cookies.remove('lunie-session')
     } else {
