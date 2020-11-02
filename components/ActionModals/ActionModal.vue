@@ -268,12 +268,9 @@ export default {
       return true
     },
     getDenom() {
-      return this.selectedDenom || 
-        (
-          Array.isArray(this.selectedDenom)
-          ? this.selectedDenom[0]
-          : network.stakingDenom
-        )
+      return Array.isArray(this.selectedDenom)
+        ? this.selectedDenom[0]
+        : this.selectedDenom || network.stakingDenom
     },
     selectedBalance() {
       const defaultBalance = {

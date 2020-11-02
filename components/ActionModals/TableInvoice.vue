@@ -1,7 +1,11 @@
 <template>
   <div>
     <ul class="table-invoice">
-      <li v-for="amount in amounts" :key="amount.denom" class="sub-total">
+      <li
+        v-for="amount in amounts"
+        :key="`${amount.denom}-subtotal`"
+        class="sub-total"
+      >
         <span v-if="amount.amount > 0">Subtotal</span>
         <span v-if="amount.amount > 0">
           {{ amount.amount | fullDecimals }} {{ amount.denom }}
@@ -14,19 +18,21 @@
           {{ fee.denom !== transactionDenom ? fee.denom : transactionDenom }}
         </span>
       </li>
-      <li class="total-row">
+      <li
+        v-for="total in totals"
+        :key="`${total.denom}-total`"
+        class="total-row"
+      >
         <span>Total</span>
         <div class="total-column">
-          <p>{{ total | fullDecimals }} {{ transactionDenom }}</p>
-          <p v-if="fee.denom !== transactionDenom">
-            {{ fee.amount | fullDecimals }} {{ fee.denom }}
-          </p>
+          <p>{{ total.amount | fullDecimals }} {{ total.denom }}</p>
         </div>
       </li>
     </ul>
   </div>
 </template>
 <script>
+import BigNumber from 'bignumber.js'
 import { fullDecimals } from '../../common/numbers'
 
 export default {
@@ -50,15 +56,25 @@ export default {
   },
   data: () => ({
     info: `Estimated network fees based on simulation.`,
+    isTotalsCalculated: false,
   }),
   computed: {
-    total() {
-      // if there is a feeDenom, it means that subTotal and estimatedFee are different currencies and
-      // cannot be therefore added up together
-      // return this.fee.denom !== this.transactionDenom
-      //   ? this.subTotal
-      //   : Number(this.fee.amount) + this.subTotal
-      return 0
+    totals() {
+      return this.isTotalsCalculated
+        ? this.amounts
+        : this.amounts.map((amount) => {
+            if (amount.denom === this.fee.denom) {
+              amount.amount = BigNumber(amount.amount)
+                .plus(BigNumber(this.fee.amount))
+                .toNumber()
+            }
+            return amount
+          }) && this.setTotalsCalculated(true)
+    },
+  },
+  methods: {
+    setTotalsCalculated(boolean) {
+      this.isTotalsCalculated = boolean
     },
   },
 }
