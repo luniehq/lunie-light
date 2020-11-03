@@ -1,5 +1,7 @@
+import { keyBy } from 'lodash'
 import network from '~/common/network'
 import DataSource from '~/common/cosmosV2-source'
+import { updateValidatorImages } from '~/common/keybase'
 
 export const state = () => ({
   block: undefined,
@@ -113,7 +115,7 @@ export const actions = {
       )
     }
   },
-  async getValidators({ commit, state: { api } }) {
+  async getValidators({ commit, dispatch, state: { api } }) {
     try {
       const validators = await api.getAllValidators()
       commit('setValidators', validators)
@@ -127,6 +129,25 @@ export const actions = {
         { root: true }
       )
     }
+    dispatch('updateValidatorImages')
+  },
+  async updateValidatorImages({ state, commit }) {
+    // get validator images for chunk
+    await updateValidatorImages(state.validators, (updatedChunk) => {
+      const updatedValidatorsDict = keyBy(updatedChunk, 'operatorAddress')
+      // update the validators from our chunk
+      const updatedValidators = state.validators.map((validator) => {
+        const updatedValidator =
+          updatedValidatorsDict[validator.operatorAddress]
+        if (updatedValidator) {
+          return updatedValidator
+        }
+        return validator
+      })
+
+      // update the store and UI
+      commit('setValidators', updatedValidators)
+    })
   },
   async getDelegations({ commit, state: { api } }, address) {
     try {
