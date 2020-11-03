@@ -66,7 +66,7 @@
           :title="`Select the token you wish to use`"
           :options="getDenoms"
           class="tm-field-token-selector"
-          placeholder="Select the token"
+          :placeholder="getDenoms[0].value"
           type="select"
         />
         <TmBtn
@@ -344,7 +344,7 @@ export default {
       })
     },
   },
-  validations(index) {
+  validations() {
     return {
       address: {
         required,
