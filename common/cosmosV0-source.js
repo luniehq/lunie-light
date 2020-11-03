@@ -1,7 +1,6 @@
 const BigNumber = require('bignumber.js')
 const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
 const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
-const { updateValidatorImages } = require('./keybase')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
@@ -23,9 +22,8 @@ class CosmosV0API {
     })
 
     this.setReducers()
-    this.loadValidators().then(async (validators) => {
-      const validatorsWithImages = await updateValidatorImages(validators)
-      this.store.validators = keyBy(validatorsWithImages, 'operatorAddress')
+    this.loadValidators().then((validators) => {
+      this.store.validators = validators
       this.resolveReady()
     })
   }
