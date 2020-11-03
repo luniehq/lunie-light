@@ -62,9 +62,12 @@ export default {
   mounted() {
     this.totals = this.amounts.map((amount) => {
       if (amount.denom === this.fee.denom) {
-        amount.amount = BigNumber(amount.amount)
-          .plus(BigNumber(this.fee.amount))
-          .toNumber()
+        return {
+          ...amount,
+          amount: BigNumber(amount.amount)
+            .plus(BigNumber(this.fee.amount))
+            .toNumber(),
+        }
       }
       return amount
     })
