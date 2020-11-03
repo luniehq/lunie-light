@@ -157,6 +157,22 @@ h1 {
   font-weight: 500;
 }
 
+.loading-row {
+  display: flex;
+  align-items: center;
+  background: var(--app-fg);
+  border-radius: 0.25rem;
+  animation: fade 2s infinite;
+  justify-content: center;
+  height: auto;
+  width: auto;
+  padding: 2rem;
+}
+
+.loading-row.left {
+  justify-content: left;
+}
+
 @keyframes fade {
   0% {
     opacity: 0.6;

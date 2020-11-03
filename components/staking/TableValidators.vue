@@ -149,17 +149,6 @@ export default {
   color: var(--dim);
 }
 
-.loading-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--app-fg);
-  height: 10rem;
-  border-radius: 0.25rem;
-  margin: 0.5rem 1rem 1rem 2rem;
-  animation: fade 2s infinite;
-}
-
 @media screen and (max-width: 550px) {
   .data-table td {
     overflow: hidden;
