@@ -1975,10 +1975,10 @@
     easy-table "^1.1.1"
     pretty-ms "^7.0.0"
 
-"@wdio/sync@^6.7.1":
-  version "6.7.1"
-  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.7.1.tgz#8bf90b7a8e1595f9e83ba238dcda2fe505cb4625"
-  integrity sha512-e5r/ZgQWp0A8JQPchfHMPaeLSyZuQncRYMwdp0+Fb2SVOvQk1RJdi16YK6kenxE6f/8htUevObR7ObaKdfTNJA==
+"@wdio/sync@^6.7.2":
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/@wdio/sync/-/sync-6.7.2.tgz#44ccbd3651d1cfd91fa6b329a16f0359ff490207"
+  integrity sha512-IPQidufkdFvmcFCYbm9o13dKfegPn/a+EBD3w7df6zDvyzr6MVrtYDilAlULDZJ/wm+wKhR27wcipCMPs0fjrw==
   dependencies:
     "@types/puppeteer" "^3.0.1"
     "@wdio/logger" "6.6.0"
