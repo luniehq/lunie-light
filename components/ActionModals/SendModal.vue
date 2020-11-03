@@ -260,11 +260,6 @@ export default {
         )
       }
     },
-    token() {
-      if (!this.selectedTokens) return ``
-
-      return this.selectedTokens
-    },
     bech32Validation(address) {
       try {
         decodeB32(address)
