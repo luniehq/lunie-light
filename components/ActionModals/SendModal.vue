@@ -309,6 +309,17 @@ export default {
         }
       )
     },
+    getDenoms(index) {
+      return this.denoms
+        ? this.denoms
+            .filter(
+              (denom) =>
+                denom === this.selectedTokens[index] ||
+                !Object.values(this.selectedTokens).includes(denom)
+            )
+            .map((denom) => (denom = { key: denom, value: denom }))
+        : []
+    },
     removeAmount(index) {
       this.amounts.pop({
         amount: 0,
