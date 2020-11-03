@@ -1,7 +1,18 @@
 <template>
   <div class="tx-container">
-    <div class="transaction" @click="toggleDetail">
-      <h3>{{ txLabel }}</h3>
+    <a
+      class="transaction"
+      :href="network.apiURL + '/txs/' + transaction.hash"
+      target="_blank"
+    >
+      <div class="left">
+        <img
+          class="icon"
+          :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
+          alt="simple icon line drawing"
+        />
+        <h3>{{ txLabel }}</h3>
+      </div>
       <div class="right">
         <div class="amounts">
           <template v-if="transaction.details.amounts">
@@ -20,13 +31,11 @@
             </p>
           </template>
         </div>
-        <div class="toggle" :class="{ up: show }">
-          <i class="material-icons notranslate toggle-icon"
-            >keyboard_arrow_down</i
-          >
+        <div class="toggle">
+          <i class="material-icons notranslate toggle-icon">launch</i>
         </div>
       </div>
-    </div>
+    </a>
     <transition name="slide-out">
       <div v-if="show" class="meta">
         <p v-if="transaction.hash">Tx Hash: {{ transaction.hash }}</p>
@@ -60,6 +69,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import network from '~/common/network'
 import dayjs from 'dayjs'
 
 export default {
@@ -76,6 +86,7 @@ export default {
   },
   data: () => ({
     show: false,
+    network,
   }),
   computed: {
     ...mapState('data', ['validators']),
@@ -89,16 +100,12 @@ export default {
     },
   },
   methods: {
-    toggleDetail(event) {
-      if (event.target.className !== `address`) {
-        this.show = !this.show
-      }
-    },
     getValidatorName(address) {
       if (address.includes('valoper')) {
         const validator = this.validators.find(
           (validator) => validator.operatorAddress === address
         )
+        console.log(validator)
         return validator.name + ' (' + address + ')'
       }
       return address
@@ -107,7 +114,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .transaction {
   position: relative;
   font-size: 14px;
@@ -122,19 +129,31 @@ export default {
   cursor: pointer;
 }
 
+.icon {
+  height: 2.75rem;
+  width: 2.75rem;
+}
+
 .transaction:hover {
   background: var(--app-fg-hover);
 }
 
+.left,
 .right {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 h3 {
   font-size: 16px;
   font-weight: 500;
-  color: var(--bright);
+  color: var(--dim);
+  padding-left: 1rem;
+}
+
+.amounts p {
+  color: var(--txt);
 }
 
 .meta {
@@ -174,23 +193,8 @@ h3 {
 .toggle i {
   font-size: 16px;
   position: relative;
+  color: var(--link);
   top: 1px;
-}
-
-.toggle.up {
-  transform: rotate(180deg);
-}
-
-.slide-out-enter-active,
-.slide-out-leave-active {
-  transition: all 0.1s;
-}
-
-.slide-out-enter,
-.slide-out-leave-to {
-  opacity: 0;
-  transform: translateY(-120px);
-  margin-bottom: -120px;
 }
 
 @media screen and (max-width: 767px) {
