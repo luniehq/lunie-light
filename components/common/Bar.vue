@@ -30,7 +30,6 @@ export default {
       type: String,
       default: 'primary',
     },
-    show: Boolean,
     link: {
       type: String,
       default: '',
@@ -42,7 +41,7 @@ export default {
   },
   data() {
     return {
-      showMessage: this.show,
+      showMessage: true,
     }
   },
   methods: {
@@ -143,10 +142,6 @@ export default {
   .left {
     flex-direction: column;
     align-items: baseline;
-  }
-
-  .left p {
-    padding-bottom: 1rem;
   }
 }
 </style>
