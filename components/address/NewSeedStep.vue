@@ -29,7 +29,7 @@
       </TmFormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Create" />
+      <TmBtn :loading="loading" value="Create" />
     </div>
   </TmFormStruct>
 </template>
@@ -43,6 +43,10 @@ export default {
     seed: {
       type: String,
       default: () => undefined,
+    },
+    loading: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data: () => ({
