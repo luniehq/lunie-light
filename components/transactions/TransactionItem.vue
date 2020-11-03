@@ -13,36 +13,36 @@
             <template v-for="(address, index) in transaction.details.from">
               <img
                 v-if="getValidatorImage(address)"
+                :key="index + '_from'"
                 class="validator-image"
                 alt="validator logo - from keybase API"
                 :src="getValidatorImage(address)"
-                :key="index + '_from'"
                 @click="$router.push(`/validators/${address}`)"
               />
               <Avatar
                 v-else
+                :key="index + '_from_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
                 :address="address"
-                :key="index + '_from_avatar'"
                 @click="$router.push(`/validators/${address}`)"
               />
             </template>
             <template v-for="(address, index) in transaction.details.to">
               <img
                 v-if="getValidatorImage(address)"
+                :key="index + '_to'"
                 class="validator-image"
                 alt="validator logo - from keybase API"
                 :src="getValidatorImage(address)"
-                :key="index + '_to'"
                 @click="$router.push(`/validators/${address}`)"
               />
               <Avatar
                 v-else
+                :key="index + '_to_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
                 :address="address"
-                :key="index + '_to_avatar'"
                 @click="$router.push(`/validators/${address}`)"
               />
             </template>
@@ -94,12 +94,12 @@ export default {
       return typeWithSpaces
     },
     includesValidatorAddresses() {
-      return this.txLabel === `Stake` ||
+      return !!(
+        this.txLabel === `Stake` ||
         this.txLabel === `Unstake` ||
         this.txLabel === `Restake` ||
         this.txLabel === `Claim Rewards`
-        ? true
-        : false
+      )
     },
   },
   methods: {
