@@ -64,9 +64,9 @@
           id="token"
           v-model="selectedTokens[index]"
           :title="`Select the token you wish to use`"
-          :options="optionDenoms"
+          :options="getDenoms"
           class="tm-field-token-selector"
-          :placeholder="denoms[0]"
+          :placeholder="getDenoms[0].value"
           type="select"
         />
       </TmFieldGroup>
@@ -197,17 +197,9 @@ export default {
         memo: this.memo,
       }
     },
-    optionDenoms() {
+    getDenoms() {
       return this.denoms
-        ? this.denoms
-            .filter(
-              (denom) =>
-                !(
-                  this.amounts.filter((amount) => amount.denom === denom)
-                    .length >= 1
-                )
-            )
-            .map((denom) => ({ key: denom, value: denom }))
+        ? this.denoms.map((denom) => (denom = { key: denom, value: denom }))
         : []
     },
     notifyMessage() {
