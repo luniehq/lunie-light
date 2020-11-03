@@ -28,13 +28,13 @@ export default class TransactionManager {
   getTransactionMetaData(
     transactionType,
     memo,
-    denom,
+    feeDenom,
     { accountNumber, sequence }
   ) {
     const transactionFees = fees.getFees(transactionType)
-    const { gasEstimate, fee } = Array.isArray(transactionFees)
-      ? transactionFees.find(({ fee }) => fee.denom === denom)
-      : transactionFees
+    const { gasEstimate, fee } = transactionFees.find(
+      ({ fee }) => fee.denom === feeDenom
+    )
     const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
     // converting view fee to on chain fee
     const convertedFee = [
