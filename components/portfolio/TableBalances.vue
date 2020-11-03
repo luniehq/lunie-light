@@ -81,6 +81,10 @@ export default {
   border-radius: 0.25rem;
 }
 
+.loading-row {
+  width: 100%;
+}
+
 @media screen and (max-width: 667px) {
   .table {
     padding: 1rem;
