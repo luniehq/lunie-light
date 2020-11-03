@@ -20,17 +20,12 @@ export default {
   },
   mounted() {
     const session = this.$cookies.get('lunie-session')
-    this.$store.dispatch('signIn', session)
-
-    this.loadData()
+    this.$store.dispatch('signIn', session) // calls 'data/refresh' to load the users data
   },
-  methods: {
-    async loadData() {
-      // somehow on mounted the mapState is not yet called
-      if (!this.$store.state.data.api) {
-        await this.$store.dispatch('data/init')
-      }
-    },
+  middleware({ store }) {
+    if (!store.state.data.api) {
+      store.dispatch('data/init') // init api
+    }
   },
 }
 </script>
