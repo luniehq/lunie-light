@@ -12,7 +12,7 @@
           id="amount"
           ref="amount"
           :is-disabled="true"
-          :value="!finalFee.amount ? defaultFee.amount : finalFee.amount"
+          :value="selectedFee.amount"
           class="tm-field-addon"
           placeholder="0"
           type="number"
@@ -24,14 +24,13 @@
           :title="`Select the token you wish to use`"
           :options="getDenoms"
           class="tm-field-token-selector"
-          :placeholder="getDenoms[0].value"
           type="select"
         />
       </TmFieldGroup>
     </TmFormGroup>
     <ul class="table-invoice">
       <li
-        v-for="subTotal in subTotals"
+        v-for="subTotal in amounts"
         :key="`${subTotal.denom}-subtotal`"
         class="sub-total"
       >
@@ -43,12 +42,8 @@
       <li class="fees">
         <span>Network Fee</span>
         <span>
-          {{
-            !finalFee.amount
-              ? defaultFee.amount
-              : finalFee.amount | fullDecimals
-          }}
-          {{ !finalFee.amount ? defaultFee.denom : finalFee.denom }}
+          {{ selectedFee.amount | fullDecimals }}
+          {{ selectedFee.denom }}
         </span>
       </li>
       <li
@@ -67,11 +62,16 @@
 <script>
 import BigNumber from 'bignumber.js'
 import { fullDecimals } from '../../common/numbers'
+import network from '~/network'
 
 export default {
   name: `table-invoice`,
   filters: {
     fullDecimals,
+  },
+  model: {
+    prop: 'feeDenom',
+    event: 'change',
   },
   props: {
     amounts: {
@@ -82,53 +82,34 @@ export default {
       type: Array,
       required: true,
     },
-    transactionDenom: {
-      type: String,
-      required: true,
-    },
   },
   data: () => ({
-    info: `Estimated network fees based on simulation.`,
-    subTotals: [],
-    totals: [],
-    feeDenom: ``,
-    finalFee: {},
+    feeDenom: network.stakingDenom,
   }),
   computed: {
     getDenoms() {
-      return this.fees.map(
-        ({ fee }) => (fee = { key: fee.denom, value: fee.denom })
-      )
+      return this.fees.map(({ denom }) => ({ key: denom, value: denom }))
     },
-    defaultFee() {
-      return this.fees[0].fee
+    selectedFee() {
+      return this.fees.find(({ denom }) => denom === this.feeDenom)
     },
-  },
-  watch: {
-    feeDenom() {
-      this.finalFee = this.fees.find(
-        ({ fee }) => fee.denom === this.feeDenom
-      ).fee
-      this.setTotalsAndSubtotals()
-    },
-  },
-  mounted() {
-    this.setTotalsAndSubtotals()
-  },
-  methods: {
-    setTotalsAndSubtotals() {
-      this.totals = this.amounts.map((amount) => {
-        if (amount.denom === this.finalFee.denom) {
+    totals() {
+      return this.amounts.map((amount) => {
+        if (amount.denom === this.selectedFee.denom) {
           return {
             ...amount,
             amount: BigNumber(amount.amount)
-              .plus(BigNumber(this.finalFee.amount))
+              .plus(BigNumber(this.selectedFee.amount))
               .toNumber(),
           }
         }
         return amount
       })
-      this.subTotals = this.amounts
+    },
+  },
+  watch: {
+    feeDenom(feeDenom) {
+      this.$emit('change:feeDenom', feeDenom)
     },
   },
 }

@@ -3,30 +3,14 @@ import BigNumber from 'bignumber.js'
 // Bank
 
 /* istanbul ignore next */
-export function SendTx(senderAddress, { to, coins }, network) {
+export function SendTx(senderAddress, { to, amounts }, network) {
   return {
     type: `bank/MsgSend`,
-    value:
-      coins.length === 1
-        ? {
-            from_address: senderAddress,
-            to_address: to[0],
-            amount: [Coin(coins[0], network.coinLookup)],
-          }
-        : {
-            inputs: [
-              {
-                address: senderAddress,
-                coins: coins.map((coin) => Coin(coin, network.coinLookup)),
-              },
-            ],
-            outputs: [
-              {
-                address: to,
-                coins: coins.map((coin) => Coin(coin, network.coinLookup)),
-              },
-            ],
-          },
+    value: {
+      from_address: senderAddress,
+      to_address: to[0],
+      amount: amounts.map((amount) => Coin(amount, network.coinLookup)),
+    },
   }
 }
 

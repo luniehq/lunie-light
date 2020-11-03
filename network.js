@@ -39,42 +39,30 @@ export default {
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
   fees: {
-    default: [
-      {
-        gasEstimate: 350000,
-        fee: {
+    default: {
+      gasEstimate: 350000,
+      feeOptions: [
+        {
           denom: 'LUNA',
-          amount: 0.00000015,
+          amount: 0.0535,
         },
-      },
-      {
-        gasEstimate: 350000,
-        fee: {
+        {
           denom: 'KRT',
-          amount: 0.000018,
+          amount: 63,
         },
-      },
-      {
-        gasEstimate: 350000,
-        fee: {
+        {
           denom: 'MNT',
-          amount: 0.000045,
+          amount: 0.045,
         },
-      },
-      {
-        gasEstimate: 350000,
-        fee: {
+        {
           denom: 'SDT',
-          amount: 0.0000001,
+          amount: 0.01,
         },
-      },
-      {
-        gasEstimate: 350000,
-        fee: {
+        {
           denom: 'UST',
-          amount: 0.00000015,
+          amount: 0.015,
         },
-      },
-    ],
+      ],
+    },
   },
 }

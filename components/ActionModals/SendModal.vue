@@ -64,9 +64,8 @@
           id="token"
           v-model="selectedTokens[index]"
           :title="`Select the token you wish to use`"
-          :options="getDenoms"
+          :options="feeOptions | availableDenoms(index, selectedTokens)"
           class="tm-field-token-selector"
-          :placeholder="getDenoms[0].value"
           type="select"
         />
       </TmFieldGroup>
@@ -158,6 +157,15 @@ const defaultMemo = ''
 
 export default {
   name: `send-modal`,
+  filters: {
+    availableDenoms(denoms, index, selectedTokens) {
+      return denoms.filter(
+        ({ key: denom }) =>
+          selectedTokens[index] === denom ||
+          !Object.values(selectedTokens).includes(denom)
+      )
+    },
+  },
   props: {
     denoms: {
       type: Array,
@@ -193,13 +201,13 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        coins: this.amounts,
+        amounts: this.amounts,
         memo: this.memo,
       }
     },
-    getDenoms() {
+    feeOptions(index) {
       return this.denoms
-        ? this.denoms.map((denom) => (denom = { key: denom, value: denom }))
+        ? this.denoms.map((denom) => ({ key: denom, value: denom }))
         : []
     },
     notifyMessage() {
