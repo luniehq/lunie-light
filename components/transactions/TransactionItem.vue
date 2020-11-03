@@ -2,13 +2,11 @@
   <div class="tx-container">
     <a class="transaction" target="_blank">
       <div class="left">
-        <div class="tx-info">
-          <img
-            class="icon"
-            :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
-            alt="simple icon line drawing"
-          />
-        </div>
+        <img
+          class="icon"
+          :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
+          alt="simple icon line drawing"
+        />
         <div class="title-and-images">
           <h3>{{ txLabel }}</h3>
           <div v-if="includesValidatorAddresses" class="validator-images">
@@ -69,8 +67,8 @@
             </p>
           </template>
         </div>
-        <div class="toggle">
-          <i class="material-icons notranslate toggle-icon">launch</i>
+        <div class="launch">
+          <i class="material-icons notranslate launch-icon">launch</i>
         </div>
       </div>
     </a>
@@ -79,8 +77,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import network from '~/common/network'
-import dayjs from 'dayjs'
 
 export default {
   name: `transaction`,
@@ -90,18 +86,12 @@ export default {
       required: true,
     },
   },
-  data: () => ({
-    network,
-  }),
   computed: {
     ...mapState('data', ['validators']),
     txLabel() {
       const typeWithoutSuffix = this.transaction.type.replace('Tx', '')
       const typeWithSpaces = typeWithoutSuffix.replace(/([A-Z])/g, ' $1').trim()
       return typeWithSpaces
-    },
-    timestamp() {
-      return dayjs(this.transaction.timestamp)
     },
     includesValidatorAddresses() {
       return this.txLabel === `Stake` ||
@@ -190,7 +180,7 @@ h3 {
   border-radius: 50%;
 }
 
-.toggle {
+.launch {
   z-index: 91;
   cursor: pointer;
   border-radius: 50%;
@@ -204,7 +194,7 @@ h3 {
   margin-left: 1rem;
 }
 
-.toggle i {
+.launch i {
   font-size: 16px;
   position: relative;
   color: var(--link);
@@ -225,11 +215,11 @@ h3 {
     padding: 0.5rem 0 0 0;
   }
 
-  .tx-info {
+  .icon {
     display: none;
   }
 
-  .toggle {
+  .launch {
     display: none;
   }
 }
