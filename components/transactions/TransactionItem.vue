@@ -2,26 +2,54 @@
   <div class="tx-container">
     <a class="transaction" target="_blank">
       <div class="left">
-        <img
-          class="icon"
-          :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
-          alt="simple icon line drawing"
-        />
-        <h3>{{ txLabel }}</h3>
-      </div>
-      <div class="validator-images">
-        <p
-          v-for="(address, index) in transaction.details.to"
-          :key="index + '_to'"
-        >
-          {{ getValidatorInfo(address) }}
-        </p>
-        <p
-          v-for="(address, index) in transaction.details.from"
-          :key="index + '_from'"
-        >
-          {{ getValidatorInfo(address) }}
-        </p>
+        <div class="tx-info">
+          <img
+            class="icon"
+            :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
+            alt="simple icon line drawing"
+          />
+        </div>
+        <div class="title-and-images">
+          <h3>{{ txLabel }}</h3>
+          <div v-if="includesValidatorAddresses" class="validator-images">
+            <template v-for="(address, index) in transaction.details.from">
+              <img
+                v-if="getValidatorImage(address)"
+                class="validator-image"
+                alt="validator logo - from keybase API"
+                :src="getValidatorImage(address)"
+                :key="index + '_from'"
+                @click="$router.push(`/validators/${address}`)"
+              />
+              <Avatar
+                v-else
+                class="validator-image"
+                alt="placeholder color for validator image"
+                :address="address"
+                :key="index + '_from_avatar'"
+                @click="$router.push(`/validators/${address}`)"
+              />
+            </template>
+            <template v-for="(address, index) in transaction.details.to">
+              <img
+                v-if="getValidatorImage(address)"
+                class="validator-image"
+                alt="validator logo - from keybase API"
+                :src="getValidatorImage(address)"
+                :key="index + '_to'"
+                @click="$router.push(`/validators/${address}`)"
+              />
+              <Avatar
+                v-else
+                class="validator-image"
+                alt="placeholder color for validator image"
+                :address="address"
+                :key="index + '_to_avatar'"
+                @click="$router.push(`/validators/${address}`)"
+              />
+            </template>
+          </div>
+        </div>
       </div>
       <div class="right">
         <div class="amounts">
@@ -61,13 +89,8 @@ export default {
       type: Object,
       required: true,
     },
-    showMetaData: {
-      type: Boolean,
-      default: true,
-    },
   },
   data: () => ({
-    show: true,
     network,
   }),
   computed: {
@@ -80,17 +103,23 @@ export default {
     timestamp() {
       return dayjs(this.transaction.timestamp)
     },
+    includesValidatorAddresses() {
+      return this.txLabel === `Stake` ||
+        this.txLabel === `Unstake` ||
+        this.txLabel === `Restake` ||
+        this.txLabel === `Claim Rewards`
+        ? true
+        : false
+    },
   },
   methods: {
-    getValidatorInfo(address) {
-      let validatorInfo
-      if (address.includes('valoper')) {
-        const validator = this.validators.find(
-          (validator) => validator.operatorAddress === address
-        )
-        validatorInfo = validator.picture || validator.name
-      }
-      return validatorInfo
+    getValidatorImage(address) {
+      if (!address.includes('valoper')) return
+      const validator = this.validators.find(
+        (validator) => validator.operatorAddress === address
+      )
+      const validatorPicture = validator.picture || false
+      return validatorPicture
     },
   },
 }
@@ -114,13 +143,29 @@ export default {
 .icon {
   height: 2.75rem;
   width: 2.75rem;
+  display: inline-flex;
 }
 
 .transaction:hover {
   background: var(--app-fg-hover);
 }
 
-.left,
+.left {
+  display: flex;
+  flex-direction: row;
+}
+
+.title-and-images {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.validator-images {
+  padding: 0 0 0 1rem;
+  display: inline-flex;
+}
+
 .right {
   display: flex;
   flex-direction: row;
@@ -138,20 +183,11 @@ h3 {
   color: var(--txt);
 }
 
-.meta {
-  background: var(--app-fg);
-  border-left: 1px solid var(--bc-dim);
-  border-right: 1px solid var(--bc-dim);
-  border-bottom: 1px solid var(--bc-dim);
-  border-bottom-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  margin: 0 auto 0.5rem auto;
-  font-size: 14px;
-  padding: 1rem;
-  position: relative;
-  z-index: 0;
-  width: 95%;
-  word-break: break-all;
+.validator-image {
+  height: 1.25rem;
+  width: 1.25rem;
+  margin: 0 0.5rem 0 0;
+  border-radius: 50%;
 }
 
 .toggle {
@@ -176,12 +212,25 @@ h3 {
 }
 
 @media screen and (max-width: 767px) {
-  .toggle {
+  .title-and-images {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  h3 {
+    padding-left: 0;
+  }
+
+  .validator-images {
+    padding: 0.5rem 0 0 0;
+  }
+
+  .tx-info {
     display: none;
   }
 
-  .meta {
-    width: 90%;
+  .toggle {
+    display: none;
   }
 }
 </style>
