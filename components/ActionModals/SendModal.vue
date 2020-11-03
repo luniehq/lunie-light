@@ -201,7 +201,10 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amounts: this.amounts,
+        amounts: this.amounts.map((amount, index) => ({
+          amount: amount.amount,
+          denom: this.selectedTokens[index],
+        })),
         memo: this.memo,
       }
     },
@@ -215,13 +218,6 @@ export default {
         title: `Successful Send`,
         body: `Successfully sent transaction to ${formatAddress(this.address)}`,
       }
-    },
-  },
-  watch: {
-    selectedTokens() {
-      this.amounts.map(
-        (amount, index) => (amount.denom = this.selectedTokens[index])
-      )
     },
   },
   methods: {
@@ -264,12 +260,6 @@ export default {
         )
       }
     },
-    // duplicateDenoms() {
-    //   const denomsArray = this.amounts.map(({ denom }) => denom)
-    //   return denomsArray.some((item, index) => {
-    //     return denomsArray.indexOf(item) !== index
-    //   })
-    // },
     token() {
       if (!this.selectedTokens) return ``
 
