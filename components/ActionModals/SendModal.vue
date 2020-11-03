@@ -69,12 +69,6 @@
           :placeholder="denoms[0]"
           type="select"
         />
-        <TmBtn
-          type="button"
-          class="addon-max"
-          value="Max"
-          @click.native="setMaxAmount(index)"
-        />
       </TmFieldGroup>
 
       <TmFormMsg
@@ -87,11 +81,11 @@
         name="Amount"
         type="numeric"
       />
-      <!-- <TmFormMsg
+      <TmFormMsg
         v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
         :msg="`You don't have enough ${selectedTokens} to proceed.`"
-      /> -->
+      />
       <TmFormMsg
         v-else-if="$v.amounts.$error && !$v.amounts.min"
         :min="smallestAmount"
@@ -260,16 +254,13 @@ export default {
       this.memo = defaultMemo
       this.sending = false
     },
-    setMaxAmount(index) {
-      this.amounts[index].amount = this.getMaxAmount(index)
-    },
     isMaxAmount(index) {
       const selectedBalance = this.getSelectedBalance(this.denoms[index])
       if (selectedBalance.available === 0) {
         return false
       } else {
         return (
-          parseFloat(this.amounts[index].amount) === this.getMaxAmount(index)
+          parseFloat(this.amounts[index].amount) === selectedBalance.available
         )
       }
     },
@@ -279,17 +270,6 @@ export default {
     //     return denomsArray.indexOf(item) !== index
     //   })
     // },
-    getMaxAmount(index) {
-      const selectedBalance = this.getSelectedBalance(this.denoms[index])
-      if (this.networkFeesLoaded) {
-        return this.maxDecimals(
-          selectedBalance.available - this.networkFees.transactionFee.amount,
-          6
-        )
-      } else {
-        return this.maxDecimals(selectedBalance.available, 6)
-      }
-    },
     token() {
       if (!this.selectedTokens) return ``
 
@@ -367,6 +347,12 @@ export default {
         decimal: (x) =>
           this.amounts.filter(({ amount }) => decimal(amount)).length ===
           this.amounts.length,
+        max: (x) =>
+          this.amounts.filter(
+            (amount) =>
+              Number(amount.amount) <=
+              this.getSelectedBalance(amount.denom).available
+          ).length === this.amounts.length,
         min: (x) =>
           this.amounts.filter(({ amount }) => Number(amount) >= SMALLEST)
             .length === this.amounts.length,
