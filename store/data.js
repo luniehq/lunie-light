@@ -230,4 +230,7 @@ export const actions = {
     }
     return []
   },
+  resetSessionData({ commit }) {
+    commit('resetSessionData')
+  },
 }
