@@ -129,5 +129,5 @@ export const actions = {
   },
   resetSessionData({ commit }) {
     commit('resetSessionData')
-  }
+  },
 }
