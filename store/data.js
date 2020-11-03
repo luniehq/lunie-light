@@ -80,32 +80,100 @@ export const actions = {
     await Promise.all(calls)
   },
   async getBlock({ commit, state: { api } }) {
-    const block = await api.getBlockHeader()
-    commit('setBlock', block)
+    try {
+      const block = await api.getBlockHeader()
+      commit('setBlock', block)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting block failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getBalances({ commit, state: { api } }, { address, currency }) {
-    const balances = await api.getBalancesV2FromAddress(
-      address,
-      currency,
-      network
-    )
-    commit('setBalances', balances)
+    try {
+      const balances = await api.getBalancesV2FromAddress(
+        address,
+        currency,
+        network
+      )
+      commit('setBalances', balances)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting balances failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getValidators({ commit, state: { api } }) {
-    const validators = await api.getAllValidators()
-    commit('setValidators', validators)
+    try {
+      const validators = await api.getAllValidators()
+      commit('setValidators', validators)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting validators failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getDelegations({ commit, state: { api } }, address) {
-    const delegations = await api.getDelegationsForDelegatorAddress(address)
-    commit('setDelegations', delegations)
+    try {
+      const delegations = await api.getDelegationsForDelegatorAddress(address)
+      commit('setDelegations', delegations)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting delegations failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getUndelegations({ commit, state: { api } }, address) {
-    const undelegations = await api.getUndelegationsForDelegatorAddress(address)
-    commit('setUndelegations', undelegations)
+    try {
+      const undelegations = await api.getUndelegationsForDelegatorAddress(
+        address
+      )
+      commit('setUndelegations', undelegations)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting undelegations failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getRewards({ commit, state: { api } }, { address, currency }) {
-    const rewards = await api.getRewards(address, currency, network)
-    commit('setRewards', rewards)
+    try {
+      const rewards = await api.getRewards(address, currency, network)
+      commit('setRewards', rewards)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting rewards failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
   async getAccountInfo({ commit, state: { api } }, address) {
     const { accountNumber, sequence } = await api.getAccountInfo(address)
@@ -116,16 +184,51 @@ export const actions = {
     { commit, state: { api } },
     { address, pageNumber = 0 }
   ) {
-    const transactions = await api.getTransactionsV2(address, pageNumber)
-    commit('setTransactions', { transactions, pageNumber })
+    try {
+      const transactions = await api.getTransactionsV2(address, pageNumber)
+      commit('setTransactions', { transactions, pageNumber })
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting transactions failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
   },
-  async getValidatorSelfStake({ state: { api } }, validator) {
-    const selfStake = await api.getSelfStake(validator)
-    return selfStake
+  async getValidatorSelfStake({ commit, state: { api } }, validator) {
+    try {
+      const selfStake = await api.getSelfStake(validator)
+      return selfStake
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting validator self stake failed:' + err.message,
+        },
+        { root: true }
+      )
+      return 0
+    }
   },
-  async getValidatorDelegations({ state: { api } }, validator) {
-    const delegations = await api.getValidatorDelegations(validator)
-    return delegations
+  async getValidatorDelegations({ commit, state: { api } }, validator) {
+    try {
+      const delegations = await api.getValidatorDelegations(validator)
+      return delegations
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting delegations to validator failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+    return []
   },
   resetSessionData({ commit }) {
     commit('resetSessionData')
