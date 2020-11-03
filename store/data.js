@@ -87,7 +87,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting block failed:' + err.message,
         },
         { root: true }
@@ -106,7 +106,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting balances failed:' + err.message,
         },
         { root: true }
@@ -121,7 +121,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting validators failed:' + err.message,
         },
         { root: true }
@@ -136,7 +136,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting delegations failed:' + err.message,
         },
         { root: true }
@@ -153,7 +153,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting undelegations failed:' + err.message,
         },
         { root: true }
@@ -168,7 +168,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting rewards failed:' + err.message,
         },
         { root: true }
@@ -191,7 +191,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting transactions failed:' + err.message,
         },
         { root: true }
@@ -206,7 +206,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting validator self stake failed:' + err.message,
         },
         { root: true }
@@ -222,7 +222,7 @@ export const actions = {
       commit(
         'notifications/add',
         {
-          type: 'warning',
+          type: 'danger',
           message: 'Getting delegations to validator failed:' + err.message,
         },
         { root: true }
