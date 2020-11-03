@@ -13,6 +13,7 @@ export const state = () => ({
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
   api: undefined,
+  initialLoad: false,
 })
 
 export const mutations = {
@@ -36,18 +37,37 @@ export const mutations = {
     state.transactionsLoaded = true
     state.moreTransactionsAvailable = transactions.length > 0
   },
+  resetSessionData(state) {
+    state.balances = []
+    state.rewards = []
+    state.delegations = []
+    state.undelegations = []
+    state.rewards = []
+    state.transactions = []
+    state.transactionsLoaded = undefined
+    state.moreTransactionsAvailable = true
+  },
 }
 
 export const actions = {
-  async init({ commit, dispatch }) {
+  async init({ commit, dispatch, state }) {
     const _store = {}
     commit('setApi', new DataSource(this.$axios, network, _store, null, null))
     await dispatch('refresh')
+    commit('setInitialLoad', true)
   },
   async refresh({ dispatch }) {
+    const calls = [
+      dispatch('getValidators'),
+      dispatch('getBlock'),
+      dispatch('refreshSession'),
+    ]
+    await Promise.all(calls)
+  },
+  async refreshSession({ dispatch }) {
+    const calls = []
     const session = this.$cookies.get('lunie-session')
     const currency = this.$cookies.get('currency') || 'USD'
-    const calls = [dispatch('getValidators'), dispatch('getBlock')]
     if (session) {
       const address = session.address
       calls.push(
@@ -64,10 +84,14 @@ export const actions = {
       const block = await api.getBlockHeader()
       commit('setBlock', block)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting block failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting block failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getBalances({ commit, state: { api } }, { address, currency }) {
@@ -79,10 +103,14 @@ export const actions = {
       )
       commit('setBalances', balances)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting balances failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting balances failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getValidators({ commit, state: { api } }) {
@@ -90,10 +118,14 @@ export const actions = {
       const validators = await api.getAllValidators()
       commit('setValidators', validators)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting validators failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting validators failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getDelegations({ commit, state: { api } }, address) {
@@ -101,10 +133,14 @@ export const actions = {
       const delegations = await api.getDelegationsForDelegatorAddress(address)
       commit('setDelegations', delegations)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting delegations failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting delegations failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getUndelegations({ commit, state: { api } }, address) {
@@ -114,10 +150,14 @@ export const actions = {
       )
       commit('setUndelegations', undelegations)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting undelegations failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting undelegations failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getRewards({ commit, state: { api } }, { address, currency }) {
@@ -125,10 +165,14 @@ export const actions = {
       const rewards = await api.getRewards(address, currency, network)
       commit('setRewards', rewards)
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting rewards failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting rewards failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getAccountInfo({ commit, state: { api } }, address) {
@@ -144,10 +188,14 @@ export const actions = {
       const transactions = await api.getTransactionsV2(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting transactions failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting transactions failed:' + err.message,
+        },
+        { root: true }
+      )
     }
   },
   async getValidatorSelfStake({ commit, state: { api } }, validator) {
@@ -155,10 +203,14 @@ export const actions = {
       const selfStake = await api.getSelfStake(validator)
       return selfStake
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting validator self stake failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting validator self stake failed:' + err.message,
+        },
+        { root: true }
+      )
       return 0
     }
   },
@@ -167,10 +219,14 @@ export const actions = {
       const delegations = await api.getValidatorDelegations(validator)
       return delegations
     } catch (err) {
-      commit('addNotification', {
-        type: 'error',
-        message: 'Getting delegations to validator failed:' + err.message,
-      })
+      commit(
+        'notifications/add',
+        {
+          type: 'warning',
+          message: 'Getting delegations to validator failed:' + err.message,
+        },
+        { root: true }
+      )
     }
     return []
   },

@@ -1,20 +1,21 @@
 <template>
   <div class="content">
-    <img class="network-icon" src="~/assets/images/currencies/atom.png" />
+    <!-- <img class="network-icon" src="~/assets/images/currencies/atom.png" /> -->
     <h1>{{ network.name }}</h1>
     <h2>{{ network.description }}</h2>
     <div class="card-sign-in">
       <div class="session-list">
         <LiSession
-          title="Explore with any address"
+          title="Start staking"
           :card="true"
-          route="/explore"
+          icon="gesture"
+          route="/validators"
         />
-        <LiSession title="Create a new address" :card="true" route="/create" />
         <LiSession
-          title="Recover from seed phrase"
+          title="Explore"
           :card="true"
-          route="/recover"
+          icon="language"
+          route="/explore"
         />
       </div>
     </div>
@@ -25,9 +26,7 @@
           <a :href="network.website" target="_blank">Project Website</a>
         </li>
         <li>
-          <a :href="network.api_url + '/node_info'" target="_blank"
-            >Node Info</a
-          >
+          <a :href="network.apiURL + '/node_info'" target="_blank">Node Info</a>
         </li>
         <!-- <li>
           <a
@@ -63,7 +62,7 @@ export default {
 
 <style scoped>
 .content {
-  padding: 2rem;
+  padding: 1rem 2rem;
   margin: 0 auto;
   max-width: 800px;
 }

@@ -51,7 +51,7 @@ export default {
   font-weight: 900;
 }
 
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 667px) {
   .user-menu {
     justify-content: center;
   }

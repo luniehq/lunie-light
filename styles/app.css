@@ -138,7 +138,7 @@ input.tm-field {
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
-  animation: fade 1.5s infinite;
+  animation: fade 2s infinite;
 }
 
 .page-enter-active,
@@ -151,17 +151,23 @@ input.tm-field {
   opacity: 0;
 }
 
+h1 {
+  font-size: 24px;
+  color: var(--bright);
+  font-weight: 500;
+}
+
 @keyframes fade {
   0% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
 
   50% {
-    opacity: 0.7;
+    opacity: 1;
   }
 
   100% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
 }
 

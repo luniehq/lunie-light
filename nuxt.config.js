@@ -28,10 +28,11 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '@/plugins/copy.client.js',
+    '@/plugins/focus.client.js',
     '@/plugins/infinite-scroll.client.js',
+    '@/plugins/init.client.js',
     '@/plugins/tooltip.client.js',
     '@/plugins/validate.client.js',
-    '@/plugins/focus.client.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -56,7 +57,9 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    progress: false,
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
