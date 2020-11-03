@@ -60,9 +60,8 @@
   </div>
 </template>
 <script>
-import BigNumber from 'bignumber.js'
-import { fullDecimals } from '../../common/numbers'
-import network from '~/network'
+import { fullDecimals } from '~/common/numbers'
+import network from '~/common/network'
 
 export default {
   name: `table-invoice`,
@@ -94,17 +93,18 @@ export default {
       return this.fees.find(({ denom }) => denom === this.feeDenom)
     },
     totals() {
-      return this.amounts.map((amount) => {
-        if (amount.denom === this.selectedFee.denom) {
-          return {
-            ...amount,
-            amount: BigNumber(amount.amount)
-              .plus(BigNumber(this.selectedFee.amount))
-              .toNumber(),
-          }
+      return this.amounts.concat(this.selectedFee).reduce((all, amount) => {
+        const existantCoin = all.find(({ denom }) => amount.denom === denom)
+        if (existantCoin) {
+          return all
+            .filter(({ denom }) => amount.denom !== denom)
+            .concat({
+              ...existantCoin,
+              amount: Number(existantCoin.amount) + Number(amount.amount),
+            })
         }
-        return amount
-      })
+        return all.concat(amount)
+      }, [])
     },
   },
   watch: {
@@ -141,8 +141,11 @@ export default {
 
 .total-row {
   border-top: 2px solid var(--bc);
-  margin-top: 0.5rem;
+}
+
+.fees + .total-row {
   padding-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .total-column {
