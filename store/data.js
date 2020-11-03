@@ -127,4 +127,7 @@ export const actions = {
     const delegations = await api.getValidatorDelegations(validator)
     return delegations
   },
+  resetSessionData({ commit }) {
+    commit('resetSessionData')
+  }
 }
