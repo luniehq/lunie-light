@@ -71,15 +71,14 @@ export default {
 .bar {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  font-family: var(--sans);
+  border-radius: 0.25rem;
   background-color: transparent;
   font-size: 14px;
   font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--menu-bright);
+  color: black;
 }
 
 .bar.primary {
@@ -95,7 +94,8 @@ export default {
 }
 
 .bar.danger {
-  background-color: var(--danger);
+  border: 2px solid var(--danger);
+  background-color: var(--danger-faded);
 }
 
 .bar.info {
