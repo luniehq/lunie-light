@@ -1,10 +1,6 @@
 <template>
   <div class="tx-container">
-    <a
-      class="transaction"
-      :href="network.apiURL + '/txs/' + transaction.hash"
-      target="_blank"
-    >
+    <a class="transaction" target="_blank">
       <div class="left">
         <img
           class="icon"
@@ -12,6 +8,20 @@
           alt="simple icon line drawing"
         />
         <h3>{{ txLabel }}</h3>
+      </div>
+      <div class="validator-images">
+        <p
+          v-for="(address, index) in transaction.details.to"
+          :key="index + '_to'"
+        >
+          {{ getValidatorInfo(address) }}
+        </p>
+        <p
+          v-for="(address, index) in transaction.details.from"
+          :key="index + '_from'"
+        >
+          {{ getValidatorInfo(address) }}
+        </p>
       </div>
       <div class="right">
         <div class="amounts">
@@ -36,34 +46,6 @@
         </div>
       </div>
     </a>
-    <transition name="slide-out">
-      <div v-if="show" class="meta">
-        <p v-if="transaction.hash">Tx Hash: {{ transaction.hash }}</p>
-        <p v-if="transaction.height">Block Height: {{ transaction.height }}</p>
-        <p v-if="transaction.timestamp">Date: {{ timestamp }}</p>
-        <p v-if="transaction.memo">Memo: {{ transaction.memo }}</p>
-        <p
-          v-for="(amount, index) in transaction.fees"
-          :key="index + transaction.timestamp"
-        >
-          Fee: {{ amount.amount }}&nbsp;{{ amount.denom }}
-        </p>
-        <div class="addresses">
-          <p
-            v-for="(address, index) in transaction.details.to"
-            :key="index + transaction.hash"
-          >
-            To: {{ getValidatorName(address) }}
-          </p>
-          <p
-            v-for="(address, index) in transaction.details.from"
-            :key="index + transaction.height"
-          >
-            From: {{ getValidatorName(address) }}
-          </p>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -85,7 +67,7 @@ export default {
     },
   },
   data: () => ({
-    show: false,
+    show: true,
     network,
   }),
   computed: {
@@ -100,15 +82,15 @@ export default {
     },
   },
   methods: {
-    getValidatorName(address) {
+    getValidatorInfo(address) {
+      let validatorInfo
       if (address.includes('valoper')) {
         const validator = this.validators.find(
           (validator) => validator.operatorAddress === address
         )
-        console.log(validator)
-        return validator.name + ' (' + address + ')'
+        validatorInfo = validator.picture || validator.name
       }
-      return address
+      return validatorInfo
     },
   },
 }
@@ -170,10 +152,6 @@ h3 {
   z-index: 0;
   width: 95%;
   word-break: break-all;
-}
-
-.addresses {
-  padding-top: 1rem;
 }
 
 .toggle {
