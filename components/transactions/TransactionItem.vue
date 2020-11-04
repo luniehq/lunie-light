@@ -8,11 +8,13 @@
       <div class="left">
         <img
           class="icon"
-          :src="require(`../../assets/images/transactions/${txLabel}.svg`)"
+          :src="
+            require(`../../assets/images/transactions/${transactionType}.svg`)
+          "
           alt="simple icon line drawing"
         />
         <div class="title-and-images">
-          <h3>{{ txLabel }}</h3>
+          <h3>{{ transactionType }}</h3>
           <div v-if="includesValidatorAddresses" class="validator-images">
             <template v-for="(address, index) in transaction.details.from">
               <Avatar
@@ -67,17 +69,18 @@ export default {
     network,
   }),
   computed: {
-    txLabel() {
-      const typeWithoutSuffix = this.transaction.type.replace('Tx', '')
-      const typeWithSpaces = typeWithoutSuffix.replace(/([A-Z])/g, ' $1').trim()
+    transactionType() {
+      const typeWithSpaces = this.transaction.type
+        .replace(/([A-Z])/g, ' $1')
+        .trim()
       return typeWithSpaces
     },
     includesValidatorAddresses() {
       return !!(
-        this.txLabel === `Stake` ||
-        this.txLabel === `Unstake` ||
-        this.txLabel === `Restake` ||
-        this.txLabel === `Claim Rewards`
+        this.transactionType === `Stake` ||
+        this.transactionType === `Unstake` ||
+        this.transactionType === `Restake` ||
+        this.transactionType === `Claim Rewards`
       )
     },
     amounts() {
