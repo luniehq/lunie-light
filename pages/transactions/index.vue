@@ -1,34 +1,25 @@
 <template>
-  <TmPage
-    data-title="Transactions"
-    :loading="loading"
-    :empty="dataEmpty"
-    :empty-title="`No Transaction History`"
-    :empty-subtitle="`There are no transactions associated with this address yet.`"
-    :sign-in-required="true"
-  >
+  <TmPage :sign-in-required="true">
     <template slot="signInRequired">
-      <template>
+      <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
+
+      <TmDataMsg v-else-if="!transactions.length">
+        <div slot="title">No transactions</div>
+        <div slot="subtitle">
+          {{ oldChainDataMessage }}
+        </div>
+      </TmDataMsg>
+
+      <template v-else>
         <EventList
           :events="transactions"
           :more-available="moreTransactionsAvailable"
           @loadMore="loadTransactions"
-        >
-          <template slot-scope="event">
-            <TransactionItem
-              :key="event.key"
-              :transaction="event"
-              :validators="validatorsAddressMap"
-              :address="session ? session.address : undefined"
-            />
-          </template>
-        </EventList>
+        />
 
-        <template v-if="!loading">
+        <template v-if="transactionsLoaded">
           <p class="message">
-            *If this transaction list looks incomplete, it's possible the
-            transactions may have occured on a previous version of this
-            blockchain.
+            {{ oldChainDataMessage }}
           </p>
         </template>
       </template>
@@ -43,7 +34,6 @@ export default {
   name: `page-transactions`,
   data: () => ({
     pageNumber: 0,
-    loading: true,
   }),
   computed: {
     ...mapState('data', [
@@ -53,43 +43,45 @@ export default {
       `moreTransactionsAvailable`,
     ]),
     ...mapState(['session']),
-    validatorsAddressMap() {
-      const names = {}
-      this.validators.forEach((item) => {
-        names[item.operatorAddress] = item
-      })
-      return names
+    oldChainDataMessage() {
+      return `If you expected to see transactions here that are missing, 
+      it's possible the transactions may have occured on a previous version of this blockchain.`
     },
-    dataEmpty() {
-      return this.transactions.length === 0
-    },
-  },
-  mounted() {
-    if (!this.transactionsLoaded) {
-      this.loadTransactions()
-    } else {
-      this.loading = false
-    }
   },
   methods: {
     async loadTransactions() {
       if (this.moreTransactionsAvailable) {
-        this.loading = true
         await this.$store.dispatch('data/getTransactions', {
           address: this.session.address,
           pageNumber: this.pageNumber++,
         })
-        this.loading = false
       }
     },
   },
+  middleware: 'addressRequired',
 }
 </script>
 <style scoped>
 .message {
-  font-size: 11px;
-  color: var(--txt);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: var(--app-fg);
+  border-radius: 0.25rem;
+  margin: 1rem;
   padding: 2rem;
+  font-size: 12px;
+  color: var(--txt);
+}
+
+.loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-fg);
+  height: 10rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 1rem 1rem 2rem;
+  animation: fade 2s infinite;
 }
 </style>

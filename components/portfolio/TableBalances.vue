@@ -5,7 +5,8 @@
     <div class="table-cell title available">Available</div>
     <div class="table-cell title actions"></div>
 
-    <table class="data-table">
+    <div v-if="!balances.length" class="loading-row left">Loading...</div>
+    <table v-else class="data-table">
       <tbody>
         <BalanceRow
           v-for="balance in balances"
@@ -55,7 +56,6 @@ export default {
   display: flex;
   align-items: center;
   width: 20%;
-  font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   position: relative;
   white-space: nowrap;
 }
@@ -74,6 +74,15 @@ export default {
   font-size: var(--sm);
   padding-bottom: 1rem;
   padding-left: 0;
+}
+
+.data-table {
+  box-shadow: 0 0 2px 0 hsl(0, 0%, 85%);
+  border-radius: 0.25rem;
+}
+
+.loading-row {
+  width: 100%;
 }
 
 @media screen and (max-width: 667px) {

@@ -29,7 +29,7 @@
         :validators="filteredValidators"
         :delegations="delegations"
         :rewards="rewards"
-        :show-mobile-sorting="showMobileSorting"
+        :search-term="searchTerm ? true : false"
         show-on-mobile="expectedReturns"
       />
     </template>
@@ -45,7 +45,6 @@ export default {
     searchTerm: '',
     activeOnly: true,
     allValidators: false,
-    showMobileSorting: false,
   }),
   computed: {
     ...mapState('data', ['validators', 'delegations', 'rewards']),
@@ -82,9 +81,6 @@ export default {
       if (selector === `activeOnly`) {
         this.activeOnly = true
       }
-    },
-    toggleMobileSorting() {
-      this.showMobileSorting = !this.showMobileSorting
     },
   },
 }
@@ -124,15 +120,6 @@ export default {
   margin-right: -1px;
 }
 
-.show-mobile-sorting {
-  display: none;
-  cursor: pointer;
-}
-
-.show-mobile-sorting.active {
-  color: var(--highlight);
-}
-
 .filterOptions {
   padding-left: 0.5rem;
 }
@@ -148,10 +135,6 @@ export default {
 
   .filterContainer .btn-radio {
     min-width: 64px;
-  }
-
-  .show-mobile-sorting {
-    display: block;
   }
 }
 

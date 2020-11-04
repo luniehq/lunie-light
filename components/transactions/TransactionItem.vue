@@ -1,230 +1,263 @@
 <template>
   <div class="tx-container">
-    <div class="tx" @click="toggleDetail">
-      <component
-        :is="messageTypeComponent"
-        :transaction="transaction"
-        :validators="validators"
-        :session-address="address"
-        :show="show"
-      />
-      <div class="toggle" :class="{ up: show }">
-        <i class="material-icons notranslate toggle-icon"
-          >keyboard_arrow_down</i
-        >
+    <a
+      class="transaction"
+      :href="network.apiURL + '/txs/' + transaction.hash"
+      target="_blank"
+    >
+      <div class="left">
+        <img
+          class="icon"
+          :src="
+            require(`../../assets/images/transactions/${transactionCaption}.svg`)
+          "
+          alt="simple icon line drawing"
+        />
+        <div class="title-and-images">
+          <div>
+            <h3>{{ transactionCaption }}</h3>
+            <template v-if="transactionCaption === `Send`">
+              <p
+                v-for="(address, index) in transaction.details.to"
+                :key="address + index"
+              >
+                {{ address }}
+              </p>
+            </template>
+            <template v-if="transactionCaption === `Receive`">
+              <p
+                v-for="(address, index) in transaction.details.from"
+                :key="address + index"
+              >
+                {{ address }}
+              </p>
+            </template>
+          </div>
+          <div v-if="includesValidatorAddresses" class="validator-images">
+            <template v-for="(address, index) in transaction.details.from">
+              <Avatar
+                :key="index + '_from_avatar'"
+                class="validator-image"
+                alt="placeholder color for validator image"
+                :address="address"
+                @click.prevent.self
+                @click="$router.push(`/validators/${address}`)"
+              />
+            </template>
+            <template v-for="(address, index) in transaction.details.to">
+              <Avatar
+                :key="index + '_to_avatar'"
+                class="validator-image"
+                alt="placeholder color for validator image"
+                :address="address"
+                @click.prevent.self
+                @click="$router.push(`/validators/${address}`)"
+              />
+            </template>
+          </div>
+        </div>
       </div>
-    </div>
-    <transition name="slide-out">
-      <div v-if="show" class="tx-details">
-        <TransactionMetadata v-if="showMetaData" :transaction="transaction" />
+      <div class="right">
+        <div v-if="amounts" class="amounts">
+          <p v-for="(item, index) in amounts" :key="index">
+            {{ item.amount }}
+            {{ item.denom }}
+          </p>
+        </div>
+        <div class="launch">
+          <i class="material-icons notranslate launch-icon">launch</i>
+        </div>
       </div>
-    </transition>
+    </a>
   </div>
 </template>
 
 <script>
-import messageViews from './message-views'
+import { mapState } from 'vuex'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
+import network from '~/common/network'
 
 export default {
-  name: `tx-item`,
-  // need to be explicit here as the dynamic import doesn't seem to work for autoimporting the components by nuxt
-  components: {
-    ...messageViews,
-  },
+  name: `transaction`,
   props: {
     transaction: {
       type: Object,
       required: true,
     },
-    validators: {
-      type: Object,
-      required: true,
-    },
-    address: {
-      type: String,
-      default: null,
-    },
-    showMetaData: {
-      type: Boolean,
-      default: true,
-    },
   },
   data: () => ({
-    show: false,
+    network,
   }),
   computed: {
-    messageTypeComponent() {
+    ...mapState(['session']),
+    transactionCaption() {
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
-          return `send-tx-details`
+          if (this.transaction.details.to.includes(this.session.address)) {
+            return 'Receive'
+          } else {
+            return 'Send'
+          }
         case lunieMessageTypes.STAKE:
-          return `stake-tx-details`
+          return `Stake`
+        case lunieMessageTypes.RESTAKE:
+          return `Restake`
         case lunieMessageTypes.UNSTAKE:
-          return `unstake-tx-details`
+          return `Unstake`
+        case lunieMessageTypes.DEPOSIT:
+          return `Deposit`
+        case lunieMessageTypes.VOTE:
+          return `Vote`
+        case lunieMessageTypes.CLAIM_REWARDS:
+          return `Claim Rewards`
         case lunieMessageTypes.UNKNOWN:
-          return `unknown-tx-details`
+          return `Unknown`
         /* istanbul ignore next */
         default:
           return ``
       }
     },
-  },
-  methods: {
-    toggleDetail(event) {
-      if (event.target.className !== `address`) {
-        this.show = !this.show
+    includesValidatorAddresses() {
+      return [
+        lunieMessageTypes.STAKE,
+        lunieMessageTypes.UNSTAKE,
+        lunieMessageTypes.RESTAKE,
+        lunieMessageTypes.CLAIM_REWARDS,
+      ].includes(this.transaction.type)
+    },
+    amounts() {
+      if (this.transaction.details.amounts) {
+        return this.transaction.details.amounts
+      } else if (this.transaction.details.amount) {
+        return [this.transaction.details.amount]
       }
+      return null
     },
   },
 }
 </script>
 
-<style>
-.tx {
+<style scoped>
+.transaction {
   position: relative;
   font-size: 14px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: var(--app-fg);
-  border: 1px solid var(--bc-dim);
   border-radius: 0.25rem;
   z-index: 90;
+  padding: 1.5rem 1rem;
+  margin: 1rem 1rem 0 1rem;
   cursor: pointer;
 }
 
-.tx a {
-  display: inline-block;
+.icon {
+  height: 2.75rem;
+  width: 2.75rem;
+  display: inline-flex;
+}
+
+.transaction:hover {
+  background: var(--app-fg-hover);
+}
+
+.left {
+  display: flex;
+  flex-direction: row;
+}
+
+.title-and-images {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title-and-images p {
+  color: var(--txt);
+  padding: 0 2rem 0 1rem;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.validator-images {
+  padding: 0 0 0 1rem;
+  display: inline-flex;
+}
+
+.right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dim);
+  padding-left: 1rem;
+}
+
+.amounts p {
+  color: var(--txt);
 }
 
 .validator-image {
-  margin: 0.25rem;
-  border-radius: 100%;
   height: 1.25rem;
   width: 1.25rem;
-  vertical-align: middle;
-  transition: transform 0.2s ease-in-out;
+  margin: 0 0.5rem 0 0;
+  border-radius: 50%;
 }
 
-.validator-image svg {
-  border-radius: 100%;
-}
-
-.tx a:hover .validator-image {
-  transform: scale(1.1);
-}
-
-.tx h3 {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--bright);
-}
-
-.tx .amount {
-  white-space: nowrap;
-}
-
-.tx-container {
-  margin: 0 1rem 0.5rem;
-}
-
-.tx-details {
-  background: var(--app-fg);
-  border-left: 1px solid var(--bc-dim);
-  border-right: 1px solid var(--bc-dim);
-  border-bottom: 1px solid var(--bc-dim);
-  border-bottom-left-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  margin: 0 1rem 0.5rem 1rem;
-  font-size: 14px;
-  padding: 1rem;
-  position: relative;
-  z-index: 0;
-}
-
-.tx__content {
-  display: flex;
-  align-items: center;
-  position: relative;
-  z-index: 90;
-  width: 100%;
-}
-
-.tx__content__left {
-  padding: 1rem 1rem 1rem 0;
-}
-
-.tx__content__right {
-  padding-right: 2rem;
-  text-align: right;
-  flex: auto;
-}
-
-.slide-out-enter-active,
-.slide-out-leave-active {
-  transition: all 0.2s;
-}
-
-.slide-out-enter,
-.slide-out-leave-to {
-  opacity: 0;
-  transform: translateY(-100px);
-  margin-bottom: -100px;
-}
-
-.toggle {
-  position: relative;
-  right: 1rem;
+.launch {
   z-index: 91;
   cursor: pointer;
-  padding: 0.1rem;
   border-radius: 50%;
   background: var(--bc-dim);
-  height: 20px;
-  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
   transition: transform 0.2s ease;
+  margin-left: 1rem;
 }
 
-.toggle.up {
-  transform: rotate(180deg);
-}
-
-.toggle-icon {
+.launch i {
   font-size: 16px;
-}
-
-.tx .copied {
-  position: absolute;
-  top: -0.5rem;
-  right: 0;
+  position: relative;
+  color: var(--link);
+  top: 1px;
 }
 
 @media screen and (max-width: 767px) {
-  .tx__icon {
+  .title-and-images {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .title-and-images p {
+    padding-left: 0;
+  }
+
+  h3 {
+    padding-left: 0;
+  }
+
+  .amounts {
+    text-align: right;
+  }
+
+  .validator-images {
+    padding: 0.5rem 0 0 0;
+  }
+
+  .icon {
     display: none;
   }
 
-  .tx__content__left {
-    padding-left: 1rem;
-  }
-
-  .toggle {
+  .launch {
     display: none;
-  }
-
-  .amount {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-  }
-
-  .tx-details {
-    margin: 0 0.25rem 0.25rem;
-  }
-
-  .validator-image {
-    height: 1rem;
-    width: 1rem;
   }
 }
 </style>

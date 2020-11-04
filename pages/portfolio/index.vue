@@ -25,5 +25,6 @@ export default {
       'rewards',
     ]),
   },
+  middleware: 'addressRequired',
 }
 </script>
