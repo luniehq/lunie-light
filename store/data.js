@@ -1,4 +1,4 @@
-import { keyBy } from 'lodash'
+import { keyBy, uniqBy } from 'lodash'
 import network from '~/common/network'
 import DataSource from '~/common/cosmosV2-source'
 import { updateValidatorImages } from '~/common/keybase'
@@ -31,7 +31,10 @@ export const mutations = {
   ),
   setTransactions(state, { transactions, pageNumber }) {
     if (pageNumber > 0) {
-      state.transactions = state.transactions.concat(transactions)
+      state.transactions = uniqBy(
+        state.transactions.concat(transactions),
+        'key'
+      )
     } else {
       state.transactions = transactions
     }
@@ -72,6 +75,7 @@ export const actions = {
       calls.push(
         dispatch('getBalances', { address, currency }),
         dispatch('getRewards', { address, currency }),
+        dispatch('getTransactions', { address }),
         dispatch('getDelegations', address),
         dispatch('getUndelegations', address)
       )
