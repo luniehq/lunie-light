@@ -1,13 +1,8 @@
 <template>
-  <TmPage
-    data-title="Validator"
-    :empty="!validator"
-    :loading="loading"
-    :empty-title="`Validator not found`"
-    :empty-subtitle="`There must be a typo somewhere.`"
-    class="readable-width"
-  >
-    <template v-if="validator">
+  <div class="readable-width">
+    <div v-if="!validators.length">Loading...</div>
+    <div v-else-if="validators.length && !validator">Validator Not Found</div>
+    <template v-else>
       <div class="button-container">
         <BackButton />
       </div>
@@ -157,7 +152,7 @@
         :is-unnomination="true"
       />
     </template>
-  </TmPage>
+  </div>
 </template>
 
 <script>
@@ -177,14 +172,7 @@ export default {
     noBlanks,
     fromNow,
   },
-  props: {
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
-    },
-  },
   data: () => ({
-    loading: true,
     selfStake: undefined,
     validatorDelegations: [],
   }),
@@ -211,7 +199,7 @@ export default {
   },
   watch: {
     validator(validator) {
-      if (validator) {
+      if (this.validator) {
         this.getSelfStake()
         this.getValidatorDelegations()
       }
@@ -326,6 +314,13 @@ span {
   text-overflow: ellipsis;
 }
 
+h4 {
+  color: var(--txt);
+  font-size: var(--sm);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+
 .li-validator h4,
 .li-validator h5 {
   font-size: var(--sm);
@@ -396,6 +391,71 @@ span {
   margin-top: 1rem;
   font-size: 0.8rem;
   color: var(--dim);
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 0 0;
+}
+
+.readable-width {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page.dark-background {
+  background: var(--app-fg);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: normal;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 0 1rem;
+}
+
+.page-profile__section {
+  margin-bottom: 1rem;
+}
+
+.page-profile__section-title {
+  margin: 0 0 0.25rem 1rem;
+  color: var(--dim);
+  font-size: var(--sm);
+  font-weight: 500;
+}
+
+li {
+  width: 100%;
+  padding: 1rem;
+  border-bottom: 1px solid var(--bc-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.row span {
+  color: var(--bright);
+  font-size: var(--sm);
+  font-weight: 400;
+  line-height: 1rem;
 }
 
 @media screen and (max-width: 425px) {

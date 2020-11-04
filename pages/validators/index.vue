@@ -1,39 +1,33 @@
 <template>
-  <TmPage :loading="!validators">
-    <template>
-      <div class="filterContainer">
-        <TmField
-          v-model="searchTerm"
-          class="searchField"
-          placeholder="Search"
-        />
-        <div class="filterOptions">
-          <div class="toggles">
-            <TmBtn
-              value="All"
-              class="btn-radio"
-              :type="allValidators ? `active` : `secondary`"
-              @click.native="defaultSelectorsController(`allValidators`)"
-            />
-            <TmBtn
-              value="Active"
-              class="btn-radio"
-              :type="activeOnly ? `active` : `secondary`"
-              @click.native="defaultSelectorsController(`activeOnly`)"
-            />
-          </div>
+  <div>
+    <div class="filterContainer">
+      <TmField v-model="searchTerm" class="searchField" placeholder="Search" />
+      <div class="filterOptions">
+        <div class="toggles">
+          <TmBtn
+            value="All"
+            class="btn-radio"
+            :type="allValidators ? `active` : `secondary`"
+            @click.native="defaultSelectorsController(`allValidators`)"
+          />
+          <TmBtn
+            value="Active"
+            class="btn-radio"
+            :type="activeOnly ? `active` : `secondary`"
+            @click.native="defaultSelectorsController(`activeOnly`)"
+          />
         </div>
       </div>
+    </div>
 
-      <TableValidators
-        :validators="filteredValidators"
-        :delegations="delegations"
-        :rewards="rewards"
-        :search-term="searchTerm ? true : false"
-        show-on-mobile="expectedReturns"
-      />
-    </template>
-  </TmPage>
+    <TableValidators
+      :validators="filteredValidators"
+      :delegations="delegations"
+      :rewards="rewards"
+      :search-term="searchTerm ? true : false"
+      show-on-mobile="expectedReturns"
+    />
+  </div>
 </template>
 
 <script>
