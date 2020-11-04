@@ -23,7 +23,7 @@ class CosmosV0API {
 
     this.setReducers()
     this.loadValidators().then((validators) => {
-      this.store.validators = validators
+      this.store.validators = keyBy(validators, 'operatorAddress')
       this.resolveReady()
     })
   }
