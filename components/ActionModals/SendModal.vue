@@ -8,7 +8,7 @@
     submission-error-prefix="Sending tokens failed"
     :transaction-type="lunieMessageTypes.SEND"
     :transaction-data="transactionData"
-    :selected-denom="selectedTokens"
+    :selected-denom="amounts.map(({ denom }) => denom)"
     :notify-message="notifyMessage"
     @close="clear"
     @txIncluded="onSuccess"
@@ -60,9 +60,9 @@
           @keyup.enter.native="enterPressed"
         />
         <TmField
-          v-model="selectedTokens[index]"
+          v-model="amount.denom"
           :title="`Select the token you wish to use`"
-          :options="denomOptions | availableDenoms(index, selectedTokens)"
+          :options="denomOptions | availableDenoms(index, amounts)"
           class="tm-field-token-selector"
           type="select"
         />
@@ -81,7 +81,9 @@
       <TmFormMsg
         v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
-        :msg="`You don't have enough ${selectedTokens} to proceed.`"
+        :msg="`You don't have enough ${amounts.map(
+          ({ denom }) => denom
+        )} to proceed.`"
       />
       <TmFormMsg
         v-else-if="$v.amounts.$error && !$v.amounts.min"
@@ -117,7 +119,7 @@
         >
           <i class="material-icons notranslate">remove_circle</i>
         </div>
-        <div class="add-amount-button" @click="addAmount(index)">
+        <div class="add-amount-button" @click="addAmount(index + 1)">
           <i class="material-icons notranslate">add_circle</i>
         </div>
       </div>
@@ -156,16 +158,18 @@ import network from '~/common/network'
 
 const defaultMemo = ''
 
+function availableDenoms(denoms, index, amounts) {
+  return denoms.filter(
+    ({ key: denom }) =>
+      (amounts[index] && amounts[index].denom === denom) ||
+      !amounts.find((amount) => amount.denom === denom)
+  )
+}
+
 export default {
   name: `send-modal`,
   filters: {
-    availableDenoms(denoms, index, selectedTokens) {
-      return denoms.filter(
-        ({ key: denom }) =>
-          selectedTokens[index] === denom ||
-          !Object.values(selectedTokens).includes(denom)
-      )
-    },
+    availableDenoms,
   },
   props: {
     denoms: {
@@ -181,7 +185,6 @@ export default {
         denom: ``,
       },
     ],
-    selectedTokens: [],
     addressError: ``,
     memo: defaultMemo,
     max_memo_characters: 256,
@@ -204,7 +207,7 @@ export default {
         from: [this.session.address],
         amounts: this.amounts.map((amount, index) => ({
           amount: amount.amount,
-          denom: this.selectedTokens[index],
+          denom: amount.denom,
         })),
         memo: this.memo,
       }
@@ -223,12 +226,7 @@ export default {
   },
   methods: {
     open(denom = undefined) {
-      if (denom) {
-        this.selectedTokens = [denom]
-      } else {
-        this.selectedTokens = [this.denoms[0]]
-        this.amounts = [{ amount: 0, denom: this.denoms[0] }]
-      }
+      this.amounts = [{ amount: 0, denom: denom || this.denoms[0] }]
       this.$v.$reset()
       this.$refs.actionModal.open()
     },
@@ -306,27 +304,14 @@ export default {
         }
       )
     },
-    getDenoms(index) {
-      return this.denoms
-        ? this.denoms
-            .filter(
-              (denom) =>
-                denom === this.selectedTokens[index] ||
-                !Object.values(this.selectedTokens).includes(denom)
-            )
-            .map((denom) => (denom = { key: denom, value: denom }))
-        : []
-    },
     removeAmount(index) {
-      this.amounts.pop({
-        amount: 0,
-        denom: this.denoms[this.amounts.length - 1],
-      })
+      this.amounts.pop()
     },
     addAmount(index) {
+      const denoms = availableDenoms(this.denomOptions, index, this.amounts)
       this.amounts.push({
         amount: 0,
-        denom: this.denoms[this.amounts.length - 1],
+        denom: denoms[0].key,
       })
     },
   },
@@ -367,7 +352,6 @@ export default {
         },
       },
       denoms: { required },
-      selectedTokens: { required },
       memo: {
         maxLength: maxLength(this.max_memo_characters),
       },
