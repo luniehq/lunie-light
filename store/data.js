@@ -1,6 +1,6 @@
 import { keyBy } from 'lodash'
 import network from '~/common/network'
-import DataSource from '~/common/emoneyV0-source'
+import DataSource from '~/common/cosmosV2-source'
 import { updateValidatorImages } from '~/common/keybase'
 
 export const state = () => ({

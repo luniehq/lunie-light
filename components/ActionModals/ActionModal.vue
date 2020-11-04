@@ -272,9 +272,7 @@ export default {
   watch: {
     networkFees(fees) {
       // set the fee denom to a default in the beginning
-      this.feeDenom = fees.feeOptions
-        ? fees.feeOptions[0].denom
-        : this.selectedDenom
+      this.feeDenom = fees.feeOptions[0].denom
     },
   },
   updated() {
