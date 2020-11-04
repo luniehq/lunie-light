@@ -1,6 +1,10 @@
 <template>
   <div class="tx-container">
-    <a class="transaction" target="_blank">
+    <a
+      class="transaction"
+      :href="network.apiURL + '/txs/' + transaction.hash"
+      target="_blank"
+    >
       <div class="left">
         <img
           class="icon"
@@ -13,6 +17,7 @@
             <template v-for="(address, index) in transaction.details.from">
               <img
                 v-if="getValidatorImage(address)"
+                v-on:click.prevent.self
                 :key="index + '_from'"
                 class="validator-image"
                 alt="validator logo - from keybase API"
@@ -21,6 +26,7 @@
               />
               <Avatar
                 v-else
+                v-on:click.prevent.self
                 :key="index + '_from_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
@@ -31,6 +37,7 @@
             <template v-for="(address, index) in transaction.details.to">
               <img
                 v-if="getValidatorImage(address)"
+                v-on:click.prevent.self
                 :key="index + '_to'"
                 class="validator-image"
                 alt="validator logo - from keybase API"
@@ -39,6 +46,7 @@
               />
               <Avatar
                 v-else
+                v-on:click.prevent.self
                 :key="index + '_to_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
@@ -77,9 +85,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import network from '~/common/network'
 
 export default {
   name: `transaction`,
+  data: () => ({
+    network,
+  }),
   props: {
     transaction: {
       type: Object,
