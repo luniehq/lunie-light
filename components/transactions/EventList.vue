@@ -6,7 +6,7 @@
         <TransactionItem
           v-for="event in group"
           :key="event.key"
-          :transaction="event"
+          :transaction="event.event"
         />
       </div>
     </template>
