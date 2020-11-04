@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <img
-      v-if="validatorAddress"
-      class="validator-image"
-      alt="validator logo - from keybase API"
-      :src="validatorPicture"
-      @click.prevent.self
-      @click="$router.push(`/validators/${address}`)"
-    />
-    <div v-else :style="{ background: hex }"></div>
-  </div>
+  <img
+    v-if="validatorAddress && validatorPicture"
+    class="validator-image"
+    alt="validator logo - from keybase API"
+    :src="validatorPicture"
+    @click.prevent.self
+    @click="$router.push(`/validators/${address}`)"
+  />
+  <div v-else :style="{ background: hex }"></div>
 </template>
 
 <script>
@@ -49,11 +47,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.validator-image {
-  height: 1.25rem;
-  width: 1.25rem;
-  margin: 0 0.5rem 0 0;
-  border-radius: 50%;
-}
-</style>
