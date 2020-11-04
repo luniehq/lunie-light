@@ -1,4 +1,4 @@
-import network from '../network'
+import network from '~/network'
 
 export default {
   ...network.fees,
