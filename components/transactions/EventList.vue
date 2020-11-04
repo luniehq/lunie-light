@@ -4,7 +4,7 @@
       <div :key="group[0].section">
         <h3>{{ group[0].section }}</h3>
         <TransactionItem
-          v-for="event in events"
+          v-for="event in group"
           :key="event.key"
           :transaction="event"
         />
