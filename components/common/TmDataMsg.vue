@@ -2,6 +2,7 @@
   <div class="tm-data-msg">
     <div class="tm-data-msg__icon" :class="{ success: success }">
       <i
+        v-if="icon"
         :style="`background: ${iconColor}`"
         :class="spinnerClass"
         class="material-icons notranslate"
