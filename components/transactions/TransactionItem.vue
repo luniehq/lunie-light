@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="right">
-        <div class="amounts">
+        <div v-if="amounts" class="amounts">
           <p v-for="(item, index) in amounts" :key="index">
             {{ item.amount }}
             {{ item.denom }}
@@ -81,9 +81,12 @@ export default {
       )
     },
     amounts() {
-      return (
-        this.transaction.details.amounts || [this.transaction.details.amount]
-      )
+      if (this.transaction.details.amounts) {
+        return this.transaction.details.amounts
+      } else if (this.transaction.details.amount) {
+        return [this.transaction.details.amount]
+      }
+      return null
     },
   },
 }
