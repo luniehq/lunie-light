@@ -34,9 +34,9 @@
       </div>
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
-          :amount="Number(subTotal)"
-          :fee="networkFee.fee"
-          :transaction-denom="getDenom"
+          v-model="feeDenom"
+          :amounts="subTotal"
+          :fees="networkFees.feeOptions"
         />
         <!-- <TmFormMsg
             type="custom"
@@ -188,9 +188,9 @@ export default {
       type: String,
       default: `Transaction failed`,
     },
-    amount: {
-      type: [String, Number],
-      default: `0`,
+    amounts: {
+      type: Array,
+      default: () => [],
     },
     rewards: {
       type: Array,
@@ -213,8 +213,8 @@ export default {
       default: false,
     },
     selectedDenom: {
-      type: String,
-      default: ``,
+      type: Array,
+      default: () => [],
     },
     transactionType: {
       type: String,
@@ -238,11 +238,12 @@ export default {
     includedHeight: undefined,
     smallestAmount: SMALLEST,
     network,
+    feeDenom: network.stakingDenom,
   }),
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
     ...mapState(['data', ['balances']]),
-    networkFee() {
+    networkFees() {
       return fees.getFees(this.transactionData.type)
     },
     selectedSignMethod() {
@@ -252,7 +253,7 @@ export default {
       return !this.session || this.session.type === sessionType.EXPLORE
     },
     subTotal() {
-      return this.transactionType === 'UnstakeTx' ? 0 : this.amount
+      return this.transactionType === 'UnstakeTx' ? 0 : this.amounts
     },
     invoiceTotal() {
       return (
@@ -267,23 +268,11 @@ export default {
       }
       return true
     },
-    getDenom() {
-      return this.selectedDenom || network.stakingDenom
-    },
-    selectedBalance() {
-      const defaultBalance = {
-        amount: 0,
-      }
-      if (this.balances.length === 0 || !network) {
-        return defaultBalance
-      }
-      // default to the staking denom for fees
-      const feeDenom = this.selectedDenom || network.stakingDenom
-      let balance = this.balances.find(({ denom }) => denom === feeDenom)
-      if (!balance) {
-        balance = defaultBalance
-      }
-      return balance
+  },
+  watch: {
+    networkFees(fees) {
+      // set the fee denom to a default in the beginning
+      this.feeDenom = fees.feeOptions[0].denom
     },
   },
   updated() {
@@ -433,6 +422,7 @@ export default {
         const transactionData = await this.transactionManager.getTransactionMetaData(
           type,
           memo,
+          this.feeDenom,
           accountInfo
         )
         // TODO currently not respected
