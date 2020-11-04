@@ -175,8 +175,9 @@ export default {
 
 .title-and-images p {
   color: var(--txt);
-  padding-left: 1rem;
+  padding: 0 2rem 0 1rem;
   font-size: 12px;
+  word-break: break-all;
 }
 
 .validator-images {
@@ -235,8 +236,16 @@ h3 {
     align-items: start;
   }
 
+  .title-and-images p {
+    padding-left: 0;
+  }
+
   h3 {
     padding-left: 0;
+  }
+
+  .amounts {
+    text-align: right;
   }
 
   .validator-images {
