@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="lunie-light">
     <AppHeader />
+    <Notifications />
     <div id="app-content">
       <UserMenu />
       <Nuxt />
