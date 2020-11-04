@@ -9,14 +9,14 @@
         <img
           class="icon"
           :src="
-            require(`../../assets/images/transactions/${transactionType}.svg`)
+            require(`../../assets/images/transactions/${transactionCaption}.svg`)
           "
           alt="simple icon line drawing"
         />
         <div class="title-and-images">
           <div>
-            <h3>{{ transactionType }}</h3>
-            <template v-if="transactionType === `Send`">
+            <h3>{{ transactionCaption }}</h3>
+            <template v-if="transactionCaption === `Send`">
               <p
                 v-for="(address, index) in transaction.details.to"
                 :key="address + index"
@@ -24,7 +24,7 @@
                 {{ address }}
               </p>
             </template>
-            <template v-if="transactionType === `Receive`">
+            <template v-if="transactionCaption === `Receive`">
               <p
                 v-for="(address, index) in transaction.details.from"
                 :key="address + index"
@@ -90,7 +90,7 @@ export default {
   }),
   computed: {
     ...mapState(['session']),
-    transactionType() {
+    transactionCaption() {
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
           if (this.transaction.details.to.includes(this.session.address)) {
@@ -118,12 +118,12 @@ export default {
       }
     },
     includesValidatorAddresses() {
-      return !!(
-        this.transactionType === `Stake` ||
-        this.transactionType === `Unstake` ||
-        this.transactionType === `Restake` ||
-        this.transactionType === `Claim Rewards`
-      )
+      return [
+        lunieMessageTypes.STAKE,
+        lunieMessageTypes.UNSTAKE,
+        lunieMessageTypes.RESTAKE,
+        lunieMessageTypes.CLAIM_REWARDS,
+      ].includes(this.transaction.type)
     },
     amounts() {
       if (this.transaction.details.amounts) {
