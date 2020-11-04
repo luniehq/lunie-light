@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js'
 /* istanbul ignore next */
 export function SendTx(senderAddress, { to, amounts }, network) {
   return {
-    type: `bank/MsgSend`,
+    type: `cosmos-sdk/MsgSend`,
     value: {
       from_address: senderAddress,
       to_address: to[0],
@@ -18,7 +18,7 @@ export function SendTx(senderAddress, { to, amounts }, network) {
 export function StakeTx(senderAddress, { to, amount }, network) {
   /* istanbul ignore next */
   return {
-    type: `staking/MsgDelegate`,
+    type: `cosmos-sdk/MsgDelegate`,
     value: {
       delegator_address: senderAddress,
       validator_address: to[0],
@@ -30,7 +30,7 @@ export function StakeTx(senderAddress, { to, amount }, network) {
 export function UnstakeTx(senderAddress, { from, amount }, network) {
   /* istanbul ignore next */
   return {
-    type: `staking/MsgUndelegate`,
+    type: `cosmos-sdk/MsgUndelegate`,
     value: {
       validator_address: from[0],
       delegator_address: senderAddress,

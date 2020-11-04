@@ -22,14 +22,6 @@
               @click.native="defaultSelectorsController(`activeOnly`)"
             />
           </div>
-          <div class="show-mobile-sorting">
-            <i
-              :class="{ active: showMobileSorting }"
-              class="filter-toggle material-icons notranslate"
-              @click="toggleMobileSorting"
-              >filter_list</i
-            >
-          </div>
         </div>
       </div>
 
@@ -37,7 +29,7 @@
         :validators="filteredValidators"
         :delegations="delegations"
         :rewards="rewards"
-        :show-mobile-sorting="showMobileSorting"
+        :search-term="searchTerm ? true : false"
         show-on-mobile="expectedReturns"
       />
     </template>
@@ -53,7 +45,6 @@ export default {
     searchTerm: '',
     activeOnly: true,
     allValidators: false,
-    showMobileSorting: false,
   }),
   computed: {
     ...mapState('data', ['validators', 'delegations', 'rewards']),
@@ -90,9 +81,6 @@ export default {
       if (selector === `activeOnly`) {
         this.activeOnly = true
       }
-    },
-    toggleMobileSorting() {
-      this.showMobileSorting = !this.showMobileSorting
     },
   },
 }
@@ -132,15 +120,6 @@ export default {
   margin-right: -1px;
 }
 
-.show-mobile-sorting {
-  display: none;
-  cursor: pointer;
-}
-
-.show-mobile-sorting.active {
-  color: var(--highlight);
-}
-
 .filterOptions {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -177,10 +156,6 @@ export default {
   .filterOptions {
     padding: 1.5em 0.5em 0.5em;
     width: 100%;
-  }
-
-  .show-mobile-sorting {
-    display: block;
   }
 }
 

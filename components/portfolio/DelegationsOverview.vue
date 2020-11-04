@@ -16,14 +16,17 @@
           show-on-mobile="expectedReturns"
         />
       </div>
-      <TmDataMsg v-if="delegations.length === 0" icon="sentiment_dissatisfied">
+      <div v-if="!delegations.length && !balances.length" class="loading-row">
+        Loading...
+      </div>
+      <TmDataMsg
+        v-else-if="delegations.length === 0"
+        icon="sentiment_dissatisfied"
+      >
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
-          <a @click="goToValidators()">validator list</a>&nbsp;to
-          {{
-            stakedBalance.total > 0 ? `start earning rewards` : `get staking`
-          }}!
+          <a @click="goToValidators()">validator list</a>&nbsp;to start staking.
         </div>
       </TmDataMsg>
       <!-- <UnstakeModal ref="UnstakeModal" /> -->
@@ -83,12 +86,6 @@ export default {
       }, {})
     },
   },
-  mounted() {
-    const persistedPreferredCurrency = this.session.preferredCurrency
-    if (persistedPreferredCurrency) {
-      this.preferredCurrency = persistedPreferredCurrency
-    }
-  },
   methods: {
     goToValidators() {
       this.$router.push('/validators')
@@ -103,7 +100,7 @@ export default {
 h1 {
   font-size: 24px;
   color: var(--bright);
-  font-weight: 400;
+  font-weight: 500;
   padding-bottom: 2rem;
 }
 

@@ -1,35 +1,7 @@
 <template>
   <div>
-    <transition name="fade">
-      <ul v-if="showMobileSorting" class="sortingOptions">
-        <li
-          :class="{ active: isSortedBy(`votingPower`) }"
-          @click="sortBy(`votingPower`)"
-        >
-          <i class="sorting-icon material-icons notranslate">flash_on</i> Voting
-          Power
-          <i
-            :class="{ inactive: !isSortedBy(`votingPower`) }"
-            class="sorting-check material-icons notranslate"
-            >check</i
-          >
-        </li>
-        <li
-          :class="{ active: isSortedBy(`expectedReturns`) }"
-          @click="sortBy(`expectedReturns`)"
-        >
-          <i class="sorting-icon material-icons notranslate">emoji_events</i>
-          Most Rewards
-          <i
-            :class="{ inactive: !isSortedBy(`expectedReturns`) }"
-            class="sorting-check material-icons notranslate"
-            >check</i
-          >
-        </li>
-      </ul>
-    </transition>
-    <table class="data-table">
-      <thead :class="{ shrinked: showMobileSorting }">
+    <table v-if="showingValidators.length" class="data-table">
+      <thead>
         <PanelSort
           :sort="sort"
           :properties="properties"
@@ -53,7 +25,8 @@
         />
       </tbody>
     </table>
-    <div v-if="!showingValidators.length" class="no-results">No results</div>
+    <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
+    <div v-else class="no-results">No results</div>
   </div>
 </template>
 
@@ -81,7 +54,7 @@ export default {
       type: String,
       default: () => 'returns',
     },
-    showMobileSorting: {
+    searchTerm: {
       type: Boolean,
       default: () => false,
     },
@@ -172,7 +145,7 @@ export default {
 <style scoped>
 .no-results {
   text-align: center;
-  margin: 3em;
+  margin: 3rem;
   color: var(--dim);
 }
 
@@ -235,10 +208,6 @@ export default {
   vertical-align: text-bottom;
 }
 
-.shrinked .panel-sort-container {
-  visibility: collapse;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -252,10 +221,6 @@ export default {
 @media screen and (min-width: 768px) {
   .sortingOptions {
     display: none;
-  }
-
-  .shrinked .panel-sort-container {
-    visibility: initial;
   }
 }
 </style>

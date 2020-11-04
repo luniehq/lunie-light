@@ -106,7 +106,10 @@
         type="custom"
         class="tm-form-msg--desc max-message"
       /> -->
-      <div v-if="index === amounts.length - 1" class="manage-amounts-container">
+      <div
+        v-if="index === amounts.length - 1 && denoms.length > 1"
+        class="manage-amounts-container"
+      >
         <div
           v-if="amounts.length > 1"
           class="add-amount-button"

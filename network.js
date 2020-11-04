@@ -1,40 +1,20 @@
 export default {
-  id: 'terra-testnet',
-  chainId: 'tequila-0004', // TODO get from chain?
-  name: 'Terra Testnet',
+  id: 'cosmos-mainnet',
+  chainId: 'cosmoshub-3', // TODO get from chain?
+  name: 'Cosmos Hub',
   description:
-    'Terra aims to make its stablecoins available to every developer on every blockchain.',
-  website: 'https://terra.money',
-  apiURL: 'https://tequila-lcd.terra.dev',
-  stakingDenom: 'LUNA',
+    'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  website: 'https://cosmos.network',
+  apiURL: 'https://lcd.nylira.net',
+  stakingDenom: 'ATOM',
   coinLookup: [
     {
-      viewDenom: 'LUNA',
-      chainDenom: 'uluna',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'KRT',
-      chainDenom: 'ukrw',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'MNT',
-      chainDenom: 'umnt',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'UST',
-      chainDenom: 'uusd',
-      chainToViewConversionFactor: 1e-6,
-    },
-    {
-      viewDenom: 'SDT',
-      chainDenom: 'usdr',
+      viewDenom: 'ATOM',
+      chainDenom: 'uatom',
       chainToViewConversionFactor: 1e-6,
     },
   ],
-  addressPrefix: 'terra',
+  addressPrefix: 'cosmos',
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
@@ -43,24 +23,8 @@ export default {
       gasEstimate: 350000,
       feeOptions: [
         {
-          denom: 'LUNA',
-          amount: 0.0535,
-        },
-        {
-          denom: 'KRT',
-          amount: 63,
-        },
-        {
-          denom: 'MNT',
-          amount: 0.045,
-        },
-        {
-          denom: 'SDT',
-          amount: 0.01,
-        },
-        {
-          denom: 'UST',
-          amount: 0.015,
+          denom: 'ATOM',
+          amount: 0.1,
         },
       ],
     },
