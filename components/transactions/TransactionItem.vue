@@ -39,21 +39,10 @@
       </div>
       <div class="right">
         <div class="amounts">
-          <template v-if="transaction.details.amounts">
-            <p
-              v-for="(amount, index) in transaction.details.amounts"
-              :key="index + amount"
-            >
-              {{ amount.amount }}
-              {{ amount.denom }}
-            </p>
-          </template>
-          <template v-if="transaction.details.amount">
-            <p>
-              {{ transaction.details.amount.amount }}
-              {{ transaction.details.amount.denom }}
-            </p>
-          </template>
+          <p v-for="(item, index) in amounts" :key="index">
+            {{ item.amount }}
+            {{ item.denom }}
+          </p>
         </div>
         <div class="launch">
           <i class="material-icons notranslate launch-icon">launch</i>
@@ -89,6 +78,11 @@ export default {
         this.txLabel === `Unstake` ||
         this.txLabel === `Restake` ||
         this.txLabel === `Claim Rewards`
+      )
+    },
+    amounts() {
+      return (
+        this.transaction.details.amounts || [this.transaction.details.amount]
       )
     },
   },
