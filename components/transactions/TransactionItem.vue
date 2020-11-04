@@ -15,42 +15,22 @@
           <h3>{{ txLabel }}</h3>
           <div v-if="includesValidatorAddresses" class="validator-images">
             <template v-for="(address, index) in transaction.details.from">
-              <img
-                v-if="getValidatorImage(address)"
-                v-on:click.prevent.self
-                :key="index + '_from'"
-                class="validator-image"
-                alt="validator logo - from keybase API"
-                :src="getValidatorImage(address)"
-                @click="$router.push(`/validators/${address}`)"
-              />
               <Avatar
-                v-else
-                v-on:click.prevent.self
                 :key="index + '_from_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
                 :address="address"
+                @click.prevent.self
                 @click="$router.push(`/validators/${address}`)"
               />
             </template>
             <template v-for="(address, index) in transaction.details.to">
-              <img
-                v-if="getValidatorImage(address)"
-                v-on:click.prevent.self
-                :key="index + '_to'"
-                class="validator-image"
-                alt="validator logo - from keybase API"
-                :src="getValidatorImage(address)"
-                @click="$router.push(`/validators/${address}`)"
-              />
               <Avatar
-                v-else
-                v-on:click.prevent.self
                 :key="index + '_to_avatar'"
                 class="validator-image"
                 alt="placeholder color for validator image"
                 :address="address"
+                @click.prevent.self
                 @click="$router.push(`/validators/${address}`)"
               />
             </template>
@@ -84,22 +64,20 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import network from '~/common/network'
 
 export default {
   name: `transaction`,
-  data: () => ({
-    network,
-  }),
   props: {
     transaction: {
       type: Object,
       required: true,
     },
   },
+  data: () => ({
+    network,
+  }),
   computed: {
-    ...mapState('data', ['validators']),
     txLabel() {
       const typeWithoutSuffix = this.transaction.type.replace('Tx', '')
       const typeWithSpaces = typeWithoutSuffix.replace(/([A-Z])/g, ' $1').trim()
@@ -112,16 +90,6 @@ export default {
         this.txLabel === `Restake` ||
         this.txLabel === `Claim Rewards`
       )
-    },
-  },
-  methods: {
-    getValidatorImage(address) {
-      if (!address.includes('valoper')) return
-      const validator = this.validators.find(
-        (validator) => validator.operatorAddress === address
-      )
-      const validatorPicture = validator.picture || false
-      return validatorPicture
     },
   },
 }

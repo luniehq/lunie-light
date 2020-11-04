@@ -1,8 +1,20 @@
 <template>
-  <div :style="{ background: hex }"></div>
+  <div>
+    <img
+      v-if="validatorAddress"
+      class="validator-image"
+      alt="validator logo - from keybase API"
+      :src="validatorPicture"
+      @click.prevent.self
+      @click="$router.push(`/validators/${address}`)"
+    />
+    <div v-else :style="{ background: hex }"></div>
+  </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: `avatar`,
   props: {
@@ -12,6 +24,17 @@ export default {
     },
   },
   computed: {
+    ...mapState('data', ['validators']),
+    validatorAddress() {
+      return !!this.address.includes('valoper')
+    },
+    validatorPicture() {
+      const validatorDict = this.validators.reduce(
+        (map, obj) => ((map[obj.operatorAddress] = obj.picture), map), // eslint-disable-line
+        {}
+      )
+      return validatorDict[this.address]
+    },
     hash() {
       let hash = 0
       for (let i = 0; i < this.address.length; i++) {
@@ -26,3 +49,11 @@ export default {
   },
 }
 </script>
+<style scoped>
+.validator-image {
+  height: 1.25rem;
+  width: 1.25rem;
+  margin: 0 0.5rem 0 0;
+  border-radius: 50%;
+}
+</style>
