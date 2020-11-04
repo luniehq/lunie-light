@@ -15,7 +15,6 @@ export const state = () => ({
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
   api: undefined,
-  initialLoad: false,
 })
 
 export const mutations = {
@@ -52,11 +51,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async init({ commit, dispatch, state }) {
+  init({ commit }) {
     const _store = {}
     commit('setApi', new DataSource(this.$axios, network, _store, null, null))
-    await dispatch('refresh')
-    commit('setInitialLoad', true)
   },
   async refresh({ dispatch }) {
     const calls = [

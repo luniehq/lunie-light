@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     ...mapState(['session']),
-    ...mapState(['data', ['initialLoad']]),
+    ...mapState(['data', ['initialLoad']]), // initialLoad doesn't exist anymore. but we are deprecating TmPage
   },
 }
 </script>
