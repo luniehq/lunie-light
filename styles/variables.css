@@ -5,9 +5,9 @@
   --menu-bright: hsl(0, 0%, 100%);
   --menu-text: hsla(0, 0%, 90%);
   --notification-title: hsl(227, 40%, 33%);
-  --success: hsl(120, 60%, 35%);
+  --success: hsl(120, 100%, 19%);
   --success-faded: hsla(120, 61%, 45%, 0.15);
-  --warning: hsl(22, 86%, 56%);
+  --warning: hsl(22, 89%, 26%);
   --warning-faded: hsla(22, 86%, 56%, 0.15);
   --danger: hsl(0, 100%, 55%);
   --danger-faded: hsl(0, 100%, 85%);

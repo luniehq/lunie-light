@@ -26,7 +26,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `page`,
+  name: `tm-page`,
   props: {
     loadingMore: {
       type: Boolean,
@@ -72,7 +72,7 @@ export default {
 }
 
 .readable-width {
-  max-width: 800px;
+  max-width: 720px;
 }
 
 .page.dark-background {

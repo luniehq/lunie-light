@@ -2,7 +2,6 @@
   <SessionFrame icon="account_box">
     <div class="card-sign-in">
       <h2 class="session-title">Welcome 👋</h2>
-      <!-- <h3 class="session-title">How would you like to get started?</h3> -->
 
       <div class="session-list">
         <LiSession
