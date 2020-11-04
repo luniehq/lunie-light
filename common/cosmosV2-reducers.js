@@ -323,6 +323,7 @@ function transactionReducerV2(network, transaction, reducers) {
         transaction,
         network
       ),
+      rawMessage: value,
       timestamp: transaction.timestamp,
       memo: transaction.tx.value.memo,
       fees,
