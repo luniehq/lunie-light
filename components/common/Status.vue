@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .status {
   text-transform: uppercase;
   font-size: 10px;

@@ -508,7 +508,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .action-modal {
   background: var(--app-fg);
   display: flex;

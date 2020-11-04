@@ -142,7 +142,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 input[type='checkbox'] {
   margin: 0.3rem 0.3rem 0.5rem 0;
   vertical-align: middle;
@@ -176,6 +176,10 @@ input[type='checkbox'] {
   border-bottom-left-radius: 0.25rem !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+
+.tm-field-group {
+  width: 100%;
 }
 
 .tm-field::placeholder {

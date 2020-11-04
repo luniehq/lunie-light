@@ -73,7 +73,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .panel-sort-container {
   padding: 1rem;
   border-bottom: 1px solid var(--bc-dim);

@@ -141,16 +141,6 @@ input.tm-field {
   animation: fade 2s infinite;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.2s;
-}
-
-.page-enter,
-.page-leave-to {
-  opacity: 0;
-}
-
 h1 {
   font-size: 24px;
   color: var(--bright);

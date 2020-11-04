@@ -8,7 +8,7 @@
 export default { name: `tm-field-group` }
 </script>
 
-<style>
+<style scoped>
 .tm-field-group {
   display: flex;
   position: relative;
