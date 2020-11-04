@@ -60,7 +60,7 @@ class CosmosV0API {
     })
 
     this.setReducers()
-    this.loadValidors().then((validators) => {
+    this.loadValidators().then((validators) => {
       this.store.validators = keyBy(validators, 'operatorAddress')
       this.resolveReady()
     })
@@ -181,8 +181,8 @@ class CosmosV0API {
     } catch (error) {
       // in some rare cases the validator has no self delegation so this query fails
 
-      if (error.extensions.response.status === 500) {
-        const parsedErrorLog = JSON.parse(error.extensions.response.body.error)
+      if (error.response.status === 500) {
+        const parsedErrorLog = JSON.parse(error.response.body.error)
         if (parsedErrorLog.message.startsWith('no delegation for this')) {
           return 0
         }
@@ -251,7 +251,7 @@ class CosmosV0API {
     return Object.values(this.store.validators)
   }
 
-  async loadValidors(height) {
+  async loadValidators(height) {
     const [
       validators,
       annualProvision,
