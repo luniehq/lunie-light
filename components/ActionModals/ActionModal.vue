@@ -213,8 +213,8 @@ export default {
       default: false,
     },
     selectedDenom: {
-      type: [String, Array],
-      default: ``,
+      type: Array,
+      default: () => [],
     },
     transactionType: {
       type: String,
@@ -268,14 +268,10 @@ export default {
       }
       return true
     },
-    getDenom() {
-      return Array.isArray(this.selectedDenom)
-        ? this.selectedDenom[0]
-        : this.selectedDenom || network.stakingDenom
-    },
   },
   watch: {
     networkFees(fees) {
+      // set the fee denom to a default in the beginning
       this.feeDenom = fees.feeOptions[0].denom
     },
   },

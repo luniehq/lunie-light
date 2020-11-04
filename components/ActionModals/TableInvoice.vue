@@ -30,14 +30,16 @@
     </TmFormGroup>
     <ul class="table-invoice">
       <li
-        v-for="subTotal in amounts"
+        v-for="(subTotal, index) in amounts"
         :key="`${subTotal.denom}-subtotal`"
         class="sub-total"
       >
-        <span v-if="subTotal.amount > 0">Subtotal</span>
-        <span v-if="subTotal.amount > 0">
-          {{ subTotal.amount | fullDecimals }} {{ subTotal.denom }}
-        </span>
+        <template v-if="subTotal.amount">
+          <span>{{ index === 0 ? 'Subtotal' : '' }}</span>
+          <span>
+            {{ subTotal.amount | fullDecimals }} {{ subTotal.denom }}
+          </span>
+        </template>
       </li>
       <li class="fees">
         <span>Network Fee</span>
@@ -47,11 +49,11 @@
         </span>
       </li>
       <li
-        v-for="total in totals"
+        v-for="(total, index) in totals"
         :key="`${total.denom}-total`"
         class="total-row"
       >
-        <span>Total</span>
+        <span>{{ index === 0 ? 'Total' : '' }}</span>
         <div class="total-column">
           <p>{{ total.amount | fullDecimals }} {{ total.denom }}</p>
         </div>
@@ -151,5 +153,22 @@ export default {
 .total-column {
   display: flex;
   flex-direction: column;
+}
+
+.tm-field-addon {
+  border-right: none;
+}
+
+.tm-field-token-selector >>> .tm-field-select {
+  border-left: 0;
+  border-radius: 0 !important;
+}
+
+.tm-field-token-selector >>> .tm-field-select:focus {
+  border-color: var(--input-bc);
+}
+
+.tm-field-token-selector >>> .tm-field-select-addon {
+  border: 0;
 }
 </style>

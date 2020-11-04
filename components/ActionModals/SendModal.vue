@@ -51,6 +51,7 @@
       :field-label="index === 0 ? `Amount` : ``"
     >
       <TmFieldGroup>
+        <!-- ATTENTION we are using id here for a repeatable element -->
         <TmField
           id="amount"
           ref="amount"
@@ -64,7 +65,7 @@
           id="token"
           v-model="selectedTokens[index]"
           :title="`Select the token you wish to use`"
-          :options="feeOptions | availableDenoms(index, selectedTokens)"
+          :options="denomOptions | availableDenoms(index, selectedTokens)"
           class="tm-field-token-selector"
           type="select"
         />
@@ -208,7 +209,7 @@ export default {
         memo: this.memo,
       }
     },
-    feeOptions(index) {
+    denomOptions(index) {
       return this.denoms
         ? this.denoms.map((denom) => ({ key: denom, value: denom }))
         : []
