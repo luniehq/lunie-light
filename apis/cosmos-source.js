@@ -1,10 +1,12 @@
 const BigNumber = require('bignumber.js')
 const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
-const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
-const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
-const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
+const { encodeB32, decodeB32, pubkeyToAddress } = require('../common/address')
+const { fixDecimalsAndRoundUpBigNumbers } = require('../common/numbers.js')
 
-class CosmosV0API {
+const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
+const PAGE_RECORDS_COUNT = 20
+
+class CosmosAPI {
   constructor(axios, network, store, fiatValuesAPI, db) {
     this.baseURL = network.apiURL
     this.axios = axios
@@ -71,8 +73,9 @@ class CosmosV0API {
   // querying data from the cosmos REST API
   // is overwritten in cosmos v2 to extract from a differnt result format
   // some endpoints /blocks and /txs have a different response format so they use this.get directly
-  async query(url) {
-    return await this.getRetry(url)
+  async query(url, resultSelector = 'result') {
+    const response = await this.getRetry(url)
+    return response[resultSelector]
   }
 
   async getSignedBlockWindow() {
@@ -100,13 +103,61 @@ class CosmosV0API {
       : []
   }
 
-  async getValidatorSigningInfos(validators) {
-    const signingInfos = await Promise.all(
-      validators.map(({ consensus_pubkey: consensusPubkey }) =>
-        this.getValidatorSigningInfo(consensusPubkey)
-      )
+  async getTransactionsV2(address, pageNumber = 0) {
+    this.checkAddress(address)
+
+    // getting page count
+    const [senderPage, recipientPage] = await Promise.all([
+      this.getPageCount(`/txs?message.sender=${address}`),
+      this.getPageCount(`/txs?transfer.recipient=${address}`),
+    ])
+
+    // dirty hack to fix first page +1
+    pageNumber = pageNumber ? pageNumber + 1 : pageNumber
+    const requests = [
+      this.loadPaginatedTxs(
+        `/txs?message.sender=${address}`,
+        senderPage - pageNumber
+      ),
+      this.loadPaginatedTxs(
+        `/txs?transfer.recipient=${address}`,
+        recipientPage - pageNumber
+      ),
+    ]
+    /*
+      if it's a first requests we need to load two pages, instead of one,
+      cause last page could contain less records than any other (even 1)
+      To do this asynchronously we need to do it with Promise.all
+      and not wait until last page is loaded
+    */
+    if (!pageNumber) {
+      if (senderPage - pageNumber > 1) {
+        requests.push(
+          this.loadPaginatedTxs(
+            `/txs?message.sender=${address}`,
+            senderPage - pageNumber - 1
+          )
+        )
+      }
+      if (recipientPage - pageNumber > 1) {
+        requests.push(
+          this.loadPaginatedTxs(
+            `/txs?transfer.recipient=${address}`,
+            recipientPage - pageNumber - 1
+          )
+        )
+      }
+    }
+
+    const txs = await Promise.all(requests).then(([...results]) =>
+      [].concat(...results)
     )
 
+    return this.reducers.transactionsReducerV2(this.network, txs, this.reducers)
+  }
+
+  async getValidatorSigningInfos() {
+    const signingInfos = await this.query(`slashing/signing_infos`)
     return signingInfos
   }
 
@@ -755,24 +806,19 @@ class CosmosV0API {
     )
   }
 
-  async loadPaginatedTxs(url, page = 1, totalAmount = 0) {
-    const pagination = `&limit=1000000000&page=${page}`
-    let allTxs = []
-
-    const { txs, total_count: totalCount } = await this.getRetry(
-      `${url}${pagination}`
-    )
-    allTxs = allTxs.concat(txs)
-
-    // there is a bug in page_number in gaia-13007 so we can't use is
-    if (allTxs.length + totalAmount < Number(totalCount)) {
-      return allTxs.concat(
-        await this.loadPaginatedTxs(url, page + 1, totalAmount + allTxs.length)
-      )
+  async loadPaginatedTxs(url, page = 1) {
+    if (page < 1) {
+      return []
     }
+    const pagination = `&limit=${PAGE_RECORDS_COUNT}&page=${page}`
+    const { txs } = await this.getRetry(`${url}${pagination}`)
+    return txs || []
+  }
 
-    return allTxs
+  async getPageCount(url) {
+    const page = await this.getRetry(url + `&limit=${PAGE_RECORDS_COUNT}`)
+    return page.page_total
   }
 }
 
-module.exports = CosmosV0API
+module.exports = CosmosAPI
