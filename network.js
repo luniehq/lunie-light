@@ -1,68 +1,63 @@
 export default {
-  id: 'terra-testnet',
-  chainId: 'tequila-0004', // TODO get from chain?
-  name: 'Terra Testnet',
-  description:
-    'Terra aims to make its stablecoins available to every developer on every blockchain.',
-  website: 'https://terra.money',
-  apiURL: 'https://tequila-lcd.terra.dev',
-  stakingDenom: 'LUNA',
+  id: 'emoney-mainnet',
+  chainId: 'emoney-1', // TODO get from chain?
+  name: 'e-Money',
+  description: 'e-Money, the world of money.',
+  website: 'https://e-money.com',
+  apiURL: 'https://emoney.validator.network/light',
+  stakingDenom: 'NGM',
   coinLookup: [
     {
-      viewDenom: 'LUNA',
-      chainDenom: 'uluna',
+      viewDenom: 'NGM',
+      chainDenom: 'ungm',
       chainToViewConversionFactor: 1e-6,
     },
     {
-      viewDenom: 'KRT',
-      chainDenom: 'ukrw',
+      viewDenom: 'eSEK',
+      chainDenom: 'esek',
       chainToViewConversionFactor: 1e-6,
     },
     {
-      viewDenom: 'MNT',
-      chainDenom: 'umnt',
+      viewDenom: 'eDKK',
+      chainDenom: 'edkk',
       chainToViewConversionFactor: 1e-6,
     },
     {
-      viewDenom: 'UST',
-      chainDenom: 'uusd',
+      viewDenom: 'eCHF',
+      chainDenom: 'echf',
       chainToViewConversionFactor: 1e-6,
     },
     {
-      viewDenom: 'SDT',
-      chainDenom: 'usdr',
+      viewDenom: 'eNOK',
+      chainDenom: 'enok',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'eJPY',
+      chainDenom: 'ejpy',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'eUSD',
+      chainDenom: 'eusd',
+      chainToViewConversionFactor: 1e-6,
+    },
+    {
+      viewDenom: 'eEUR',
+      chainDenom: 'eeur',
       chainToViewConversionFactor: 1e-6,
     },
   ],
-  addressPrefix: 'terra',
+  addressPrefix: 'emoney',
   HDPath: `m/44'/118'/0'/0/0`,
   curve: 'ed25519',
   lockUpPeriod: `21 days`,
   fees: {
     default: {
-      gasEstimate: 350000,
-      feeOptions: [
-        {
-          denom: 'LUNA',
-          amount: 0.0535,
-        },
-        {
-          denom: 'KRT',
-          amount: 63,
-        },
-        {
-          denom: 'MNT',
-          amount: 0.045,
-        },
-        {
-          denom: 'SDT',
-          amount: 0.01,
-        },
-        {
-          denom: 'UST',
-          amount: 0.015,
-        },
-      ],
+      gasEstimate: 550000,
+    },
+    SendTx: {
+      gasEstimate: 75000,
     },
   },
 }

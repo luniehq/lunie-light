@@ -1,5 +1,5 @@
 import network from '~/common/network'
-import DataSource from '~/common/terraV2-source'
+import DataSource from '~/common/emoneyV0-source'
 
 export const state = () => ({
   block: undefined,

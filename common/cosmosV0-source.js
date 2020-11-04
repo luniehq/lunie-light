@@ -4,6 +4,44 @@ const { encodeB32, decodeB32, pubkeyToAddress } = require('./address')
 const { fixDecimalsAndRoundUpBigNumbers } = require('./numbers.js')
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 
+const hardCodedFiatValuesAPI = {
+  eMoneyExchangeRates: {
+    NGM: {
+      EUR: 0.3,
+      USD: 0.3,
+    },
+    eEUR: {
+      EUR: 1,
+      USD: 1.3,
+    },
+    eUSD: {
+      EUR: 0.8,
+      USD: 1,
+    },
+    eDKK: {
+      EUR: 0.17,
+      USD: 0.2,
+    },
+    eNOK: {
+      EUR: 0.07,
+      USD: 0.09,
+    },
+    eSEK: {
+      EUR: 0.11,
+      USD: 0.13,
+    },
+    eJPY: {
+      EUR: 0.05,
+      USD: 0.07,
+    },
+    eGBP: {
+      EUR: 1.24,
+      USD: 1.45,
+    },
+  },
+  calculateFiatValues: (value) => value,
+}
+
 class CosmosV0API {
   constructor(axios, network, store, fiatValuesAPI, db) {
     this.baseURL = network.apiURL
@@ -13,7 +51,7 @@ class CosmosV0API {
     this.delegatorBech32Prefix = network.addressPrefix
     this.validatorConsensusBech32Prefix = `${network.addressPrefix}valcons`
     this.store = store // TODO remove store
-    this.fiatValuesAPI = fiatValuesAPI
+    this.fiatValuesAPI = hardCodedFiatValuesAPI
     this.db = db
 
     // system to stop queries to proceed if store data is not yet available
