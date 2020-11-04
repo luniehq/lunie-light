@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 export default {
@@ -70,10 +71,27 @@ export default {
   }),
   computed: {
     transactionType() {
-      const typeWithSpaces = this.transaction.type
-        .replace(/([A-Z])/g, ' $1')
-        .trim()
-      return typeWithSpaces
+      switch (this.transaction.type) {
+        case lunieMessageTypes.SEND:
+          return `Send`
+        case lunieMessageTypes.STAKE:
+          return `Stake`
+        case lunieMessageTypes.RESTAKE:
+          return `Restake`
+        case lunieMessageTypes.UNSTAKE:
+          return `Unstake`
+        case lunieMessageTypes.DEPOSIT:
+          return `Deposit`
+        case lunieMessageTypes.VOTE:
+          return `Vote`
+        case lunieMessageTypes.CLAIM_REWARDS:
+          return `Claim Rewards`
+        case lunieMessageTypes.UNKNOWN:
+          return `Unknown`
+        /* istanbul ignore next */
+        default:
+          return ``
+      }
     },
     includesValidatorAddresses() {
       return !!(
