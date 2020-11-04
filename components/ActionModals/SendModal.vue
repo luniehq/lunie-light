@@ -44,7 +44,7 @@
     <TmFormGroup
       v-for="(amount, index) in amounts"
       id="form-group-amount"
-      :key="`${amount.amount}-${amount.denom}-${index}`"
+      :key="amount.denom"
       :error="$v.amounts.$error && $v.amounts.$invalid"
       class="action-modal-form-group"
       field-id="amount"
@@ -53,16 +53,13 @@
       <TmFieldGroup>
         <!-- ATTENTION we are using id here for a repeatable element -->
         <TmField
-          id="amount"
-          ref="amount"
-          v-model="amounts[index].amount"
-          class="tm-field-addon"
+          v-model="amount.amount"
+          class="tm-field-addon amount"
           placeholder="0"
           type="number"
           @keyup.enter.native="enterPressed"
         />
         <TmField
-          id="token"
           v-model="selectedTokens[index]"
           :title="`Select the token you wish to use`"
           :options="denomOptions | availableDenoms(index, selectedTokens)"
