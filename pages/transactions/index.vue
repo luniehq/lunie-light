@@ -1,7 +1,15 @@
 <template>
   <TmPage :sign-in-required="true">
     <template slot="signInRequired">
-      <div v-if="!transactions.length" class="loading-row">Loading...</div>
+      <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
+
+      <TmDataMsg v-else-if="!transactions.length">
+        <div slot="title">No transactions</div>
+        <div slot="subtitle">
+          {{ oldChainDataMessage }}
+        </div>
+      </TmDataMsg>
+
       <template v-else>
         <EventList
           :events="transactions"
@@ -9,11 +17,9 @@
           @loadMore="loadTransactions"
         />
 
-        <template v-if="transactions">
+        <template v-if="transactionsLoaded">
           <p class="message">
-            *If this transaction list looks incomplete, it's possible the
-            transactions may have occured on a previous version of this
-            blockchain.
+            {{ oldChainDataMessage }}
           </p>
         </template>
       </template>
@@ -37,6 +43,10 @@ export default {
       `moreTransactionsAvailable`,
     ]),
     ...mapState(['session']),
+    oldChainDataMessage() {
+      return `If you expected to see transactions here that are missing, 
+      it's possible the transactions may have occured on a previous version of this blockchain.`
+    },
   },
   methods: {
     async loadTransactions() {
@@ -53,10 +63,15 @@ export default {
 </script>
 <style scoped>
 .message {
-  font-size: 11px;
-  color: var(--txt);
-  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: var(--app-fg);
+  border-radius: 0.25rem;
+  margin: 1rem;
   padding: 2rem;
+  font-size: 12px;
+  color: var(--txt);
 }
 
 .loading-row {
