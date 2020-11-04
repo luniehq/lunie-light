@@ -14,7 +14,25 @@
           alt="simple icon line drawing"
         />
         <div class="title-and-images">
-          <h3>{{ transactionType }}</h3>
+          <div>
+            <h3>{{ transactionType }}</h3>
+            <template v-if="transactionType === `Send`">
+              <p
+                v-for="(address, index) in transaction.details.to"
+                :key="address + index"
+              >
+                {{ address }}
+              </p>
+            </template>
+            <template v-if="transactionType === `Receive`">
+              <p
+                v-for="(address, index) in transaction.details.from"
+                :key="address + index"
+              >
+                {{ address }}
+              </p>
+            </template>
+          </div>
           <div v-if="includesValidatorAddresses" class="validator-images">
             <template v-for="(address, index) in transaction.details.from">
               <Avatar
@@ -55,6 +73,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
@@ -70,10 +89,15 @@ export default {
     network,
   }),
   computed: {
+    ...mapState(['session']),
     transactionType() {
       switch (this.transaction.type) {
         case lunieMessageTypes.SEND:
-          return `Send`
+          if (this.transaction.details.to.includes(this.session.address)) {
+            return 'Receive'
+          } else {
+            return 'Send'
+          }
         case lunieMessageTypes.STAKE:
           return `Stake`
         case lunieMessageTypes.RESTAKE:
@@ -147,6 +171,12 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.title-and-images p {
+  color: var(--txt);
+  padding-left: 1rem;
+  font-size: 12px;
 }
 
 .validator-images {

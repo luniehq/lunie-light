@@ -4,8 +4,8 @@
       <div :key="group[0].section">
         <h3>{{ group[0].section }}</h3>
         <TransactionItem
-          v-for="item in group"
-          :key="item.event.key"
+          v-for="(item, index) in group"
+          :key="item.event.key + index"
           :transaction="item.event"
         />
       </div>
