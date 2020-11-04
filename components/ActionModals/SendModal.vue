@@ -229,6 +229,7 @@ export default {
         this.selectedTokens = [this.denoms[0]]
         this.amounts = [{ amount: 0, denom: this.denoms[0] }]
       }
+      this.$v.$reset()
       this.$refs.actionModal.open()
     },
     onSuccess(event) {
