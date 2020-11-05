@@ -121,7 +121,7 @@ export default {
   margin: 2rem 0 0;
   border-collapse: inherit;
   padding: 0 0.25rem;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   letter-spacing: 0.4px;
 }
 

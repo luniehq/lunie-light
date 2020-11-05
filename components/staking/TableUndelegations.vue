@@ -86,7 +86,7 @@ export default {
 .data-table >>> th:first-child {
   width: 5%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table >>> th:nth-child(2) {

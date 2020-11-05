@@ -149,7 +149,7 @@ input[type='checkbox'] {
 }
 
 .tm-field {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-radius: 0;
   color: var(--txt);
@@ -162,7 +162,7 @@ input[type='checkbox'] {
 }
 
 .tm-field-addon {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-radius: 0;
   color: var(--txt);
@@ -215,7 +215,7 @@ textarea.tm-field {
 
 .tm-select select {
   appearance: none;
-  background: var(--input-bg);
+  background: var(--transparent);
   border-radius: 0;
   color: var(--txt, #333);
   padding-right: 2rem;
@@ -233,7 +233,7 @@ textarea.tm-field {
 
 .tm-select .tm-field-select-addon {
   align-items: center;
-  background: var(--input-bg);
+  background: var(--transparent);
   border-left: 1px solid var(--input-bc);
   box-sizing: border-box;
   color: var(--txt, #333);
@@ -249,7 +249,7 @@ textarea.tm-field {
 }
 
 .input-group-addon {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-left: none;
   color: var(--txt);

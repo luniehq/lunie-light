@@ -174,9 +174,9 @@ export default {
 }
 
 .title-and-images p {
-  color: var(--txt);
+  color: var(--dim);
   padding: 0 2rem 0 1rem;
-  font-size: 12px;
+  font-size: var(--text-xs);
   word-break: break-all;
 }
 
@@ -192,14 +192,15 @@ export default {
 }
 
 h3 {
-  font-size: 16px;
+  font-size: var(--text-base);
   font-weight: 500;
-  color: var(--dim);
+  color: var(--txt);
   padding-left: 1rem;
 }
 
-.amounts p {
+.amounts {
   color: var(--txt);
+  font-size: var(--text-base);
 }
 
 .validator-image {

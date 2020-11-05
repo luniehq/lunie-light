@@ -130,7 +130,7 @@ export default {
 
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 
@@ -141,13 +141,13 @@ export default {
 
 .li-validator:hover {
   cursor: pointer;
-  background: var(--app-fg-hover);
+  background: var(--gray-200);
   color: var(--bright);
 }
 
 .li-validator-name {
   font-size: 1rem;
-  line-height: 18px;
+  line-height: 20px;
   font-weight: 500;
   color: var(--bright);
   display: inline-block;

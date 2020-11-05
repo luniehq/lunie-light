@@ -540,7 +540,7 @@ export default {
 
 .action-modal-title {
   flex: 1;
-  font-size: var(--h2);
+  font-size: var(--text-2xl);
   font-weight: 400;
   color: var(--bright);
   padding-bottom: 1rem;
@@ -553,7 +553,7 @@ export default {
 }
 
 .action-modal-icon i {
-  font-size: var(--lg);
+  font-size: var(--text-xl);
 }
 
 .action-modal-icon.action-modal-prev {
@@ -611,7 +611,7 @@ export default {
 }
 
 .form-message {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   color: var(--bright);
   font-style: italic;
   display: inline-block;

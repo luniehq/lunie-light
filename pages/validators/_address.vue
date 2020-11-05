@@ -292,7 +292,7 @@ span {
 
 .li-validator-name {
   color: var(--bright);
-  font-size: var(--h1);
+  font-size: var(--text-3xl);
   line-height: 2rem;
   font-weight: 500;
   max-width: 600px;
@@ -315,7 +315,7 @@ h4 {
 
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 

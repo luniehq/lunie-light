@@ -80,11 +80,11 @@ export default {
 }
 
 .panel-sort-table-header {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .sort-by i {
-  font-size: var(--lg);
+  font-size: var(--text-xl);
   position: relative;
   top: 6px;
   right: 4px;

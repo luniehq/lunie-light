@@ -91,7 +91,7 @@ export default {
 .tm-data-msg__title {
   font-weight: 400;
   color: var(--bright);
-  font-size: var(--h2);
+  font-size: var(--text-2xl);
 }
 
 .tm-data-msg__subtitle {

@@ -21,19 +21,19 @@ export default {
   text-transform: uppercase;
   font-size: 10px;
   font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 1rem;
+  padding: 2px 6px;
+  border-radius: 0.25rem;
   width: fit-content;
   text-align: center;
 }
 
 .status.inactive {
-  background: var(--warning-faded);
-  color: var(--warning);
+  background: var(--orange-200);
+  color: var(--orange-800);
 }
 
 .status.active {
-  background: var(--success-faded);
-  color: var(--success);
+  background: var(--green-200);
+  color: var(--green-800);
 }
 </style>
