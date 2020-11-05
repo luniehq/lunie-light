@@ -13,6 +13,11 @@
       :seed="seed"
       @submit="setSeed"
     />
+    <ConfirmNewSeedStep
+      v-if="step === 'Confirm'"
+      :seed="seed"
+      @submit="confirmSeed"
+    />
     <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
@@ -21,7 +26,7 @@
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
 import network from '~/common/network'
 
-const steps = [`Name`, `Password`, `Backup`]
+const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
   name: `sign-up`,
@@ -51,6 +56,9 @@ export default {
     },
     setSeed(seed) {
       this.seed = seed
+      this.step = `Confirm`
+    },
+    confirmSeed(seed) {
       this.onSubmit()
     },
     onSubmit() {
