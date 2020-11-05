@@ -54,9 +54,9 @@ class CosmosAPI {
   // querying data from the cosmos REST API
   // is overwritten in cosmos v2 to extract from a differnt result format
   // some endpoints /blocks and /txs have a different response format so they use this.get directly
-  async query(url, resultSelector = 'data') {
+  async query(url, resultSelector = 'result') {
     try {
-      const response = await this.axios(this.baseURL + url)
+      const response = await this.get(url)
       return response[resultSelector]
     } catch (error) {
       console.error(
@@ -559,13 +559,13 @@ class CosmosAPI {
     let block, transactions
     if (blockHeight) {
       const response = await Promise.all([
-        this.query(`blocks/${blockHeight}`),
+        this.get(`blocks/${blockHeight}`),
         this.getTransactionsV2ByHeight(blockHeight),
       ])
       block = response[0]
       transactions = response[1]
     } else {
-      block = await this.query(`blocks/latest`)
+      block = await this.get(`blocks/latest`)
       transactions = await this.getTransactionsV2ByHeight(
         block.block.header.height
       )
@@ -580,9 +580,9 @@ class CosmosAPI {
   async getBlockHeader(blockHeight) {
     let block
     if (blockHeight) {
-      block = await this.query(`blocks/${blockHeight}`)
+      block = await this.get(`blocks/${blockHeight}`)
     } else {
-      block = await this.query(`blocks/latest`)
+      block = await this.get(`blocks/latest`)
     }
     return this.reducers.blockHeaderReducer(this.network.id, block)
   }
