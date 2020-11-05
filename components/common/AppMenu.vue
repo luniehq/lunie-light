@@ -103,7 +103,6 @@ export default {
 
 .app-menu .app-menu-item.nuxt-link-active h2 {
   color: var(--menu-bright);
-  font-weight: 500;
 }
 
 @media screen and (min-width: 1024px) {

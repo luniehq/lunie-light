@@ -96,7 +96,7 @@ export default {
 
 .li-validator-name {
   font-size: 1rem;
-  line-height: 18px;
+  line-height: 20px;
   font-weight: 500;
   color: var(--bright);
   display: inline-block;

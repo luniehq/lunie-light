@@ -94,13 +94,6 @@ export default {
 }
 </script>
 <style scoped>
-h1 {
-  font-size: 24px;
-  color: var(--bright);
-  font-weight: 500;
-  padding-bottom: 2rem;
-}
-
 .delegations-overview {
   background: var(--app-fg);
 }
@@ -125,11 +118,6 @@ h1 {
 }
 
 @media screen and (max-width: 667px) {
-  h1 {
-    padding: 2rem;
-    text-align: center;
-  }
-
   .loading-image-container {
     padding: 2rem;
   }

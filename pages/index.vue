@@ -75,8 +75,6 @@ export default {
 
 h1 {
   font-size: var(--text-4xl);
-  font-weight: 700;
-  padding-bottom: 1rem;
 }
 
 h2 {

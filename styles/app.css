@@ -143,8 +143,15 @@ input.tm-field {
 
 h1 {
   font-size: 24px;
-  color: var(--bright);
+  color: var(--gray-800);
   font-weight: 500;
+  padding-bottom: 2rem;
+}
+
+@media screen and (max-width: 667px) {
+  h1 {
+    text-align: center;
+  }
 }
 
 .loading-row {

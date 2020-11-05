@@ -1,21 +1,21 @@
 .lunie-light {
   /* theme colors */
-  --primary: var(--red-600);
-  --primary-hover: var(--red-700);
-  --highlight: var(--purple-500);
+  --primary: var(--purple-600);
+  --primary-hover: var(--purple-700);
+  --highlight: #F67F70;
   --link: var(--blue-700);
   --link-hover: var(--blue-800);
 
   /* background-colors */
-  --app-fg: hsl(229, 100%, 97%);
-  --app-fg-hover: hsl(229, 100%, 95%);
-  --app-bg: #fff;
-  --primary-faded: hsla(7, 88%, 70%, 0.2);
-  --primary-faded-hover: hsla(7, 88%, 70%, 0.3);
+  --app-fg: var(--gray-100);
+  --app-fg-hover: var(--gray-200);
+  --app-bg: var(--white);
+  --primary-faded: var(--red-200);
+  --primary-faded-hover: var(--red-300);
 
   /* menu styles */
-  --app-nav: hsl(229, 20%, 11%);
-  --app-nav-hover: hsl(229, 20%, 16%);
+  --app-nav: var(--gray-1000);
+  --app-nav-hover: var(--gray-900);
   --menu-link: var(--link);
   --menu-link-hover: var(--link-hover);
   --menu-border: hsl(229, 20%, 26%);
@@ -24,20 +24,16 @@
   --menu-text: hsla(0, 0%, 90%);
 
   /* typography */
-  --bright: hsl(227, 40%, 33%);
-  --txt: hsl(227, 40%, 28%);
-  --dim: hsl(227, 40%, 23%);
-  --bc: hsl(0, 0%, 95%);
-  --bc-dim: hsl(0, 0%, 97%);
+  --bright: var(--gray-900);
+  --txt: var(--gray-800);
+  --dim: var(--gray-700);
+  --bc: var(--gray-500);
+  --bc-dim: var(--gray-200);
   --input-bc: var(--menu-border);
 
-  --notification-title: hsl(227, 40%, 33%);
-  --success: var(--green-800);
-  --success-faded: var(--green-200);
-  --warning: var(--orange-800);
-  --warning-faded: var(--orange-200);
-  --danger: var(--red-800);
-  --danger-faded: var(--red-200);
+  --success: var(--green-600);
+  --warning: var(--orange-400);
+  --danger: var(--red-400);
   --info: var(--pink-900);
   --dark-grey-blue: hsl(227, 40%, 33%);
 }

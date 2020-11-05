@@ -106,6 +106,10 @@ export default {
   width: 100%;
 }
 
+.header h1 {
+  padding-bottom: 0;
+}
+
 .header button {
   margin-right: 0.5rem;
 }
@@ -116,10 +120,6 @@ export default {
 }
 
 @media screen and (max-width: 667px) {
-  h1 {
-    padding-bottom: 2rem;
-  }
-
   .header {
     flex-direction: column;
     padding: 0 1rem;
