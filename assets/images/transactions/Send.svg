@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Send</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Send" fill-rule="nonzero">
+            <circle id="Oval" fill-opacity="0.2" fill="#C8C8C8" cx="32" cy="32" r="32"></circle>
+            <path d="M20,22 C30.85,25.86 47.18,31.68 47.91,32 L47.91,32 L48,32 L47,32.38 L47,32.38 L20,42 L20,22 M20,20 C18.8954305,20 18,20.8954305 18,22 L18,32 L18,32 L18,42 C18,43.1045695 18.8954305,44 20,44 C20.2007596,43.9985542 20.3999765,43.9647887 20.59,43.9 C20.59,43.9 48.66,33.9 48.67,33.9 C49.472777,33.6146064 50.006621,32.8519721 50.0000609,32 L50.0000609,32 C49.9981257,31.15536 49.4658378,30.402953 48.67,30.12 C48.67,30.12 20.59,20.12 20.59,20.12 C20.4011059,20.0483946 20.2018573,20.0078694 20,20 Z" id="Shape" fill="#324176"></path>
+            <path d="M23,33 L37,33 C37.5522847,33 38,32.5522847 38,32 C38,31.4477153 37.5522847,31 37,31 L23,31 C22.4477153,31 22,31.4477153 22,32 C22,32.5522847 22.4477153,33 23,33 Z" id="Path" fill="#66A1FF"></path>
+        </g>
+    </g>
+</svg>

@@ -21,10 +21,12 @@ export default {
   fees: {
     default: {
       gasEstimate: 350000,
-      fee: {
-        denom: 'ATOM',
-        amount: 0.1,
-      },
+      feeOptions: [
+        {
+          denom: 'ATOM',
+          amount: 0.1,
+        },
+      ],
     },
   },
 }

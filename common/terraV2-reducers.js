@@ -14,8 +14,21 @@ function delegationReducer(delegation, validator, active) {
   }
 }
 
+function blockHeaderReducer(networkId, block) {
+  return {
+    id: block.block_id.hash,
+    networkId,
+    height: block.block.header.height,
+    chainId: block.block.header.chain_id,
+    hash: block.block_id.hash,
+    time: block.block.header.time,
+    proposer_address: block.block.header.proposer_address,
+  }
+}
+
 module.exports = {
   ...cosmosV2Reducers,
   blockReducer: cosmosV3Reducers.blockReducer,
   delegationReducer,
+  blockHeaderReducer,
 }
