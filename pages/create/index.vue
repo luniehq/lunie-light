@@ -7,11 +7,11 @@
       :password="password"
       @submit="setPassword"
     />
-    <NewSeedStep
-      v-if="step === 'Backup'"
+    <NewSeedStep v-if="step === 'Backup'" :seed="seed" @submit="setSeed" />
+    <ConfirmSeedStep
+      v-if="step === 'Confirm'"
       :loading="loading"
-      :seed="seed"
-      @submit="setSeed"
+      @submit="confirmSeed"
     />
     <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
@@ -21,7 +21,7 @@
 import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
 import network from '~/common/network'
 
-const steps = [`Name`, `Password`, `Backup`]
+const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
   name: `sign-up`,
@@ -51,6 +51,14 @@ export default {
     },
     setSeed(seed) {
       this.seed = seed
+      this.step = `Confirm`
+    },
+    confirmSeed(seed) {
+      if (this.seed !== seed) {
+        this.errorMessage =
+          'The backup code you entered is incorrect. Please go back and write down your backup code.'
+        return
+      }
       this.onSubmit()
     },
     onSubmit() {
