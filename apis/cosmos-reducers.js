@@ -720,7 +720,7 @@ function transactionReducerV2(network, transaction, reducers) {
       })
     }
     // We do display only the transactions we support in Lunie
-    const filteredMessages = transaction.tx.body.messages.filter(
+    const filteredMessages = transaction.tx.value.msg.filter(
       ({ type }) => reducers.getMessageType(type) !== 'Unknown'
     )
     const { claimMessages, otherMessages } = filteredMessages.reduce(
@@ -742,7 +742,7 @@ function transactionReducerV2(network, transaction, reducers) {
     // we need to aggregate claim rewards messages in one single one to avoid transaction repetition
     const claimMessage =
       claimMessages.length > 0
-        ? reducers.claimRewardsMessagesAggregator(claimMessages)
+        ? claimRewardsMessagesAggregator(claimMessages)
         : undefined
     const allMessages = claimMessage
       ? otherMessages.concat(claimMessage) // add aggregated claim message
@@ -754,7 +754,7 @@ function transactionReducerV2(network, transaction, reducers) {
       networkId: network.id,
       key: `${transaction.txhash}_${index}`,
       height: transaction.height,
-      details: reducers.transactionDetailsReducer(
+      details: transactionDetailsReducer(
         reducers.getMessageType(type),
         value,
         reducers,
@@ -762,7 +762,7 @@ function transactionReducerV2(network, transaction, reducers) {
         network
       ),
       timestamp: transaction.timestamp,
-      memo: transaction.tx.body.memo,
+      memo: transaction.tx.value.memo,
       fees,
       success: reducers.setTransactionSuccess(transaction, index, network.id),
       log:
@@ -774,9 +774,8 @@ function transactionReducerV2(network, transaction, reducers) {
       involvedAddresses: Array.isArray(transaction.logs)
         ? uniq(
             reducers.extractInvolvedAddresses(
-              transaction.logs.find(
-                ({ msg_index: msgIndex }) => msgIndex === index
-              ).events
+              transaction.logs.find(({ msg_index }) => msg_index === index)
+                .events
             )
           )
         : [],
@@ -786,7 +785,6 @@ function transactionReducerV2(network, transaction, reducers) {
     return [] // must return something differ from undefined
   }
 }
-
 function transactionsReducerV2(network, txs, reducers) {
   const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash)
   const sortedTxs = sortBy(duplicateFreeTxs, ['timestamp'])
