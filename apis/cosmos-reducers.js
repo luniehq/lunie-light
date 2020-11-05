@@ -225,14 +225,14 @@ function getValidatorStatus(validator) {
 
 function blockReducer(networkId, block, transactions, data = {}) {
   return {
-    id: block.block_meta.block_id.hash,
+    id: block.block_id.hash,
     networkId,
-    height: block.block_meta.header.height,
-    chainId: block.block_meta.header.chain_id,
-    hash: block.block_meta.block_id.hash,
-    time: block.block_meta.header.time,
+    height: block.block.header.height,
+    chainId: block.block.header.chain_id,
+    hash: block.block_id.hash,
+    time: block.block.header.time,
     transactions,
-    proposer_address: block.block_meta.header.proposer_address,
+    proposer_address: block.block.header.proposer_address,
     data: JSON.stringify(data),
   }
 }
@@ -487,9 +487,11 @@ function getMessageType(type) {
 }
 
 function setTransactionSuccess(transaction, index) {
-  return transaction.logs && transaction.logs[index]
-    ? transaction.logs[index].success || false
-    : false
+  // TODO identify logs per message
+  if (transaction.code) {
+    return false
+  }
+  return true
 }
 
 function sendDetailsReducer(message, reducers, network) {
@@ -712,19 +714,22 @@ function transactionReducerV2(network, transaction, reducers) {
         return coinReducer(coin, coinLookup)
       })
     } else {
-      const coinLookup = network.getCoinLookup(
-        transaction.tx.value.fee.amount.denom
-      )
-      fees = [coinReducer(transaction.tx.value.fee.amount, coinLookup)]
+      fees = transaction.tx.auth_info.fee.amount.map((fee) => {
+        const coinLookup = network.getCoinLookup(fee.denom)
+        return coinReducer(fee, coinLookup)
+      })
     }
     // We do display only the transactions we support in Lunie
-    const filteredMessages = transaction.tx.value.msg.filter(
-      ({ type }) => getMessageType(type) !== 'Unknown'
+    const filteredMessages = transaction.tx.body.messages.filter(
+      ({ type }) => reducers.getMessageType(type) !== 'Unknown'
     )
     const { claimMessages, otherMessages } = filteredMessages.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
-        if (getMessageType(message.type) === lunieMessageTypes.CLAIM_REWARDS) {
+        if (
+          reducers.getMessageType(message.type) ===
+          lunieMessageTypes.CLAIM_REWARDS
+        ) {
           claimMessages.push(message)
         } else {
           otherMessages.push(message)
@@ -737,41 +742,47 @@ function transactionReducerV2(network, transaction, reducers) {
     // we need to aggregate claim rewards messages in one single one to avoid transaction repetition
     const claimMessage =
       claimMessages.length > 0
-        ? claimRewardsMessagesAggregator(claimMessages)
+        ? reducers.claimRewardsMessagesAggregator(claimMessages)
         : undefined
     const allMessages = claimMessage
       ? otherMessages.concat(claimMessage) // add aggregated claim message
       : otherMessages
     const returnedMessages = allMessages.map(({ value, type }, index) => ({
       id: transaction.txhash,
-      type: getMessageType(type),
+      type: reducers.getMessageType(type),
       hash: transaction.txhash,
       networkId: network.id,
       key: `${transaction.txhash}_${index}`,
       height: transaction.height,
-      details: transactionDetailsReducer(
-        getMessageType(type),
+      details: reducers.transactionDetailsReducer(
+        reducers.getMessageType(type),
         value,
         reducers,
         transaction,
         network
       ),
       timestamp: transaction.timestamp,
-      memo: transaction.tx.value.memo,
+      memo: transaction.tx.body.memo,
       fees,
-      success: setTransactionSuccess(transaction, index, network.id),
+      success: reducers.setTransactionSuccess(transaction, index, network.id),
       log:
         transaction.logs && transaction.logs[index]
           ? transaction.logs[index].log
             ? transaction.logs[index].log || transaction.logs[0] // failing txs show the first logs
             : transaction.logs[0].log || ''
           : JSON.parse(JSON.stringify(transaction.raw_log)).message,
-      involvedAddresses: uniq(extractInvolvedAddresses(transaction)),
+      involvedAddresses: Array.isArray(transaction.logs)
+        ? uniq(
+            reducers.extractInvolvedAddresses(
+              transaction.logs.find(
+                ({ msg_index: msgIndex }) => msgIndex === index
+              ).events
+            )
+          )
+        : [],
     }))
     return returnedMessages
   } catch (error) {
-    // eslint-disable-next-line
-      console.error(error)
     return [] // must return something differ from undefined
   }
 }
@@ -788,13 +799,21 @@ function transactionsReducerV2(network, txs, reducers) {
   }, [])
 }
 
-function delegationReducer(delegation, validator, active) {
+function delegationReducer(delegation, validator, active, network) {
+  const coinLookup = network.coinLookup.find(
+    ({ viewDenom }) => viewDenom === network.stakingDenom
+  )
+  const { amount, denom } = coinReducer(
+    { amount: delegation.balance, denom: network.stakingDenom },
+    coinLookup
+  )
+
   return {
-    id: delegation.validator_address,
+    id: delegation.validator_address.concat(`-${denom}`),
     validatorAddress: delegation.validator_address,
     delegatorAddress: delegation.delegator_address,
     validator,
-    amount: delegation.balance ? atoms(delegation.balance) : 0,
+    amount,
     active,
   }
 }
@@ -846,6 +865,8 @@ function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: statusInfo.status,
     statusDetailed: statusInfo.status_detailed,
+    delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
+    popularity: validator.popularity,
     expectedReturns: reducers
       .expectedRewardsPerToken(
         validator,
@@ -885,20 +906,21 @@ function extractInvolvedAddresses(transaction) {
 }
 
 function undelegationEndTimeReducer(transaction) {
-  if (transaction.events) {
-    let completionTimeAttribute
-    transaction.events.find(({ attributes }) => {
-      if (attributes) {
-        completionTimeAttribute = attributes.find(
-          (tx) => tx.key === `completion_time`
-        )
-      }
-      return !!completionTimeAttribute
-    })
-    return completionTimeAttribute ? completionTimeAttribute.value : undefined
-  } else {
-    return null
-  }
+  const events = transaction.logs.reduce(
+    (events, log) => (log.events ? events.concat(log.events) : events),
+    []
+  )
+
+  let completionTimeAttribute
+  events.find(({ attributes }) => {
+    if (attributes) {
+      completionTimeAttribute = attributes.find(
+        (tx) => tx.key === `completion_time`
+      )
+    }
+    return !!completionTimeAttribute
+  })
+  return completionTimeAttribute ? completionTimeAttribute.value : undefined
 }
 
 module.exports = {
@@ -946,5 +968,7 @@ module.exports = {
   sendDetailsReducer,
   restakeDetailsReducer,
   setTransactionSuccess,
+  transactionDetailsReducer,
+  claimRewardsMessagesAggregator,
   getMessageType,
 }

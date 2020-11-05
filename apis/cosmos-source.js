@@ -581,7 +581,7 @@ class CosmosAPI {
     } else {
       block = await this.getRetry(`blocks/latest`)
       transactions = await this.getTransactionsV2ByHeight(
-        block.block_meta.header.height
+        block.block.header.height
       )
     }
     return this.reducers.blockReducer(this.network.id, block, transactions)
@@ -723,7 +723,12 @@ class CosmosAPI {
     })
 
     return delegations.map((delegation) =>
-      this.reducers.delegationReducer(delegation, validator)
+      this.reducers.delegationReducer(
+        delegation,
+        validator,
+        delegationEnum.ACTIVE,
+        this.network
+      )
     )
   }
 
