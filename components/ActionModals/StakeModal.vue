@@ -43,8 +43,7 @@
         <TmBtn
           type="button"
           class="secondary addon-max"
-          value="Set Max"
-          :disabled="session.addressRole === `controller`"
+          value="Max"
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>

@@ -1,30 +1,28 @@
 <template>
-  <TmPage :sign-in-required="true">
-    <template slot="signInRequired">
-      <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
+  <div>
+    <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
 
-      <TmDataMsg v-else-if="!transactions.length">
-        <div slot="title">No transactions</div>
-        <div slot="subtitle">
+    <TmDataMsg v-else-if="!transactions.length">
+      <div slot="title">No transactions</div>
+      <div slot="subtitle">
+        {{ oldChainDataMessage }}
+      </div>
+    </TmDataMsg>
+
+    <template v-else>
+      <EventList
+        :events="transactions"
+        :more-available="moreTransactionsAvailable"
+        @loadMore="loadTransactions"
+      />
+
+      <template v-if="transactionsLoaded">
+        <p class="message">
           {{ oldChainDataMessage }}
-        </div>
-      </TmDataMsg>
-
-      <template v-else>
-        <EventList
-          :events="transactions"
-          :more-available="moreTransactionsAvailable"
-          @loadMore="loadTransactions"
-        />
-
-        <template v-if="transactionsLoaded">
-          <p class="message">
-            {{ oldChainDataMessage }}
-          </p>
-        </template>
+        </p>
       </template>
     </template>
-  </TmPage>
+  </div>
 </template>
 
 <script>

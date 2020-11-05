@@ -1,13 +1,8 @@
 <template>
-  <TmPage
-    data-title="Validator"
-    :empty="!validator"
-    :loading="loading"
-    :empty-title="`Validator not found`"
-    :empty-subtitle="`There must be a typo somewhere.`"
-    class="readable-width"
-  >
-    <template v-if="validator">
+  <div class="readable-width">
+    <div v-if="!validators.length">Loading...</div>
+    <div v-else-if="validators.length && !validator">Validator Not Found</div>
+    <template v-else>
       <div class="back-button-container">
         <BackButton />
       </div>
@@ -150,7 +145,7 @@
         :is-unnomination="true"
       />
     </template>
-  </TmPage>
+  </div>
 </template>
 
 <script>
@@ -169,14 +164,7 @@ export default {
     noBlanks,
     fromNow,
   },
-  props: {
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
-    },
-  },
   data: () => ({
-    loading: true,
     selfStake: undefined,
     validatorDelegations: [],
   }),
@@ -316,6 +304,13 @@ span {
   flex-direction: column;
   padding-left: 1rem;
   text-overflow: ellipsis;
+}
+
+h4 {
+  color: var(--txt);
+  font-size: var(--sm);
+  margin-bottom: 2px;
+  font-weight: 500;
 }
 
 .li-validator h4,
