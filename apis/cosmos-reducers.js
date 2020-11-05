@@ -701,14 +701,10 @@ function proposalReducer(
   }
 }
 
-function transactionReducerV2(network, transaction, reducers) {
+function transactionReducer(network, transaction, reducers) {
   try {
-    // TODO check if this is anywhere not an array
     let fees
-    if (
-      transaction.tx.value &&
-      Array.isArray(transaction.tx.value.fee.amount)
-    ) {
+    if (transaction.tx.value) {
       fees = transaction.tx.value.fee.amount.map((coin) => {
         const coinLookup = network.getCoinLookup(coin.denom)
         return coinReducer(coin, coinLookup)
@@ -791,9 +787,7 @@ function transactionsReducerV2(network, txs, reducers) {
   const reversedTxs = reverse(sortedTxs)
   // here we filter out all transactions related to validators
   return reversedTxs.reduce((collection, transaction) => {
-    return collection.concat(
-      transactionReducerV2(network, transaction, reducers)
-    )
+    return collection.concat(transactionReducer(network, transaction, reducers))
   }, [])
 }
 
@@ -956,7 +950,7 @@ module.exports = {
   undelegationEndTimeReducer,
 
   transactionsReducerV2,
-  transactionReducerV2,
+  transactionReducer,
   depositDetailsReducer,
   voteProposalDetailsReducer,
   submitProposalDetailsReducer,

@@ -51,30 +51,19 @@ class CosmosAPI {
     ).then((res) => res.data)
   }
 
-  async getRetry(url, intent = 0) {
-    try {
-      return await this.get(url)
-    } catch (error) {
-      // give up
-      if (intent >= 3) {
-        // eslint-disable-next-line
-        console.error(
-          `Error for query ${url} in network ${this.networkId} (tried 3 times)`
-        )
-        throw error
-      }
-
-      // retry
-      await new Promise((resolve) => setTimeout(() => resolve(), 1000))
-      return this.getRetry(url, intent + 1)
-    }
-  }
-
   // querying data from the cosmos REST API
   // is overwritten in cosmos v2 to extract from a differnt result format
   // some endpoints /blocks and /txs have a different response format so they use this.get directly
   async query(url, resultSelector = 'result') {
-    const response = await this.getRetry(url)
+    let response
+    try {
+      response = await this.axios.$get(url)
+    } catch (error) {
+      console.error(
+        `Error for query ${url} in network ${this.networkId} (tried 3 times)`
+      )
+      throw error
+    }
     return response[resultSelector]
   }
 
@@ -112,8 +101,6 @@ class CosmosAPI {
       this.getPageCount(`/txs?transfer.recipient=${address}`),
     ])
 
-    // dirty hack to fix first page +1
-    pageNumber = pageNumber ? pageNumber + 1 : pageNumber
     const requests = [
       this.loadPaginatedTxs(
         `/txs?message.sender=${address}`,
@@ -573,13 +560,13 @@ class CosmosAPI {
     let block, transactions
     if (blockHeight) {
       const response = await Promise.all([
-        this.getRetry(`blocks/${blockHeight}`),
+        this.query(`blocks/${blockHeight}`),
         this.getTransactionsV2ByHeight(blockHeight),
       ])
       block = response[0]
       transactions = response[1]
     } else {
-      block = await this.getRetry(`blocks/latest`)
+      block = await this.query(`blocks/latest`)
       transactions = await this.getTransactionsV2ByHeight(
         block.block.header.height
       )
@@ -594,9 +581,9 @@ class CosmosAPI {
   async getBlockHeader(blockHeight) {
     let block
     if (blockHeight) {
-      block = await this.getRetry(`blocks/${blockHeight}`)
+      block = await this.query(`blocks/${blockHeight}`)
     } else {
-      block = await this.getRetry(`blocks/latest`)
+      block = await this.query(`blocks/latest`)
     }
     return this.reducers.blockHeaderReducer(this.network.id, block)
   }
@@ -816,12 +803,12 @@ class CosmosAPI {
       return []
     }
     const pagination = `&limit=${PAGE_RECORDS_COUNT}&page=${page}`
-    const { txs } = await this.getRetry(`${url}${pagination}`)
+    const { txs } = await this.query(`${url}${pagination}`)
     return txs || []
   }
 
   async getPageCount(url) {
-    const page = await this.getRetry(url + `&limit=${PAGE_RECORDS_COUNT}`)
+    const page = await this.query(url + `&limit=${PAGE_RECORDS_COUNT}`)
     return page.page_total
   }
 }
