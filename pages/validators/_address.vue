@@ -3,18 +3,11 @@
     <div v-if="!validators.length">Loading...</div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
     <template v-else>
-      <div class="button-container">
+      <div class="back-button-container">
         <BackButton />
       </div>
-      <div class="status-button-container">
-        <div class="status-container">
-          <span
-            :class="validator.status || `` | toLower"
-            class="validator-status"
-          >
-            {{ validator.status }}
-          </span>
-        </div>
+      <div class="status-container">
+        <Status :label="validator.status" />
       </div>
       <tr class="li-validator">
         <td class="data-table__row__info">
@@ -168,7 +161,6 @@ export default {
     shortDecimals,
     fullDecimals,
     percent,
-    toLower: (text) => text.toLowerCase(),
     noBlanks,
     fromNow,
   },
@@ -295,7 +287,7 @@ span {
 .li-validator-image {
   border-radius: 50%;
   height: 4rem;
-  width: 4rem;
+  min-width: 4rem;
 }
 
 .li-validator-name {
@@ -342,6 +334,11 @@ h4 {
   align-items: center;
 }
 
+.back-button-container {
+  display: flex;
+  padding: 0 1rem;
+}
+
 .button-container {
   justify-content: space-between;
 }
@@ -364,105 +361,6 @@ h4 {
 
 .status-container {
   padding: 1rem 1rem 0;
-}
-
-.validator-status {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 600;
-  border: 2px solid;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
-
-.validator-status.inactive {
-  color: var(--warning);
-  border-color: var(--warning);
-}
-
-.validator-status.active {
-  color: var(--success);
-  border-color: var(--success);
-}
-
-.validator-status-detailed,
-.no-img-info {
-  display: block;
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  color: var(--dim);
-}
-
-.page {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1rem 0 0;
-}
-
-.readable-width {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.page.dark-background {
-  background: var(--app-fg);
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: normal;
-  width: 100%;
-}
-
-.row {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 2rem 0 1rem;
-}
-
-.page-profile__section {
-  margin-bottom: 1rem;
-}
-
-.page-profile__section-title {
-  margin: 0 0 0.25rem 1rem;
-  color: var(--dim);
-  font-size: var(--sm);
-  font-weight: 500;
-}
-
-li {
-  width: 100%;
-  padding: 1rem;
-  border-bottom: 1px solid var(--bc-dim);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-li:last-child {
-  border-bottom: none;
-}
-
-.row span {
-  color: var(--bright);
-  font-size: var(--sm);
-  font-weight: 400;
-  line-height: 1rem;
-}
-
-@media screen and (max-width: 425px) {
-  .status-button-container {
-    display: flex;
-    flex-direction: column-reverse;
-  }
 }
 
 @media screen and (max-width: 667px) {

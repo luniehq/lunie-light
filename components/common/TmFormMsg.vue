@@ -123,7 +123,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tm-form-msg {
   padding: 0;
   display: flex;

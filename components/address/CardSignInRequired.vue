@@ -1,8 +1,7 @@
 <template>
   <SessionFrame icon="account_box">
     <div class="card-sign-in">
-      <h2>Welcome 👋</h2>
-      <h3>How would you like to get started?</h3>
+      <h2 class="session-title">Welcome 👋</h2>
 
       <div class="session-list">
         <LiSession
@@ -58,12 +57,6 @@ export default {
 }
 </script>
 <style scoped>
-h2 {
-  font-size: 24px;
-  color: var(--bright);
-  font-weight: 400;
-}
-
 h2,
 h3 {
   text-align: center;

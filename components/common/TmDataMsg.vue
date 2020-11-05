@@ -61,7 +61,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tm-data-msg {
   padding: 2rem;
   margin: 1rem;

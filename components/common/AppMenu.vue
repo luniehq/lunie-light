@@ -89,19 +89,6 @@ export default {
   transition: all 0.5s ease;
 }
 
-.button.small.sidebar {
-  display: flex;
-  width: -webkit-fill-available;
-}
-
-.material-icons {
-  width: 1rem;
-}
-
-.button.small {
-  border-color: var(--menu-border);
-}
-
 .app-menu .app-menu-item--link:hover {
   color: var(--menu-link-hover);
 }

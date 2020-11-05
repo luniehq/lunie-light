@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tm-form-group {
   padding: 0.75rem 0;
   position: relative;
@@ -72,6 +72,11 @@ export default {
   color: var(--txt);
   text-align: left;
   font-weight: 500;
+}
+
+.tm-form-group__field {
+  display: flex;
+  width: 100%;
 }
 
 .tm-form-group__sub-label ~ .tm-form-group__label {

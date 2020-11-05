@@ -12,9 +12,6 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data: () => ({
-    loading: true,
-  }),
   computed: {
     ...mapState(['session']),
     ...mapState(['data', ['validators']]),
@@ -30,3 +27,14 @@ export default {
   },
 }
 </script>
+<style scoped>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.1s;
+}
+
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+</style>

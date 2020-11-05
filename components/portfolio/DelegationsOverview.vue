@@ -19,10 +19,7 @@
       <div v-if="!delegations.length && !balances.length" class="loading-row">
         Loading...
       </div>
-      <TmDataMsg
-        v-else-if="delegations.length === 0"
-        icon="sentiment_dissatisfied"
-      >
+      <TmDataMsg v-else-if="delegations.length === 0">
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the

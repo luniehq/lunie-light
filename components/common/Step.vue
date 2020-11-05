@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .stepItem {
   display: flex;
   flex-direction: row;
