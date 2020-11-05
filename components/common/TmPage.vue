@@ -101,7 +101,7 @@ export default {
 .page-profile__section-title {
   margin: 0 0 0.25rem 1rem;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   font-weight: 500;
 }
 
@@ -120,16 +120,16 @@ li:last-child {
 
 h4 {
   color: var(--txt);
-  font-size: var(--sm);
-  margin-bottom: 2px;
+  font-size: var(--text-xs);
+  margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
 .row span {
   color: var(--bright);
-  font-size: var(--sm);
+  font-size: var(--text-sm);
   font-weight: 400;
-  line-height: 1rem;
+  line-height: var(--text-xl);
 }
 
 @media screen and (max-width: 1024px) {

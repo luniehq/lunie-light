@@ -97,7 +97,7 @@ export default {
 
 .title {
   color: var(--dim);
-  font-size: var(--h4);
+  font-size: var(--text-lg);
   font-weight: 400;
 }
 

@@ -59,7 +59,7 @@ a:hover {
 }
 
 #app {
-  font-size: var(--x);
+  font-size: var(--text-base);
   line-height: 1.5;
   color: var(--txt);
   display: flex;
@@ -108,7 +108,7 @@ input.tm-field {
   display: inline-block;
   position: absolute;
   padding: 7px;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   text-transform: uppercase;
   top: 2px;
   right: 30px;

@@ -131,7 +131,7 @@ export default {
 }
 
 .tm-form-msg.sm {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .tm-form-msg::before {

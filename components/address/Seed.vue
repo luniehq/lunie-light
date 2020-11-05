@@ -141,7 +141,7 @@ export default {
 }
 
 .seed-warning p {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   color: var(--warning);
   margin: 0;
 }

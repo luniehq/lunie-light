@@ -51,7 +51,7 @@ export default {
   padding: 0.5rem 1.25rem;
   display: flex;
   align-items: center;
-  font-size: var(--xs);
+  font-size: var(--text-xs);
   color: var(--menu-text-dim);
   justify-content: space-between;
 }

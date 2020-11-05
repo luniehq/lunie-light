@@ -132,7 +132,7 @@ export default {
   }
 
   .app-menu-title {
-    font-size: var(--xxl);
+    font-size: var(--text-3xl);
     line-height: 1.125;
     font-weight: 600;
     letter-spacing: 0.004em;

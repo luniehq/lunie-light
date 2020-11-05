@@ -71,7 +71,7 @@ export default {
 
 .title {
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   padding-bottom: 1rem;
   padding-left: 0;
 }

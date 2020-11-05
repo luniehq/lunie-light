@@ -61,7 +61,7 @@ export default {
   position: absolute;
   bottom: 0.5rem;
   left: 1rem;
-  font-size: var(--xs);
+  font-size: var(--text-xs);
   color: var(--dim);
 }
 

@@ -386,7 +386,7 @@ export default {
 }
 
 .memo-span {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   font-style: italic;
 }
 

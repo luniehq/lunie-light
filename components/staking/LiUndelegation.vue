@@ -79,7 +79,7 @@ export default {
 
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 
