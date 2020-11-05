@@ -1,4 +1,5 @@
 @import "./themes/lunie-light.css";
+@import "./colors.css";
 
 :root {
   --text-xs: 0.7rem;

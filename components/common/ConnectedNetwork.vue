@@ -69,7 +69,7 @@ export default {
 }
 
 .connected .status {
-  background: var(--success);
+  background: var(--green-500);
   animation: pulse 2.5s infinite;
 }
 
@@ -84,14 +84,14 @@ export default {
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 var(--success-faded);
+    box-shadow: 0 0 0 0 hsla(120, 61%, 45%, 0.15);
   }
   70% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 5px var(--success-faded);
+    box-shadow: 0 0 0 5px hsla(120, 61%, 45%, 0.15);
   }
   100% {
-    box-shadow: 0 0 0 0 var(--success-faded);
+    box-shadow: 0 0 0 0 hsla(120, 61%, 45%, 0.15);
   }
 }
 </style>
