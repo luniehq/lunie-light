@@ -802,12 +802,12 @@ class CosmosAPI {
       return []
     }
     const pagination = `&limit=${PAGE_RECORDS_COUNT}&page=${page}`
-    const { txs } = await this.query(`${url}${pagination}`)
+    const { txs } = await this.get(`${url}${pagination}`)
     return txs || []
   }
 
   async getPageCount(url) {
-    const page = await this.query(url + `&limit=${PAGE_RECORDS_COUNT}`)
+    const page = await this.get(url + `&limit=${PAGE_RECORDS_COUNT}`)
     return page.page_total
   }
 }
