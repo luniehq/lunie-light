@@ -31,7 +31,7 @@ class CosmosAPI {
   }
 
   setReducers() {
-    this.reducers = require('./cosmosV0-reducers')
+    this.reducers = require('./cosmos-reducers')
   }
 
   // hacky way to get error text

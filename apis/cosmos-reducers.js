@@ -1,9 +1,9 @@
 const BigNumber = require('bignumber.js')
 const { reverse, sortBy, uniq, uniqWith } = require('lodash')
-const { encodeB32, decodeB32 } = require('../common/address')
-const { fixDecimalsAndRoundUp } = require('../common/numbers.js')
-const { getProposalSummary } = require('../common/common-reducers')
-const { lunieMessageTypes } = require('./lunie-message-types')
+const { encodeB32, decodeB32 } = require('~/common/address')
+const { fixDecimalsAndRoundUp } = require('~/common/numbers.js')
+const { getProposalSummary } = require('~/common/common-reducers')
+const { lunieMessageTypes } = require('~/common/lunie-message-types')
 /**
  * Modify the following reducers with care as they are used for ./cosmosV2-reducer.js as well
  * [proposalBeginTime, proposalEndTime, getDeposit, tallyReducer, atoms, getValidatorStatus, coinReducer]
