@@ -54,17 +54,16 @@ class CosmosAPI {
   // querying data from the cosmos REST API
   // is overwritten in cosmos v2 to extract from a differnt result format
   // some endpoints /blocks and /txs have a different response format so they use this.get directly
-  async query(url, resultSelector = 'result') {
-    let response
+  async query(url, resultSelector = 'data') {
     try {
-      response = await this.axios.$get(url)
+      const response = await this.axios(this.baseURL + url)
+      return response[resultSelector]
     } catch (error) {
       console.error(
         `Error for query ${url} in network ${this.networkId} (tried 3 times)`
       )
       throw error
     }
-    return response[resultSelector]
   }
 
   async getSignedBlockWindow() {
