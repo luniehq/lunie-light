@@ -199,7 +199,7 @@ export default {
   },
   watch: {
     validator(validator) {
-      if (this.validator) {
+      if (validator) {
         this.getSelfStake()
         this.getValidatorDelegations()
       }
