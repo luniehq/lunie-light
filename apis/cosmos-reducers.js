@@ -701,6 +701,12 @@ function proposalReducer(
   }
 }
 
+function getTransactionLogs(logs, index) {
+  return logs[index].log
+    ? logs[index].log || logs[0] // failing txs show the first logs
+    : logs[0].log || ''
+}
+
 function transactionReducer(network, transaction, reducers) {
   try {
     let fees
@@ -717,15 +723,12 @@ function transactionReducer(network, transaction, reducers) {
     }
     // We do display only the transactions we support in Lunie
     const filteredMessages = transaction.tx.value.msg.filter(
-      ({ type }) => reducers.getMessageType(type) !== 'Unknown'
+      ({ type }) => getMessageType(type) !== 'Unknown'
     )
     const { claimMessages, otherMessages } = filteredMessages.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
-        if (
-          reducers.getMessageType(message.type) ===
-          lunieMessageTypes.CLAIM_REWARDS
-        ) {
+        if (getMessageType(message.type) === lunieMessageTypes.CLAIM_REWARDS) {
           claimMessages.push(message)
         } else {
           otherMessages.push(message)
@@ -745,13 +748,13 @@ function transactionReducer(network, transaction, reducers) {
       : otherMessages
     const returnedMessages = allMessages.map(({ value, type }, index) => ({
       id: transaction.txhash,
-      type: reducers.getMessageType(type),
+      type: getMessageType(type),
       hash: transaction.txhash,
       networkId: network.id,
       key: `${transaction.txhash}_${index}`,
       height: transaction.height,
       details: transactionDetailsReducer(
-        reducers.getMessageType(type),
+        getMessageType(type),
         value,
         reducers,
         transaction,
@@ -760,16 +763,14 @@ function transactionReducer(network, transaction, reducers) {
       timestamp: transaction.timestamp,
       memo: transaction.tx.value.memo,
       fees,
-      success: reducers.setTransactionSuccess(transaction, index, network.id),
+      success: setTransactionSuccess(transaction, index, network.id),
       log:
         transaction.logs && transaction.logs[index]
-          ? transaction.logs[index].log
-            ? transaction.logs[index].log || transaction.logs[0] // failing txs show the first logs
-            : transaction.logs[0].log || ''
+          ? getTransactionLogs(transaction.logs, index)
           : JSON.parse(JSON.stringify(transaction.raw_log)).message,
       involvedAddresses: Array.isArray(transaction.logs)
         ? uniq(
-            reducers.extractInvolvedAddresses(
+            extractInvolvedAddresses(
               transaction.logs.find(({ msg_index }) => msg_index === index)
                 .events
             )
@@ -810,6 +811,22 @@ function delegationReducer(delegation, validator, active, network) {
   }
 }
 
+function getValidatorUptimePercentage(validator, signedBlocksWindow) {
+  if (
+    validator.signing_info &&
+    validator.signing_info.missed_blocks_counter &&
+    signedBlocksWindow
+  ) {
+    return (
+      1 -
+      Number(validator.signing_info.missed_blocks_counter) /
+        Number(signedBlocksWindow)
+    )
+  } else {
+    return 1
+  }
+}
+
 function validatorReducer(
   network,
   signedBlocksWindow,
@@ -838,18 +855,10 @@ function validatorReducer(
     startHeight: validator.signing_info
       ? validator.signing_info.start_height
       : undefined,
-    uptimePercentage:
-      validator.signing_info &&
-      validator.signing_info.missed_blocks_counter &&
+    uptimePercentage: getValidatorUptimePercentage(
+      validator,
       signedBlocksWindow
-        ? 1 -
-          Number(
-            validator.signing_info
-              ? validator.signing_info.missed_blocks_counter
-              : 0
-          ) /
-            Number(signedBlocksWindow)
-        : 1,
+    ),
     tokens: atoms(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
     commission: Number(validator.commission.commission_rates.rate).toFixed(6),
