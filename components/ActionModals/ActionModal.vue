@@ -510,7 +510,7 @@ export default {
 
 <style scoped>
 .action-modal {
-  background: var(--app-fg);
+  background: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -524,10 +524,7 @@ export default {
   z-index: var(--z-modal);
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
-  border-left: 2px solid var(--bc-dim);
-  border-right: 2px solid var(--bc-dim);
-  border-top: 2px solid var(--bc-dim);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 2px 0 var(--gray-400);
   outline: none;
 }
 

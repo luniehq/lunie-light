@@ -1,38 +1,34 @@
 <template>
-  <div v-if="type === 'select'" class="tm-select">
+  <div v-if="type === 'select'" class="select">
     <select
-      :class="css"
+      class="field"
       :value="value"
       :disabled="isDisabled"
       @input="updateValue($event.target.value)"
-      @change="onChange"
       @keyup="onKeyup"
       @keydown="onKeydown"
     >
       <option value disabled="disabled" selected="selected" hidden="hidden">
         {{ selectPlaceholder }}
       </option>
-      <template>
-        <option
-          v-for="(option, index) in resolvedOptions"
-          :key="index"
-          :value="option.value"
-        >
-          {{ option.key }}
-        </option>
-      </template>
+      <option
+        v-for="(option, index) in resolvedOptions"
+        :key="index"
+        :value="option.value"
+      >
+        {{ option.key }}
+      </option>
     </select>
-    <div class="tm-field-select-addon">
+    <div class="select-addon">
       <i class="material-icons notranslate">arrow_drop_down</i>
     </div>
   </div>
 
   <textarea
     v-else-if="type === 'textarea'"
-    :class="css"
+    class="field"
     :placeholder="placeholder"
     :value="value"
-    @change="onChange"
     @keyup="onKeyup"
     @keydown="onKeydown"
     @input="updateValue($event.target.value)"
@@ -41,13 +37,12 @@
   <input
     v-else
     ref="numTextInput"
+    class="field"
     :type="type"
-    :class="css"
     :placeholder="placeholder"
     :value="value"
     step="0.000001"
     :disabled="isDisabled"
-    @change="onChange"
     @keyup="onKeyup"
     @keydown="onKeydown"
     @input="updateValue($event.target.value)"
@@ -60,7 +55,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: `text`,
+      default: `input`,
     },
     value: {
       type: [String, Number, Boolean, Array],
@@ -70,16 +65,8 @@ export default {
       type: String,
       default: null,
     },
-    size: {
-      type: String,
-      default: null,
-    },
     options: {
       type: [Array, Object],
-      default: null,
-    },
-    change: {
-      type: Function,
       default: null,
     },
     keyup: {
@@ -96,14 +83,6 @@ export default {
     },
   },
   computed: {
-    css() {
-      let value = `tm-field`
-      if (this.type === `select`) {
-        value += ` tm-field-select`
-      }
-      if (this.size) value += ` tm-field-size-${this.size}`
-      return value
-    },
     resolvedOptions() {
       if (this.type === `select`) {
         return this.options || []
@@ -126,12 +105,6 @@ export default {
       // Emit the number value through the input event
       this.$emit(`input`, formattedValue)
     },
-    onChange(...args) {
-      if (this.type === `number` && this.$refs.numTextInput) {
-        this.$refs.numTextInput.focus()
-      }
-      if (this.change) return this.change(...args)
-    },
     onKeyup(...args) {
       if (this.keyup) return this.keyup(...args)
     },
@@ -143,102 +116,34 @@ export default {
 </script>
 
 <style scoped>
-input[type='checkbox'] {
-  margin: 0.3rem 0.3rem 0.5rem 0;
-  vertical-align: middle;
-}
-
-.tm-field {
-  background: var(--transparent);
-  border: 2px solid var(--input-bc);
-  border-radius: 0;
-  color: var(--txt);
-  display: block;
-  font-size: 14px;
-  min-width: 0;
-  padding: 0.5rem 0.75rem;
-  width: 100%;
-  -webkit-appearance: none;
-}
-
-.tm-field-addon {
-  background: var(--transparent);
-  border: 2px solid var(--input-bc);
-  border-radius: 0;
-  color: var(--txt);
-  display: block;
-  font-size: 14px;
-  min-width: 0;
-  padding: 0.5rem 0.5rem;
-  width: 100%;
-  -webkit-appearance: none;
-  border-top-left-radius: 0.25rem !important;
-  border-bottom-left-radius: 0.25rem !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.tm-field-group {
-  width: 100%;
-}
-
-.tm-field::placeholder {
-  color: var(--dim);
-}
-
-.tm-field:disabled {
-  background: var(--app-fg);
-  border: 2px solid black;
-  box-shadow: none;
-  color: var(--dim);
-  text-shadow: none;
-}
-
-.tm-field:focus {
-  border: 2px solid var(--link);
-  box-shadow: none;
-  outline: none;
-}
-
-input.tm-field {
-  height: 2rem;
-}
-
-textarea.tm-field {
-  height: 4rem;
-  resize: vertical;
-}
-
-.tm-select {
+.select {
   position: relative;
+  width: 100%;
 }
 
-.tm-select select {
+.select select {
   appearance: none;
   background: var(--transparent);
-  border-radius: 0;
-  color: var(--txt, #333);
+  color: var(--txt);
   padding-right: 2rem;
   width: 100%;
 }
 
-.tm-select select:invalid {
-  color: dim;
+.select select:invalid {
+  color: var(--dim);
 }
 
-.tm-select select option {
+.select select option {
   background: var(--app-bg);
   color: var(--txt);
 }
 
-.tm-select .tm-field-select-addon {
+.select .select-addon {
   align-items: center;
   background: var(--transparent);
-  border-left: 1px solid var(--input-bc);
   box-sizing: border-box;
-  color: var(--txt, #333);
+  color: var(--txt);
   display: flex;
-  height: 2rem;
   justify-content: center;
   pointer-events: none;
   position: absolute;
@@ -246,6 +151,108 @@ textarea.tm-field {
   text-align: center;
   top: 0;
   width: 2rem;
+  height: 100%;
+}
+
+input[readonly],
+input[disabled],
+textarea[readonly],
+textarea[disabled] {
+  background: var(--gray-200);
+}
+
+input[type='radio'] {
+  margin: 0;
+}
+
+.input-suffix {
+  background: transparent;
+  display: inline-block;
+  position: absolute;
+  padding: 7px;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  top: 2px;
+  right: 30px;
+  letter-spacing: 1px;
+  text-align: right;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+}
+
+.input-suffix.max-button {
+  right: 124px;
+}
+
+.field-checkbox-input {
+  display: block;
+  line-height: 14px;
+  font-size: 14px;
+}
+
+.field-checkbox-label {
+  color: var(--bright);
+  display: inline-block;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+  line-height: 14px;
+}
+
+input[type='checkbox'] {
+  margin: 0.3rem 0.3rem 0.5rem 0;
+  vertical-align: middle;
+}
+
+.field,
+.field-addon {
+  background: var(--transparent);
+  border: 2px solid var(--input-bc);
+  color: var(--txt);
+  display: block;
+  font-size: 14px;
+  min-width: 0;
+  width: 100%;
+  box-shadow: 0 0 1px 0 var(--gray-300);
+}
+
+.field {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+}
+
+.field-addon {
+  padding: 0.5rem 0.5rem;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.field-group {
+  width: 100%;
+}
+
+.field::placeholder {
+  color: var(--dim);
+}
+
+.field:disabled {
+  background: var(--gray-200);
+  border: 2px solid var(--gray-900);
+  box-shadow: none;
+  color: var(--dim);
+  text-shadow: none;
+}
+
+.field:focus {
+  border: 2px solid var(--link);
+  box-shadow: none;
+  outline: none;
+}
+
+textarea.field {
+  height: 4rem;
+  resize: vertical;
 }
 
 .input-group-addon {
@@ -262,19 +269,5 @@ textarea.tm-field {
   .input-group-addon {
     font-size: 1rem;
   }
-}
-
-.tm-field.tm-field-size-sm {
-  font-size: 0.75rem;
-  height: 1.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.tm-field.tm-field-size-lg {
-  font-size: 1.125rem;
-  height: 3rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
 }
 </style>

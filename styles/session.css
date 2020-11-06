@@ -116,16 +116,6 @@
   margin: 1rem 1rem 3.5rem;
 }
 
-.field-checkbox-input {
-  display: block;
-  line-height: 14px;
-  font-size: 14px;
-}
-
-.field-checkbox-label {
-  color: var(--bright);
-}
-
 .accounts-header {
   padding: 0 1rem;
 }

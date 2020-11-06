@@ -68,8 +68,8 @@ export default {
 .tm-form-group__label {
   display: block;
   line-height: 2rem;
-  font-size: 14px;
-  color: var(--txt);
+  font-size: var(--text-xs);
+  color: var(--dim);
   text-align: left;
   font-weight: 500;
 }
