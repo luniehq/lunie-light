@@ -29,7 +29,7 @@
       </FormGroup>
     </div>
     <div class="session-footer">
-      <Button :loading="loading" value="Create" />
+      <Button value="Next" type="submit" />
     </div>
   </Form>
 </template>
@@ -43,10 +43,6 @@ export default {
     seed: {
       type: String,
       default: () => undefined,
-    },
-    loading: {
-      type: Boolean,
-      default: () => false,
     },
   },
   data: () => ({
