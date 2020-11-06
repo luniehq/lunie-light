@@ -1,10 +1,6 @@
 <template>
   <div v-if="address" class="address">
-    <Address
-      class="menu-address"
-      :address="address || ''"
-      tooltip-text="Your Address"
-    />
+    <Address class="menu-address" :address="address || ''" />
     <!-- <div
       v-if="!session.isMobile && session.sessionType === 'ledger'"
       class="show-on-ledger-container"

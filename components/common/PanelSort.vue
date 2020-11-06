@@ -12,7 +12,6 @@
     >
       <a
         v-if="sort"
-        v-tooltip.top="property.tooltip"
         class="sort-by-link"
         @click="orderBy(property.value)"
       >

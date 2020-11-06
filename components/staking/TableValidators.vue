@@ -87,22 +87,18 @@ export default {
         {
           title: `Status`,
           value: `status`,
-          tooltip: `Validation status of the validator`,
         },
         {
           title: `Name`,
           value: `smallName`,
-          tooltip: `The validator's name`,
         },
         {
           title: `Rewards`,
           value: `expectedReturns`,
-          tooltip: `Approximate annualized reward`,
         },
         {
           title: `Voting Power`,
           value: `votingPower`,
-          tooltip: `Percentage of voting shares`,
         },
       ]
     },

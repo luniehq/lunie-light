@@ -31,7 +31,6 @@ export default {
     '@/plugins/focus.client.js',
     '@/plugins/infinite-scroll.client.js',
     '@/plugins/init.client.js',
-    '@/plugins/tooltip.client.js',
     '@/plugins/validate.client.js',
   ],
 

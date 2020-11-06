@@ -1,6 +1,5 @@
 <template>
   <div
-    v-tooltip="tooltipText"
     class="copyable-address"
     :class="{
       'with-type': !!addressType,
@@ -36,10 +35,6 @@ export default {
       type: String,
       required: true,
     },
-    tooltipText: {
-      type: String,
-      default: ``,
-    },
     addressType: {
       type: String,
       default: undefined,
@@ -66,7 +61,6 @@ export default {
   padding: 0 1rem;
   border-radius: 1rem;
   margin: 0;
-  background: var(--app-fg);
 }
 
 .copyable-address.with-type {
