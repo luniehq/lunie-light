@@ -1,5 +1,5 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Create a new address</h2>
     <div class="session-main bottom-indent">
       <DangerZoneWarning />
@@ -39,7 +39,7 @@
     <div class="session-footer">
       <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

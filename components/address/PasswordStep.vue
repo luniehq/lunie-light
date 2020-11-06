@@ -1,5 +1,5 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Choose a password</h2>
     <div>
       <FormGroup
@@ -50,7 +50,7 @@
         <Button value="Next" type="submit" />
       </div>
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <TmFormStruct :submit="onSubmit.bind(this)">
+  <Form :submit="onSubmit.bind(this)">
     <h2 class="session-title">Backup code</h2>
     <div class="session-main bottom-indent reorder">
       <Seed :value="fieldSeed" />
@@ -31,7 +31,7 @@
     <div class="session-footer">
       <Button :loading="loading" value="Create" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

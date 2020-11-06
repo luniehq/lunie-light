@@ -1,6 +1,6 @@
 <template>
   <SessionFrame :icon="`language`">
-    <TmFormStruct :submit="onSubmit">
+    <Form :submit="onSubmit">
       <h2 class="session-title bottom-indent">Explore with any address</h2>
       <div class="session-main">
         <FormGroup field-id="sign-in-name" field-label="Your Address">
@@ -10,23 +10,23 @@
             placeholder
             vue-focus="vue-focus"
           />
-          <FormMessage
+          <TmFormMsg
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
           />
-          <FormMessage
+          <TmFormMsg
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
           />
-          <FormMessage v-if="error" :name="error" type="custom" />
+          <TmFormMsg v-if="error" :name="error" type="custom" />
         </FormGroup>
       </div>
       <div class="session-footer">
         <Button value="Explore" />
       </div>
-    </TmFormStruct>
+    </Form>
   </SessionFrame>
 </template>
 

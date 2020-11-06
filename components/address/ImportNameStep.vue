@@ -1,5 +1,5 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Choose name</h2>
     <div class="session-main bottom-indent">
       <FormGroup field-id="import-name" field-label="Address">
@@ -42,7 +42,7 @@
     <div class="session-footer">
       <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

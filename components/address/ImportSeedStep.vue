@@ -1,5 +1,5 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Recover with backup code</h2>
     <div class="session-main bottom-indent">
       <FormGroup
@@ -35,7 +35,7 @@
     <div class="session-footer">
       <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>
