@@ -29,7 +29,7 @@
       </TmFormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn :loading="loading" value="Create" />
+      <Button :loading="loading" value="Create" />
     </div>
   </TmFormStruct>
 </template>

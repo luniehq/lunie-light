@@ -101,13 +101,13 @@
             v-if="[defaultStep, feeStep, signStep].includes(step)"
             class="action-modal-group"
           >
-            <TmBtn
+            <Button
               id="closeBtn"
               value="Cancel"
               type="secondary"
               @click.native="close"
             />
-            <TmBtn
+            <Button
               v-if="requiresSignIn"
               v-focus
               value="Sign In"
@@ -115,13 +115,13 @@
               @click.native="goToSession"
               @click.enter.native="goToSession"
             />
-            <TmBtn
+            <Button
               v-else-if="sending"
               value="Sending..."
               disabled="disabled"
               type="primary"
             />
-            <TmBtn
+            <Button
               v-else-if="step !== signStep"
               ref="next"
               type="primary"
@@ -130,7 +130,7 @@
               :disabled="disabled || !balancesLoaded"
               @click.native="validateChangeStep"
             />
-            <TmBtn
+            <Button
               v-else
               type="primary"
               value="Send"

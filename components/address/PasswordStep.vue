@@ -47,7 +47,7 @@
         />
       </TmFormGroup>
       <div class="session-footer">
-        <TmBtn value="Next" type="submit" />
+        <Button value="Next" type="submit" />
       </div>
     </div>
   </TmFormStruct>

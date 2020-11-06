@@ -38,12 +38,12 @@
       </tr>
 
       <div class="action-button-container">
-        <TmBtn
+        <Button
           id="delegation-btn"
           :value="`Stake`"
           @click.native="onDelegation"
         />
-        <TmBtn
+        <Button
           id="undelegation-btn"
           class="undelegation-btn"
           :disabled="!delegation"

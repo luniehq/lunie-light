@@ -4,13 +4,13 @@
       <div class="header">
         <h1>Your Balances</h1>
         <div class="buttons">
-          <TmBtn
+          <Button
             class="send-button"
             value="Send"
             type="secondary"
             @click.native="onSend()"
           />
-          <!-- <TmBtn
+          <!-- <Button
             :disabled="!readyToWithdraw"
             class="withdraw-rewards"
             value="Claim Rewards"

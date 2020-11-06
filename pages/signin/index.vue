@@ -44,7 +44,7 @@
         </TmFormGroup>
       </div>
       <div class="session-footer">
-        <TmBtn value="Sign In" :disabled="loading" />
+        <Button value="Sign In" :disabled="loading" />
       </div>
     </TmFormStruct>
   </SessionFrame>

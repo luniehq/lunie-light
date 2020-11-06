@@ -24,7 +24,7 @@
         </TmFormGroup>
       </div>
       <div class="session-footer">
-        <TmBtn value="Explore" />
+        <Button value="Explore" />
       </div>
     </TmFormStruct>
   </SessionFrame>
