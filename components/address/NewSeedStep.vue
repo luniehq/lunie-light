@@ -4,7 +4,7 @@
     <div class="session-main bottom-indent reorder">
       <Seed :value="fieldSeed" />
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldWarning.$error"
         class="field-checkbox"
         field-id="sign-up-warning"
@@ -26,7 +26,7 @@
           name="Recovery confirmation"
           type="required"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
       <Button :loading="loading" value="Create" />

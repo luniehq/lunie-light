@@ -48,7 +48,7 @@
           v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
           @submit.prevent="validateChangeStep"
         >
-          <TmFormGroup
+          <FormGroup
             class="action-modal-group"
             field-id="password"
             field-label="Password"
@@ -64,7 +64,7 @@
                 name="Password"
                 type="required"
               /> -->
-          </TmFormGroup>
+          </FormGroup>
         </form>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
@@ -97,7 +97,7 @@
       </p>
       <div class="action-modal-footer">
         <slot name="action-modal-footer">
-          <TmFormGroup
+          <FormGroup
             v-if="[defaultStep, feeStep, signStep].includes(step)"
             class="action-modal-group"
           >
@@ -136,7 +136,7 @@
               value="Send"
               @click.native="validateChangeStep"
             />
-          </TmFormGroup>
+          </FormGroup>
         </slot>
       </div>
     </div>

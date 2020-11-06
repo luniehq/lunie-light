@@ -14,42 +14,35 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       class="action-modal-form-group"
       field-id="from"
       field-label="From"
     >
-      <Field
-        id="from"
-        :value="enhancedSourceValidator"
-        type="text"
-        readonly
-      />
-    </TmFormGroup>
-    <TmFormGroup
+      <Field id="from" :value="enhancedSourceValidator" type="text" readonly />
+    </FormGroup>
+    <FormGroup
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
     >
       <span class="input-suffix max-button">{{ stakingDenom }}</span>
-      <TmFieldGroup>
-        <Field
-          id="amount"
-          v-model="amount"
-          v-focus
-          class="tm-field-addon"
-          placeholder="0"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <Button
-          type="button"
-          class="secondary addon-max"
-          value="Set Max"
-          @click.native="setMaxAmount()"
-        />
-      </TmFieldGroup>
+      <Field
+        id="amount"
+        v-model="amount"
+        v-focus
+        class="tm-field-addon"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Button
+        type="button"
+        class="secondary addon-max"
+        value="Set Max"
+        @click.native="setMaxAmount()"
+      />
       <span v-if="maximum > 0" class="form-message">
         Currently staked: {{ maximum }} {{ stakingDenom }}s
       </span>
@@ -85,7 +78,7 @@
         name="Amount"
         type="maxDecimals"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 

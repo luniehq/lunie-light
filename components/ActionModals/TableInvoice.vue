@@ -1,13 +1,12 @@
 <template>
   <div>
-    <TmFormGroup
+    <FormGroup
       v-if="getDenoms.length > 1"
       id="form-group-amount"
       class="action-modal-form-group"
       field-id="feeDenom"
       field-label="Select Fee"
     >
-      <TmFieldGroup>
         <Field
           id="amount"
           ref="amount"
@@ -26,8 +25,7 @@
           class="tm-field-token-selector"
           type="select"
         />
-      </TmFieldGroup>
-    </TmFormGroup>
+    </FormGroup>
     <ul class="table-invoice">
       <li
         v-for="(subTotal, index) in amounts"

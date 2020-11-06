@@ -4,7 +4,7 @@
     <div class="session-main bottom-indent">
       <DangerZoneWarning />
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldName.$error"
         field-id="sign-up-name"
         field-label="Account Name"
@@ -34,7 +34,7 @@
           type="custom"
           msg="already exists"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
       <Button value="Next" type="submit" />

@@ -2,7 +2,7 @@
   <TmFormStruct :submit="onSubmit">
     <h2 class="session-title">Recover with backup code</h2>
     <div class="session-main bottom-indent">
-      <TmFormGroup
+      <FormGroup
         :error="$v.$error && $v.fieldSeed.$invalid"
         field-id="import-seed"
         field-label="Backup code"
@@ -30,7 +30,7 @@
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'lowercaseAndSpaces'"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
       <Button value="Next" type="submit" />

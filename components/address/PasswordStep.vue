@@ -2,7 +2,7 @@
   <TmFormStruct :submit="onSubmit">
     <h2 class="session-title">Choose a password</h2>
     <div>
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldPassword.$error"
         field-id="sign-up-password"
         field-label="Password"
@@ -25,8 +25,8 @@
           type="minLength"
           min="10"
         />
-      </TmFormGroup>
-      <TmFormGroup
+      </FormGroup>
+      <FormGroup
         :error="$v.fieldPasswordConfirm.$error"
         field-id="sign-up-password-confirm"
         field-label="Confirm Password"
@@ -45,7 +45,7 @@
           name="Password confirmation"
           type="match"
         />
-      </TmFormGroup>
+      </FormGroup>
       <div class="session-footer">
         <Button value="Next" type="submit" />
       </div>

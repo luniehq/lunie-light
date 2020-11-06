@@ -3,7 +3,7 @@
     <TmFormStruct :submit="onSubmit" class="session-container">
       <h2 class="session-title">Sign in with account</h2>
       <div class="session-main bottom-indent">
-        <TmFormGroup field-id="sign-in-name" field-label="Select Account">
+        <FormGroup field-id="sign-in-name" field-label="Select Account">
           <Field
             id="sign-in-name"
             v-model="signInAddress"
@@ -17,9 +17,9 @@
             name="Name"
             type="required"
           />
-        </TmFormGroup>
+        </FormGroup>
 
-        <TmFormGroup
+        <FormGroup
           :error="$v.signInPassword.$error"
           field-id="sign-in-password"
           field-label="Password"
@@ -41,7 +41,7 @@
             min="10"
           />
           <TmFormMsg v-if="error" type="custom" :msg="error" />
-        </TmFormGroup>
+        </FormGroup>
       </div>
       <div class="session-footer">
         <Button value="Sign In" :disabled="loading" />

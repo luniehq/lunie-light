@@ -14,23 +14,22 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       v-if="Object.keys(targetValidator).length > 0"
       class="action-modal-form-group"
       field-id="to"
       field-label="To"
     >
       <Field id="to" :value="enhancedTargetValidator" type="text" readonly />
-    </TmFormGroup>
+    </FormGroup>
 
-    <TmFormGroup
+    <FormGroup
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
     >
       <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
-      <TmFieldGroup>
         <Field
           id="amount"
           v-model="amount"
@@ -46,7 +45,6 @@
           value="Max"
           @click.native="setMaxAmount()"
         />
-      </TmFieldGroup>
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
@@ -90,7 +88,7 @@
         type="custom"
         class="tm-form-msg--desc"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 

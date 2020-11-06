@@ -2,13 +2,13 @@
   <TmFormStruct :submit="onSubmit">
     <h2 class="session-title">Choose name</h2>
     <div class="session-main bottom-indent">
-      <TmFormGroup field-id="import-name" field-label="Address">
+      <FormGroup field-id="import-name" field-label="Address">
         <p class="address">
           {{ address }}
         </p>
-      </TmFormGroup>
+      </FormGroup>
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.$error && $v.fieldName.$invalid"
         field-id="import-name"
         field-label="Account Name"
@@ -37,7 +37,7 @@
           type="custom"
           msg="already exists"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
       <Button value="Next" type="submit" />

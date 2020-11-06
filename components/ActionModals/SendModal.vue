@@ -13,7 +13,7 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       :error="$v.address.$error && $v.address.$invalid"
       class="action-modal-form-group"
       field-id="send-address"
@@ -40,8 +40,8 @@
         type="custom"
         :msg="addressError"
       />
-    </TmFormGroup>
-    <TmFormGroup
+    </FormGroup>
+    <FormGroup
       v-for="(amount, index) in amounts"
       id="form-group-amount"
       :key="amount.denom"
@@ -50,23 +50,21 @@
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
     >
-      <TmFieldGroup>
-        <!-- ATTENTION we are using id here for a repeatable element -->
-        <Field
-          v-model="amount.amount"
-          class="tm-field-addon amount"
-          placeholder="0"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <Field
-          v-model="amount.denom"
-          :title="`Select the token you wish to use`"
-          :options="denomOptions | availableDenoms(index, amounts)"
-          class="tm-field-token-selector"
-          type="select"
-        />
-      </TmFieldGroup>
+      <!-- ATTENTION we are using id here for a repeatable element -->
+      <Field
+        v-model="amount.amount"
+        class="tm-field-addon amount"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Field
+        v-model="amount.denom"
+        :title="`Select the token you wish to use`"
+        :options="denomOptions | availableDenoms(index, amounts)"
+        class="tm-field-token-selector"
+        type="select"
+      />
 
       <TmFormMsg
         v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
@@ -123,8 +121,8 @@
           <i class="material-icons notranslate">add_circle</i>
         </div>
       </div>
-    </TmFormGroup>
-    <TmFormGroup
+    </FormGroup>
+    <FormGroup
       id="memo"
       :error="$v.memo.$error && $v.memo.$invalid"
       class="action-modal-group"
@@ -143,7 +141,7 @@
         type="maxLength"
         :max="max_memo_characters"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 

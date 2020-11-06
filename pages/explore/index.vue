@@ -3,7 +3,7 @@
     <TmFormStruct :submit="onSubmit">
       <h2 class="session-title bottom-indent">Explore with any address</h2>
       <div class="session-main">
-        <TmFormGroup field-id="sign-in-name" field-label="Your Address">
+        <FormGroup field-id="sign-in-name" field-label="Your Address">
           <Field
             v-model.trim="address"
             type="text"
@@ -21,7 +21,7 @@
             :msg="addressError"
           />
           <TmFormMsg v-if="error" :name="error" type="custom" />
-        </TmFormGroup>
+        </FormGroup>
       </div>
       <div class="session-footer">
         <Button value="Explore" />
