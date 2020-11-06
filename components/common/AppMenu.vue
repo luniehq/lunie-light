@@ -42,6 +42,7 @@
         <i class="material-icons notranslate">chevron_right</i>
       </nuxt-link>
     </div>
+    <UserMenu />
     <ConnectedNetwork @close-menu="handleClick" />
   </menu>
 </template>

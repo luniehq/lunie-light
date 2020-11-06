@@ -3,7 +3,6 @@
     <AppHeader />
     <Notifications />
     <div id="app-content">
-      <UserMenu />
       <Nuxt />
     </div>
   </div>

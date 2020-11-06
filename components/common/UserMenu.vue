@@ -1,9 +1,9 @@
 <template>
   <div class="user-menu">
     <UserMenuAddress :address="session ? session.address : undefined" />
-    <button class="icon-button" @click="$router.push('/address')">
-      <i class="material-icons">person</i>
-    </button>
+    <i class="material-icons icon-button" @click="$router.push('/address')">
+      person
+    </i>
   </div>
 </template>
 
@@ -29,7 +29,6 @@ export default {
 
 .icon-button {
   border-radius: 50%;
-  background: var(--app-fg);
   border: none;
   outline: none;
   height: 2rem;
@@ -38,7 +37,6 @@ export default {
   margin-left: 0.25rem;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.25s ease;
 }
 
 .icon-button:hover {
