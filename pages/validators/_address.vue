@@ -239,31 +239,9 @@ export default {
 }
 </script>
 <style scoped>
-.back-button {
-  padding: 0.5rem 1rem;
-  width: auto;
-  font-size: 14px;
-  background: transparent;
-  color: #7a88b8;
-  border: 2px solid rgb(122, 136, 184, 0.1);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.back-button i {
-  padding-right: 1rem;
-  font-size: 1rem;
-}
-
 span {
   font-size: 12px;
   line-height: normal;
-}
-
-.back-button:hover {
-  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .li-validator {
