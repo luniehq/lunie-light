@@ -434,6 +434,7 @@ export default {
           signingType: this.selectedSignMethod,
           password: this.password,
           HDPath,
+          memo,
         })
 
         const { hash } = hashResult

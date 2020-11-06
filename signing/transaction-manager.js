@@ -16,7 +16,7 @@ export function getFees(transactionType) {
     {
       amount: BigNumber(fee.amount)
         .div(coinLookup.chainToViewConversionFactor)
-        .toNumber(),
+        .toString(),
       denom: coinLookup.chainDenom,
     },
   ]
@@ -45,7 +45,7 @@ export async function createSignBroadcast({
 
   const messages = messageCreators[messageType](senderAddress, message, network)
 
-  const transactionData = this.getFees(messageType)
+  const transactionData = getFees(messageType)
   const fee = {
     amount: transactionData.fee,
     gas: String(transactionData.gasEstimate),
@@ -53,9 +53,13 @@ export async function createSignBroadcast({
 
   const client = new SigningCosmosClient(network.apiURL, senderAddress, signer)
   const broadcastResult = await client.signAndBroadcast(
-    messages,
+    [].concat(messages),
     fee,
     transactionData.memo
   )
   assertIsBroadcastTxSuccess(broadcastResult)
+
+  return {
+    hash: broadcastResult.txhash,
+  }
 }

@@ -181,10 +181,12 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amount: {
-          amount: this.amount,
-          denom: this.selectedToken,
-        },
+        amounts: [
+          {
+            amount: this.amount,
+            denom: this.selectedToken,
+          },
+        ],
         memo: this.memo,
       }
     },
