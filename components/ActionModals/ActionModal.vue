@@ -418,37 +418,22 @@ export default {
       const { type, memo, ...message } = this.transactionData
 
       try {
-        if (!this.transactionManager) {
-          // Lazy import as a bunch of big libraries are imported here
-          const { default: TransactionManager } = await import(
-            '~/signing/transaction-manager'
-          )
-          this.transactionManager = new TransactionManager()
-        }
+        // Lazy import as a bunch of big libraries are imported here
+        const { createSignBroadcast } = await import(
+          '~/signing/transaction-manager'
+        )
 
-        const accountInfo = await this.$store.dispatch(
-          'data/getAccountInfo',
-          this.session.address
-        )
-        const transactionData = await this.transactionManager.getTransactionMetaData(
-          type,
-          memo,
-          accountInfo
-        )
         // TODO currently not respected
         const HDPath = network.HDPath
-        const curve = network.curve
 
-        const hashResult = await this.transactionManager.createSignBroadcast({
+        const hashResult = await createSignBroadcast({
           messageType: type,
           message,
-          transactionData,
           senderAddress: this.session.address,
           network,
           signingType: this.selectedSignMethod,
           password: this.password,
           HDPath,
-          curve,
         })
 
         const { hash } = hashResult

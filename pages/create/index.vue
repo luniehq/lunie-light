@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
+import { getHDPath } from '~/common/hdpath'
+import { storeWallet } from '~/common/keystore'
 import network from '~/common/network'
 
 const steps = [`Name`, `Password`, `Backup`]
@@ -53,34 +54,33 @@ export default {
       this.seed = seed
       this.onSubmit()
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.loading) return
 
       this.loading = true
       this.errorMessage = undefined
       try {
-        const wallet = getNewWalletFromSeed(
+        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        const wallet = await Secp256k1HdWallet.fromMnemonic(
           this.seed,
-          network.addressPrefix,
-          network.HDPath,
-          network.curve
+          await getHDPath(network.HDPath),
+          network.addressPrefix
         )
         storeWallet(
-          wallet,
+          await wallet.serialize(this.password),
+          wallet.address,
           this.name,
-          this.password,
-          network.id,
-          network.HDPath,
-          network.curve
+          network.HDPath
         )
         this.$store.dispatch('signIn', {
-          address: wallet.cosmosAddress,
+          address: wallet.address,
           type: 'local',
         })
         this.$router.push({
           name: 'portfolio',
         })
       } catch (error) {
+        debugger
         this.loading = false
         this.errorMessage = error.message
       }

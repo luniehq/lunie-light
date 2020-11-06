@@ -59,8 +59,8 @@ export default {
   methods: {
     async getSeed() {
       if (!this.seed) {
-        const { getSeed } = await import('@lunie/cosmos-keys')
-        this.fieldSeed = getSeed()
+        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        this.fieldSeed = (await Secp256k1HdWallet.generate(24)).mnemonic
       } else {
         this.fieldSeed = this.seed
       }

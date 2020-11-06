@@ -47,7 +47,7 @@
 
 <script>
 import { required, minLength } from 'vuelidate/lib/validators'
-import { getWalletIndex } from '@lunie/cosmos-keys'
+import { getWalletIndex } from '~/common/keystore'
 
 const nameExists = (value) => {
   const walletIndex = getWalletIndex()
