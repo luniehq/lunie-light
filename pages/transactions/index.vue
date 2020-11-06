@@ -65,7 +65,7 @@ export default {
   align-items: center;
   flex-direction: column;
   background: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin: 1rem;
   padding: 2rem;
   font-size: 12px;
@@ -78,7 +78,7 @@ export default {
   justify-content: center;
   background: var(--app-fg);
   height: 10rem;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin: 0.5rem 1rem 1rem 2rem;
   animation: fade 2s infinite;
 }

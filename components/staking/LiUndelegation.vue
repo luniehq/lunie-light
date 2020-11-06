@@ -67,7 +67,7 @@ export default {
   padding: 0.5rem 1rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--bc-dim);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .validator-info {
@@ -103,7 +103,7 @@ export default {
 }
 
 .li-validator-image {
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   height: 2.5rem;
   width: 2.5rem;
   min-width: 2.5rem;

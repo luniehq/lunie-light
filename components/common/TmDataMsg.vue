@@ -67,7 +67,7 @@ export default {
   margin: 1rem;
   display: flex;
   align-items: center;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   background: var(--app-fg);
   border: 2px solid var(--app-fg-hover);
 }

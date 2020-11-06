@@ -102,11 +102,7 @@ export default {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 4rem 2rem;
-}
-
-.table-validators {
-  margin-top: 2rem;
+  padding: 4rem 3rem;
 }
 
 .tm-form-msg--desc {
@@ -118,10 +114,6 @@ export default {
 }
 
 @media screen and (max-width: 667px) {
-  .loading-image-container {
-    padding: 2rem;
-  }
-
   .table-container {
     padding: 4rem 1rem;
   }

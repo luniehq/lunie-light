@@ -3,6 +3,9 @@
   width: 100%;
   padding: 0;
   table-layout: fixed;
+  box-shadow: 0 0 1px 0 var(--gray-500);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .data-table th {
@@ -54,7 +57,7 @@
 
 .data-table__row {
   padding: 1rem;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   border: 1px solid var(--bc-dim);
   cursor: pointer;
 
@@ -117,6 +120,7 @@
 }
 
 @media screen and (max-width: 667px) {
+
   .data-table th,
   .data-table td {
     padding: 0.5rem 1rem;

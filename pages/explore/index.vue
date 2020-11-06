@@ -98,7 +98,7 @@ export default {
   padding: 1rem;
   margin: 0.5rem 0;
   background-color: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .tm-li-session:hover {

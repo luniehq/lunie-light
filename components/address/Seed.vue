@@ -90,7 +90,7 @@ export default {
   width: 16.6666666666667%;
   background-color: var(--app-fg);
   padding: 0.5rem 0.1rem 0.5rem 0.1rem;
-  border-radius: 0.2rem;
+  border-radius: var(--border-radius);
   font-size: 0.9rem;
   color: var(--bright);
 }
@@ -135,7 +135,7 @@ export default {
 
 .seed-warning {
   border: 2px solid var(--warning);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin-bottom: 1rem;
   padding: 0.5rem;
 }
@@ -149,7 +149,7 @@ export default {
 @media screen and (max-width: 360px) {
   .seed-table td {
     padding: 0.5rem 0.1rem 0.5rem 0.1rem;
-    border-radius: 0.2rem;
+    border-radius: var(--border-radius);
     font-size: 0.7rem;
   }
 }

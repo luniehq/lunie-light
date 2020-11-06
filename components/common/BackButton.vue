@@ -19,7 +19,7 @@ export default {
   background: transparent;
   color: #7a88b8;
   border: 2px solid rgb(122, 136, 184, 0.1);
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   align-items: center;

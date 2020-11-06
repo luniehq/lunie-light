@@ -4,6 +4,7 @@ export default {
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',

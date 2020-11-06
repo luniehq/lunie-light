@@ -22,7 +22,7 @@ export default {
   font-size: 10px;
   font-weight: 700;
   padding: 2px 6px;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   width: fit-content;
   text-align: center;
 }
