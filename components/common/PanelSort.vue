@@ -10,12 +10,7 @@
       }"
       class="panel-sort-table-header"
     >
-      <a
-        v-if="sort"
-        v-tooltip.top="property.tooltip"
-        class="sort-by-link"
-        @click="orderBy(property.value)"
-      >
+      <a v-if="sort" class="sort-by-link" @click="orderBy(property.value)">
         {{ property.title }}
         <i class="material-icons notranslate">arrow_drop_up</i>
       </a>

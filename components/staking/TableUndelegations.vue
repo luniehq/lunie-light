@@ -41,12 +41,10 @@ export default {
         {
           title: `Name`,
           value: `smallName`,
-          tooltip: `The validator's name`,
         },
         {
           title: `End Time`,
           value: `endTime`,
-          tooltip: `Time until the undelegation is re-added to your balance`,
         },
       ]
     },
