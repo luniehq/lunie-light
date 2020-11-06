@@ -3,7 +3,6 @@ export default {
   // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
   target: 'static',
-  buildDir: 'dist',
 
   // Use local 404 instead of redirecting to Netlify 404 (https://go.nuxtjs.dev/config-build)
   generate: {
