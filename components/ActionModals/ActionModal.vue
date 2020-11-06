@@ -53,7 +53,7 @@
             field-id="password"
             field-label="Password"
           >
-            <TmField
+            <Field
               id="password"
               v-model="password"
               v-focus
@@ -68,18 +68,18 @@
         </form>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
-        <TmDataMsg icon="hourglass_empty" :spin="true">
+        <Card icon="hourglass_empty" :spin="true">
           <div slot="title">Sent and confirming</div>
           <div slot="subtitle">
             Waiting for confirmation from {{ network.name }}.
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <div
         v-else-if="step === successStep"
         class="action-modal-form success-step"
       >
-        <TmDataMsg icon="check" icon-color="var(--success)" :success="true">
+        <Card icon="check" icon-color="var(--success)" :success="true">
           <div slot="title">{{ notifyMessage.title }}</div>
           <div slot="subtitle">
             {{ notifyMessage.body }}
@@ -87,7 +87,7 @@
             <br />
             <router-link to="/transactions">See your transaction</router-link>
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <p
         v-if="submissionError"
