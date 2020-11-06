@@ -1,7 +1,12 @@
 export default {
-  // Build the app as a static site instead of SSR
+  // Build the app as a static site instead of SSR 
+  // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
   target: 'static',
+  // For site generated in SPA mode (https://go.nuxtjs.dev/config-build)
+  generate: {
+    fallback: true
+  },
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
