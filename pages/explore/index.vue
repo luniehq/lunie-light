@@ -10,17 +10,17 @@
             placeholder
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <Card
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
           />
-          <TmFormMsg
+          <Card
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
           />
-          <TmFormMsg v-if="error" :name="error" type="custom" />
+          <Card v-if="error" :name="error" type="custom" />
         </FormGroup>
       </div>
       <div class="session-footer">
