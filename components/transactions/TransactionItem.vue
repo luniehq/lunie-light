@@ -145,11 +145,12 @@ export default {
   align-items: center;
   justify-content: space-between;
   background: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   z-index: 90;
-  padding: 1.5rem 1rem;
+  padding: 0.75rem 1rem;
   margin: 1rem 1rem 0 1rem;
   cursor: pointer;
+  box-shadow: 0 0 1px 0 var(--gray-500);
 }
 
 .icon {
@@ -200,7 +201,7 @@ h3 {
 
 .amounts {
   color: var(--txt);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
 }
 
 .validator-image {
@@ -214,7 +215,7 @@ h3 {
   z-index: 91;
   cursor: pointer;
   border-radius: 50%;
-  background: var(--bc-dim);
+  background: var(--gray-300);
   display: flex;
   align-items: center;
   justify-content: center;

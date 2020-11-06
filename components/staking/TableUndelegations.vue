@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table class="data-table">
       <thead>
         <PanelSort :properties="properties" show-on-mobile="endTime" />
@@ -67,6 +67,10 @@ export default {
 }
 </script>
 <style scoped>
+.container {
+  margin: 1.5rem;
+}
+
 @media screen and (max-width: 550px) {
   .data-table td {
     overflow: hidden;
@@ -75,10 +79,6 @@ export default {
   .data-table__row__info {
     max-width: 22rem;
   }
-}
-
-.flip-list-move {
-  transition: transform 0.3s;
 }
 
 .data-table >>> th:first-child {

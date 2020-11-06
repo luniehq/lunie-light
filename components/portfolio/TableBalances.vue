@@ -76,11 +76,6 @@ export default {
   padding-left: 0;
 }
 
-.data-table {
-  box-shadow: 0 0 2px 0 var(--gray-500);
-  border-radius: 0.25rem;
-}
-
 .loading-row {
   width: 100%;
 }

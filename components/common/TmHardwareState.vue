@@ -41,7 +41,7 @@ export default {
   margin: 1.5rem auto 0;
   padding: 1.5rem;
   user-select: none;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .tm-hardware-state-content {

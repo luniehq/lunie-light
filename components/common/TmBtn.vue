@@ -71,13 +71,14 @@ export default {
   padding: 8px 10px;
   color: var(--menu-bright);
   margin: 0;
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   background: var(--primary);
   border: 2px solid var(--primary);
   transition: all 0.5s ease;
   white-space: nowrap;
   outline: none;
+  box-shadow: 0 0 2px 0 var(--gray-300);
 }
 
 .button:hover {

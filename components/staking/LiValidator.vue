@@ -118,7 +118,7 @@ export default {
   padding: 0.5rem 1rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--bc-dim);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .validator-info {
@@ -141,7 +141,7 @@ export default {
 
 .li-validator:hover {
   cursor: pointer;
-  background: var(--gray-200);
+  background: var(--gray-100);
   color: var(--bright);
 }
 

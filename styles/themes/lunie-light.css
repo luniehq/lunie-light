@@ -1,10 +1,10 @@
 .lunie-light {
   /* theme colors */
-  --primary: var(--purple-600);
-  --primary-hover: var(--purple-700);
-  --highlight: #F67F70;
-  --link: var(--blue-700);
-  --link-hover: var(--blue-800);
+  --primary: var(--teal-800);
+  --primary-hover: var(--teal-900);
+  --highlight: var(--teal-600);
+  --link: var(--blue-500);
+  --link-hover: var(--blue-600);
 
   /* background-colors */
   --app-fg: var(--gray-100);
@@ -18,10 +18,8 @@
   --app-nav-hover: var(--gray-900);
   --menu-link: var(--link);
   --menu-link-hover: var(--link-hover);
-  --menu-border: hsl(229, 20%, 26%);
-  --menu-text-dim: hsl(0, 0%, 65%);
-  --menu-bright: hsl(0, 0%, 100%);
-  --menu-text: hsla(0, 0%, 90%);
+  --menu-bright: var(--white);
+  --menu-text: var(--gray-100);
 
   /* typography */
   --bright: var(--gray-900);
@@ -29,10 +27,9 @@
   --dim: var(--gray-700);
   --bc: var(--gray-500);
   --bc-dim: var(--gray-200);
-  --input-bc: var(--menu-border);
-  --success: var(--green-600);
+  --input-bc: hsl(229, 20%, 26%);
+  --success: var(--green-700);
   --warning: var(--orange-400);
   --danger: var(--red-400);
   --info: var(--pink-900);
-  --dark-grey-blue: hsl(227, 40%, 33%);
 }

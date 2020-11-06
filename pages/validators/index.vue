@@ -21,6 +21,7 @@
     </div>
 
     <TableValidators
+      class="table-validators"
       :validators="filteredValidators"
       :delegations="delegations"
       :rewards="rewards"
@@ -81,13 +82,17 @@ export default {
 </script>
 
 <style scoped>
+.table-validators {
+  margin: 1.5rem;
+}
+
 .filterContainer {
   display: flex;
   flex-flow: row;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  margin: 0.5rem 1rem 1rem 2rem;
+  margin: 1.5rem;
 }
 
 .filterContainer .toggles {
@@ -105,12 +110,12 @@ export default {
 }
 
 .filterContainer .btn-radio:last-child {
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   margin-left: -1px;
 }
 
 .filterContainer .btn-radio:first-child {
-  border-radius: 1rem 0 0 1rem;
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
   margin-right: -1px;
 }
 

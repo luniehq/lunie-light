@@ -47,20 +47,23 @@ export default {
 
 <style scoped>
 .container {
-  margin: 0.5rem;
-  padding: 0.5rem 1.25rem;
   display: flex;
   align-items: center;
   font-size: var(--text-xs);
-  color: var(--menu-text-dim);
+  color: var(--gray-500);
   justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  margin: 1rem;
+  border-radius: var(--border-radius);
+  background: var(--app-nav-hover);
+  box-shadow: 0 0 1px 0 var(--gray-700);
 }
 
 .status {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  margin-right: 0.5rem;
+  margin-right: 0.6rem;
 }
 
 .connected {

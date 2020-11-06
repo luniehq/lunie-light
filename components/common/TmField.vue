@@ -156,7 +156,7 @@ input[type='checkbox'] {
   display: block;
   font-size: 14px;
   min-width: 0;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   width: 100%;
   -webkit-appearance: none;
 }

@@ -51,17 +51,13 @@ export default {
 }
 </script>
 <style scoped>
-.address {
-  display: flex;
-}
-
 .show-on-ledger-container {
   display: inline-block;
   padding: 6px 10px;
   font-size: 12px;
   min-width: 0;
   background-color: var(--app-fg);
-  border-radius: 1rem;
+  border-radius: var(--border-radius);
   font-weight: 400;
   width: fit-content;
 }

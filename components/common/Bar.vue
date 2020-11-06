@@ -71,7 +71,7 @@ export default {
 .bar {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   background-color: transparent;
   font-size: 14px;
   font-weight: 400;
@@ -111,7 +111,7 @@ export default {
 .bar .button {
   background-color: transparent;
   color: var(--menu-bright);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   padding: 0.1rem 0.5rem;
   cursor: pointer;
 }

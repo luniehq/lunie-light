@@ -11,7 +11,7 @@
 <style scoped>
 .danger-zone {
   border: 2px solid var(--danger);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin: 1rem 0;
   padding: 1rem;
 }

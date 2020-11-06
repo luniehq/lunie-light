@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table v-if="showingValidators.length" class="data-table">
       <thead>
         <PanelSort
@@ -153,10 +153,6 @@ export default {
   .data-table__row__info {
     max-width: 22rem;
   }
-}
-
-.flip-list-move {
-  transition: transform 0.3s;
 }
 
 .data-table >>> th:first-child {
