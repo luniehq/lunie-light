@@ -29,12 +29,12 @@
         @change.native="trimSendAddress"
         @keyup.enter.native="refocusOnAmount"
       />
-      <TmFormMsg
+      <FormMessage
         v-if="$v.address.$error && !$v.address.required"
         name="Address"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.address.$error && !$v.address.addressValidate"
         name="Address"
         type="custom"
@@ -66,41 +66,41 @@
         type="select"
       />
 
-      <TmFormMsg
+      <FormMessage
         v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.decimal"
         name="Amount"
         type="numeric"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
         :msg="`You don't have enough ${amounts.map(
           ({ denom }) => denom
         )} to proceed.`"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="isMaxAmount(index)"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc max-message"
       />
-      <!-- <TmFormMsg
+      <!-- <FormMessage
         v-else-if="duplicateDenoms()"
         msg="It is only possible to send one amount per currency"
         type="custom"
@@ -135,7 +135,7 @@
         type="text"
         @keyup.enter.native="enterPressed"
       />
-      <TmFormMsg
+      <FormMessage
         v-if="$v.memo.$error && !$v.memo.maxLength"
         name="Memo"
         type="maxLength"

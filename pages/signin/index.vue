@@ -12,7 +12,7 @@
             placeholder="Select account…"
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInAddress.$error && !$v.signInAddress.required"
             name="Name"
             type="required"
@@ -29,18 +29,18 @@
             v-model="signInPassword"
             type="password"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInPassword.$error && !$v.signInPassword.required"
             name="Password"
             type="required"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInPassword.$error && !$v.signInPassword.minLength"
             name="Password"
             type="minLength"
             min="10"
           />
-          <TmFormMsg v-if="error" type="custom" :msg="error" />
+          <FormMessage v-if="error" type="custom" :msg="error" />
         </FormGroup>
       </div>
       <div class="session-footer">

@@ -14,12 +14,12 @@
           type="password"
           placeholder="Must be at least 10 characters"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldPassword.$error && !$v.fieldPassword.required"
           name="Password"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldPassword.$error && !$v.fieldPassword.minLength"
           name="Password"
           type="minLength"
@@ -37,7 +37,7 @@
           type="password"
           placeholder="Enter password again"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="
             $v.fieldPasswordConfirm.$error &&
             !$v.fieldPasswordConfirm.sameAsPassword

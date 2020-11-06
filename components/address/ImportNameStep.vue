@@ -20,18 +20,18 @@
           placeholder="Must have at least 3 characters"
           vue-focus="vue-focus"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.minLength"
           name="Name"
           type="minLength"
           min="3"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.nameExists"
           name="Name"
           type="custom"

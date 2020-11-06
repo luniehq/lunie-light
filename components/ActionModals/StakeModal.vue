@@ -50,39 +50,39 @@
         {{ maxAmount }}
         {{ network.stakingDenom }}s
       </span>
-      <TmFormMsg
+      <FormMessage
         v-if="balance.available === '0'"
         :msg="`doesn't have any ${network.stakingDenom}s`"
         name="Wallet"
         type="custom"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${network.stakingDenom} to proceed.`"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="isMaxAmount()"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"

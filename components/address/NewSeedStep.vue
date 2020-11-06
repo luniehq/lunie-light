@@ -21,7 +21,7 @@
             I understand that lost seeds cannot be recovered.</label
           >
         </div>
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldWarning.$error && !$v.fieldWarning.required"
           name="Recovery confirmation"
           type="required"

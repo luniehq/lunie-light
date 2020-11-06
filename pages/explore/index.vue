@@ -10,17 +10,17 @@
             placeholder
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
           />
-          <TmFormMsg
+          <FormMessage
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
           />
-          <TmFormMsg v-if="error" :name="error" type="custom" />
+          <FormMessage v-if="error" :name="error" type="custom" />
         </FormGroup>
       </div>
       <div class="session-footer">

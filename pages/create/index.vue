@@ -13,7 +13,7 @@
       :seed="seed"
       @submit="setSeed"
     />
-    <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
+    <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
 

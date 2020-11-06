@@ -13,17 +13,17 @@
           :placeholder="'Must be exactly 12 or 24 words'"
           @input="(val) => (fieldSeed = val)"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldSeed.$error && !$v.fieldSeed.required"
           name="Seed"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-else-if="$v.fieldSeed.$error && !$v.fieldSeed.seedHasCorrectLength"
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'words12or24'"
         />
-        <TmFormMsg
+        <FormMessage
           v-else-if="
             $v.fieldSeed.$error && !$v.fieldSeed.seedIsLowerCaseAndSpaces
           "

@@ -38,7 +38,7 @@
           :amounts="subTotal"
           :fees="networkFees.feeOptions"
         />
-        <!-- <TmFormMsg
+        <!-- <FormMessage
             type="custom"
             :msg="`You don't have enough ${selectedDenom} to proceed.`"
           /> -->
@@ -60,7 +60,7 @@
               type="password"
               placeholder="Password"
             />
-            <!-- <TmFormMsg
+            <!-- <FormMessage
                 name="Password"
                 type="required"
               /> -->
