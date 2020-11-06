@@ -8,8 +8,9 @@
       @submit="setPassword"
     />
     <NewSeedStep v-if="step === 'Backup'" :seed="seed" @submit="setSeed" />
-    <ConfirmSeedStep
+    <ImportSeedStep
       v-if="step === 'Confirm'"
+      title="Enter the backup code again"
       :loading="loading"
       @submit="confirmSeed"
     />

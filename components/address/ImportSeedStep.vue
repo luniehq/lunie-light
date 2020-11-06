@@ -1,6 +1,6 @@
 <template>
   <TmFormStruct :submit="onSubmit">
-    <h2 class="session-title">Recover with backup code</h2>
+    <h2 class="session-title">{{ title }}</h2>
     <div class="session-main bottom-indent">
       <TmFormGroup
         :error="$v.$error && $v.fieldSeed.$invalid"
@@ -61,6 +61,10 @@ export default {
     seed: {
       type: String,
       default: undefined,
+    },
+    title: {
+      type: String,
+      default: `Recover with backup code`,
     },
   },
   data: () => ({
