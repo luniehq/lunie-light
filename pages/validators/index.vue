@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="filterContainer">
-      <TmField v-model="searchTerm" class="searchField" placeholder="Search" />
+      <Field v-model="searchTerm" class="searchField" placeholder="Search" />
       <div class="filterOptions">
         <div class="toggles">
           <Button

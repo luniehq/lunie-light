@@ -8,7 +8,7 @@
       field-label="Select Fee"
     >
       <TmFieldGroup>
-        <TmField
+        <Field
           id="amount"
           ref="amount"
           :is-disabled="true"
@@ -18,7 +18,7 @@
           type="number"
           @keyup.enter.native="enterPressed"
         />
-        <TmField
+        <Field
           id="token"
           v-model="feeDenom"
           :title="`Select the token you wish to use`"

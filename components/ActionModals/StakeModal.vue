@@ -20,7 +20,7 @@
       field-id="to"
       field-label="To"
     >
-      <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
+      <Field id="to" :value="enhancedTargetValidator" type="text" readonly />
     </TmFormGroup>
 
     <TmFormGroup
@@ -31,7 +31,7 @@
     >
       <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
       <TmFieldGroup>
-        <TmField
+        <Field
           id="amount"
           v-model="amount"
           v-focus

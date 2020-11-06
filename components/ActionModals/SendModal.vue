@@ -19,7 +19,7 @@
       field-id="send-address"
       field-label="Send To"
     >
-      <TmField
+      <Field
         id="send-address"
         ref="sendAddress"
         v-model="address"
@@ -52,14 +52,14 @@
     >
       <TmFieldGroup>
         <!-- ATTENTION we are using id here for a repeatable element -->
-        <TmField
+        <Field
           v-model="amount.amount"
           class="tm-field-addon amount"
           placeholder="0"
           type="number"
           @keyup.enter.native="enterPressed"
         />
-        <TmField
+        <Field
           v-model="amount.denom"
           :title="`Select the token you wish to use`"
           :options="denomOptions | availableDenoms(index, amounts)"
@@ -131,7 +131,7 @@
       field-id="memo"
       field-label="Memo"
     >
-      <TmField
+      <Field
         id="memo"
         v-model="memo"
         type="text"

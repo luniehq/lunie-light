@@ -9,7 +9,7 @@
         field-id="sign-up-name"
         field-label="Account Name"
       >
-        <TmField
+        <Field
           id="sign-up-name"
           v-model.trim="fieldName"
           v-focus

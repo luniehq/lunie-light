@@ -4,7 +4,7 @@
       <h2 class="session-title bottom-indent">Explore with any address</h2>
       <div class="session-main">
         <TmFormGroup field-id="sign-in-name" field-label="Your Address">
-          <TmField
+          <Field
             v-model.trim="address"
             type="text"
             placeholder

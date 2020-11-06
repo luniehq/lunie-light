@@ -19,7 +19,7 @@
       field-id="from"
       field-label="From"
     >
-      <TmField
+      <Field
         id="from"
         :value="enhancedSourceValidator"
         type="text"
@@ -34,7 +34,7 @@
     >
       <span class="input-suffix max-button">{{ stakingDenom }}</span>
       <TmFieldGroup>
-        <TmField
+        <Field
           id="amount"
           v-model="amount"
           v-focus

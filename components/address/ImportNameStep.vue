@@ -13,7 +13,7 @@
         field-id="import-name"
         field-label="Account Name"
       >
-        <TmField
+        <Field
           id="import-name"
           v-model.trim="fieldName"
           type="text"

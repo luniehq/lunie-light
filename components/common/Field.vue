@@ -56,7 +56,7 @@
 
 <script>
 export default {
-  name: `tm-field`,
+  name: `field`,
   props: {
     type: {
       type: String,

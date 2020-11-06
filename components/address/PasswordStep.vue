@@ -7,7 +7,7 @@
         field-id="sign-up-password"
         field-label="Password"
       >
-        <TmField
+        <Field
           id="sign-up-password"
           v-model="fieldPassword"
           v-focus
@@ -31,7 +31,7 @@
         field-id="sign-up-password-confirm"
         field-label="Confirm Password"
       >
-        <TmField
+        <Field
           id="sign-up-password-confirm"
           v-model="fieldPasswordConfirm"
           type="password"

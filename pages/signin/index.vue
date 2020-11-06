@@ -4,7 +4,7 @@
       <h2 class="session-title">Sign in with account</h2>
       <div class="session-main bottom-indent">
         <TmFormGroup field-id="sign-in-name" field-label="Select Account">
-          <TmField
+          <Field
             id="sign-in-name"
             v-model="signInAddress"
             :options="accounts"
@@ -24,7 +24,7 @@
           field-id="sign-in-password"
           field-label="Password"
         >
-          <TmField
+          <Field
             id="sign-in-password"
             v-model="signInPassword"
             type="password"
