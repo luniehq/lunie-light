@@ -80,7 +80,6 @@ export default {
           name: 'portfolio',
         })
       } catch (error) {
-        debugger
         this.loading = false
         this.errorMessage = error.message
       }
