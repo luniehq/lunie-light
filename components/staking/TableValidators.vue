@@ -1,32 +1,34 @@
 <template>
   <div class="container">
-    <table v-if="showingValidators.length" class="data-table">
-      <thead>
-        <PanelSort
-          :sort="sort"
-          :properties="properties"
-          :show-on-mobile="showOnMobile"
-        />
-      </thead>
-      <tbody
-        v-infinite-scroll="loadMore"
-        infinite-scroll-distance="400"
-        name="flip-list"
-      >
-        <LiValidator
-          v-for="(validator, index) in showingValidators"
-          :key="validator.operatorAddress"
-          :index="index"
-          :validator="validator"
-          :delegation="getDelegation(validator)"
-          :rewards="getRewards(validator)"
-          :show-on-mobile="showOnMobile"
-          :staking-denom="stakingDenom"
-        />
-      </tbody>
+    <table class="data-table">
+      <template v-if="showingValidators.length">
+        <thead>
+          <PanelSort
+            :sort="sort"
+            :properties="properties"
+            :show-on-mobile="showOnMobile"
+          />
+        </thead>
+        <tbody
+          v-infinite-scroll="loadMore"
+          infinite-scroll-distance="400"
+          name="flip-list"
+        >
+          <LiValidator
+            v-for="(validator, index) in showingValidators"
+            :key="validator.operatorAddress"
+            :index="index"
+            :validator="validator"
+            :delegation="getDelegation(validator)"
+            :rewards="getRewards(validator)"
+            :show-on-mobile="showOnMobile"
+            :staking-denom="stakingDenom"
+          />
+        </tbody>
+      </template>
+      <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
+      <div v-else class="no-results">No results</div>
     </table>
-    <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
-    <div v-else class="no-results">No results</div>
   </div>
 </template>
 

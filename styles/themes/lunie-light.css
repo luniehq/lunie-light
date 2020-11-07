@@ -27,7 +27,7 @@
   --dim: var(--gray-700);
   --bc: var(--gray-500);
   --bc-dim: var(--gray-200);
-  --input-bc: hsl(229, 20%, 26%);
+  --input-bc: var(--gray-600);
   --success: var(--green-700);
   --warning: var(--orange-400);
   --danger: var(--red-400);

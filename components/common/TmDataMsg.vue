@@ -64,12 +64,12 @@ export default {
 <style scoped>
 .tm-data-msg {
   padding: 2rem;
-  margin: 1rem;
   display: flex;
   align-items: center;
   border-radius: var(--border-radius);
   background: var(--app-fg);
   border: 2px solid var(--app-fg-hover);
+  box-shadow: 0 0 1px 0 var(--gray-500);
 }
 
 .tm-data-msg__icon {
