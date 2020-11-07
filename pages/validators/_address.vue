@@ -2,7 +2,7 @@
   <div>
     <div v-if="!validators.length" class="loading-row">Loading...</div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
-    <div class="readable-width" v-else>
+    <div v-else class="readable-width">
       <div class="back-button-container">
         <BackButton />
       </div>
