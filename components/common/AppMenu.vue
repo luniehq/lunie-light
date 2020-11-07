@@ -1,6 +1,7 @@
 <template>
   <menu class="app-menu">
     <div>
+      <UserMenu />
       <nuxt-link
         class="app-menu-item"
         to="/portfolio"
@@ -43,7 +44,6 @@
       </nuxt-link>
     </div>
     <div>
-      <UserMenu />
       <ConnectedNetwork @close-menu="handleClick" />
     </div>
   </menu>

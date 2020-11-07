@@ -99,14 +99,14 @@ export default {
 }
 
 .button.secondary.active {
-  background: var(--primary);
+  background: var(--gray-200);
   color: var(--menu-bright);
 }
 
 .button.secondary {
   color: var(--bright);
   background: transparent;
-  border-color: var(--primary);
+  border-color: var(--input-bc);
 }
 
 .button.secondary:disabled {
@@ -116,7 +116,7 @@ export default {
 }
 
 .button.secondary:hover:not(:disabled) {
-  border-color: var(--primary-hover);
+  background: var(--gray-200);
 }
 
 .addon-max {

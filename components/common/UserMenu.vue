@@ -39,7 +39,7 @@ export default {
 }
 
 .container {
-  margin: 0.5rem 1rem;
+  margin: 1rem 1rem 3rem;
 }
 
 .user-menu {
@@ -67,12 +67,13 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--menu-link);
+  color: var(--gray-500);
   font-size: var(--text-base);
   background: var(--gray-800);
 }
 
 .icon-button:hover {
   cursor: pointer;
+  color: var(--gray-600);
 }
 </style>
