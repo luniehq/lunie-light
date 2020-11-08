@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "nuxt",
+    "analyze": "nuxt build -a",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
