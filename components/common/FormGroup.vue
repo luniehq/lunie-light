@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: `tm-form-group`,
+  name: `form-group`,
   props: {
     error: {
       type: Boolean,

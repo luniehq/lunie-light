@@ -14,7 +14,7 @@
       :loading="loading"
       @submit="confirmSeed"
     />
-    <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
+    <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
 

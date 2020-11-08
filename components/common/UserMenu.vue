@@ -10,11 +10,11 @@
       </i>
     </div>
     <template v-else>
-      <TmBtn
+      <Button
         value="Get Started"
         type="secondary"
         @click.native="$router.push('/address')"
-      ></TmBtn>
+      />
     </template>
   </div>
 </template>

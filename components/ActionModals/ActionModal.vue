@@ -38,7 +38,7 @@
           :amounts="amounts"
           :fees="networkFees.feeOptions"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.invoiceTotal.$error && $v.invoiceTotal.$invalid"
           type="custom"
           :msg="`Your balance is not enough to proceed.`"
@@ -49,39 +49,39 @@
           v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
           @submit.prevent="validateChangeStep"
         >
-          <TmFormGroup
+          <FormGroup
             class="action-modal-group"
             field-id="password"
             field-label="Password"
           >
-            <TmField
+            <Field
               id="password"
               v-model="password"
               v-focus
               type="password"
               placeholder="Password"
             />
-            <TmFormMsg
+            <FormMessage
               v-if="$v.password.$error && $v.password.$invalid"
               name="Password"
               type="required"
             />
-          </TmFormGroup>
+          </FormGroup>
         </form>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
-        <TmDataMsg icon="hourglass_empty" :spin="true">
+        <Card icon="hourglass_empty" :spin="true">
           <div slot="title">Sent and confirming</div>
           <div slot="subtitle">
             Waiting for confirmation from {{ network.name }}.
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <div
         v-else-if="step === successStep"
         class="action-modal-form success-step"
       >
-        <TmDataMsg icon="check" icon-color="var(--success)" :success="true">
+        <Card icon="check" icon-color="var(--success)" :success="true">
           <div slot="title">{{ notifyMessage.title }}</div>
           <div slot="subtitle">
             {{ notifyMessage.body }}
@@ -89,7 +89,7 @@
             <br />
             <router-link to="/transactions">See your transaction</router-link>
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <p
         v-if="submissionError"
@@ -99,17 +99,17 @@
       </p>
       <div class="action-modal-footer">
         <slot name="action-modal-footer">
-          <TmFormGroup
+          <FormGroup
             v-if="[defaultStep, feeStep, signStep].includes(step)"
             class="action-modal-group"
           >
-            <TmBtn
+            <Button
               id="closeBtn"
               value="Cancel"
               type="secondary"
               @click.native="close"
             />
-            <TmBtn
+            <Button
               v-if="requiresSignIn"
               v-focus
               value="Sign In"
@@ -117,13 +117,13 @@
               @click.native="goToSession"
               @click.enter.native="goToSession"
             />
-            <TmBtn
+            <Button
               v-else-if="sending"
               value="Sending..."
               disabled="disabled"
               type="primary"
             />
-            <TmBtn
+            <Button
               v-else-if="step !== signStep"
               ref="next"
               type="primary"
@@ -132,13 +132,13 @@
               :disabled="disabled || !balancesLoaded"
               @click.native="validateChangeStep"
             />
-            <TmBtn
+            <Button
               v-else
               type="primary"
               value="Send"
               @click.native="validateChangeStep"
             />
-          </TmFormGroup>
+          </FormGroup>
         </slot>
       </div>
     </div>

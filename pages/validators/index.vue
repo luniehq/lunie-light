@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="filterContainer">
-      <TmField v-model="searchTerm" class="searchField" placeholder="Search" />
+      <Field v-model="searchTerm" class="searchField" placeholder="Search" />
       <div class="filterOptions">
         <div class="toggles">
-          <TmBtn
+          <Button
             value="All"
             class="btn-radio"
             :type="allValidators ? `active` : `secondary`"
             @click.native="defaultSelectorsController(`allValidators`)"
           />
-          <TmBtn
+          <Button
             value="Active"
             class="btn-radio"
             :type="activeOnly ? `active` : `secondary`"

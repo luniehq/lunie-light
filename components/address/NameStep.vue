@@ -1,15 +1,15 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Create a new address</h2>
     <div class="session-main bottom-indent">
       <DangerZoneWarning />
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldName.$error"
         field-id="sign-up-name"
         field-label="Account Name"
       >
-        <TmField
+        <Field
           id="sign-up-name"
           v-model.trim="fieldName"
           v-focus
@@ -17,29 +17,29 @@
           placeholder="Must be at least 3 characters"
           vue-focus="vue-focus"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.minLength"
           name="Name"
           type="minLength"
           min="3"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.nameExists"
           name="Name"
           type="custom"
           msg="already exists"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Next" type="submit" />
+      <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

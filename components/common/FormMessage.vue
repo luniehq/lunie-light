@@ -7,6 +7,7 @@
 <script>
 import { prettyDecimals } from '../../common/numbers'
 export default {
+  name: 'FormMessage',
   props: {
     type: {
       type: String,

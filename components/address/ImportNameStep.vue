@@ -1,48 +1,48 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Choose name</h2>
     <div class="session-main bottom-indent">
-      <TmFormGroup field-id="import-name" field-label="Address">
+      <FormGroup field-id="import-name" field-label="Address">
         <p class="address">
           {{ address }}
         </p>
-      </TmFormGroup>
+      </FormGroup>
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.$error && $v.fieldName.$invalid"
         field-id="import-name"
         field-label="Account Name"
       >
-        <TmField
+        <Field
           id="import-name"
           v-model.trim="fieldName"
           type="text"
           placeholder="Must have at least 3 characters"
           vue-focus="vue-focus"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.required"
           name="Name"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.minLength"
           name="Name"
           type="minLength"
           min="3"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.nameExists"
           name="Name"
           type="custom"
           msg="already exists"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Next" type="submit" />
+      <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

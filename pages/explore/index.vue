@@ -1,32 +1,32 @@
 <template>
   <SessionFrame :icon="`language`">
-    <TmFormStruct :submit="onSubmit">
+    <Form :submit="onSubmit">
       <h2 class="session-title bottom-indent">Explore with any address</h2>
       <div class="session-main">
-        <TmFormGroup field-id="sign-in-name" field-label="Your Address">
-          <TmField
+        <FormGroup field-id="sign-in-name" field-label="Your Address">
+          <Field
             v-model.trim="address"
             type="text"
             placeholder
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <Card
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
           />
-          <TmFormMsg
+          <Card
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
           />
-          <TmFormMsg v-if="error" :name="error" type="custom" />
-        </TmFormGroup>
+          <Card v-if="error" :name="error" type="custom" />
+        </FormGroup>
       </div>
       <div class="session-footer">
-        <TmBtn value="Explore" />
+        <Button value="Explore" />
       </div>
-    </TmFormStruct>
+    </Form>
   </SessionFrame>
 </template>
 

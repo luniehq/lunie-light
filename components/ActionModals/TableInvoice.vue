@@ -1,33 +1,31 @@
 <template>
   <div>
-    <TmFormGroup
+    <FormGroup
       v-if="getDenoms.length > 1"
       id="form-group-amount"
       class="action-modal-form-group"
       field-id="feeDenom"
       field-label="Select Fee"
     >
-      <TmFieldGroup>
-        <TmField
-          id="amount"
-          ref="amount"
-          :is-disabled="true"
-          :value="selectedFee.amount"
-          class="tm-field-addon"
-          placeholder="0"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <TmField
-          id="token"
-          v-model="feeDenom"
-          :title="`Select the token you wish to use`"
-          :options="getDenoms"
-          class="tm-field-token-selector"
-          type="select"
-        />
-      </TmFieldGroup>
-    </TmFormGroup>
+      <Field
+        id="amount"
+        ref="amount"
+        :is-disabled="true"
+        :value="selectedFee.amount"
+        class="tm-field-addon"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Field
+        id="token"
+        v-model="feeDenom"
+        :title="`Select the token you wish to use`"
+        :options="getDenoms"
+        class="tm-field-token-selector"
+        type="select"
+      />
+    </FormGroup>
     <ul class="table-invoice">
       <li
         v-for="(subTotal, index) in amounts"
