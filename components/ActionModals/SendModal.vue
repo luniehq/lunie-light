@@ -50,7 +50,6 @@
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
     >
-      <!-- ATTENTION we are using id here for a repeatable element -->
       <Field
         v-model="amount.amount"
         class="tm-field-addon amount"
