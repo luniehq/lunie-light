@@ -3,7 +3,7 @@
     id="undelegation-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amounts="[amount]"
+    :amounts="[]"
     title="Unstake"
     class="undelegation-modal"
     submission-error-prefix="Unstaking failed"
