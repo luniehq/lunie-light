@@ -32,6 +32,7 @@ export default {
     address: undefined,
     errorMessage: undefined,
   }),
+  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = this.steps.findIndex((step) => step === this.step)

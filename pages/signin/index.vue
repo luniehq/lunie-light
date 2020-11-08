@@ -74,6 +74,7 @@ export default {
       return []
     },
   },
+  middleware: 'localSigning',
   methods: {
     onSubmit() {
       this.$v.$touch()
