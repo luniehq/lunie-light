@@ -8,8 +8,9 @@ import messageCreators from './messages.js'
 import fees from '~/common/fees'
 import network from '~/common/network'
 
-export function getFees(transactionType) {
-  const { gasEstimate, fee } = fees.getFees(transactionType)
+export function getFees(transactionType, feeDenom) {
+  const { gasEstimate, feeOptions } = fees.getFees(transactionType)
+  const fee = feeOptions.find(({ denom }) => denom === feeDenom)
   const coinLookup = network.getCoinLookup(fee.denom, 'viewDenom')
   // converting view fee to on chain fee
   const convertedFee = [
@@ -34,6 +35,7 @@ export async function createSignBroadcast({
   signingType,
   password,
   HDPath,
+  feeDenom,
 }) {
   // TODO signer doesn't respect HDPATH
   const signer = await getSigner(signingType, {
@@ -45,7 +47,7 @@ export async function createSignBroadcast({
 
   const messages = messageCreators[messageType](senderAddress, message, network)
 
-  const transactionData = getFees(messageType)
+  const transactionData = getFees(messageType, feeDenom)
   const fee = {
     amount: transactionData.fee,
     gas: String(transactionData.gasEstimate),
