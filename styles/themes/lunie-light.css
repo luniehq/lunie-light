@@ -1,31 +1,35 @@
 .lunie-light {
   /* theme colors */
-  --primary: hsl(7, 88%, 70%);
-  --primary-hover: hsl(7, 88%, 65%);
-  --highlight: hsl(252, 100%, 75%);
-  --link: hsl(217, 95%, 62%);
-  --link-hover: hsl(217, 95%, 65%);
+  --primary: var(--teal-800);
+  --primary-hover: var(--teal-900);
+  --highlight: var(--teal-600);
+  --link: var(--blue-500);
+  --link-hover: var(--blue-600);
 
   /* background-colors */
-  --app-fg: hsl(229, 100%, 97%);
-  --app-fg-hover: hsl(229, 100%, 95%);
-  --app-bg: #fff;
-  --primary-faded: hsla(7, 88%, 70%, 0.2);
-  --primary-faded-hover: hsla(7, 88%, 70%, 0.3);
+  --app-fg: var(--gray-100);
+  --app-fg-hover: var(--gray-200);
+  --app-bg: var(--white);
+  --primary-faded: var(--red-200);
+  --primary-faded-hover: var(--red-300);
 
   /* menu styles */
-  --app-nav: hsl(229, 20%, 11%);
-  --app-nav-hover: hsl(229, 20%, 16%);
+  --app-nav: var(--gray-1000);
+  --app-nav-hover: var(--gray-900);
   --menu-link: var(--link);
   --menu-link-hover: var(--link-hover);
-  --menu-border: hsl(229, 20%, 26%);
-  --menu-text-dim: hsl(0, 0%, 65%);
+  --menu-bright: var(--white);
+  --menu-text: var(--gray-100);
 
-  /* dark-theme typography */
-  --bright: hsl(227, 40%, 33%);
-  --txt: hsl(227, 40%, 28%);
-  --dim: hsl(227, 40%, 23%);
-  --bc: hsl(0, 0%, 95%);
-  --bc-dim: hsl(0, 0%, 97%);
-  --input-bc: var(--menu-border);
+  /* typography */
+  --bright: var(--gray-900);
+  --txt: var(--gray-800);
+  --dim: var(--gray-700);
+  --bc: var(--gray-500);
+  --bc-dim: var(--gray-200);
+  --input-bc: hsl(229, 20%, 26%);
+  --success: var(--green-700);
+  --warning: var(--orange-400);
+  --danger: var(--red-400);
+  --info: var(--pink-900);
 }

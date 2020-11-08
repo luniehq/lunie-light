@@ -67,7 +67,7 @@ export default {
   padding: 0.5rem 1rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--bc-dim);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .validator-info {
@@ -79,7 +79,7 @@ export default {
 
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 
@@ -96,35 +96,17 @@ export default {
 
 .li-validator-name {
   font-size: 1rem;
-  line-height: 18px;
+  line-height: 20px;
   font-weight: 500;
   color: var(--bright);
   display: inline-block;
 }
 
 .li-validator-image {
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   height: 2.5rem;
   width: 2.5rem;
+  min-width: 2.5rem;
   border: 1px solid var(--bc-dim);
-}
-
-.validator-status {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 600;
-  border: 2px solid;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
-
-.validator-status.inactive {
-  color: var(--warning);
-  border-color: var(--warning);
-}
-
-.validator-status.active {
-  color: var(--success);
-  border-color: var(--success);
 }
 </style>

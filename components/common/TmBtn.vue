@@ -1,16 +1,11 @@
 <template>
   <button
     class="button"
-    :class="
-      customClass || {
-        secondary: type === `secondary`,
-        small: size === `small`,
-        active: type === `active`,
-        sidebar: type === `sidebar`,
-        centered: centered,
-        loading: loading,
-      }
-    "
+    :class="{
+      secondary: type === `secondary`,
+      active: type === `active`,
+      loading: loading,
+    }"
     :disabled="disabled"
   >
     <svg
@@ -45,7 +40,7 @@
 
 <script>
 export default {
-  name: `TmBtn`,
+  name: `Button`,
   props: {
     value: {
       type: String,
@@ -55,25 +50,13 @@ export default {
       type: String,
       default: null,
     },
-    size: {
-      type: String,
-      default: null,
-    },
     loading: {
-      type: Boolean,
-      default: false,
-    },
-    centered: {
       type: Boolean,
       default: false,
     },
     disabled: {
       type: Boolean,
       default: false,
-    },
-    customClass: {
-      type: String,
-      default: '',
     },
   },
 }
@@ -82,22 +65,20 @@ export default {
 <style scoped>
 .button {
   font-size: 14px;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 500;
   width: auto;
   min-width: 100px;
+  padding: 8px 10px;
   color: var(--menu-bright);
   margin: 0;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius);
   cursor: pointer;
   background: var(--primary);
   border: 2px solid var(--primary);
   transition: all 0.5s ease;
   white-space: nowrap;
   outline: none;
-  height: 36px;
+  box-shadow: 0 0 2px 0 var(--gray-300);
 }
 
 .button:hover {
@@ -128,31 +109,14 @@ export default {
   border-color: var(--primary);
 }
 
-.button.secondary:hover {
+.button.secondary:disabled {
+  color: var(--dim);
+  background: transparent;
+  border-color: var(--dim);
+}
+
+.button.secondary:hover:not(:disabled) {
   border-color: var(--primary-hover);
-}
-
-.button.small {
-  padding: 6px 10px;
-  font-size: 12px;
-  min-width: 0;
-  color: var(--menu-text);
-  border-color: var(--bc);
-  background-color: transparent;
-}
-
-.button.small:hover {
-  background: var(--app-nav-hover);
-}
-
-.button.centered {
-  margin: 0 auto;
-}
-
-@media screen and (max-width: 1023px) {
-  .button.secondary.small {
-    padding: 10px 10px;
-  }
 }
 
 .addon-max {
@@ -176,17 +140,5 @@ export default {
 .addon-max:hover {
   background: transparent;
   border-color: var(--primary-hover);
-}
-
-.addon-max:disabled {
-  opacity: 0.5;
-  background: var(--primary);
-  border-color: var(--primary);
-  cursor: default;
-}
-
-.addon-max:disabled:hover {
-  background: var(--primary);
-  border-color: var(--primary);
 }
 </style>

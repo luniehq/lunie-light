@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table v-if="showingValidators.length" class="data-table">
       <thead>
         <PanelSort
@@ -87,22 +87,18 @@ export default {
         {
           title: `Status`,
           value: `status`,
-          tooltip: `Validation status of the validator`,
         },
         {
           title: `Name`,
           value: `smallName`,
-          tooltip: `The validator's name`,
         },
         {
           title: `Rewards`,
           value: `expectedReturns`,
-          tooltip: `Approximate annualized reward`,
         },
         {
           title: `Voting Power`,
           value: `votingPower`,
-          tooltip: `Percentage of voting shares`,
         },
       ]
     },
@@ -159,20 +155,16 @@ export default {
   }
 }
 
-.flip-list-move {
-  transition: transform 0.3s;
-}
-
 .data-table >>> th:first-child {
   width: 5%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table >>> th:nth-child(2) {
   width: 10%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table >>> th:nth-child(3) {

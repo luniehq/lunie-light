@@ -3,12 +3,12 @@
     id="send-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amount="amount"
+    :amounts="amounts"
     title="Send"
     submission-error-prefix="Sending tokens failed"
     :transaction-type="lunieMessageTypes.SEND"
     :transaction-data="transactionData"
-    :selected-denom="selectedToken"
+    :selected-denom="amounts.map(({ denom }) => denom)"
     :notify-message="notifyMessage"
     @close="clear"
     @txIncluded="onSuccess"
@@ -42,71 +42,87 @@
       />
     </TmFormGroup>
     <TmFormGroup
+      v-for="(amount, index) in amounts"
       id="form-group-amount"
-      :error="$v.amount.$error && $v.amount.$invalid"
+      :key="amount.denom"
+      :error="$v.amounts.$error && $v.amounts.$invalid"
       class="action-modal-form-group"
       field-id="amount"
-      field-label="Amount"
+      :field-label="index === 0 ? `Amount` : ``"
     >
       <TmFieldGroup>
+        <!-- ATTENTION we are using id here for a repeatable element -->
         <TmField
-          id="amount"
-          ref="amount"
-          v-model="amount"
-          class="tm-field-addon"
+          v-model="amount.amount"
+          class="tm-field-addon amount"
           placeholder="0"
           type="number"
           @keyup.enter.native="enterPressed"
         />
         <TmField
-          id="token"
-          v-model="selectedToken"
+          v-model="amount.denom"
           :title="`Select the token you wish to use`"
-          :options="getDenoms"
+          :options="denomOptions | availableDenoms(index, amounts)"
           class="tm-field-token-selector"
-          placeholder="Select the token"
           type="select"
-        />
-        <TmBtn
-          type="button"
-          class="addon-max"
-          value="Set Max"
-          @click.native="setMaxAmount()"
         />
       </TmFieldGroup>
 
       <TmFormMsg
-        v-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
+        v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
         name="Amount"
         type="required"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.decimal"
+        v-else-if="$v.amounts.$error && !$v.amounts.decimal"
         name="Amount"
         type="numeric"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.max"
+        v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
-        :msg="`You don't have enough ${selectedToken} to proceed.`"
+        :msg="`You don't have enough ${amounts.map(
+          ({ denom }) => denom
+        )} to proceed.`"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.min"
+        v-else-if="$v.amounts.$error && !$v.amounts.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
       <TmFormMsg
-        v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
+        v-else-if="$v.amounts.$error && !$v.amounts.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
       <TmFormMsg
-        v-else-if="isMaxAmount()"
+        v-else-if="isMaxAmount(index)"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc max-message"
       />
+      <!-- <TmFormMsg
+        v-else-if="duplicateDenoms()"
+        msg="It is only possible to send one amount per currency"
+        type="custom"
+        class="tm-form-msg--desc max-message"
+      /> -->
+      <div
+        v-if="index === amounts.length - 1 && denoms.length > 1"
+        class="manage-amounts-container"
+      >
+        <div
+          v-if="amounts.length > 1"
+          class="add-amount-button"
+          @click="removeAmount(index)"
+        >
+          <i class="material-icons notranslate">remove_circle</i>
+        </div>
+        <div class="add-amount-button" @click="addAmount(index + 1)">
+          <i class="material-icons notranslate">add_circle</i>
+        </div>
+      </div>
     </TmFormGroup>
     <TmFormGroup
       id="memo"
@@ -142,8 +158,19 @@ import network from '~/common/network'
 
 const defaultMemo = ''
 
+function availableDenoms(denoms, index, amounts) {
+  return denoms.filter(
+    ({ key: denom }) =>
+      (amounts[index] && amounts[index].denom === denom) ||
+      !amounts.find((amount) => amount.denom === denom)
+  )
+}
+
 export default {
   name: `send-modal`,
+  filters: {
+    availableDenoms,
+  },
   props: {
     denoms: {
       type: Array,
@@ -152,12 +179,16 @@ export default {
   },
   data: () => ({
     address: ``,
-    amount: null,
+    amounts: [
+      {
+        amount: null,
+        denom: ``,
+      },
+    ],
     addressError: ``,
     memo: defaultMemo,
     max_memo_characters: 256,
     isFirstLoad: true,
-    selectedToken: undefined,
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
@@ -166,88 +197,34 @@ export default {
   computed: {
     ...mapState([`session`]),
     ...mapState(`data`, [`balances`]),
-    selectedBalance() {
-      return (
-        this.balances.find(({ denom }) => denom === this.selectedToken) || {
-          amount: 0,
-        }
-      )
-    },
     transactionData() {
-      if (isNaN(this.amount) || !this.session || !this.selectedToken) {
+      if (this.amounts.find(({ amount }) => isNaN(amount)) || !this.session) {
         return {}
       }
       return {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amounts: [
-          {
-            amount: this.amount,
-            denom: this.selectedToken,
-          },
-        ],
+        amounts: this.amounts,
         memo: this.memo,
       }
+    },
+    denomOptions(index) {
+      return this.denoms
+        ? this.denoms.map((denom) => ({ key: denom, value: denom }))
+        : []
     },
     notifyMessage() {
       return {
         title: `Successful Send`,
-        body: `Successfully sent ${this.amount} ${
-          this.selectedToken
-        }s to ${formatAddress(this.address)}`,
-      }
-    },
-    getDenoms() {
-      return this.denoms
-        ? this.denoms.map((denom) => (denom = { key: denom, value: denom }))
-        : []
-    },
-    // TODO: maxAmount should be handled from ActionModal
-    maxAmount() {
-      if (this.networkFeesLoaded) {
-        return this.maxDecimals(
-          this.selectedBalance.available -
-            this.networkFees.transactionFee.amount,
-          6
-        )
-      } else {
-        return this.maxDecimals(this.selectedBalance.available, 6)
-      }
-    },
-  },
-  watch: {
-    // we set the amount in the input to zero every time the user selects another token so they
-    // realize they are dealing with a different balance each time
-    selectedToken() {
-      if (!this.isFirstLoad) {
-        this.amount = 0
-      } else {
-        this.isFirstLoad = false
-      }
-    },
-    balances(balances) {
-      // if there is already a token selected don't reset it
-      if (this.selectedToken) return
-
-      // in case the account has no balances we will display the staking denom received from the denom query
-      if (balances.length === 0) {
-        this.selectedToken = network.stakingDenom
-      } else {
-        this.selectedToken = balances[0].denom
+        body: `Successfully sent transaction to ${formatAddress(this.address)}`,
       }
     },
   },
   methods: {
     open(denom = undefined) {
-      if (denom) {
-        this.selectedToken = denom
-      } else {
-        this.selectedToken =
-          this.balances && this.balances.length > 0
-            ? this.balances[0].denom
-            : network.stakingDenom
-      }
+      this.amounts = [{ amount: 0, denom: denom || this.denoms[0] }]
+      this.$v.$reset()
       this.$refs.actionModal.open()
     },
     onSuccess(event) {
@@ -261,24 +238,24 @@ export default {
       this.$v.$reset()
 
       this.address = undefined
-      this.amount = undefined
+      this.amounts = [
+        {
+          amount: 0,
+          denom: this.denoms[0],
+        },
+      ]
       this.memo = defaultMemo
       this.sending = false
     },
-    setMaxAmount() {
-      this.amount = this.maxAmount
-    },
-    isMaxAmount() {
-      if (this.selectedBalance.available === 0) {
+    isMaxAmount(index) {
+      const selectedBalance = this.getSelectedBalance(this.denoms[index])
+      if (selectedBalance.available === 0) {
         return false
       } else {
-        return parseFloat(this.amount) === this.maxAmount
+        return (
+          parseFloat(this.amounts[index].amount) === selectedBalance.available
+        )
       }
-    },
-    token() {
-      if (!this.selectedToken) return ``
-
-      return this.selectedToken
     },
     bech32Validation(address) {
       try {
@@ -290,7 +267,7 @@ export default {
       }
     },
     prefixValidation(address) {
-      if (address.startsWith(this.network.addressPrefix)) {
+      if (address && address.startsWith(this.network.addressPrefix)) {
         return true
       } else {
         this.addressError = `Address prefix does not match this network's prefix`
@@ -298,7 +275,7 @@ export default {
       }
     },
     validatorAddressValidation(address) {
-      if (address.includes('valoper')) {
+      if (address && address.includes('valoper')) {
         this.addressError = `Validator addresses are not supported`
         return false
       } else {
@@ -317,6 +294,23 @@ export default {
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
+    getSelectedBalance(selectedDenom) {
+      return (
+        this.balances.find(({ denom }) => denom === selectedDenom) || {
+          amount: 0,
+        }
+      )
+    },
+    removeAmount(index) {
+      this.amounts.pop()
+    },
+    addAmount(index) {
+      const denoms = availableDenoms(this.denomOptions, index, this.amounts)
+      this.amounts.push({
+        amount: 0,
+        denom: denoms[0].key,
+      })
+    },
   },
   validations() {
     return {
@@ -326,19 +320,35 @@ export default {
         prefixValidation: this.prefixValidation,
         validatorAddressValidation: this.validatorAddressValidation,
       },
-      amount: {
-        required,
-        decimal,
-        max: (x) => Number(x) <= this.maxAmount,
-        min: (x) => Number(x) >= SMALLEST,
+      amounts: {
+        required: (x) =>
+          this.amounts.filter(({ amount }) => required(amount)).length ===
+          this.amounts.length,
+        decimal: (x) =>
+          this.amounts.filter(({ amount }) => decimal(amount)).length ===
+          this.amounts.length,
+        max: (x) =>
+          this.amounts.filter(
+            (amount) =>
+              Number(amount.amount) <=
+              this.getSelectedBalance(amount.denom).available
+          ).length === this.amounts.length,
+        min: (x) =>
+          this.amounts.filter(({ amount }) => Number(amount) >= SMALLEST)
+            .length === this.amounts.length,
         maxDecimals: (x) => {
-          return Number(x).toString().split('.').length > 1
-            ? Number(x).toString().split('.')[1].length <= 6
+          const amountsWithDecimals = this.amounts.filter(
+            ({ amount }) => Number(amount).toString().split('.').length > 1
+          )
+          return amountsWithDecimals.length > 0
+            ? amountsWithDecimals.filter(
+                ({ amount }) =>
+                  Number(amount).toString().split('.')[1].length <= 6
+              ).length === amountsWithDecimals.length
             : true
         },
       },
       denoms: { required },
-      selectedToken: { required },
       memo: {
         maxLength: maxLength(this.max_memo_characters),
       },
@@ -373,7 +383,28 @@ export default {
 }
 
 .memo-span {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   font-style: italic;
+}
+
+.manage-amounts-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.add-amount-button {
+  text-align: right;
+  color: var(--primary);
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.add-amount-button i {
+  font-size: 1.75rem;
+}
+
+.add-amount-button:hover {
+  color: var(--secondary);
 }
 </style>

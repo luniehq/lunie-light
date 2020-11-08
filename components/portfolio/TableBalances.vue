@@ -71,14 +71,9 @@ export default {
 
 .title {
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   padding-bottom: 1rem;
   padding-left: 0;
-}
-
-.data-table {
-  box-shadow: 0 0 2px 0 hsl(0, 0%, 85%);
-  border-radius: 0.25rem;
 }
 
 .loading-row {

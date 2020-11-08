@@ -3,7 +3,7 @@
     id="delegation-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amount="amount"
+    :amounts="[amount]"
     title="Stake"
     class="delegation-modal"
     submission-error-prefix="Staking failed"
@@ -43,8 +43,7 @@
         <TmBtn
           type="button"
           class="secondary addon-max"
-          value="Set Max"
-          :disabled="session.addressRole === `controller`"
+          value="Max"
           @click.native="setMaxAmount()"
         />
       </TmFieldGroup>

@@ -98,7 +98,7 @@ export default {
   padding: 1rem;
   margin: 0.5rem 0;
   background-color: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .tm-li-session:hover {
@@ -118,7 +118,7 @@ export default {
 
 .tm-li-session-title {
   color: var(--bright);
-  font-size: var(--h4);
+  font-size: var(--text-lg);
   font-weight: 400;
   margin-top: -0.4rem;
 }
@@ -126,7 +126,7 @@ export default {
 .tm-li-session-subtitle {
   display: block;
   width: 100%;
-  font-size: var(--h6);
+  font-size: var(--text-xs);
   font-weight: 400;
   color: var(--dim);
 }

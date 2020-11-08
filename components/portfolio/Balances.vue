@@ -95,6 +95,7 @@ export default {
 .balances {
   margin: 0 auto;
   max-width: 1100px;
+  padding: 1.5rem 1rem;
 }
 
 .header {
@@ -102,12 +103,16 @@ export default {
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 2rem 2rem;
+  padding: 1.5rem 2rem 1rem;
   width: 100%;
 }
 
-.header button {
-  margin-right: 0.5rem;
+.header h1 {
+  padding-bottom: 0;
+}
+
+.header button:last-child {
+  margin-left: 0.5rem;
 }
 
 .buttons {
@@ -116,10 +121,6 @@ export default {
 }
 
 @media screen and (max-width: 667px) {
-  h1 {
-    padding-bottom: 2rem;
-  }
-
   .header {
     flex-direction: column;
     padding: 0 1rem;

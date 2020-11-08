@@ -19,10 +19,7 @@
       <div v-if="!delegations.length && !balances.length" class="loading-row">
         Loading...
       </div>
-      <TmDataMsg
-        v-else-if="delegations.length === 0"
-        icon="sentiment_dissatisfied"
-      >
+      <TmDataMsg v-else-if="delegations.length === 0">
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
@@ -97,13 +94,6 @@ export default {
 }
 </script>
 <style scoped>
-h1 {
-  font-size: 24px;
-  color: var(--bright);
-  font-weight: 500;
-  padding-bottom: 2rem;
-}
-
 .delegations-overview {
   background: var(--app-fg);
 }
@@ -112,11 +102,7 @@ h1 {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 4rem 2rem;
-}
-
-.table-validators {
-  margin-top: 2rem;
+  padding: 4rem 3rem;
 }
 
 .tm-form-msg--desc {
@@ -128,15 +114,6 @@ h1 {
 }
 
 @media screen and (max-width: 667px) {
-  h1 {
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .loading-image-container {
-    padding: 2rem;
-  }
-
   .table-container {
     padding: 4rem 1rem;
   }

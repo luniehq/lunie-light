@@ -74,18 +74,16 @@ export default {
 }
 
 h1 {
-  font-size: 44px;
-  font-weight: 700;
-  padding-bottom: 1rem;
+  font-size: var(--text-4xl);
 }
 
 h2 {
-  font-size: 18px;
+  font-size: var(--text-lg);
   padding-bottom: 2rem;
 }
 
 h3 {
-  font-size: 12px;
+  font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;

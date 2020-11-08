@@ -1,24 +1,14 @@
 <template>
-  <div
-    v-tooltip="tooltipText"
-    class="copyable-address"
-    :class="{
-      'with-type': !!addressType,
-    }"
-  >
+  <div class="copyable-address">
     <div
       v-clipboard:copy="address"
       v-clipboard:success="() => onCopy()"
       class="address"
     >
-      <div class="address-section">
-        <span v-if="addressType" class="type"> {{ addressType }} Address </span>
-        <span>{{ address | formatAddress }}</span>
-      </div>
+      <span>{{ address | formatAddress }}</span>
       <div :class="{ active: copySuccess }" class="icon-container">
         <i class="material-icons notranslate success">check</i>
       </div>
-      <i class="material-icons notranslate copy">content_copy</i>
     </div>
   </div>
 </template>
@@ -35,10 +25,6 @@ export default {
     address: {
       type: String,
       required: true,
-    },
-    tooltipText: {
-      type: String,
-      default: ``,
     },
     addressType: {
       type: String,
@@ -60,38 +46,15 @@ export default {
 </script>
 <style scoped>
 .copyable-address {
-  font-size: 14px;
-  display: inline-flex;
-  height: 2rem;
-  padding: 0 1rem;
-  border-radius: 1rem;
-  margin: 0;
-  background: var(--app-fg);
+  font-size: var(--text-sm);
 }
 
-.copyable-address.with-type {
-  height: 2.5rem;
-}
-
-.copyable-address .type {
-  font-size: 10px;
-  line-height: 10px;
-  color: var(--dim);
-  margin-top: 1px;
-}
-
-.copyable-address .address {
+.address {
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
   color: var(--link);
-}
-
-.copyable-address .address-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 }
 
 .menu-address .address {
@@ -106,18 +69,18 @@ export default {
   color: var(--menu-link-hover);
 }
 
-.copyable-address .icon-container {
+.icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.copyable-address .icon-container .success {
+.icon-container .success {
   opacity: 0;
   transition: opacity 250ms ease;
 }
 
-.copyable-address .icon-container.active .success {
+.icon-container.active .success {
   opacity: 1;
 }
 
@@ -126,11 +89,7 @@ export default {
   padding-left: 0.25rem;
 }
 
-.copyable-address .icon-container i.success {
+.icon-container i.success {
   color: var(--success);
-}
-
-.material-icons {
-  font-size: 14px;
 }
 </style>

@@ -1,9 +1,10 @@
 export default {
   id: 'cosmos-mainnet',
-  chain_id: 'cosmos-hub-3', // TODO get from chain?
+  chainId: 'cosmoshub-3', // TODO get from chain?
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
@@ -20,10 +21,12 @@ export default {
   fees: {
     default: {
       gasEstimate: 350000,
-      fee: {
-        denom: 'ATOM',
-        amount: 0.001,
-      },
+      feeOptions: [
+        {
+          denom: 'ATOM',
+          amount: 0.001,
+        },
+      ],
     },
   },
 }

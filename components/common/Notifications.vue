@@ -20,7 +20,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .notification-container {
   position: fixed;
   z-index: 9999;

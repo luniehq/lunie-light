@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .stepItem {
   display: flex;
   flex-direction: row;
@@ -39,7 +39,7 @@ export default {
 }
 
 .text--default {
-  font-size: var(--xs);
+  font-size: var(--text-xs);
   font-weight: 500;
   line-height: normal;
   letter-spacing: normal;

@@ -2,6 +2,7 @@
   <div class="tm-data-msg">
     <div class="tm-data-msg__icon" :class="{ success: success }">
       <i
+        v-if="icon"
         :style="`background: ${iconColor}`"
         :class="spinnerClass"
         class="material-icons notranslate"
@@ -60,13 +61,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tm-data-msg {
   padding: 2rem;
   margin: 1rem;
   display: flex;
   align-items: center;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   background: var(--app-fg);
   border: 2px solid var(--app-fg-hover);
 }
@@ -90,7 +91,7 @@ export default {
 .tm-data-msg__title {
   font-weight: 400;
   color: var(--bright);
-  font-size: var(--h2);
+  font-size: var(--text-2xl);
 }
 
 .tm-data-msg__subtitle {

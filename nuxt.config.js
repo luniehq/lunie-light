@@ -1,7 +1,14 @@
 export default {
-  // Build the app as a static site instead of SSR
+  // Build the app as a static site instead of Server Side Rendered (SSR)
+  // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
   target: 'static',
+  buildDir: 'dist',
+
+  // Use local 404 instead of redirecting to Netlify 404 (https://go.nuxtjs.dev/config-build)
+  generate: {
+    fallback: true,
+  },
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -16,7 +23,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Lunie 3 is a simple forkable wallet and staking interface for proof-of-stake blockchains',
+          'Lunie 3 is a simple staking and governance interface for proof-of-stake blockchains',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -31,7 +38,6 @@ export default {
     '@/plugins/focus.client.js',
     '@/plugins/infinite-scroll.client.js',
     '@/plugins/init.client.js',
-    '@/plugins/tooltip.client.js',
     '@/plugins/validate.client.js',
   ],
 

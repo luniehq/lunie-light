@@ -42,7 +42,10 @@
         <i class="material-icons notranslate">chevron_right</i>
       </nuxt-link>
     </div>
-    <ConnectedNetwork @close-menu="handleClick" />
+    <div>
+      <UserMenu />
+      <ConnectedNetwork @close-menu="handleClick" />
+    </div>
   </menu>
 </template>
 
@@ -80,26 +83,13 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
   margin: 0.5rem 1rem;
   font-weight: 400;
   font-size: 14px;
   color: var(--menu-text);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   transition: all 0.5s ease;
-}
-
-.button.small.sidebar {
-  display: flex;
-  width: -webkit-fill-available;
-}
-
-.material-icons {
-  width: 1rem;
-}
-
-.button.small {
-  border-color: var(--menu-border);
 }
 
 .app-menu .app-menu-item--link:hover {
@@ -108,6 +98,7 @@ export default {
 
 .app-menu .app-menu-item.nuxt-link-active {
   background: var(--app-nav-hover);
+  box-shadow: 0 0 1px 0 var(--gray-700);
 }
 
 .app-menu .app-menu-item.nuxt-link-active i {
@@ -116,7 +107,6 @@ export default {
 
 .app-menu .app-menu-item.nuxt-link-active h2 {
   color: var(--menu-bright);
-  font-weight: 500;
 }
 
 @media screen and (min-width: 1024px) {
@@ -145,7 +135,7 @@ export default {
   }
 
   .app-menu-title {
-    font-size: var(--xxl);
+    font-size: var(--text-3xl);
     line-height: 1.125;
     font-weight: 600;
     letter-spacing: 0.004em;
