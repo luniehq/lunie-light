@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@cosmjs/launchpad": "^0.23.1",
-    "@lunie/cosmos-keys": "^0.3.2",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
     "bignumber.js": "^9.0.1",
