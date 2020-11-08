@@ -19,13 +19,13 @@
       <div v-if="!delegations.length && !balances.length" class="loading-row">
         Loading...
       </div>
-      <TmDataMsg v-else-if="delegations.length === 0">
+      <Card v-else-if="delegations.length === 0">
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
           <a @click="goToValidators()">validator list</a>&nbsp;to start staking.
         </div>
-      </TmDataMsg>
+      </Card>
       <!-- <UnstakeModal ref="UnstakeModal" /> -->
     </div>
   </div>

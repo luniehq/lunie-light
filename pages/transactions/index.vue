@@ -2,12 +2,12 @@
   <div>
     <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
 
-    <TmDataMsg v-else-if="!transactions.length">
+    <Card v-else-if="!transactions.length">
       <div slot="title">No transactions</div>
       <div slot="subtitle">
         {{ oldChainDataMessage }}
       </div>
-    </TmDataMsg>
+    </Card>
 
     <template v-else>
       <EventList

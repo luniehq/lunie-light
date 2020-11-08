@@ -13,7 +13,7 @@
       :password="password"
       @submit="setPassword"
     />
-    <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
+    <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
 

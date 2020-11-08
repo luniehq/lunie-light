@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: `tm-data-msg`,
+  name: `Card`,
   props: {
     title: {
       type: String,

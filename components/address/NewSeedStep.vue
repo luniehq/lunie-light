@@ -1,10 +1,10 @@
 <template>
-  <TmFormStruct :submit="onSubmit.bind(this)">
+  <Form :submit="onSubmit.bind(this)">
     <h2 class="session-title">Backup code</h2>
     <div class="session-main bottom-indent reorder">
       <Seed :value="fieldSeed" />
 
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldWarning.$error"
         class="field-checkbox"
         field-id="sign-up-warning"
@@ -21,17 +21,17 @@
             I understand that lost seeds cannot be recovered.</label
           >
         </div>
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldWarning.$error && !$v.fieldWarning.required"
           name="Recovery confirmation"
           type="required"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Next" type="submit" />
+      <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

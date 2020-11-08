@@ -14,78 +14,71 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       class="action-modal-form-group"
       field-id="from"
       field-label="From"
     >
-      <TmField
-        id="from"
-        :value="enhancedSourceValidator"
-        type="text"
-        readonly
-      />
-    </TmFormGroup>
-    <TmFormGroup
+      <Field id="from" :value="enhancedSourceValidator" type="text" readonly />
+    </FormGroup>
+    <FormGroup
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
     >
       <span class="input-suffix max-button">{{ stakingDenom }}</span>
-      <TmFieldGroup>
-        <TmField
-          id="amount"
-          v-model="amount"
-          v-focus
-          class="tm-field-addon"
-          placeholder="0"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <TmBtn
-          type="button"
-          class="secondary addon-max"
-          value="Set Max"
-          @click.native="setMaxAmount()"
-        />
-      </TmFieldGroup>
+      <Field
+        id="amount"
+        v-model="amount"
+        v-focus
+        class="tm-field-addon"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Button
+        type="button"
+        class="secondary addon-max"
+        value="Set Max"
+        @click.native="setMaxAmount()"
+      />
       <span v-if="maximum > 0" class="form-message">
         Currently staked: {{ maximum }} {{ stakingDenom }}s
       </span>
-      <TmFormMsg
+      <FormMessage
         v-if="maximum === 0"
         :msg="`don't have any ${stakingDenom} delegated to this validator`"
         name="You"
         type="custom"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${stakingDenom} to proceed.`"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 

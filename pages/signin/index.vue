@@ -1,10 +1,10 @@
 <template>
   <SessionFrame :icon="`lock`">
-    <TmFormStruct :submit="onSubmit" class="session-container">
+    <Form :submit="onSubmit" class="session-container">
       <h2 class="session-title">Sign in with account</h2>
       <div class="session-main bottom-indent">
-        <TmFormGroup field-id="sign-in-name" field-label="Select Account">
-          <TmField
+        <FormGroup field-id="sign-in-name" field-label="Select Account">
+          <Field
             id="sign-in-name"
             v-model="signInAddress"
             :options="accounts"
@@ -12,41 +12,41 @@
             placeholder="Select account…"
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInAddress.$error && !$v.signInAddress.required"
             name="Name"
             type="required"
           />
-        </TmFormGroup>
+        </FormGroup>
 
-        <TmFormGroup
+        <FormGroup
           :error="$v.signInPassword.$error"
           field-id="sign-in-password"
           field-label="Password"
         >
-          <TmField
+          <Field
             id="sign-in-password"
             v-model="signInPassword"
             type="password"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInPassword.$error && !$v.signInPassword.required"
             name="Password"
             type="required"
           />
-          <TmFormMsg
+          <FormMessage
             v-if="$v.signInPassword.$error && !$v.signInPassword.minLength"
             name="Password"
             type="minLength"
             min="10"
           />
-          <TmFormMsg v-if="error" type="custom" :msg="error" />
-        </TmFormGroup>
+          <FormMessage v-if="error" type="custom" :msg="error" />
+        </FormGroup>
       </div>
       <div class="session-footer">
-        <TmBtn value="Sign In" :disabled="loading" />
+        <Button value="Sign In" :disabled="loading" />
       </div>
-    </TmFormStruct>
+    </Form>
   </SessionFrame>
 </template>
 

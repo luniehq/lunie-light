@@ -9,7 +9,7 @@
         >Show on Ledger</a
       >
     </div> -->
-    <!-- <TmFormMsg
+    <!-- <FormMessage
       v-if="ledgerAddressError"
       :msg="ledgerAddressError"
       type="custom"
