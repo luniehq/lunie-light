@@ -4,10 +4,7 @@ const { encodeB32, decodeB32 } = require('~/common/address')
 const { fixDecimalsAndRoundUp } = require('~/common/numbers.js')
 const { getProposalSummary } = require('~/common/common-reducers')
 const { lunieMessageTypes } = require('~/common/lunie-message-types')
-/**
- * Modify the following reducers with care as they are used for ./cosmosV2-reducer.js as well
- * [proposalBeginTime, proposalEndTime, getDeposit, tallyReducer, atoms, getValidatorStatus, coinReducer]
- */
+const network = require('~/common/network')
 
 function proposalBeginTime(proposal) {
   switch (proposal.proposal_status.toLowerCase()) {
@@ -50,20 +47,31 @@ function accountInfoReducer(accountValue, accountType) {
   }
 }
 
-function atoms(nanoAtoms) {
-  return BigNumber(nanoAtoms).div(1000000).toFixed(6)
+function getStakingCoinViewAmount(chainStakeAmount) {
+  return coinReducer({
+    amount: chainStakeAmount,
+    denom: network.stakingDenom,
+  }).amount
 }
 
-const calculateTokens = (validator, shares) => {
-  // this is the based on the idea that tokens should equal
-  // (myShares / totalShares) * totalTokens where totalShares
-  // and totalTokens are both represented as fractions
-  const myShares = new BigNumber(shares || 0)
-  const totalShares = new BigNumber(validator.delegatorShares)
-  const totalTokens = new BigNumber(validator.tokens)
+function coinReducer(chainCoin) {
+  const coinLookup = network.getCoinLookup(chainCoin.denom)
 
-  if (totalShares.eq(0)) return new BigNumber(0)
-  return myShares.times(totalTokens).div(totalShares).toFixed(6)
+  if (!coinLookup) {
+    return {
+      supported: false,
+      amount: -1,
+      denom: '[NOT SUPPORTED] ' + chainCoin.denom,
+    }
+  }
+
+  return {
+    supported: true,
+    amount: BigNumber(chainCoin.amount)
+      .times(coinLookup.chainToViewConversionFactor)
+      .toFixed(6),
+    denom: coinLookup.viewDenom,
+  }
 }
 
 /* if you don't get this, write fabian@lunie.io */
@@ -92,13 +100,12 @@ const expectedRewardsPerToken = (validator, commission, annualProvision) => {
 }
 
 // reduce deposits to one number
+// ATTENTION doesn't consider multi denom deposits
 function getDeposit(proposal) {
-  return atoms(
-    proposal.total_deposit.reduce(
-      (sum, cur) => sum.plus(cur.amount),
-      BigNumber(0)
-    )
-  )
+  const sum = proposal.total_deposit
+    .filter(({ denom }) => denom === network.stakingDenom)
+    .reduce((sum, cur) => sum.plus(cur.amount), BigNumber(0))
+  return getStakingCoinViewAmount(sum)
 }
 
 function getTotalVotePercentage(proposal, totalBondedTokens, totalVoted) {
@@ -107,7 +114,10 @@ function getTotalVotePercentage(proposal, totalBondedTokens, totalVoted) {
   if (BigNumber(totalVoted).eq(0)) return 0
   if (!totalBondedTokens) return -1
   return Number(
-    BigNumber(totalVoted).div(atoms(totalBondedTokens)).toNumber().toFixed(6)
+    BigNumber(totalVoted)
+      .div(getStakingCoinViewAmount(totalBondedTokens))
+      .toNumber()
+      .toFixed(6)
   )
 }
 
@@ -117,7 +127,7 @@ function tallyReducer(proposal, tally, totalBondedTokens) {
     tally = proposal.final_tally_result
   }
 
-  const totalVoted = atoms(
+  const totalVoted = getStakingCoinViewAmount(
     BigNumber(tally.yes)
       .plus(tally.no)
       .plus(tally.abstain)
@@ -125,10 +135,10 @@ function tallyReducer(proposal, tally, totalBondedTokens) {
   )
 
   return {
-    yes: atoms(tally.yes),
-    no: atoms(tally.no),
-    abstain: atoms(tally.abstain),
-    veto: atoms(tally.no_with_veto),
+    yes: getStakingCoinViewAmount(tally.yes),
+    no: getStakingCoinViewAmount(tally.no),
+    abstain: getStakingCoinViewAmount(tally.abstain),
+    veto: getStakingCoinViewAmount(tally.no_with_veto),
     total: totalVoted,
     totalVotedPercentage: getTotalVotePercentage(
       proposal,
@@ -138,26 +148,25 @@ function tallyReducer(proposal, tally, totalBondedTokens) {
   }
 }
 
-function depositReducer(deposit, network, store) {
-  const coinLookup = network.getCoinLookup(network.stakingDenom)
+function depositReducer(deposit, validators) {
   return {
     id: deposit.depositor,
-    amount: [coinReducer(deposit.amount[0], coinLookup)],
-    depositer: networkAccountReducer(deposit.depositor, store.validators),
+    amount: deposit.amount.map(coinReducer),
+    depositer: networkAccountReducer(deposit.depositor, validators),
   }
 }
 
-function voteReducer(vote, store) {
+function voteReducer(vote, validators) {
   return {
     id: String(vote.proposal_id.concat(`_${vote.voter}`)),
-    voter: networkAccountReducer(vote.voter, store.validators),
+    voter: networkAccountReducer(vote.voter, validators),
     option: vote.option,
   }
 }
 
 function networkAccountReducer(address, validators) {
   const proposerValAddress = address
-    ? encodeB32(decodeB32(address), `cosmosvaloper`, `hex`)
+    ? encodeB32(decodeB32(address), network.validatorAddressPrefix, `hex`)
     : ''
   const validator =
     validators && proposerValAddress.length > 0
@@ -171,22 +180,14 @@ function networkAccountReducer(address, validators) {
   }
 }
 
-function governanceParameterReducer(
-  depositParameters,
-  tallyingParamers,
-  network
-) {
+function governanceParameterReducer(depositParameters, tallyingParamers) {
+  // for now assuming one deposit denom
+  const minDeposit = coinReducer(depositParameters.min_deposit[0])
   return {
     votingThreshold: tallyingParamers.threshold,
     vetoThreshold: tallyingParamers.veto,
-    // for now assuming one deposit denom
-    depositDenom: denomLookup(
-      network.coinLookup,
-      depositParameters.min_deposit[0].denom
-    ),
-    depositThreshold: BigNumber(depositParameters.min_deposit[0].amount).div(
-      1000000
-    ),
+    depositDenom: minDeposit.denom,
+    depositThreshold: minDeposit.amount,
   }
 }
 
@@ -223,24 +224,9 @@ function getValidatorStatus(validator) {
   }
 }
 
-function blockReducer(networkId, block, transactions, data = {}) {
-  return {
-    id: block.block_id.hash,
-    networkId,
-    height: block.block.header.height,
-    chainId: block.block.header.chain_id,
-    hash: block.block_id.hash,
-    time: block.block.header.time,
-    transactions,
-    proposer_address: block.block.header.proposer_address,
-    data: JSON.stringify(data),
-  }
-}
-
-function blockHeaderReducer(networkId, block) {
+function blockReducer(block) {
   return {
     id: block.block_meta.block_id.hash,
-    networkId,
     height: block.block_meta.header.height,
     chainId: block.block_meta.header.chain_id,
     hash: block.block_meta.block_id.hash,
@@ -249,103 +235,25 @@ function blockHeaderReducer(networkId, block) {
   }
 }
 
-function denomLookup(coinLookup, denom) {
-  if (
-    Array.isArray(coinLookup) &&
-    coinLookup.find(({ chainDenom }) => chainDenom === denom)
-  ) {
-    return coinLookup.find(({ chainDenom }) => chainDenom === denom).viewDenom
-  }
-  return coinLookup.viewDenom ? coinLookup.viewDenom : denom.toUpperCase()
-}
-
-function coinReducer(coin, coinLookup) {
-  if (!coin) {
-    return {
-      amount: 0,
-      denom: '',
-    }
-  }
-
-  if (!coinLookup) {
-    return {
-      amount: -1,
-      denom: '[UNSUPPORTED] ' + coin.denom,
-    }
-  }
-
-  // we want to show only atoms as this is what users know
-  const denom = denomLookup(coinLookup, coin.denom)
-
-  return {
-    denom,
-    amount: BigNumber(coin.amount)
-      .times(coinLookup.chainToViewConversionFactor || 6)
-      .toNumber(),
-  }
-}
-
-function gasPriceReducer(gasPrice, coinLookup) {
-  if (!gasPrice) {
-    throw new Error(
-      'The token you are trying to request data for is not supported by Lunie.'
-    )
-  }
-
-  // we want to show only atoms as this is what users know
-  const denom = denomLookup(coinLookup, gasPrice.denom)
-  return {
-    denom,
-    price: BigNumber(gasPrice.price).div(1000000), // Danger: this might not be the case for all future tokens
-  }
-}
-
 // delegations rewards in Tendermint are located in events as strings with this form:
 // amount: {"15000umuon"}, or in multidenom networks they look like this:
 // amount: {"15000ungm,100000uchf,110000ueur,2000000ujpy"}
 // That is why we need this separate function to extract those amounts in this format
-function rewardCoinReducer(reward, network) {
+function rewardCoinReducer(reward) {
   const multiDenomRewardsArray = reward.split(`,`)
   const mappedMultiDenomRewardsArray = multiDenomRewardsArray.map((reward) => {
-    const denom = denomLookup(network.coinLookup, reward.match(/[a-z]+/gi)[0])
-    const coinLookup = network.getCoinLookup(denom, `viewDenom`)
-    return {
-      denom,
-      amount: BigNumber(reward.match(/[0-9]+/gi)).times(
-        coinLookup.chainToViewConversionFactor
-      ),
-    }
+    const rewardDenom = reward.match(/[a-z]+/gi)[0]
+    const rewardAmount = reward.match(/[0-9]+/gi)
+    return coinReducer({
+      amount: rewardAmount,
+      denom: rewardDenom,
+    })
   })
   return mappedMultiDenomRewardsArray
 }
 
-function balanceReducer(coin, gasPrices, fiatValue, fiatCurrency, network) {
-  return {
-    id: coin.denom,
-    ...coin,
-    fiatValue,
-    gasPrice: gasPrices
-      ? gasPriceReducer(
-          gasPrices.find(
-            (gasPrice) =>
-              denomLookup(network.coinLookup, gasPrice.denom) === coin.denom
-          ),
-          network.coinLookup
-        ).price
-      : null,
-  }
-}
-
-async function balanceV2Reducer(
-  lunieCoin,
-  stakingDenom,
-  delegations,
-  undelegations,
-  fiatValueAPI,
-  fiatCurrency,
-  address
-) {
-  const isStakingDenom = lunieCoin.denom === stakingDenom
+function balanceReducer(lunieCoin, delegations, undelegations) {
+  const isStakingDenom = lunieCoin.denom === network.stakingDenom
   const delegatedStake = delegations.reduce(
     (sum, { amount }) => BigNumber(sum).plus(amount),
     0
@@ -357,31 +265,13 @@ async function balanceV2Reducer(
   const total = isStakingDenom
     ? BigNumber(lunieCoin.amount).plus(delegatedStake).plus(undelegatingStake)
     : lunieCoin.amount
-  let fiatValue, availableFiatValue
-  if (fiatValueAPI) {
-    fiatValue = await fiatValueAPI.calculateFiatValues(
-      [
-        {
-          ...lunieCoin,
-          amount: total,
-        },
-      ],
-      fiatCurrency
-    )[lunieCoin.denom]
-    availableFiatValue = await fiatValueAPI.calculateFiatValues(
-      [lunieCoin],
-      fiatCurrency
-    )[stakingDenom]
-  }
   return {
     id: lunieCoin.denom,
     type: isStakingDenom ? 'STAKE' : 'CURRENCY',
     total,
     denom: lunieCoin.denom,
-    fiatValue,
     available: lunieCoin.amount,
     staked: delegatedStake.amount || 0,
-    availableFiatValue,
   }
 }
 
@@ -390,7 +280,7 @@ function undelegationReducer(undelegation, validator) {
     id: `${validator.operatorAddress}_${undelegation.creation_height}`,
     delegatorAddress: undelegation.delegator_address,
     validator,
-    amount: atoms(undelegation.balance),
+    amount: getStakingCoinViewAmount(undelegation.balance),
     startHeight: undelegation.creation_height,
     endTime: undelegation.completion_time,
   }
@@ -399,40 +289,24 @@ function undelegationReducer(undelegation, validator) {
 async function reduceFormattedRewards(
   reward,
   validator,
-  fiatCurrency,
-  calculateFiatValue,
-  reducers,
-  multiDenomRewardsArray,
-  network
+  multiDenomRewardsArray
 ) {
   await Promise.all(
-    reward.map(async (denomReward) => {
-      const coinLookup = network.getCoinLookup(denomReward.denom)
-      const lunieCoin = coinReducer(denomReward, coinLookup)
+    reward.map((denomReward) => {
+      const lunieCoin = coinReducer(denomReward)
       if (lunieCoin.amount < 0.000001) return
 
-      const fiatValue = calculateFiatValue
-        ? await calculateFiatValue(lunieCoin, fiatCurrency)
-        : undefined
       multiDenomRewardsArray.push({
-        id: `${validator.operatorAddress}_${lunieCoin.denom}_${fiatCurrency}`,
+        id: `${validator.operatorAddress}_${lunieCoin.denom}`,
         denom: lunieCoin.denom,
         amount: fixDecimalsAndRoundUp(lunieCoin.amount, 6).toString(), // TODO: refactor using a decimals number from coinLookup
-        fiatValue,
         validator,
       })
     })
   )
 }
 
-async function rewardReducer(
-  rewards,
-  validatorsDictionary,
-  fiatCurrency,
-  calculateFiatValue,
-  reducers,
-  network
-) {
+async function rewardReducer(rewards, validatorsDictionary) {
   const formattedRewards = rewards.map((reward) => ({
     reward: reward.reward,
     validator: validatorsDictionary[reward.validator_address],
@@ -440,15 +314,7 @@ async function rewardReducer(
   const multiDenomRewardsArray = []
   await Promise.all(
     formattedRewards.map(({ reward, validator }) =>
-      reduceFormattedRewards(
-        reward,
-        validator,
-        fiatCurrency,
-        calculateFiatValue,
-        reducers,
-        multiDenomRewardsArray,
-        network
-      )
+      reduceFormattedRewards(reward, validator, multiDenomRewardsArray)
     )
   )
   return multiDenomRewardsArray
@@ -494,50 +360,44 @@ function setTransactionSuccess(transaction, index) {
   return true
 }
 
-function sendDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(
-    message.amount ? message.amount[0].denom : network.stakingDenom
-  )
+function sendDetailsReducer(message) {
   return {
     from: [message.from_address],
     to: [message.to_address],
-    amount: coinReducer(message.amount[0], coinLookup),
+    amount: message.amount.map(coinReducer),
   }
 }
 
-function stakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(message.amount.denom)
+function stakeDetailsReducer(message) {
   return {
     to: [message.validator_address],
-    amount: coinReducer(message.amount, coinLookup),
+    amount: coinReducer(message.amount),
   }
 }
 
-function restakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(message.amount.denom)
+function restakeDetailsReducer(message) {
   return {
     from: [message.validator_src_address],
     to: [message.validator_dst_address],
-    amount: coinReducer(message.amount, coinLookup),
+    amount: coinReducer(message.amount),
   }
 }
 
-function unstakeDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(message.amount.denom)
+function unstakeDetailsReducer(message) {
   return {
     from: [message.validator_address],
-    amount: coinReducer(message.amount, coinLookup),
+    amount: coinReducer(message.amount),
   }
 }
 
-function claimRewardsDetailsReducer(message, reducers, transaction, network) {
+function claimRewardsDetailsReducer(message, transaction) {
   return {
     from: message.validators,
-    amounts: claimRewardsAmountReducer(transaction, reducers, network),
+    amounts: claimRewardsAmountReducer(transaction),
   }
 }
 
-function claimRewardsAmountReducer(transaction, reducers, network) {
+function claimRewardsAmountReducer(transaction) {
   const transactionClaimEvents =
     transaction.events &&
     transaction.events.filter((event) => event.type === `transfer`)
@@ -562,7 +422,7 @@ function claimRewardsAmountReducer(transaction, reducers, network) {
     .filter((attribute) => attribute.key === `amount`)
   const allClaimedRewards = amountAttributes
     .map((amount) => amount.value)
-    .map((rewardValue) => rewardCoinReducer(rewardValue, network))
+    .map((rewardValue) => rewardCoinReducer(rewardValue))
   const aggregatedClaimRewardsObject = allClaimedRewards.reduce(
     (all, rewards) => {
       rewards.forEach((reward) => {
@@ -579,13 +439,12 @@ function claimRewardsAmountReducer(transaction, reducers, network) {
   return claimedRewardsDenomArray.map(([denom, amount]) => ({ denom, amount }))
 }
 
-function submitProposalDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(message.initial_deposit[0].denom)
+function submitProposalDetailsReducer(message) {
   return {
     proposalType: message.content.type,
     proposalTitle: message.content.value.title,
     proposalDescription: message.content.value.description,
-    initialDeposit: coinReducer(message.initial_deposit[0], coinLookup),
+    initialDeposit: coinReducer(message.initial_deposit[0]),
   }
 }
 
@@ -596,52 +455,40 @@ function voteProposalDetailsReducer(message) {
   }
 }
 
-function depositDetailsReducer(message, reducers, network) {
-  const coinLookup = network.getCoinLookup(message.amount[0].denom)
+function depositDetailsReducer(message) {
   return {
     proposalId: message.proposal_id,
-    amount: coinReducer(message.amount[0], coinLookup),
+    amount: coinReducer(message.amount[0]),
   }
 }
 
 // function to map cosmos messages to our details format
-function transactionDetailsReducer(
-  type,
-  message,
-  reducers,
-  transaction,
-  network
-) {
+function transactionDetailsReducer(type, message, transaction) {
   let details
   switch (type) {
     case lunieMessageTypes.SEND:
-      details = sendDetailsReducer(message, reducers, network)
+      details = sendDetailsReducer(message)
       break
     case lunieMessageTypes.STAKE:
-      details = stakeDetailsReducer(message, reducers, network)
+      details = stakeDetailsReducer(message)
       break
     case lunieMessageTypes.RESTAKE:
-      details = restakeDetailsReducer(message, reducers, network)
+      details = restakeDetailsReducer(message)
       break
     case lunieMessageTypes.UNSTAKE:
-      details = unstakeDetailsReducer(message, reducers, network)
+      details = unstakeDetailsReducer(message)
       break
     case lunieMessageTypes.CLAIM_REWARDS:
-      details = claimRewardsDetailsReducer(
-        message,
-        reducers,
-        transaction,
-        network
-      )
+      details = claimRewardsDetailsReducer(message, transaction)
       break
     case lunieMessageTypes.SUBMIT_PROPOSAL:
-      details = submitProposalDetailsReducer(message, reducers, network)
+      details = submitProposalDetailsReducer(message)
       break
     case lunieMessageTypes.VOTE:
-      details = voteProposalDetailsReducer(message, reducers, network)
+      details = voteProposalDetailsReducer(message)
       break
     case lunieMessageTypes.DEPOSIT:
-      details = depositDetailsReducer(message, reducers, network)
+      details = depositDetailsReducer(message)
       break
     default:
       details = {}
@@ -659,7 +506,7 @@ function claimRewardsMessagesAggregator(claimMessages) {
     (msg) => msg.value.validator_address
   )
   return {
-    type: `cosmos-sdk/MsgWithdrawDelegationReward`,
+    type: `xxx/MsgWithdrawDelegationReward`, // prefix omited as not important
     value: {
       validators: onlyValidatorsAddressesArray,
     },
@@ -667,17 +514,14 @@ function claimRewardsMessagesAggregator(claimMessages) {
 }
 
 function proposalReducer(
-  networkId,
   proposal,
   tally,
   proposer,
   totalBondedTokens,
   detailedVotes,
-  reducers,
   validators
 ) {
   return {
-    networkId,
     id: Number(proposal.id),
     proposalId: String(proposal.id),
     type: proposalTypeEnumDictionary[proposal.content.type.split('/')[1]],
@@ -690,7 +534,7 @@ function proposalReducer(
     statusBeginTime: proposalBeginTime(proposal),
     statusEndTime: proposalEndTime(proposal),
     tally: tallyReducer(proposal, tally, totalBondedTokens),
-    deposit: getDeposit(proposal, 'stake'), // TODO use denom lookup + use network config
+    deposit: getDeposit(proposal),
     proposer: proposer
       ? networkAccountReducer(proposer.proposer, validators)
       : undefined,
@@ -701,24 +545,26 @@ function proposalReducer(
   }
 }
 
-function getTransactionLogs(logs, index) {
+function getTransactionLogs(transaction, index) {
+  if (!transaction.logs || !transaction.logs[index]) {
+    return JSON.parse(JSON.stringify(transaction.raw_log)).message
+  }
+  const logs = transaction.logs[index]
   return logs[index].log
     ? logs[index].log || logs[0] // failing txs show the first logs
     : logs[0].log || ''
 }
 
-function transactionReducer(network, transaction, reducers) {
+function transactionReducer(transaction, reducers) {
   try {
     let fees
     if (transaction.tx.value) {
       fees = transaction.tx.value.fee.amount.map((coin) => {
-        const coinLookup = network.getCoinLookup(coin.denom)
-        return coinReducer(coin, coinLookup)
+        return coinReducer(coin)
       })
     } else {
       fees = transaction.tx.auth_info.fee.amount.map((fee) => {
-        const coinLookup = network.getCoinLookup(fee.denom)
-        return coinReducer(fee, coinLookup)
+        return coinReducer(fee)
       })
     }
     // We do display only the transactions we support in Lunie
@@ -746,61 +592,53 @@ function transactionReducer(network, transaction, reducers) {
     const allMessages = claimMessage
       ? otherMessages.concat(claimMessage) // add aggregated claim message
       : otherMessages
-    const returnedMessages = allMessages.map(({ value, type }, index) => ({
-      id: transaction.txhash,
-      type: getMessageType(type),
-      hash: transaction.txhash,
-      networkId: network.id,
-      key: `${transaction.txhash}_${index}`,
-      height: transaction.height,
-      details: transactionDetailsReducer(
-        getMessageType(type),
-        value,
-        reducers,
-        transaction,
-        network
-      ),
-      timestamp: transaction.timestamp,
-      memo: transaction.tx.value.memo,
-      fees,
-      success: setTransactionSuccess(transaction, index, network.id),
-      log:
-        transaction.logs && transaction.logs[index]
-          ? getTransactionLogs(transaction.logs, index)
-          : JSON.parse(JSON.stringify(transaction.raw_log)).message,
-      involvedAddresses: Array.isArray(transaction.logs)
-        ? uniq(
-            extractInvolvedAddresses(
+    const returnedMessages = allMessages.map(
+      ({ value, type }, messageIndex) => ({
+        id: transaction.txhash,
+        type: getMessageType(type),
+        hash: transaction.txhash,
+        key: `${transaction.txhash}_${messageIndex}`,
+        height: transaction.height,
+        details: transactionDetailsReducer(
+          getMessageType(type),
+          value,
+          transaction
+        ),
+        timestamp: transaction.timestamp,
+        memo: transaction.tx.value.memo,
+        fees,
+        success: setTransactionSuccess(transaction, messageIndex),
+        log: getTransactionLogs(transaction, messageIndex),
+        involvedAddresses: Array.isArray(transaction.logs)
+          ? extractInvolvedAddresses(
+              // TODO check
               transaction.logs.find(
-                ({ msg_index: msgIndex }) => msgIndex === index
+                ({ msg_index: msgIndex }) => msgIndex === messageIndex
               ).events
             )
-          )
-        : [],
-    }))
+          : [],
+      })
+    )
     return returnedMessages
   } catch (error) {
     return [] // must return something differ from undefined
   }
 }
-function transactionsReducer(network, txs, reducers) {
+function transactionsReducer(txs, reducers) {
   const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash)
   const sortedTxs = sortBy(duplicateFreeTxs, ['timestamp'])
   const reversedTxs = reverse(sortedTxs)
   // here we filter out all transactions related to validators
   return reversedTxs.reduce((collection, transaction) => {
-    return collection.concat(transactionReducer(network, transaction, reducers))
+    return collection.concat(transactionReducer(transaction, reducers))
   }, [])
 }
 
-function delegationReducer(delegation, validator, active, network) {
-  const coinLookup = network.coinLookup.find(
-    ({ viewDenom }) => viewDenom === network.stakingDenom
-  )
-  const { amount, denom } = coinReducer(
-    { amount: delegation.balance, denom: network.stakingDenom },
-    coinLookup
-  )
+function delegationReducer(delegation, validator, active) {
+  const { amount, denom } = coinReducer({
+    amount: delegation.balance,
+    denom: network.stakingDenom,
+  })
 
   return {
     id: delegation.validator_address.concat(`-${denom}`),
@@ -829,7 +667,6 @@ function getValidatorUptimePercentage(validator, signedBlocksWindow) {
 }
 
 function validatorReducer(
-  network,
   signedBlocksWindow,
   validator,
   annualProvision,
@@ -860,7 +697,7 @@ function validatorReducer(
       validator,
       signedBlocksWindow
     ),
-    tokens: atoms(validator.tokens),
+    tokens: getStakingCoinViewAmount(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
     commission: Number(validator.commission.commission_rates.rate).toFixed(6),
     maxCommission: validator.commission.commission_rates.max_rate,
@@ -879,32 +716,29 @@ function validatorReducer(
   }
 }
 
-function extractInvolvedAddresses(transaction) {
+function extractInvolvedAddresses(messageEvents) {
   // If the transaction has failed, it doesn't get tagged
-  if (!Array.isArray(transaction.events)) return []
+  if (!Array.isArray(messageEvents)) return []
 
   // extract all addresses from events that are either sender or recipient
-  const involvedAddresses = transaction.events.reduce(
-    (involvedAddresses, event) => {
-      const senderAttributes = event.attributes
-        .filter(({ key }) => key === 'sender')
-        .map((sender) => sender.value)
-      if (senderAttributes.length) {
-        involvedAddresses = [...involvedAddresses, ...senderAttributes]
-      }
+  const involvedAddresses = messageEvents.reduce((involvedAddresses, event) => {
+    const senderAttributes = event.attributes
+      .filter(({ key }) => key === 'sender')
+      .map((sender) => sender.value)
+    if (senderAttributes.length) {
+      involvedAddresses = [...involvedAddresses, ...senderAttributes]
+    }
 
-      const recipientAttribute = event.attributes.find(
-        ({ key }) => key === 'recipient'
-      )
-      if (recipientAttribute) {
-        involvedAddresses.push(recipientAttribute.value)
-      }
+    const recipientAttribute = event.attributes.find(
+      ({ key }) => key === 'recipient'
+    )
+    if (recipientAttribute) {
+      involvedAddresses.push(recipientAttribute.value)
+    }
 
-      return involvedAddresses
-    },
-    []
-  )
-  return involvedAddresses
+    return involvedAddresses
+  }, [])
+  return uniq(involvedAddresses)
 }
 
 function undelegationEndTimeReducer(transaction) {
@@ -935,26 +769,20 @@ module.exports = {
   voteReducer,
   validatorReducer,
   blockReducer,
-  blockHeaderReducer,
   delegationReducer,
   coinReducer,
-  gasPriceReducer,
   rewardCoinReducer,
   balanceReducer,
-  balanceV2Reducer,
   undelegationReducer,
   rewardReducer,
   accountInfoReducer,
-  calculateTokens,
 
-  atoms,
   proposalBeginTime,
   proposalEndTime,
   getDeposit,
   getTotalVotePercentage,
   getValidatorStatus,
   expectedRewardsPerToken,
-  denomLookup,
   extractInvolvedAddresses,
   getProposalSummary,
   undelegationEndTimeReducer,

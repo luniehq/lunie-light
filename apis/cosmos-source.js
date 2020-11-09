@@ -1,48 +1,30 @@
 const BigNumber = require('bignumber.js')
-const { keyBy, orderBy, take, reverse, sortBy, uniqBy } = require('lodash')
+const { keyBy, orderBy, take, reverse, sortBy } = require('lodash')
 const { encodeB32, decodeB32, pubkeyToAddress } = require('../common/address')
 const { fixDecimalsAndRoundUpBigNumbers } = require('../common/numbers.js')
 
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 const PAGE_RECORDS_COUNT = 20
+const GOLANG_NULL_TIME = `0001-01-01T00:00:00Z` // time that gets serialized from null in golang
 
 class CosmosAPI {
-  constructor(axios, network, store, fiatValuesAPI, db) {
+  constructor(axios, network) {
     this.baseURL = network.apiURL
     this.axios = axios
     this.network = network
-    this.networkId = network.id
     this.delegatorBech32Prefix = network.addressPrefix
     this.validatorConsensusBech32Prefix = `${network.addressPrefix}valcons`
-    this.store = store // TODO remove store
-    this.fiatValuesAPI = fiatValuesAPI
-    this.db = db
+    this.reducers = require('./cosmos-reducers')
 
     // system to stop queries to proceed if store data is not yet available
     this.dataReady = new Promise((resolve) => {
       this.resolveReady = resolve
     })
 
-    this.setReducers()
     this.loadValidators().then((validators) => {
-      this.store.validators = keyBy(validators, 'operatorAddress')
+      this.validators = keyBy(validators, 'operatorAddress')
       this.resolveReady()
     })
-  }
-
-  setReducers() {
-    this.reducers = require('./cosmos-reducers')
-  }
-
-  // hacky way to get error text
-  async getError(url) {
-    try {
-      return await this.axios(
-        this.baseURL + (url.startsWith('/') ? url : '/' + url)
-      )
-    } catch (error) {
-      return error.response.body.error
-    }
   }
 
   async get(url) {
@@ -52,7 +34,6 @@ class CosmosAPI {
   }
 
   // querying data from the cosmos REST API
-  // is overwritten in cosmos v2 to extract from a differnt result format
   // some endpoints /blocks and /txs have a different response format so they use this.get directly
   async query(url, resultSelector = 'result') {
     try {
@@ -60,7 +41,7 @@ class CosmosAPI {
       return response[resultSelector]
     } catch (error) {
       console.error(
-        `Error for query ${url} in network ${this.networkId} (tried 3 times)`
+        `Error for query ${url} in network ${this.network.name} (tried 3 times)`
       )
       throw error
     }
@@ -69,26 +50,6 @@ class CosmosAPI {
   async getSignedBlockWindow() {
     const slashingParams = await this.query('/slashing/parameters')
     return slashingParams.signed_blocks_window
-  }
-
-  checkAddress(address) {
-    if (!address.startsWith(this.delegatorBech32Prefix)) {
-      throw new Error(
-        `The address you entered doesn't belong to the ${this.network.title} network`
-      )
-    }
-  }
-
-  async getTransactionsByHeight(height) {
-    const txs = await this.loadPaginatedTxs(`txs?tx.height=${height}`)
-    return Array.isArray(txs)
-      ? this.reducers.transactionsReducer(
-          this.network,
-          txs,
-          this.reducers,
-          this.network.stakingDenom
-        )
-      : []
   }
 
   async getTransactions(address, pageNumber = 0) {
@@ -139,25 +100,12 @@ class CosmosAPI {
       [].concat(...results)
     )
 
-    return this.reducers.transactionsReducer(this.network, txs, this.reducers)
+    return this.reducers.transactionsReducer(txs, this.reducers)
   }
 
   async getValidatorSigningInfos() {
     const signingInfos = await this.query(`slashing/signing_infos`)
     return signingInfos
-  }
-
-  async getValidatorSigningInfo(validatorConsensusPubKey) {
-    const response = await this.query(
-      `slashing/validators/${validatorConsensusPubKey}/signing_info`
-    )
-    return {
-      address: pubkeyToAddress(
-        validatorConsensusPubKey,
-        this.validatorConsensusBech32Prefix
-      ),
-      ...response,
-    }
   }
 
   async getAllValidatorSets(height = 'latest') {
@@ -194,60 +142,18 @@ class CosmosAPI {
     return this.reducers.delegationReducer(
       selfDelegation,
       validator,
-      delegationEnum.ACTIVE,
-      this.network
+      delegationEnum.ACTIVE
     ).amount
   }
 
   async getValidator(address) {
-    const [
-      validator,
-      annualProvision,
-      validatorSet,
-      signedBlocksWindow,
-    ] = await Promise.all([
-      this.query(`staking/validators/${address}`),
-      this.getAnnualProvision(),
-      this.getAllValidatorSets(),
-      this.getSignedBlockWindow(),
-    ])
-
-    // create a dictionary to reduce array lookups
-    const consensusValidators = keyBy(validatorSet.validators, 'address')
-    const totalVotingPower = validatorSet.validators.reduce(
-      (sum, { votingPower }) => sum.plus(votingPower),
-      BigNumber(0)
-    )
-
-    // query for signing info
-    const signingInfos = keyBy(
-      await this.getValidatorSigningInfos([validator]),
-      'address'
-    )
-
-    const consensusAddress = pubkeyToAddress(
-      validator.consensus_pubkey,
-      this.validatorConsensusBech32Prefix
-    )
-    validator.votingPower = consensusValidators[consensusAddress]
-      ? BigNumber(consensusValidators[consensusAddress].votingPower)
-          .div(totalVotingPower)
-          .toNumber()
-      : 0
-    validator.signing_info = signingInfos[consensusAddress]
-
-    return this.reducers.validatorReducer(
-      this.network,
-      signedBlocksWindow,
-      validator,
-      annualProvision,
-      this.reducers
-    )
+    await this.dataReady
+    return this.validators[address]
   }
 
   async getAllValidators() {
     await this.dataReady
-    return Object.values(this.store.validators)
+    return Object.values(this.validators)
   }
 
   async loadValidators(height) {
@@ -295,7 +201,6 @@ class CosmosAPI {
 
     return validators.map((validator) =>
       this.reducers.validatorReducer(
-        this.network,
         signedBlocksWindow,
         validator,
         annualProvision,
@@ -319,7 +224,6 @@ class CosmosAPI {
       this.query(`/gov/proposals/${proposal.id}/tally`),
       this.query(`/gov/parameters/tallying`),
       this.query(`/gov/parameters/deposit`),
-      this.db.getNetworkLinks(this.network.id),
     ])
     const totalVotingParticipation = BigNumber(tally.yes)
       .plus(tally.abstain)
@@ -327,7 +231,7 @@ class CosmosAPI {
       .plus(tally.no_with_veto)
     const formattedDeposits = deposits
       ? deposits.map((deposit) =>
-          this.reducers.depositReducer(deposit, this.network, this.store)
+          this.reducers.depositReducer(deposit, this.network, this.validators)
         )
       : undefined
     const depositsSum = formattedDeposits
@@ -339,38 +243,26 @@ class CosmosAPI {
       deposits: formattedDeposits,
       depositsSum: deposits ? Number(depositsSum).toFixed(6) : undefined,
       percentageDepositsNeeded: deposits
-        ? (
-            (depositsSum * 100) /
+        ? percentage(
+            depositsSum,
             fixDecimalsAndRoundUpBigNumbers(
               depositParameters.min_deposit[0].amount,
               6,
               this.network
             )
-          ).toFixed(2)
+          )
         : undefined,
       votes: votes
-        ? votes.map((vote) => this.reducers.voteReducer(vote, this.store))
+        ? votes.map((vote) => this.reducers.voteReducer(vote, this.validators))
         : undefined,
       votesSum: votes ? votes.length : undefined,
       votingThresholdYes: Number(tallyingParameters.threshold).toFixed(2),
       votingThresholdNo: (1 - tallyingParameters.threshold).toFixed(2),
-      votingPercentageYes:
-        totalVotingParticipation.toNumber() > 0
-          ? BigNumber(tally.yes)
-              .times(100)
-              .div(totalVotingParticipation)
-              .toNumber()
-              .toFixed(2)
-          : 0,
-      votingPercentageNo:
-        totalVotingParticipation.toNumber() > 0
-          ? BigNumber(tally.no)
-              .plus(tally.no_with_veto)
-              .times(100)
-              .div(totalVotingParticipation)
-              .toNumber()
-              .toFixed(2)
-          : 0,
+      votingPercentageYes: percentage(tally.yes, totalVotingParticipation),
+      votingPercentageNo: percentage(
+        BigNumber(tally.no).plus(tally.no_with_veto),
+        totalVotingParticipation
+      ),
       links,
       timeline: [
         proposal.submit_time
@@ -381,7 +273,7 @@ class CosmosAPI {
               title: `Deposit Period Ends`,
               // the deposit period can end before the time as the limit is reached already
               time:
-                proposal.voting_start_time !== `0001-01-01T00:00:00Z` &&
+                proposal.voting_start_time !== GOLANG_NULL_TIME &&
                 new Date(proposal.voting_start_time) <
                   new Date(proposal.deposit_end_time)
                   ? proposal.voting_start_time
@@ -392,7 +284,7 @@ class CosmosAPI {
           ? {
               title: `Voting Period Starts`,
               time:
-                proposal.voting_start_time !== `0001-01-01T00:00:00Z`
+                proposal.voting_start_time !== GOLANG_NULL_TIME
                   ? proposal.voting_start_time
                   : undefined,
             }
@@ -401,7 +293,7 @@ class CosmosAPI {
           ? {
               title: `Voting Period Ends`,
               time:
-                proposal.voting_end_time !== `0001-01-01T00:00:00Z`
+                proposal.voting_end_time !== GOLANG_NULL_TIME
                   ? proposal.voting_end_time
                   : undefined,
             }
@@ -414,7 +306,7 @@ class CosmosAPI {
   async getProposer(proposal, firstBlock) {
     let proposer = { proposer: undefined }
     const proposalIsFromPastChain =
-      proposal.voting_end_time !== `0001-01-01T00:00:00Z` &&
+      proposal.voting_end_time !== GOLANG_NULL_TIME &&
       new Date(firstBlock.time) > new Date(proposal.voting_end_time)
     if (!proposalIsFromPastChain) {
       proposer = await this.query(`gov/proposals/${proposal.id}/proposer`)
@@ -422,42 +314,40 @@ class CosmosAPI {
     return proposer
   }
 
-  async getProposal(proposal, totalBondedTokens, validators, firstBlock) {
-    const [tally, detailedVotes] = await Promise.all([
+  async getProposalMetaData(proposal, firstBlock) {
+    const [tally, detailedVotes, proposer] = await Promise.all([
       this.query(`gov/proposals/${proposal.id}/tally`),
       this.getDetailedVotes(proposal),
+      this.getProposer(proposal, firstBlock),
     ])
-    const proposer = await this.getProposer(proposal, firstBlock)
-    return this.reducers.proposalReducer(
-      this.network.id,
-      proposal,
-      tally,
-      proposer,
-      totalBondedTokens,
-      detailedVotes,
-      this.reducers,
-      validators
-    )
+    return [tally, detailedVotes, proposer]
   }
 
-  async getAllProposals(validators) {
+  async getProposals() {
+    await this.dataReady
     const [
       proposalsResponse,
       firstBlock,
       { bonded_tokens: totalBondedTokens },
     ] = await Promise.all([
       this.query('gov/proposals'),
-      this.getBlockByHeightV2(1),
+      this.getBlock(1),
       this.query('/staking/pool'),
     ])
     if (!Array.isArray(proposalsResponse)) return []
     const proposals = await Promise.all(
       proposalsResponse.map(async (proposal) => {
-        return await this.getProposal(
+        const [tally, detailedVotes, proposer] = await this.getProposalMetaData(
           proposal,
-          totalBondedTokens,
-          validators,
           firstBlock
+        )
+        return this.reducers.proposalReducer(
+          proposal,
+          tally,
+          proposer,
+          totalBondedTokens,
+          detailedVotes,
+          this.validators
         )
       })
     )
@@ -465,7 +355,8 @@ class CosmosAPI {
     return orderBy(proposals, 'id', 'desc')
   }
 
-  async getProposalById(proposalId, validators) {
+  async getProposal(proposalId) {
+    await this.dataReady
     const [
       proposal,
       { bonded_tokens: totalBondedTokens },
@@ -477,9 +368,20 @@ class CosmosAPI {
         )
       }),
       this.query(`/staking/pool`),
-      this.getBlockByHeightV2(1),
+      this.getBlock(1),
     ])
-    return this.getProposal(proposal, totalBondedTokens, validators, firstBlock)
+    const [tally, detailedVotes, proposer] = await this.getProposalMetaData(
+      proposal,
+      firstBlock
+    )
+    return this.reducers.proposalReducer(
+      proposal,
+      tally,
+      proposer,
+      totalBondedTokens,
+      detailedVotes,
+      this.validators
+    )
   }
 
   async getGovernanceParameters() {
@@ -498,7 +400,7 @@ class CosmosAPI {
     // for now defaulting to pick the 10 largest voting powers
     return take(
       reverse(
-        sortBy(this.store.validators, [
+        sortBy(this.validators, [
           (validator) => {
             return validator.votingPower
           },
@@ -514,7 +416,6 @@ class CosmosAPI {
     )
     const [communityPoolArray, links, topVoters] = await Promise.all([
       this.query('/distribution/community_pool'),
-      this.db.getNetworkLinks(this.network.id),
       this.getTopVoters(),
     ])
     const communityPool = communityPoolArray.find(
@@ -546,7 +447,6 @@ class CosmosAPI {
   }
 
   async getDelegatorVote({ proposalId, address }) {
-    this.checkAddress(address)
     const response = await this.query(`gov/proposals/${proposalId}/votes`)
     const votes = response || []
     const vote = votes.find(({ voter }) => voter === address) || {}
@@ -555,52 +455,27 @@ class CosmosAPI {
     }
   }
 
-  async getBlockByHeightV2(blockHeight) {
-    let block, transactions
-    if (blockHeight) {
-      const response = await Promise.all([
-        this.get(`blocks/${blockHeight}`),
-        this.getTransactionsByHeight(blockHeight),
-      ])
-      block = response[0]
-      transactions = response[1]
-    } else {
-      block = await this.get(`blocks/latest`)
-      transactions = await this.getTransactionsByHeight(
-        block.block.header.height
-      )
-    }
-    return this.reducers.blockReducer(this.network.id, block, transactions)
-  }
-
-  async getBlockV2(blockHeight) {
-    return await this.getBlockByHeightV2(blockHeight)
-  }
-
-  async getBlockHeader(blockHeight) {
+  async getBlock(blockHeight) {
     let block
     if (blockHeight) {
       block = await this.get(`blocks/${blockHeight}`)
     } else {
       block = await this.get(`blocks/latest`)
     }
-    return this.reducers.blockHeaderReducer(this.network.id, block)
+    return this.reducers.blockReducer(block)
   }
 
-  async getBalancesV2FromAddress(address, fiatCurrency, network) {
-    this.checkAddress(address)
+  async getBalances(address) {
     const [balancesResponse, delegations, undelegations] = await Promise.all([
       this.query(`bank/balances/${address}`),
-      this.getDelegationsForDelegatorAddress(address),
-      this.getUndelegationsForDelegatorAddress(address),
+      this.getDelegationsForDelegator(address),
+      this.getUndelegationsForDelegator(address),
     ])
     const balances = balancesResponse || []
-    const coins = balances.map((coin) => {
-      const coinLookup = network.getCoinLookup(coin.denom)
-      return this.reducers.coinReducer(coin, coinLookup)
-    })
-    // also check if there are any balances as rewards
-    const rewards = await this.getRewards(address, fiatCurrency, network)
+    const coins = balances.map(this.reducers.coinReducer)
+    // also check if there are any denoms as rewards the user has not as a balance
+    // we need to show those as well in the balance overview as we show the rewards there
+    const rewards = await this.getRewards(address)
     const rewardsBalances = rewards.reduce((coinsAggregator, reward) => {
       if (
         !coins.find((coin) => coin.denom === reward.denom) &&
@@ -615,45 +490,29 @@ class CosmosAPI {
     }, [])
     // join regular balances and rewards balances
     coins.push(...rewardsBalances)
+
+    // the user might not have liquid staking tokens but have staking tokens delegated
+    // if we don't add the staking denom, we would show a 0 total for the staking denom which is wrong
     const hasStakingDenom = coins.find(
       ({ denom }) => denom === this.network.stakingDenom
     )
-    // the user might not have liquid staking tokens but have staking tokens delegated
-    // if we don't add the staking denom, we would show a 0 total for the staking denom which is wrong
     if (!hasStakingDenom) {
       coins.push({
         amount: BigNumber(0),
         denom: this.network.stakingDenom,
       })
     }
-    const fiatValueAPI = this.fiatValuesAPI
     return await Promise.all(
-      coins.map((coin) => {
-        return this.reducers.balanceV2Reducer(
-          coin,
-          this.network.stakingDenom,
-          delegations,
-          undelegations,
-          fiatValueAPI,
-          fiatCurrency
-        )
-      })
+      coins
+        .map((coin) => {
+          return this.reducers.balanceReducer(coin, delegations, undelegations)
+        })
+        .filter(({ supported }) => supported)
     )
   }
 
-  async getAccountInfo(address) {
-    if (!address.startsWith(this.network.addressPrefix)) {
-      throw new Error("This address doesn't exist in this network")
-    }
-    const response = await this.query(`auth/accounts/${address}`)
-    const accountType = response.type
-    const accountValue = response && response.value
-    return this.reducers.accountInfoReducer(accountValue, accountType)
-  }
-
-  async getDelegationsForDelegatorAddress(address) {
+  async getDelegationsForDelegator(address) {
     await this.dataReady
-    this.checkAddress(address)
     const delegations =
       (await this.query(`staking/delegators/${address}/delegations`)) || []
 
@@ -661,7 +520,7 @@ class CosmosAPI {
       .map((delegation) =>
         this.reducers.delegationReducer(
           delegation,
-          this.store.validators[delegation.validator_address],
+          this.validators[delegation.validator_address],
           delegationEnum.ACTIVE,
           this.network
         )
@@ -669,9 +528,8 @@ class CosmosAPI {
       .filter((delegation) => BigNumber(delegation.amount).gt(0))
   }
 
-  async getUndelegationsForDelegatorAddress(address) {
+  async getUndelegationsForDelegator(address) {
     await this.dataReady
-    this.checkAddress(address)
     const undelegations =
       (await this.query(
         `staking/delegators/${address}/unbonding_delegations`
@@ -696,7 +554,7 @@ class CosmosAPI {
     return flattenedUndelegations.map((undelegation) =>
       this.reducers.undelegationReducer(
         undelegation,
-        this.store.validators[undelegation.validator_address]
+        this.validators[undelegation.validator_address]
       )
     )
   }
@@ -718,83 +576,20 @@ class CosmosAPI {
     )
   }
 
-  async getDelegationForValidator(delegatorAddress, validator) {
-    this.checkAddress(delegatorAddress)
-
-    const operatorAddress = validator.operatorAddress
-    const delegation = await this.query(
-      `staking/delegators/${delegatorAddress}/delegations/${operatorAddress}`
-    ).catch(() => {
-      const coinLookup = this.network.getCoinLookup(
-        this.network.stakingDenom,
-        'viewDenom'
-      )
-      return {
-        validator_address: operatorAddress,
-        delegator_address: delegatorAddress,
-        shares: 0,
-        balance: {
-          amount: 0,
-          denom: coinLookup.chainDenom,
-        },
-      }
-    })
-    return this.reducers.delegationReducer(
-      delegation,
-      validator,
-      delegationEnum.ACTIVE,
-      this.network
-    )
-  }
-
   async getAnnualProvision() {
     const response = await this.query(`minting/annual-provisions`)
     return response
   }
 
-  async getExpectedReturns(validator) {
-    const annualProvision = await this.getAnnualProvision()
-    const expectedReturns = this.reducers.expectedRewardsPerToken(
-      validator,
-      validator.commission,
-      annualProvision
-    )
-    return expectedReturns
-  }
-
-  async getRewards(delegatorAddress, fiatCurrency, network) {
+  async getRewards(delegatorAddress) {
     await this.dataReady
-    this.checkAddress(delegatorAddress)
     const result = await this.query(
       `distribution/delegators/${delegatorAddress}/rewards`
     )
     const rewards = (result.rewards || []).filter(
       ({ reward }) => reward && reward.length > 0
     )
-    return this.reducers.rewardReducer(
-      rewards,
-      this.store.validators,
-      fiatCurrency,
-      this.calculateFiatValue && this.calculateFiatValue.bind(this),
-      this.reducers,
-      network
-    )
-  }
-
-  async getAllDelegators() {
-    await this.dataReady
-    const allDelegations = await Object.keys(this.store.validators).reduce(
-      async (all, validator) => {
-        const delegations = await this.query(
-          `staking/validators/${validator}/delegations`
-        )
-        return (await all).concat(delegations)
-      },
-      []
-    )
-    return uniqBy(allDelegations, 'delegator_address').map(
-      ({ delegator_address: delegatorAddress }) => delegatorAddress
-    )
+    return this.reducers.rewardReducer(rewards, this.validators)
   }
 
   async loadPaginatedTxs(url, page = 1) {
@@ -810,6 +605,13 @@ class CosmosAPI {
     const page = await this.get(url + `&limit=${PAGE_RECORDS_COUNT}`)
     return page.page_total
   }
+}
+
+function percentage(x, total) {
+  // percentage output should always be a number between 0 and 1
+  return total.toNumber() > 0
+    ? BigNumber(x).div(total).toNumber().toFixed(4)
+    : 0
 }
 
 module.exports = CosmosAPI
