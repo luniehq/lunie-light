@@ -58,7 +58,7 @@ export default {
 }
 
 .menu-address .address {
-  color: var(--menu-link);
+  color: var(--link);
 }
 
 .copyable-address .address:hover {
@@ -66,7 +66,7 @@ export default {
 }
 
 .menu-address .address:hover {
-  color: var(--menu-link-hover);
+  color: var(--link-hover);
 }
 
 .icon-container {

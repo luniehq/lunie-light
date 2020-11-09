@@ -69,7 +69,7 @@ export default {
   width: auto;
   min-width: 100px;
   padding: 8px 10px;
-  color: var(--menu-bright);
+  color: var(--white);
   margin: 0;
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -100,7 +100,7 @@ export default {
 
 .button.secondary.active {
   background: var(--gray-200);
-  color: var(--menu-bright);
+  color: var(--white);
 }
 
 .button.secondary {

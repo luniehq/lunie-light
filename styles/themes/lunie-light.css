@@ -2,7 +2,6 @@
   /* theme colors */
   --primary: hsl(7, 88%, 70%);
   --primary-hover: hsl(7, 88%, 65%);
-  --highlight: var(--primary);
   --link: var(--blue-500);
   --link-hover: var(--blue-600);
 
@@ -16,10 +15,6 @@
   /* menu styles */
   --app-nav: var(--gray-1000);
   --app-nav-hover: var(--gray-900);
-  --menu-link: var(--link);
-  --menu-link-hover: var(--link-hover);
-  --menu-bright: var(--white);
-  --menu-text: var(--gray-100);
 
   /* typography */
   --bright: var(--gray-900);
