@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import { getWalletIndex, testPassword } from '@lunie/cosmos-keys'
 import { required, minLength } from 'vuelidate/lib/validators'
+import { getWallet, getWalletIndex } from '~/common/keystore'
 
 export default {
   name: `sign-in`,
@@ -74,14 +74,17 @@ export default {
       return []
     },
   },
+  middleware: 'localSigning',
   methods: {
-    onSubmit() {
+    async onSubmit() {
       this.$v.$touch()
       if (this.$v.$error) return
       this.loading = true
 
       try {
-        testPassword(this.signInAddress, this.signInPassword)
+        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        const { wallet } = getWallet(this.signInAddress)
+        await Secp256k1HdWallet.deserialize(wallet, this.signInPassword)
         this.$store.dispatch('signIn', {
           address: this.signInAddress,
           type: 'local',

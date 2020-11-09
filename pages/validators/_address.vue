@@ -1,8 +1,8 @@
 <template>
-  <div class="readable-width">
-    <div v-if="!validators.length">Loading...</div>
+  <div>
+    <div v-if="!validators.length" class="loading-row">Loading...</div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
-    <template v-else>
+    <div v-else class="readable-width">
       <div class="back-button-container">
         <BackButton />
       </div>
@@ -144,7 +144,7 @@
         :source-validator="validator"
         :is-unnomination="true"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -239,8 +239,13 @@ export default {
 }
 </script>
 <style scoped>
+.loading-row {
+  margin: 1rem;
+  height: 50vh;
+}
+
 span {
-  font-size: 12px;
+  font-size: var(--text-xs);
   line-height: normal;
 }
 
@@ -275,9 +280,9 @@ span {
 }
 
 h4 {
-  color: var(--txt);
-  font-size: var(--sm);
-  margin-bottom: 2px;
+  color: var(--dim);
+  font-size: var(--text-xs);
+  margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
@@ -329,6 +334,70 @@ h4 {
 
 .status-container {
   padding: 1rem 1rem 0;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 0 0;
+}
+
+.readable-width {
+  max-width: 800px;
+  margin: 1rem auto;
+}
+
+.page.dark-background {
+  background: var(--app-fg);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: normal;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 0 1rem;
+}
+
+.page-profile__section {
+  margin-bottom: 1rem;
+}
+
+.page-profile__section-title {
+  margin: 0 0 0.25rem 1rem;
+  color: var(--txt);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+li {
+  width: 100%;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.row span {
+  color: var(--bright);
+  font-size: var(--text-sm);
+  font-weight: 400;
 }
 
 @media screen and (max-width: 667px) {

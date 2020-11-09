@@ -50,7 +50,6 @@
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
     >
-      <!-- ATTENTION we are using id here for a repeatable element -->
       <Field
         v-model="amount.amount"
         class="tm-field-addon amount"
@@ -203,10 +202,7 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amounts: this.amounts.map((amount, index) => ({
-          amount: amount.amount,
-          denom: amount.denom,
-        })),
+        amounts: this.amounts,
         memo: this.memo,
       }
     },

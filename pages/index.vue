@@ -62,7 +62,7 @@ export default {
 
 <style scoped>
 .content {
-  padding: 1rem 2rem;
+  padding: 5rem 2rem 2rem;
   margin: 0 auto;
   max-width: 800px;
 }

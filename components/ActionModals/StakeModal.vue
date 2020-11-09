@@ -3,7 +3,7 @@
     id="delegation-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amounts="[amount]"
+    :amounts="[{ amount, denom: stakingDenom }]"
     title="Stake"
     class="delegation-modal"
     submission-error-prefix="Staking failed"
@@ -30,21 +30,21 @@
       field-label="Amount"
     >
       <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
-        <Field
-          id="amount"
-          v-model="amount"
-          v-focus
-          placeholder="0"
-          class="tm-field-addon"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <Button
-          type="button"
-          class="secondary addon-max"
-          value="Max"
-          @click.native="setMaxAmount()"
-        />
+      <Field
+        id="amount"
+        v-model="amount"
+        v-focus
+        placeholder="0"
+        class="tm-field-addon"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Button
+        type="button"
+        class="secondary addon-max"
+        value="Max"
+        @click.native="setMaxAmount()"
+      />
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
