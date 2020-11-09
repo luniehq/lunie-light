@@ -54,7 +54,7 @@ function addToStorage(name, address, ciphertext, HDPath) {
   localStorage.setItem(KEY_TAG + '-' + address, JSON.stringify(storedWallet))
 }
 
-// removed a wallet from localstorage
+// remove a wallet from localstorage
 export function removeFromStorage(address) {
   removeFromIndex(address)
   localStorage.removeItem(KEY_TAG + '-' + address)
