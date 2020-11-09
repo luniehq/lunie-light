@@ -114,10 +114,6 @@ ul {
   padding: 2rem 0 4rem;
 }
 
-.list-container a {
-  padding: 0.5rem;
-}
-
 .session-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 3fr));
