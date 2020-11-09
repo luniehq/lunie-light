@@ -1,13 +1,11 @@
-import { SigningCosmosClient } from '@cosmjs/launchpad' // TODO make async
-import { Coin } from '~/signing/messages'
 import network from '~/common/network'
 
-export const state = () => ({})
+export const state = () => ({
+  accounts: [],
+  initialized: false,
+})
 
 export const mutations = {
-  setOfflineSigner(state, offlineSigner) {
-    state.offlineSigner = offlineSigner
-  },
   setAccounts(state, accounts) {
     state.accounts = accounts
   },
@@ -34,13 +32,13 @@ export const actions = {
         // If the same chain id is already registered, it will resolve and not require the user interactions.
         await window.keplr.experimentalSuggestChain({
           // Chain-id of the Cosmos SDK chain.
-          chainId: network.chain_id,
+          chainId: network.chainId,
           // The name of the chain to be displayed to the user.
           chainName: network.name,
           // RPC endpoint of the chain.
-          rpc: network.rpc_url,
+          rpc: network.rpcURL,
           // REST endpoint of the chain.
-          rest: network.api_url,
+          rest: network.apiURL,
           // Staking coin information
           stakeCurrency: lunieCoinToKeplrCoin(network.stakingDenom),
           // (Optional) If you have a wallet webpage used to stake the coin then provide the url to the website in `walletUrlForStaking`.
@@ -98,35 +96,8 @@ export const actions = {
         console.error(error)
         alert('Failed to suggest the chain')
       }
-      await window.keplr.enable(network.chain_id)
+      await window.keplr.enable(network.chainId)
       commit('setInitialized')
-    }
-  },
-  async sign({}, { senderAddress, messages, fee, memo, transactionType }) {
-    const offlineSigner = window.getOfflineSigner(network.chain_id)
-
-    // Initialize the gaia api with the offline signer that is injected by Keplr extension.
-    const cosmJS = new SigningCosmosClient(
-      network.api_url,
-      senderAddress,
-      offlineSigner
-    )
-
-    let result
-    switch (transactionType) {
-      case 'SendTx': {
-        result = await cosmJS.sendTokens(
-          senderAddress,
-          [Coin(messages.amount, network.coinLookup)],
-          memo
-        )
-      }
-    }
-
-    if (result.code !== undefined && result.code !== 0) {
-      alert('Failed to send tx: ' + result.log || result.rawLog)
-    } else {
-      alert('Succeed to send tx')
     }
   },
 }

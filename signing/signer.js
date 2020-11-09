@@ -1,4 +1,5 @@
 import { getWallet } from '~/common/keystore'
+import network from '~/common/network'
 
 export async function getSigner(signingType, { address, password }) {
   if (signingType === `local`) {
@@ -9,6 +10,8 @@ export async function getSigner(signingType, { address, password }) {
       password
     )
     return wallet
+  } else if (signingType === `extension`) {
+    return window.getOfflineSigner(network.chainId)
   }
   // else if (signingType === `ledger`) {
   //   return await getCosmosLedgerSigner({}) // gets config
