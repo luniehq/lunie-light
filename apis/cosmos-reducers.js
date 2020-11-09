@@ -782,7 +782,7 @@ function transactionReducer(network, transaction, reducers) {
     return [] // must return something differ from undefined
   }
 }
-function transactionsReducerV2(network, txs, reducers) {
+function transactionsReducer(network, txs, reducers) {
   const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash)
   const sortedTxs = sortBy(duplicateFreeTxs, ['timestamp'])
   const reversedTxs = reverse(sortedTxs)
@@ -958,7 +958,7 @@ module.exports = {
   getProposalSummary,
   undelegationEndTimeReducer,
 
-  transactionsReducerV2,
+  transactionsReducer,
   transactionReducer,
   depositDetailsReducer,
   voteProposalDetailsReducer,

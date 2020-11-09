@@ -82,7 +82,7 @@ class CosmosAPI {
   async getTransactionsByHeight(height) {
     const txs = await this.loadPaginatedTxs(`txs?tx.height=${height}`)
     return Array.isArray(txs)
-      ? this.reducers.transactionsReducerV2(
+      ? this.reducers.transactionsReducer(
           this.network,
           txs,
           this.reducers,
@@ -139,7 +139,7 @@ class CosmosAPI {
       [].concat(...results)
     )
 
-    return this.reducers.transactionsReducerV2(this.network, txs, this.reducers)
+    return this.reducers.transactionsReducer(this.network, txs, this.reducers)
   }
 
   async getValidatorSigningInfos() {
