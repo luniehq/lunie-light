@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    <!-- <img class="network-icon" src="~/assets/images/currencies/atom.png" /> -->
     <h1>{{ network.name }}</h1>
     <h2>{{ network.description }}</h2>
     <div class="card-sign-in">
@@ -20,23 +19,34 @@
       </div>
     </div>
     <div class="list-container">
+      <h3>Helpful Links</h3>
       <ul>
-        <h3>Helpful Links</h3>
         <li>
-          <a :href="network.website" target="_blank">Project Website</a>
+          <a
+            :href="network.website"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            >Project Website</a
+          >
         </li>
         <li>
-          <a :href="network.apiURL + '/node_info'" target="_blank">Node Info</a>
+          <a
+            :href="network.apiURL + '/node_info'"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            >Node Info</a
+          >
         </li>
         <!-- <li>
           <a
             href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
             target="_blank"
+            rel="nofollow noreferrer noopener"
             >Keplr Browser Extension</a
           >
         </li>
         <li>
-          <a href="https://www.ledger.com/" target="_blank"
+          <a href="https://www.ledger.com/" target="_blank" rel="nofollow noreferrer noopener"
             >Ledger Hardware Wallet</a
           >
         </li> -->
@@ -100,7 +110,12 @@ ul {
 
 .list-container {
   display: flex;
+  flex-direction: column;
   padding: 2rem 0 4rem;
+}
+
+.list-container a {
+  padding: 0.5rem;
 }
 
 .session-list {
