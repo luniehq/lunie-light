@@ -83,7 +83,7 @@ export const actions = {
   },
   async getBlock({ commit, state: { api } }) {
     try {
-      const block = await api.getBlockHeader()
+      const block = await api.getBlock()
       commit('setBlock', block)
       return block
     } catch (err) {
