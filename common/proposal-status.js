@@ -1,4 +1,4 @@
-const governanceStatusEnum = {
+export const governanceStatusEnum = {
   PASSED: 'PASSED',
   REJECTED: 'REJECTED',
   DEPOSITING: 'DEPOSITING',

@@ -9,7 +9,11 @@
     </Card>
 
     <template v-else>
-      <PageProposals :proposals="proposals" :governance-overview="{}" />
+      <PageProposals
+        class="page"
+        :proposals="proposals"
+        :governance-overview="{}"
+      />
 
       <template v-if="proposalsLoaded">
         <p class="message">
@@ -71,5 +75,12 @@ export default {
   border-radius: var(--border-radius);
   margin: 0.5rem 1rem 1rem 2rem;
   animation: fade 2s infinite;
+}
+
+.page {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
 }
 </style>
