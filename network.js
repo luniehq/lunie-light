@@ -1,25 +1,33 @@
 export default {
-  id: 'terra-mainnet',
-  chain_id: 'akashnet-1', // TODO get from chain?
-  name: 'Akash Mainnet',
-  api_url: 'http://localhost:9999/lcd.akash.forbole.com',
-  rpc_url: 'http://localhost:9999/rpc.akash.forbole.com',
-  stakingDenom: 'AKT',
+  id: 'cosmos-mainnet',
+  chainId: 'cosmoshub-3', // TODO get from chain?
+  name: 'Cosmos Hub',
+  description:
+    'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  logo: `logo.svg`,
+  website: 'https://cosmos.network',
+  apiURL: 'https://lcd.nylira.net',
+  stakingDenom: 'ATOM',
   coinLookup: [
     {
-      viewDenom: 'AKT',
-      chainDenom: 'uakt',
+      viewDenom: 'ATOM',
+      chainDenom: 'uatom',
       chainToViewConversionFactor: 1e-6,
     },
   ],
-  address_prefix: 'akash',
+  addressPrefix: 'cosmos',
   HDPath: `m/44'/118'/0'/0/0`,
-  curve: 'ed25519',
   lockUpPeriod: `21 days`,
-
-  // utility functions
-  // TODO put in a wrapper outside this file
-  getCoinLookup(denom, coinLookupDenomType = `chainDenom`) {
-    return this.coinLookup.find((coin) => coin[coinLookupDenomType] === denom)
+  fees: {
+    default: {
+      gasEstimate: 350000,
+      feeOptions: [
+        {
+          denom: 'ATOM',
+          amount: 0.001,
+        },
+      ],
+    },
   },
+  localSigning: false,
 }

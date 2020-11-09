@@ -2,22 +2,13 @@
   <div class="balance-row">
     <div :key="balance.denom" class="table-cell big">
       <img
-        class="currency-flag"
+        class="token-icon"
         :src="image"
         :alt="`${balance.denom}` + ' currency'"
       />
-      <div class="total-and-fiat">
-        <span class="total">
-          {{ balance.total | bigFigureOrShortDecimals }}
-          {{ balance.denom }}
-        </span>
-        <span
-          v-if="balance.fiatValue && balance.fiatValue.amount > 0"
-          class="fiat"
-        >
-          {{ bigFigureOrShortDecimals(balance.fiatValue.amount) }}
-          {{ balance.fiatValue.denom }}</span
-        >
+      <div class="total">
+        {{ balance.total | bigFigureOrShortDecimals }}
+        {{ balance.denom }}
       </div>
     </div>
 
@@ -72,18 +63,6 @@
     <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
     <!-- <StakeModal ref="StakeModal" />
     <UnstakeModal ref="UnstakeModal" /> -->
-
-    <!-- endTime span for Polkadot undelegations -->
-    <div
-      v-if="unstakingBalance"
-      :key="balance.denom + '_endtime'"
-      class="table-cell endtime"
-    >
-      <span v-if="unstakeClaimable">Claimable</span>
-      <span v-else>
-        {{ balance.endTime | fromNow }}
-      </span>
-    </div>
   </div>
 </template>
 <script>
@@ -122,9 +101,6 @@ export default {
     unstakingBalance() {
       return !!this.balance.endTime
     },
-    unstakeClaimable() {
-      return new Date(this.balance.endTime) <= new Date()
-    },
     image() {
       const fileName = this.balance.denom.toLowerCase() + '.png'
       return require(`../../assets/images/currencies/${fileName}`)
@@ -147,20 +123,23 @@ export default {
 <style scoped>
 .balance-row {
   display: flex;
-  border: 1px solid var(--bc);
-  border-radius: 0.25rem;
-  background: var(--app-bg);
+}
+
+.balance-row:not(:first-child) {
   margin-top: -1px;
+}
+
+.balance-row:not(:last-child) {
+  border-bottom: 1px solid var(--bc);
 }
 
 .table-cell {
   flex-grow: 1;
-  padding: 0.5rem 0.5rem 0.5rem 0;
+  padding: 0.75rem 0.75rem 0.75rem 0;
   overflow: hidden;
   display: flex;
   align-items: center;
   width: 20%;
-  font-family: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   position: relative;
   white-space: nowrap;
 }
@@ -169,21 +148,11 @@ export default {
   color: var(--success);
 }
 
-.fiat {
-  color: var(--dim);
-  padding-left: 1rem;
-}
-
 .total {
   color: var(--bright);
 }
 
-.total-and-fiat {
-  display: flex;
-  flex-direction: row;
-}
-
-.currency-flag {
+.token-icon {
   width: 2.5rem;
   height: 2.5rem;
   max-width: 100%;
@@ -219,7 +188,7 @@ export default {
 
 .icon-button {
   border-radius: 50%;
-  background: var(--link);
+  background: var(--primary);
   border: none;
   outline: none;
   height: 2rem;
@@ -231,7 +200,7 @@ export default {
 }
 
 .icon-button:hover {
-  background: var(--link-hover);
+  background: var(--primary-hover);
   cursor: pointer;
 }
 
@@ -268,7 +237,7 @@ export default {
 }
 
 @media screen and (min-width: 1254px) {
-  .send-button {
+  .button.send-button {
     display: none;
   }
 }
@@ -276,16 +245,6 @@ export default {
 @media screen and (max-width: 1254px) {
   .actions {
     display: none;
-  }
-
-  .total-and-fiat {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .fiat {
-    padding: 0;
-    font-size: 12px;
   }
 }
 </style>

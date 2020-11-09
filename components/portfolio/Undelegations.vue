@@ -46,13 +46,6 @@ export default {
 }
 </script>
 <style scoped>
-h1 {
-  font-size: 24px;
-  color: var(--bright);
-  font-weight: 400;
-  padding: 1rem 0 2rem;
-}
-
 .undelegations {
   background: var(--app-fg);
 }
@@ -87,11 +80,6 @@ h1 {
 }
 
 @media screen and (max-width: 667px) {
-  h1 {
-    padding: 2rem;
-    text-align: center;
-  }
-
   .table-container {
     padding: 0 1rem 8rem;
   }

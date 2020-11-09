@@ -13,13 +13,14 @@
       :password="password"
       @submit="setPassword"
     />
-    <TmFormMsg v-if="errorMessage" type="custom" :msg="errorMessage" />
+    <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
   </SessionFrame>
 </template>
 
 <script>
-import { storeWallet, getNewWalletFromSeed } from '@lunie/cosmos-keys'
+import { storeWallet } from '~/common/keystore'
 import network from '~/common/network'
+import { getHDPath } from '~/common/hdpath'
 
 export default {
   name: `recover`,
@@ -32,6 +33,7 @@ export default {
     address: undefined,
     errorMessage: undefined,
   }),
+  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = this.steps.findIndex((step) => step === this.step)
@@ -47,39 +49,37 @@ export default {
       this.password = password
       this.onSubmit()
     },
-    setSeed(seed) {
+    async setSeed(seed) {
       this.seed = seed
-      const wallet = getNewWalletFromSeed(
+      const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+      const wallet = await Secp256k1HdWallet.fromMnemonic(
         this.seed,
-        network.address_prefix,
-        network.HDPath,
-        network.curve
+        await getHDPath(network.HDPath),
+        network.addressPrefix
       )
-      this.address = wallet.cosmosAddress
+      this.address = wallet.address
       this.step = `Name`
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.loading) return
 
       this.errorMessage = undefined
       this.loading = true
       try {
-        const wallet = getNewWalletFromSeed(
+        const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+        const wallet = await Secp256k1HdWallet.fromMnemonic(
           this.seed,
-          network.address_prefix,
-          network.HDPath,
-          network.curve
+          await getHDPath(network.HDPath),
+          network.addressPrefix
         )
         storeWallet(
-          wallet,
+          await wallet.serialize(this.password),
+          wallet.address,
           this.name,
-          this.password,
-          network.id,
-          network.HDPath,
-          network.curve
+          network.HDPath
         )
         this.$store.dispatch('signIn', {
-          address: wallet.cosmosAddress,
+          address: wallet.address,
           type: 'local',
         })
         this.$router.push({

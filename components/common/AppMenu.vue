@@ -1,6 +1,7 @@
 <template>
   <menu class="app-menu">
     <div>
+      <UserMenu />
       <nuxt-link
         class="app-menu-item"
         to="/portfolio"
@@ -42,7 +43,9 @@
         <i class="material-icons notranslate">chevron_right</i>
       </nuxt-link>
     </div>
-    <ConnectedNetwork @close-menu="handleClick" />
+    <div>
+      <ConnectedNetwork @close-menu="handleClick" />
+    </div>
   </menu>
 </template>
 
@@ -68,10 +71,6 @@ export default {
   padding-top: 3rem;
 }
 
-.app-menu-item {
-  color: var(--menu-text);
-}
-
 .app-menu-item:hover {
   background: var(--app-nav-hover);
 }
@@ -84,48 +83,19 @@ export default {
   margin: 0.5rem 1rem;
   font-weight: 400;
   font-size: 14px;
-  color: var(--menu-text);
-  border-radius: 0.25rem;
+  color: var(--gray-500);
+  border-radius: var(--border-radius);
   transition: all 0.5s ease;
 }
 
-.session-link {
-  margin: 2.5rem 1rem 1rem;
-}
-
-.show-on-ledger {
-  display: inline-block;
-  padding-top: 1rem;
-}
-
-.show-on-ledger:hover {
-  cursor: pointer;
-}
-
-.button.small.sidebar {
-  display: flex;
-  width: -webkit-fill-available;
-}
-
-.button.small {
-  border-color: var(--menu-border);
-}
-
 .app-menu .app-menu-item--link:hover {
-  color: var(--menu-link-hover);
+  color: var(--link-hover);
 }
 
 .app-menu .app-menu-item.nuxt-link-active {
   background: var(--app-nav-hover);
-}
-
-.app-menu .app-menu-item.nuxt-link-active i {
-  color: var(--highlight);
-}
-
-.app-menu .app-menu-item.nuxt-link-active h2 {
-  color: var(--menu-bright);
-  font-weight: 500;
+  box-shadow: 0 0 1px 0 var(--gray-700);
+  color: var(--gray-100);
 }
 
 @media screen and (min-width: 1024px) {
@@ -154,11 +124,11 @@ export default {
   }
 
   .app-menu-title {
-    font-size: var(--xxl);
+    font-size: var(--text-3xl);
     line-height: 1.125;
     font-weight: 600;
     letter-spacing: 0.004em;
-    color: var(--menu-bright);
+    color: var(--white);
   }
 }
 

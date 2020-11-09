@@ -1,64 +1,115 @@
 <template>
   <div>
+    <FormGroup
+      v-if="getDenoms.length > 1"
+      id="form-group-amount"
+      class="action-modal-form-group"
+      field-id="feeDenom"
+      field-label="Select Fee"
+    >
+      <Field
+        id="amount"
+        ref="amount"
+        :is-disabled="true"
+        :value="selectedFee.amount"
+        class="tm-field-addon"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Field
+        id="token"
+        v-model="feeDenom"
+        :title="`Select the token you wish to use`"
+        :options="getDenoms"
+        class="tm-field-token-selector"
+        type="select"
+      />
+    </FormGroup>
     <ul class="table-invoice">
-      <li v-if="subTotal > 0" class="sub-total">
-        <span>Subtotal</span>
-        <span> {{ subTotal | fullDecimals }} {{ transactionDenom }} </span>
+      <li
+        v-for="(subTotal, index) in amounts"
+        :key="`${subTotal.denom}-subtotal`"
+        class="sub-total"
+      >
+        <template v-if="subTotal.amount">
+          <span>{{ index === 0 ? 'Subtotal' : '' }}</span>
+          <span>
+            {{ subTotal.amount | fullDecimals }} {{ subTotal.denom }}
+          </span>
+        </template>
       </li>
       <li class="fees">
         <span>Network Fee</span>
         <span>
-          {{ fee.amount | fullDecimals }}
-          {{ fee.denom !== transactionDenom ? fee.denom : transactionDenom }}
+          {{ selectedFee.amount | fullDecimals }}
+          {{ selectedFee.denom }}
         </span>
       </li>
-      <li class="total-row">
-        <span>Total</span>
+      <li
+        v-for="(total, index) in totals"
+        :key="`${total.denom}-total`"
+        class="total-row"
+      >
+        <span>{{ index === 0 ? 'Total' : '' }}</span>
         <div class="total-column">
-          <p>{{ total | fullDecimals }} {{ transactionDenom }}</p>
-          <p v-if="fee.denom !== transactionDenom">
-            {{ fee.amount | fullDecimals }} {{ fee.denom }}
-          </p>
+          <p>{{ total.amount | fullDecimals }} {{ total.denom }}</p>
         </div>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { fullDecimals } from '../../common/numbers'
+import { fullDecimals } from '~/common/numbers'
+import network from '~/common/network'
 
 export default {
   name: `table-invoice`,
   filters: {
     fullDecimals,
   },
+  model: {
+    prop: 'feeDenom',
+    event: 'change',
+  },
   props: {
-    amount: {
-      type: Number,
+    amounts: {
+      type: Array,
       required: true,
     },
-    fee: {
-      type: Object,
-      required: true,
-    },
-    transactionDenom: {
-      type: String,
+    fees: {
+      type: Array,
       required: true,
     },
   },
   data: () => ({
-    info: `Estimated network fees based on simulation.`,
+    feeDenom: network.stakingDenom,
   }),
   computed: {
-    subTotal() {
-      return this.amount
+    getDenoms() {
+      return this.fees.map(({ denom }) => ({ key: denom, value: denom }))
     },
-    total() {
-      // if there is a feeDenom, it means that subTotal and estimatedFee are different currencies and
-      // cannot be therefore added up together
-      return this.fee.denom !== this.transactionDenom
-        ? this.subTotal
-        : Number(this.fee.amount) + this.subTotal
+    selectedFee() {
+      return this.fees.find(({ denom }) => denom === this.feeDenom)
+    },
+    totals() {
+      return this.amounts.concat(this.selectedFee).reduce((all, amount) => {
+        const existantCoin = all.find(({ denom }) => amount.denom === denom)
+        if (existantCoin) {
+          return all
+            .filter(({ denom }) => amount.denom !== denom)
+            .concat({
+              ...existantCoin,
+              amount: Number(existantCoin.amount) + Number(amount.amount),
+            })
+        }
+        return all.concat(amount)
+      }, [])
+    },
+  },
+  watch: {
+    feeDenom(feeDenom) {
+      this.$emit('change:feeDenom', feeDenom)
     },
   },
 }
@@ -68,7 +119,7 @@ export default {
   margin: 2rem 0 0;
   border-collapse: inherit;
   padding: 0 0.25rem;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   letter-spacing: 0.4px;
 }
 
@@ -90,12 +141,32 @@ export default {
 
 .total-row {
   border-top: 2px solid var(--bc);
-  margin-top: 0.5rem;
+}
+
+.fees + .total-row {
   padding-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .total-column {
   display: flex;
   flex-direction: column;
+}
+
+.tm-field-addon {
+  border-right: none;
+}
+
+.tm-field-token-selector >>> .tm-field-select {
+  border-left: 0;
+  border-radius: 0 !important;
+}
+
+.tm-field-token-selector >>> .tm-field-select:focus {
+  border-color: var(--input-bc);
+}
+
+.tm-field-token-selector >>> .tm-field-select-addon {
+  border: 0;
 }
 </style>

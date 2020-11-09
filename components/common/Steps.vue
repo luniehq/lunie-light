@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .step--container {
   display: flex;
   flex-direction: row;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table class="data-table">
       <thead>
         <PanelSort :properties="properties" show-on-mobile="endTime" />
@@ -41,12 +41,10 @@ export default {
         {
           title: `Name`,
           value: `smallName`,
-          tooltip: `The validator's name`,
         },
         {
           title: `End Time`,
           value: `endTime`,
-          tooltip: `Time until the undelegation is re-added to your balance`,
         },
       ]
     },
@@ -69,6 +67,10 @@ export default {
 }
 </script>
 <style scoped>
+.container {
+  margin: 1.5rem;
+}
+
 @media screen and (max-width: 550px) {
   .data-table td {
     overflow: hidden;
@@ -79,14 +81,10 @@ export default {
   }
 }
 
-.flip-list-move {
-  transition: transform 0.3s;
-}
-
 .data-table >>> th:first-child {
   width: 5%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table >>> th:nth-child(2) {

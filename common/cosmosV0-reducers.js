@@ -296,7 +296,7 @@ function validatorReducer(
               : 0
           ) /
             Number(signedBlocksWindow)
-        : undefined,
+        : 1,
     tokens: atoms(validator.tokens),
     commissionUpdateTime: validator.commission.update_time,
     commission: validator.commission.rate,
@@ -323,6 +323,18 @@ function blockReducer(networkId, block, transactions, data = {}) {
     transactions,
     proposer_address: block.block_meta.header.proposer_address,
     data: JSON.stringify(data),
+  }
+}
+
+function blockHeaderReducer(networkId, block) {
+  return {
+    id: block.block_meta.block_id.hash,
+    networkId,
+    height: block.block_meta.header.height,
+    chainId: block.block_meta.header.chain_id,
+    hash: block.block_meta.block_id.hash,
+    time: block.block_meta.header.time,
+    proposer_address: block.block_meta.header.proposer_address,
   }
 }
 
@@ -573,6 +585,7 @@ module.exports = {
   voteReducer,
   validatorReducer,
   blockReducer,
+  blockHeaderReducer,
   delegationReducer,
   coinReducer,
   gasPriceReducer,

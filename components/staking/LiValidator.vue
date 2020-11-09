@@ -6,15 +6,7 @@
   >
     <td>{{ index + 1 }}</td>
     <td class="hide-xs">
-      <div class="status-container">
-        <span
-          :class="validator.status | toLower"
-          class="validator-status"
-          :title="validator.statusDetailed"
-        >
-          {{ validator.status }}
-        </span>
-      </div>
+      <Status :label="validator.status" />
     </td>
     <td class="data-table__row__info">
       <Avatar
@@ -33,7 +25,7 @@
         <h3 class="li-validator-name">
           {{ validator.name }}
         </h3>
-        <div v-if="delegation.amount > 0">
+        <div v-if="delegation.amount > 0" class="stake-amount">
           <h4>
             {{ delegation.amount | bigFigureOrShortDecimals }}
           </h4>
@@ -77,7 +69,6 @@ export default {
   name: `li-validator`,
   components: {},
   filters: {
-    toLower: (text) => text.toLowerCase(),
     bigFigureOrShortDecimals,
     bigFigureOrPercent,
   },
@@ -127,7 +118,7 @@ export default {
   padding: 0.5rem 1rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--bc-dim);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .validator-info {
@@ -139,7 +130,7 @@ export default {
 
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 
@@ -150,13 +141,13 @@ export default {
 
 .li-validator:hover {
   cursor: pointer;
-  background: var(--app-fg-hover);
+  background: var(--gray-100);
   color: var(--bright);
 }
 
 .li-validator-name {
   font-size: 1rem;
-  line-height: 18px;
+  line-height: 20px;
   font-weight: 500;
   color: var(--bright);
   display: inline-block;
@@ -170,25 +161,11 @@ export default {
   border-radius: 50%;
   height: 2.5rem;
   width: 2.5rem;
+  min-width: 2.5rem;
 }
 
-.validator-status {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 600;
-  border: 2px solid;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
-}
-
-.validator-status.inactive {
-  color: var(--warning);
-  border-color: var(--warning);
-}
-
-.validator-status.active {
-  color: var(--success);
-  border-color: var(--success);
+.stake-amount {
+  line-height: 16px;
 }
 
 @media screen and (max-width: 768px) {

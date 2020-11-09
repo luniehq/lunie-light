@@ -1,6 +1,5 @@
 @import "./reset.css";
 @import "./variables.css";
-@import "./vendor/vue-directive-tooltip.css";
 
 /* global-reset() */
 
@@ -10,27 +9,23 @@
 @import "./table.css";
 
 /* --- BASICS --- */
-* {
-  box-sizing: border-box;
-  transition: color 0.2s ease-in-out;
-  transition: background-color 0.2s ease-in-out;
-  transition: border-color 0.2s ease-in-out;
-  transition: fill 0.2s ease-in-out;
-}
-
 html,
 body,
-#app {
-  background: var(--app-bg);
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+button,
+select,
+option,
+input,
+textarea {
+  font-family: -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 *,
@@ -63,9 +58,8 @@ a:hover {
 }
 
 #app {
-  font-size: var(--x);
+  font-size: var(--text-base);
   line-height: 1.5;
-  font-family: var(--sans);
   color: var(--txt);
   display: flex;
   flex-flow: column nowrap;
@@ -80,7 +74,7 @@ a:hover {
 }
 
 .tm-field {
-  border-radius: 0.25rem !important;
+  border-radius: var(--border-radius) !important;
 }
 
 input[readonly],
@@ -113,14 +107,14 @@ input.tm-field {
   display: inline-block;
   position: absolute;
   padding: 7px;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   text-transform: uppercase;
   top: 2px;
   right: 30px;
   letter-spacing: 1px;
   text-align: right;
   font-weight: 500;
-  border-radius: 2px;
+  border-radius: var(--border-radius);
 }
 
 .input-suffix.max-button {
@@ -143,36 +137,55 @@ input.tm-field {
   margin: 0 auto;
   width: 100%;
   overflow: hidden;
-  animation: fade 1.5s infinite;
+  animation: fade 2s infinite;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.2s;
+h1 {
+  font-size: 24px;
+  color: var(--gray-800);
+  font-weight: 500;
+  padding-bottom: 2rem;
 }
 
-.page-enter,
-.page-leave-to {
-  opacity: 0;
+@media screen and (max-width: 667px) {
+  h1 {
+    text-align: center;
+  }
+}
+
+.loading-row {
+  display: flex;
+  align-items: center;
+  background: var(--app-fg);
+  border-radius: var(--border-radius);
+  animation: fade 2s infinite;
+  justify-content: center;
+  height: auto;
+  width: auto;
+  padding: 2rem;
+}
+
+.loading-row.left {
+  justify-content: left;
 }
 
 @keyframes fade {
   0% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
 
   50% {
-    opacity: 0.7;
+    opacity: 1;
   }
 
   100% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
 }
 
 @media screen and (max-width: 1023px) {
   #app-content {
-    padding-top: 66px;
+    padding-top: 70px;
     flex-flow: column;
   }
 
@@ -196,51 +209,4 @@ input.tm-field {
   .hide-xs {
     display: none !important;
   }
-}
-
-/* iPhone X and Xs Max */
-@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  #app-content {
-    padding-top: 80px;
-  }
-}
-
-/* iPhone XR */
-@media only screen and (min-device-width: 414px) and (min-device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
-  #app-content {
-    padding-top: 80px;
-  }
-}
-
-.intercom-button {
-  cursor: pointer;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
 }

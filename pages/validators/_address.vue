@@ -1,25 +1,13 @@
 <template>
-  <TmPage
-    data-title="Validator"
-    :empty="!validator"
-    :loading="loading"
-    :empty-title="`Validator not found`"
-    :empty-subtitle="`There must be a typo somewhere.`"
-    class="readable-width"
-  >
-    <template v-if="validator">
-      <div class="button-container">
+  <div>
+    <div v-if="!validators.length" class="loading-row">Loading...</div>
+    <div v-else-if="validators.length && !validator">Validator Not Found</div>
+    <div v-else class="readable-width">
+      <div class="back-button-container">
         <BackButton />
       </div>
-      <div class="status-button-container">
-        <div class="status-container">
-          <span
-            :class="validator.status || `` | toLower"
-            class="validator-status"
-          >
-            {{ validator.status }}
-          </span>
-        </div>
+      <div class="status-container">
+        <Status :label="validator.status" />
       </div>
       <tr class="li-validator">
         <td class="data-table__row__info">
@@ -50,12 +38,12 @@
       </tr>
 
       <div class="action-button-container">
-        <TmBtn
+        <Button
           id="delegation-btn"
           :value="`Stake`"
           @click.native="onDelegation"
         />
-        <TmBtn
+        <Button
           id="undelegation-btn"
           class="undelegation-btn"
           :disabled="!delegation"
@@ -156,8 +144,8 @@
         :source-validator="validator"
         :is-unnomination="true"
       />
-    </template>
-  </TmPage>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -173,18 +161,10 @@ export default {
     shortDecimals,
     fullDecimals,
     percent,
-    toLower: (text) => text.toLowerCase(),
     noBlanks,
     fromNow,
   },
-  props: {
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
-    },
-  },
   data: () => ({
-    loading: true,
     selfStake: undefined,
     validatorDelegations: [],
   }),
@@ -259,42 +239,14 @@ export default {
 }
 </script>
 <style scoped>
-.back-button,
-.tutorial-button {
-  padding: 0.5rem 1rem;
-  width: auto;
-  font-size: 14px;
-  background: transparent;
-  color: #7a88b8;
-  border: 2px solid rgb(122, 136, 184, 0.1);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-family: var(--sans);
-}
-
-.back-button i {
-  padding-right: 1rem;
-}
-
-.back-button i,
-.tutorial-button i {
-  font-size: 1rem;
+.loading-row {
+  margin: 1rem;
+  height: 50vh;
 }
 
 span {
-  font-size: 12px;
+  font-size: var(--text-xs);
   line-height: normal;
-}
-
-.tutorial-button span {
-  font-size: 14px;
-}
-
-.back-button:hover,
-.tutorial-button:hover {
-  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .li-validator {
@@ -308,12 +260,12 @@ span {
 .li-validator-image {
   border-radius: 50%;
   height: 4rem;
-  width: 4rem;
+  min-width: 4rem;
 }
 
 .li-validator-name {
   color: var(--bright);
-  font-size: var(--h1);
+  font-size: var(--text-3xl);
   line-height: 2rem;
   font-weight: 500;
   max-width: 600px;
@@ -327,9 +279,16 @@ span {
   text-overflow: ellipsis;
 }
 
+h4 {
+  color: var(--dim);
+  font-size: var(--text-xs);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
 .li-validator h4,
 .li-validator h5 {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   display: inline-block;
 }
 
@@ -346,6 +305,11 @@ span {
 .li-validator .li-validator-name-row {
   display: flex;
   align-items: center;
+}
+
+.back-button-container {
+  display: flex;
+  padding: 0 1rem;
 }
 
 .button-container {
@@ -372,38 +336,68 @@ span {
   padding: 1rem 1rem 0;
 }
 
-.validator-status {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: 600;
-  border: 2px solid;
-  padding: 2px 4px;
-  border-radius: 0.25rem;
+.page {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1rem 0 0;
 }
 
-.validator-status.inactive {
-  color: var(--warning);
-  border-color: var(--warning);
+.readable-width {
+  max-width: 800px;
+  margin: 1rem auto;
 }
 
-.validator-status.active {
-  color: var(--success);
-  border-color: var(--success);
+.page.dark-background {
+  background: var(--app-fg);
 }
 
-.validator-status-detailed,
-.no-img-info {
-  display: block;
-  margin-top: 1rem;
-  font-size: 0.8rem;
-  color: var(--dim);
+.column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: normal;
+  width: 100%;
 }
 
-@media screen and (max-width: 425px) {
-  .status-button-container {
-    display: flex;
-    flex-direction: column-reverse;
-  }
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem 0 1rem;
+}
+
+.page-profile__section {
+  margin-bottom: 1rem;
+}
+
+.page-profile__section-title {
+  margin: 0 0 0.25rem 1rem;
+  color: var(--txt);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+li {
+  width: 100%;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.row span {
+  color: var(--bright);
+  font-size: var(--text-sm);
+  font-weight: 400;
 }
 
 @media screen and (max-width: 667px) {

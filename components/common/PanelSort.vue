@@ -10,12 +10,7 @@
       }"
       class="panel-sort-table-header"
     >
-      <a
-        v-if="sort"
-        v-tooltip.top="property.tooltip"
-        class="sort-by-link"
-        @click="orderBy(property.value)"
-      >
+      <a v-if="sort" class="sort-by-link" @click="orderBy(property.value)">
         {{ property.title }}
         <i class="material-icons notranslate">arrow_drop_up</i>
       </a>
@@ -73,18 +68,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .panel-sort-container {
   padding: 1rem;
   border-bottom: 1px solid var(--bc-dim);
 }
 
 .panel-sort-table-header {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .sort-by i {
-  font-size: var(--lg);
+  font-size: var(--text-xl);
   position: relative;
   top: 6px;
   right: 4px;

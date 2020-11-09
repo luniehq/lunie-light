@@ -1,15 +1,13 @@
 <template>
-  <TmPage :sign-in-required="true">
-    <template slot="signInRequired">
-      <Balances :balances="balances" :rewards="rewards" />
-      <DelegationsOverview
-        :balances="balances"
-        :rewards="rewards"
-        :delegations="delegations"
-      />
-      <Undelegations :undelegations="undelegations" />
-    </template>
-  </TmPage>
+  <div>
+    <Balances :balances="balances" :rewards="rewards" />
+    <DelegationsOverview
+      :balances="balances"
+      :rewards="rewards"
+      :delegations="delegations"
+    />
+    <Undelegations :undelegations="undelegations" />
+  </div>
 </template>
 
 <script>
@@ -25,5 +23,6 @@ export default {
       'rewards',
     ]),
   },
+  middleware: 'addressRequired',
 }
 </script>

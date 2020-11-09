@@ -1,8 +1,8 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
-    <h2 class="session-title">Recover with backup code</h2>
+  <Form :submit="onSubmit">
+    <h2 class="session-title">{{ title }}</h2>
     <div class="session-main bottom-indent">
-      <TmFormGroup
+      <FormGroup
         :error="$v.$error && $v.fieldSeed.$invalid"
         field-id="import-seed"
         field-label="Backup code"
@@ -13,29 +13,29 @@
           :placeholder="'Must be exactly 12 or 24 words'"
           @input="(val) => (fieldSeed = val)"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldSeed.$error && !$v.fieldSeed.required"
           name="Seed"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-else-if="$v.fieldSeed.$error && !$v.fieldSeed.seedHasCorrectLength"
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'words12or24'"
         />
-        <TmFormMsg
+        <FormMessage
           v-else-if="
             $v.fieldSeed.$error && !$v.fieldSeed.seedIsLowerCaseAndSpaces
           "
           name="Seed"
           :type="isPolkadot ? 'incorrectPolkadotSeed' : 'lowercaseAndSpaces'"
         />
-      </TmFormGroup>
+      </FormGroup>
     </div>
     <div class="session-footer">
-      <TmBtn value="Next" type="submit" />
+      <Button value="Next" type="submit" />
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>
@@ -61,6 +61,10 @@ export default {
     seed: {
       type: String,
       default: undefined,
+    },
+    title: {
+      type: String,
+      default: `Recover with backup code`,
     },
   },
   data: () => ({

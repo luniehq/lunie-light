@@ -26,8 +26,7 @@
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
         <p class="form-message notice">
-          You're using Lunie in explore mode. Sign in or create an account to
-          get started.
+          You're in explore mode. Sign in or create an account to get started.
         </p>
       </div>
       <div v-else-if="step === defaultStep" class="action-modal-form">
@@ -35,52 +34,54 @@
       </div>
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
-          :amount="Number(subTotal)"
-          :fee="networkFee.fee"
-          :transaction-denom="getDenom"
+          v-model="feeDenom"
+          :amounts="amounts"
+          :fees="networkFees.feeOptions"
         />
-        <!-- <TmFormMsg
-            type="custom"
-            :msg="`You don't have enough ${selectedDenom} to proceed.`"
-          /> -->
+        <FormMessage
+          v-if="$v.invoiceTotal.$error && $v.invoiceTotal.$invalid"
+          type="custom"
+          :msg="`Your balance is not enough to proceed.`"
+        />
       </div>
       <div v-else-if="step === signStep" class="action-modal-form">
         <form
           v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
           @submit.prevent="validateChangeStep"
         >
-          <TmFormGroup
+          <FormGroup
             class="action-modal-group"
             field-id="password"
             field-label="Password"
           >
-            <TmField
+            <Field
               id="password"
               v-model="password"
               v-focus
               type="password"
               placeholder="Password"
             />
-            <!-- <TmFormMsg
-                name="Password"
-                type="required"
-              /> -->
-          </TmFormGroup>
+            <FormMessage
+              v-if="$v.password.$error && $v.password.$invalid"
+              name="Password"
+              type="required"
+            />
+          </FormGroup>
         </form>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
-        <TmDataMsg icon="hourglass_empty" :spin="true">
+        <Card icon="hourglass_empty" :spin="true">
           <div slot="title">Sent and confirming</div>
           <div slot="subtitle">
             Waiting for confirmation from {{ network.name }}.
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <div
         v-else-if="step === successStep"
         class="action-modal-form success-step"
       >
-        <TmDataMsg icon="check" icon-color="var(--success)" :success="true">
+        <Card icon="check" icon-color="var(--success)" :success="true">
           <div slot="title">{{ notifyMessage.title }}</div>
           <div slot="subtitle">
             {{ notifyMessage.body }}
@@ -88,7 +89,7 @@
             <br />
             <router-link to="/transactions">See your transaction</router-link>
           </div>
-        </TmDataMsg>
+        </Card>
       </div>
       <p
         v-if="submissionError"
@@ -98,17 +99,17 @@
       </p>
       <div class="action-modal-footer">
         <slot name="action-modal-footer">
-          <TmFormGroup
+          <FormGroup
             v-if="[defaultStep, feeStep, signStep].includes(step)"
             class="action-modal-group"
           >
-            <TmBtn
+            <Button
               id="closeBtn"
               value="Cancel"
               type="secondary"
               @click.native="close"
             />
-            <TmBtn
+            <Button
               v-if="requiresSignIn"
               v-focus
               value="Sign In"
@@ -116,13 +117,13 @@
               @click.native="goToSession"
               @click.enter.native="goToSession"
             />
-            <TmBtn
+            <Button
               v-else-if="sending"
               value="Sending..."
               disabled="disabled"
               type="primary"
             />
-            <TmBtn
+            <Button
               v-else-if="step !== signStep"
               ref="next"
               type="primary"
@@ -131,13 +132,13 @@
               :disabled="disabled || !balancesLoaded"
               @click.native="validateChangeStep"
             />
-            <TmBtn
+            <Button
               v-else
               type="primary"
               value="Send"
               @click.native="validateChangeStep"
             />
-          </TmFormGroup>
+          </FormGroup>
         </slot>
       </div>
     </div>
@@ -147,7 +148,7 @@
 <script>
 import BigNumber from 'bignumber.js'
 import { mapState } from 'vuex'
-// import { requiredIf } from 'vuelidate/lib/validators'
+import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '~/common/numbers'
 import network from '~/common/network'
 import fees from '~/common/fees'
@@ -189,9 +190,9 @@ export default {
       type: String,
       default: `Transaction failed`,
     },
-    amount: {
-      type: [String, Number],
-      default: `0`,
+    amounts: {
+      type: Array,
+      default: () => [],
     },
     rewards: {
       type: Array,
@@ -214,8 +215,8 @@ export default {
       default: false,
     },
     selectedDenom: {
-      type: String,
-      default: ``,
+      type: Array,
+      default: () => [],
     },
     transactionType: {
       type: String,
@@ -228,7 +229,6 @@ export default {
     sending: false,
     submissionError: null,
     show: false,
-    balancesLoaded: false,
     txHash: null,
     defaultStep,
     feeStep,
@@ -239,11 +239,12 @@ export default {
     includedHeight: undefined,
     smallestAmount: SMALLEST,
     network,
+    feeDenom: network.stakingDenom,
   }),
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
-    ...mapState(['data', ['balances']]),
-    networkFee() {
+    ...mapState('data', ['balances', 'balancesLoaded']),
+    networkFees() {
       return fees.getFees(this.transactionData.type)
     },
     selectedSignMethod() {
@@ -252,15 +253,6 @@ export default {
     requiresSignIn() {
       return false //! this.session || this.session.type === sessionType.EXPLORE
     },
-    subTotal() {
-      return this.transactionType === 'UnstakeTx' ? 0 : this.amount
-    },
-    invoiceTotal() {
-      return (
-        Number(this.subTotal) +
-        Number(fees[this.transactionData.type].fee.amount)
-      )
-    },
     isValidChildForm() {
       // here we trigger the validation of the child form
       if (this.validate) {
@@ -268,23 +260,11 @@ export default {
       }
       return true
     },
-    getDenom() {
-      return this.selectedDenom || network.stakingDenom
-    },
-    selectedBalance() {
-      const defaultBalance = {
-        amount: 0,
-      }
-      if (this.balances.length === 0 || !network) {
-        return defaultBalance
-      }
-      // default to the staking denom for fees
-      const feeDenom = this.selectedDenom || network.stakingDenom
-      let balance = this.balances.find(({ denom }) => denom === feeDenom)
-      if (!balance) {
-        balance = defaultBalance
-      }
-      return balance
+  },
+  watch: {
+    networkFees(fees) {
+      // set the fee denom to a default in the beginning
+      this.feeDenom = fees.feeOptions[0].denom
     },
   },
   updated() {
@@ -295,26 +275,31 @@ export default {
       this.$refs.next.$el.focus()
     }
   },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
-  mounted() {
-    this.loadBalances()
+  validations() {
+    return {
+      password: {
+        required: requiredIf(
+          () =>
+            this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+            this.step === signStep
+        ),
+      },
+      invoiceTotal: {
+        available: () =>
+          this.amounts
+            .concat(
+              this.networkFees.feeOptions.find(
+                ({ denom }) => denom === this.feeDenom
+              )
+            )
+            .every(({ amount, denom }) => {
+              const balance = this.balances.find(
+                (balance) => balance.denom === denom
+              )
+              return !!balance && balance.available >= amount
+            }),
+      },
+    }
   },
   methods: {
     confirmModalOpen() {
@@ -360,10 +345,9 @@ export default {
       this.$router.push('/address')
     },
     isValidInput(property) {
-      //   this.$v[property].$touch()
+      this.$v[property].$touch()
 
-      //   return !this.$v[property].$invalid
-      return true
+      return !this.$v[property].$invalid
     },
     previousStep() {
       switch (this.step) {
@@ -419,47 +403,24 @@ export default {
       const { type, memo, ...message } = this.transactionData
 
       try {
-        if (!this.transactionManager) {
-          // Lazy import as a bunch of big libraries are imported here
-          const { default: TransactionManager } = await import(
-            '~/signing/transaction-manager'
-          )
-          this.transactionManager = new TransactionManager()
-        }
-
-        debugger
-        await this.$store.dispatch('keplr/sign', {
-          senderAddress: this.session.address,
-          messages: message,
-          memo,
-          fee: this.transactionManager.getFees(type),
-          transactionType: type,
-        })
-        return
-
-        const accountInfo = await this.$store.dispatch(
-          'data/getAccountInfo',
-          this.session.address
+        // Lazy import as a bunch of big libraries are imported here
+        const { createSignBroadcast } = await import(
+          '~/signing/transaction-manager'
         )
-        const transactionData = await this.transactionManager.getTransactionMetaData(
-          type,
-          memo,
-          accountInfo
-        )
+
         // TODO currently not respected
         const HDPath = network.HDPath
-        const curve = network.curve
 
-        const hashResult = await this.transactionManager.createSignBroadcast({
+        const hashResult = await createSignBroadcast({
           messageType: type,
           message,
-          transactionData,
           senderAddress: this.session.address,
           network,
           signingType: this.selectedSignMethod,
           password: this.password,
           HDPath,
-          curve,
+          memo,
+          feeDenom: this.feeDenom,
         })
 
         const { hash } = hashResult
@@ -510,18 +471,6 @@ export default {
         )
       }
     },
-    async loadBalances() {
-      const session = this.$cookies.get('lunie-session')
-      const currency = this.$cookies.get('currency') || 'USD'
-      if (session) {
-        // do we need to refetch the data?
-        await this.$store.dispatch('data/getBalances', {
-          address: session.address,
-          currency,
-        })
-        this.balancesLoaded = true
-      }
-    },
     refreshData() {
       this.$store.dispatch('data/refresh')
     },
@@ -529,7 +478,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .action-modal {
   background: var(--app-fg);
   display: flex;
@@ -561,7 +510,7 @@ export default {
 
 .action-modal-title {
   flex: 1;
-  font-size: var(--h2);
+  font-size: var(--text-2xl);
   font-weight: 400;
   color: var(--bright);
   padding-bottom: 1rem;
@@ -574,7 +523,7 @@ export default {
 }
 
 .action-modal-icon i {
-  font-size: var(--lg);
+  font-size: var(--text-xl);
 }
 
 .action-modal-icon.action-modal-prev {
@@ -632,7 +581,7 @@ export default {
 }
 
 .form-message {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   color: var(--bright);
   font-style: italic;
   display: inline-block;
@@ -682,20 +631,6 @@ export default {
 
   .tm-form-group__field {
     width: 100%;
-  }
-}
-
-/* iPhone X and Xs Max */
-@media only screen and (min-device-width: 375px) and (min-device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait) {
-  .action-modal-footer {
-    padding-bottom: 1.8rem;
-  }
-}
-
-/* iPhone XR */
-@media only screen and (min-device-width: 414px) and (min-device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait) {
-  .action-modal-footer {
-    padding-bottom: 1.8rem;
   }
 }
 </style>
