@@ -30,6 +30,6 @@
   --input-bc: var(--gray-700);
   --success: var(--green-700);
   --warning: var(--orange-400);
-  --danger: var(--red-400);
+  --danger: var(--red-600);
   --info: var(--pink-900);
 }

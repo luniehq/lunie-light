@@ -27,15 +27,16 @@
         type="text"
         placeholder="Address"
         @change.native="trimSendAddress"
-        @keyup.enter.native="refocusOnAmount"
       />
       <FormMessage
+        slot="errors"
         v-if="$v.address.$error && !$v.address.required"
         name="Address"
         type="required"
       />
       <FormMessage
         v-else-if="$v.address.$error && !$v.address.addressValidate"
+        slot="errors"
         name="Address"
         type="custom"
         :msg="addressError"
@@ -284,9 +285,6 @@ export default {
     },
     trimSendAddress() {
       this.address = this.$refs.sendAddress.value.trim()
-    },
-    refocusOnAmount() {
-      this.$refs.amount.$el.focus()
     },
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
