@@ -3,7 +3,7 @@
     id="delegation-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amounts="[amount]"
+    :amounts="[{ amount, denom: stakingDenom }]"
     title="Stake"
     class="delegation-modal"
     submission-error-prefix="Staking failed"

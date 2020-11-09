@@ -202,10 +202,7 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amounts: this.amounts.map((amount, index) => ({
-          amount: amount.amount,
-          denom: amount.denom,
-        })),
+        amounts: this.amounts,
         memo: this.memo,
       }
     },
