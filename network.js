@@ -1,6 +1,13 @@
+import axios from 'axios'
+
+async function getNetworkChainId() {
+  const nodeInfo = await axios.get(`https://lcd.nylira.net/blocks/latest`)
+  return nodeInfo || 'cosmoshub-3'
+}
+
 export default {
   id: 'cosmos-mainnet',
-  chainId: 'cosmoshub-3', // TODO get from chain?
+  chainId: getNetworkChainId(),
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
