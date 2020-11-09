@@ -1,8 +1,11 @@
+# CSP headers are a great security practice. Feel free to add or remove any links you might need for your app to work.
+# By default, we whitelist Google Analytics, Intercom, Netlify, Amazon AWS and Twitter image storage connections
 [[headers]]
   for = "/*"
   [headers.values]
     Content-Security-Policy = '''
       default-src 'self' https://*.netlify.app https://www.google-analytics.com https://js.intercomcdn.com;
+      # add here the RPC URLS you might need
       connect-src 'self' https://*.googleapis.com https://www.google-analytics.com https://api-iam.intercom.io https://widget.intercom.io wss://*.intercom.io wss://kusama-rpc.polkadot.io/ wss://rpc.polkadot.io wss://westend-rpc.polkadot.io;
       img-src 'self' data: https://*.netlify.app https://www.google-analytics.com https://s3.amazonaws.com https://abs.twimg.com https://pbs.twimg.com;
       script-src 'self' 'unsafe-eval' https://*.netlify.app https://www.google-analytics.com https://api-iam.intercom.io https://js.intercomcdn.com https://widget.intercom.io https://www.gstatic.com;
