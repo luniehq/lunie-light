@@ -56,11 +56,9 @@ export default {
     },
     bech32Validation(address) {
       try {
-        debugger
         decodeB32(address)
         return true
       } catch (error) {
-        debugger
         this.addressError = String(error).slice(7)
         return false
       }
