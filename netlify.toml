@@ -5,7 +5,7 @@
       default-src 'self' https://*.netlify.app https://www.google-analytics.com https://js.intercomcdn.com;
       connect-src 'self' https://*.googleapis.com https://www.google-analytics.com https://api-iam.intercom.io https://widget.intercom.io wss://*.intercom.io wss://kusama-rpc.polkadot.io/ wss://rpc.polkadot.io wss://westend-rpc.polkadot.io;
       img-src 'self' data: https://*.netlify.app https://www.google-analytics.com https://s3.amazonaws.com https://abs.twimg.com https://pbs.twimg.com;
-      script-src 'self' 'unsafe-eval' https://*.netlify.app https://www.google-analytics.com https://api-iam.intercom.io https://js.intercomcdn.com https://widget.intercom.io https://www.gstatic.com 'nonce-4AEemGbGTJptoIGFP3Nd' 'nonce-HYjB4SnB0b0lHRlAzTmQ' 'nonce-YW5hbHl0aWNzLWx1bmll';
+      script-src 'self' 'unsafe-eval' https://*.netlify.app https://www.google-analytics.com https://api-iam.intercom.io https://js.intercomcdn.com https://widget.intercom.io https://www.gstatic.com;
       style-src 'self' 'unsafe-inline' https://*.netlify.app;
       media-src 'self' https://*.netlify.app blob:;
       object-src 'self' data: blob: https://*.netlify.app https://www.google-analytics.com;
