@@ -36,6 +36,7 @@ export default {
     errorMessage: undefined,
     loading: false,
   }),
+  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = steps.findIndex((step) => step === this.step)

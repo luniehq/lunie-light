@@ -6,13 +6,13 @@
         <div class="toggles">
           <Button
             value="All"
-            class="btn-radio"
+            class="toggle-button"
             :type="allValidators ? `active` : `secondary`"
             @click.native="defaultSelectorsController(`allValidators`)"
           />
           <Button
             value="Active"
-            class="btn-radio"
+            class="toggle-button"
             :type="activeOnly ? `active` : `secondary`"
             @click.native="defaultSelectorsController(`activeOnly`)"
           />
@@ -95,7 +95,7 @@ export default {
   margin: 1.5rem;
 }
 
-.filterContainer .toggles {
+.toggles {
   margin-bottom: 0;
   display: inline-flex;
 }
@@ -104,19 +104,31 @@ export default {
   max-width: 300px;
 }
 
-.filterContainer .btn-radio {
+.toggle-button {
   min-width: 100px;
   border-radius: 0;
+  background: var(--white);
+  color: var(--txt);
+  border-color: var(--input-bc);
 }
 
-.filterContainer .btn-radio:last-child {
+.toggle-button.active {
+  background: var(--gray-200);
+}
+
+.toggle-button:last-child {
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
   margin-left: -1px;
 }
 
-.filterContainer .btn-radio:first-child {
+.toggle-button:first-child {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
   margin-right: -1px;
+}
+
+.toggles .toggle-button:hover:not(:disabled) {
+  background: var(--gray-200);
+  border-color: var(--input-bc);
 }
 
 .filterOptions {
@@ -132,7 +144,7 @@ export default {
     margin: 0 0.75rem 1rem;
   }
 
-  .filterContainer .btn-radio {
+  .filterContainer .toggle-button {
     min-width: 64px;
   }
 }
