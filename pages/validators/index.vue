@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="filterContainer">
-      <TmField v-model="searchTerm" class="searchField" placeholder="Search" />
+      <Field v-model="searchTerm" class="searchField" placeholder="Search" />
       <div class="filterOptions">
         <div class="toggles">
-          <TmBtn
+          <Button
             value="All"
-            class="btn-radio"
+            class="toggle-button"
             :type="allValidators ? `active` : `secondary`"
             @click.native="defaultSelectorsController(`allValidators`)"
           />
-          <TmBtn
+          <Button
             value="Active"
-            class="btn-radio"
+            class="toggle-button"
             :type="activeOnly ? `active` : `secondary`"
             @click.native="defaultSelectorsController(`activeOnly`)"
           />
@@ -21,6 +21,7 @@
     </div>
 
     <TableValidators
+      class="table-validators"
       :validators="filteredValidators"
       :delegations="delegations"
       :rewards="rewards"
@@ -81,16 +82,20 @@ export default {
 </script>
 
 <style scoped>
+.table-validators {
+  margin: 1.5rem;
+}
+
 .filterContainer {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  margin: 0.5rem 1rem 1rem 2rem;
+  margin: 1.5rem;
 }
 
-.filterContainer .toggles {
+.toggles {
   margin-bottom: 0;
   display: inline-flex;
 }
@@ -99,35 +104,35 @@ export default {
   max-width: 300px;
 }
 
-.filterContainer .btn-radio {
+.toggle-button {
   min-width: 100px;
   border-radius: 0;
+  background: var(--white);
+  color: var(--txt);
+  border-color: var(--input-bc);
 }
 
-.filterContainer .btn-radio:last-child {
-  border-radius: 0 0.5em 0.5em 0;
+.toggle-button.active {
+  background: var(--gray-200);
+}
+
+.toggle-button:last-child {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   margin-left: -1px;
 }
 
-.filterContainer .btn-radio:first-child {
-  border-radius: 0.5em 0 0 0.5em;
+.toggle-button:first-child {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
   margin-right: -1px;
 }
 
+.toggles .toggle-button:hover:not(:disabled) {
+  background: var(--gray-200);
+  border-color: var(--input-bc);
+}
+
 .filterOptions {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+  padding-left: 0.5rem;
 }
 
 .filter-toggle {
@@ -136,20 +141,11 @@ export default {
 
 @media screen and (max-width: 768px) {
   .filterContainer {
-    margin: 0.5rem 2rem 0 2rem;
+    margin: 0 0.75rem 1rem;
   }
 
-  .filterContainer .btn-radio {
-    min-width: 75px;
-  }
-
-  .filterContainer input {
-    max-width: 100%;
-  }
-
-  .filterOptions {
-    padding: 1.5em 0.5em 0.5em;
-    width: 100%;
+  .filterContainer .toggle-button {
+    min-width: 64px;
   }
 }
 

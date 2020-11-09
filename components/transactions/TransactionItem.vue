@@ -145,11 +145,12 @@ export default {
   align-items: center;
   justify-content: space-between;
   background: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   z-index: 90;
-  padding: 1.5rem 1rem;
+  padding: 0.75rem 1rem;
   margin: 1rem 1rem 0 1rem;
   cursor: pointer;
+  box-shadow: 0 0 1px 0 var(--gray-500);
 }
 
 .icon {
@@ -174,9 +175,9 @@ export default {
 }
 
 .title-and-images p {
-  color: var(--txt);
+  color: var(--dim);
   padding: 0 2rem 0 1rem;
-  font-size: 12px;
+  font-size: var(--text-xs);
   word-break: break-all;
 }
 
@@ -192,14 +193,15 @@ export default {
 }
 
 h3 {
-  font-size: 16px;
+  font-size: var(--text-base);
   font-weight: 500;
-  color: var(--dim);
+  color: var(--txt);
   padding-left: 1rem;
 }
 
-.amounts p {
+.amounts {
   color: var(--txt);
+  font-size: var(--text-sm);
 }
 
 .validator-image {
@@ -213,7 +215,7 @@ h3 {
   z-index: 91;
   cursor: pointer;
   border-radius: 50%;
-  background: var(--bc-dim);
+  background: var(--gray-300);
   display: flex;
   align-items: center;
   justify-content: center;

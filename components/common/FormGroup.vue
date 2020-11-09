@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: `tm-form-group`,
+  name: `form-group`,
   props: {
     error: {
       type: Boolean,
@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tm-form-group {
   padding: 0.75rem 0;
   position: relative;
@@ -61,7 +61,7 @@ export default {
   position: absolute;
   bottom: 0.5rem;
   left: 1rem;
-  font-size: var(--xs);
+  font-size: var(--text-xs);
   color: var(--dim);
 }
 
@@ -72,6 +72,11 @@ export default {
   color: var(--txt);
   text-align: left;
   font-weight: 500;
+}
+
+.tm-form-group__field {
+  display: flex;
+  width: 100%;
 }
 
 .tm-form-group__sub-label ~ .tm-form-group__label {

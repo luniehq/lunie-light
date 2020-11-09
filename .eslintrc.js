@@ -12,10 +12,9 @@ module.exports = {
     'prettier',
     'prettier/vue',
     'plugin:prettier/recommended',
-    'plugin:wdio/recommended',
     'plugin:nuxt/recommended',
   ],
-  plugins: ['prettier', 'wdio'],
+  plugins: ['prettier'],
   // add your custom rules here
   rules: {
     'no-console': 0,

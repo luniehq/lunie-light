@@ -6,6 +6,7 @@ import { updateValidatorImages } from '~/common/keybase'
 export const state = () => ({
   block: undefined,
   balances: [],
+  balancesLoaded: undefined,
   rewards: [],
   delegations: [],
   undelegations: [],
@@ -105,6 +106,7 @@ export const actions = {
         network
       )
       commit('setBalances', balances)
+      commit('setBalancesLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',

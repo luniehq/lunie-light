@@ -13,13 +13,13 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       :error="$v.address.$error && $v.address.$invalid"
       class="action-modal-form-group"
       field-id="send-address"
       field-label="Send To"
     >
-      <TmField
+      <Field
         id="send-address"
         ref="sendAddress"
         v-model="address"
@@ -29,19 +29,19 @@
         @change.native="trimSendAddress"
         @keyup.enter.native="refocusOnAmount"
       />
-      <TmFormMsg
+      <FormMessage
         v-if="$v.address.$error && !$v.address.required"
         name="Address"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.address.$error && !$v.address.addressValidate"
         name="Address"
         type="custom"
         :msg="addressError"
       />
-    </TmFormGroup>
-    <TmFormGroup
+    </FormGroup>
+    <FormGroup
       v-for="(amount, index) in amounts"
       id="form-group-amount"
       :key="amount.denom"
@@ -50,59 +50,56 @@
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
     >
-      <TmFieldGroup>
-        <!-- ATTENTION we are using id here for a repeatable element -->
-        <TmField
-          v-model="amount.amount"
-          class="tm-field-addon amount"
-          placeholder="0"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <TmField
-          v-model="amount.denom"
-          :title="`Select the token you wish to use`"
-          :options="denomOptions | availableDenoms(index, amounts)"
-          class="tm-field-token-selector"
-          type="select"
-        />
-      </TmFieldGroup>
+      <Field
+        v-model="amount.amount"
+        class="tm-field-addon amount"
+        placeholder="0"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Field
+        v-model="amount.denom"
+        :title="`Select the token you wish to use`"
+        :options="denomOptions | availableDenoms(index, amounts)"
+        class="tm-field-token-selector"
+        type="select"
+      />
 
-      <TmFormMsg
+      <FormMessage
         v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.decimal"
         name="Amount"
         type="numeric"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.max"
         type="custom"
         :msg="`You don't have enough ${amounts.map(
           ({ denom }) => denom
         )} to proceed.`"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amounts.$error && !$v.amounts.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="isMaxAmount(index)"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc max-message"
       />
-      <!-- <TmFormMsg
+      <!-- <FormMessage
         v-else-if="duplicateDenoms()"
         msg="It is only possible to send one amount per currency"
         type="custom"
@@ -123,27 +120,27 @@
           <i class="material-icons notranslate">add_circle</i>
         </div>
       </div>
-    </TmFormGroup>
-    <TmFormGroup
+    </FormGroup>
+    <FormGroup
       id="memo"
       :error="$v.memo.$error && $v.memo.$invalid"
       class="action-modal-group"
       field-id="memo"
       field-label="Memo"
     >
-      <TmField
+      <Field
         id="memo"
         v-model="memo"
         type="text"
         @keyup.enter.native="enterPressed"
       />
-      <TmFormMsg
+      <FormMessage
         v-if="$v.memo.$error && !$v.memo.maxLength"
         name="Memo"
         type="maxLength"
         :max="max_memo_characters"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 
@@ -205,10 +202,7 @@ export default {
         type: lunieMessageTypes.SEND,
         to: [this.address],
         from: [this.session.address],
-        amounts: this.amounts.map((amount, index) => ({
-          amount: amount.amount,
-          denom: amount.denom,
-        })),
+        amounts: this.amounts,
         memo: this.memo,
       }
     },
@@ -386,7 +380,7 @@ export default {
 }
 
 .memo-span {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   font-style: italic;
 }
 

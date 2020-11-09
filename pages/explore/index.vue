@@ -1,32 +1,32 @@
 <template>
   <SessionFrame :icon="`language`">
-    <TmFormStruct :submit="onSubmit">
+    <Form :submit="onSubmit">
       <h2 class="session-title bottom-indent">Explore with any address</h2>
       <div class="session-main">
-        <TmFormGroup field-id="sign-in-name" field-label="Your Address">
-          <TmField
+        <FormGroup field-id="sign-in-name" field-label="Your Address">
+          <Field
             v-model.trim="address"
             type="text"
             placeholder
             vue-focus="vue-focus"
           />
-          <TmFormMsg
+          <Card
             v-if="$v.address.$error && !$v.address.required"
             name="Address"
             type="required"
           />
-          <TmFormMsg
+          <Card
             v-else-if="$v.address.$error && !$v.address.addressValidate"
             type="custom"
             :msg="addressError"
           />
-          <TmFormMsg v-if="error" :name="error" type="custom" />
-        </TmFormGroup>
+          <Card v-if="error" :name="error" type="custom" />
+        </FormGroup>
       </div>
       <div class="session-footer">
-        <TmBtn value="Explore" />
+        <Button value="Explore" />
       </div>
-    </TmFormStruct>
+    </Form>
   </SessionFrame>
 </template>
 
@@ -98,7 +98,7 @@ export default {
   padding: 1rem;
   margin: 0.5rem 0;
   background-color: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
 }
 
 .tm-li-session:hover {
@@ -118,7 +118,7 @@ export default {
 
 .tm-li-session-title {
   color: var(--bright);
-  font-size: var(--h4);
+  font-size: var(--text-lg);
   font-weight: 400;
   margin-top: -0.4rem;
 }
@@ -126,7 +126,7 @@ export default {
 .tm-li-session-subtitle {
   display: block;
   width: 100%;
-  font-size: var(--h6);
+  font-size: var(--text-xs);
   font-weight: 400;
   color: var(--dim);
 }

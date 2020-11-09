@@ -56,7 +56,7 @@
 
 <script>
 export default {
-  name: `tm-field`,
+  name: `field`,
   props: {
     type: {
       type: String,
@@ -142,27 +142,27 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 input[type='checkbox'] {
   margin: 0.3rem 0.3rem 0.5rem 0;
   vertical-align: middle;
 }
 
 .tm-field {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-radius: 0;
   color: var(--txt);
   display: block;
   font-size: 14px;
   min-width: 0;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   width: 100%;
   -webkit-appearance: none;
 }
 
 .tm-field-addon {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-radius: 0;
   color: var(--txt);
@@ -176,6 +176,10 @@ input[type='checkbox'] {
   border-bottom-left-radius: 0.25rem !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+
+.tm-field-group {
+  width: 100%;
 }
 
 .tm-field::placeholder {
@@ -211,7 +215,7 @@ textarea.tm-field {
 
 .tm-select select {
   appearance: none;
-  background: var(--input-bg);
+  background: var(--transparent);
   border-radius: 0;
   color: var(--txt, #333);
   padding-right: 2rem;
@@ -229,7 +233,7 @@ textarea.tm-field {
 
 .tm-select .tm-field-select-addon {
   align-items: center;
-  background: var(--input-bg);
+  background: var(--transparent);
   border-left: 1px solid var(--input-bc);
   box-sizing: border-box;
   color: var(--txt, #333);
@@ -245,7 +249,7 @@ textarea.tm-field {
 }
 
 .input-group-addon {
-  background: var(--input-bg);
+  background: var(--transparent);
   border: 2px solid var(--input-bc);
   border-left: none;
   color: var(--txt);

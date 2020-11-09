@@ -3,6 +3,9 @@
   width: 100%;
   padding: 0;
   table-layout: fixed;
+  box-shadow: 0 0 1px 0 var(--gray-500);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .data-table th {
@@ -19,7 +22,7 @@
 
 .data-table tr td:first-child::before {
   position: absolute;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   text-align: right;
   color: var(--dim);
   left: -1.5rem;
@@ -28,13 +31,13 @@
 .data-table th:first-child {
   width: 5%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table th:nth-child(2) {
   width: 10%;
   color: var(--dim);
-  font-size: var(--sm);
+  font-size: var(--text-xs);
 }
 
 .data-table th:nth-child(3) {
@@ -54,7 +57,7 @@
 
 .data-table__row {
   padding: 1rem;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   border: 1px solid var(--bc-dim);
   cursor: pointer;
 
@@ -112,11 +115,12 @@
 }
 
 .data-table__row__info__container__description {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   padding-left: 1rem;
 }
 
 @media screen and (max-width: 667px) {
+
   .data-table th,
   .data-table td {
     padding: 0.5rem 1rem;

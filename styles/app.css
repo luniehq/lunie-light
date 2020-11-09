@@ -1,6 +1,5 @@
 @import "./reset.css";
 @import "./variables.css";
-@import "./vendor/vue-directive-tooltip.css";
 
 /* global-reset() */
 
@@ -59,7 +58,7 @@ a:hover {
 }
 
 #app {
-  font-size: var(--x);
+  font-size: var(--text-base);
   line-height: 1.5;
   color: var(--txt);
   display: flex;
@@ -75,7 +74,7 @@ a:hover {
 }
 
 .tm-field {
-  border-radius: 0.25rem !important;
+  border-radius: var(--border-radius) !important;
 }
 
 input[readonly],
@@ -108,14 +107,14 @@ input.tm-field {
   display: inline-block;
   position: absolute;
   padding: 7px;
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   text-transform: uppercase;
   top: 2px;
   right: 30px;
   letter-spacing: 1px;
   text-align: right;
   font-weight: 500;
-  border-radius: 2px;
+  border-radius: var(--border-radius);
 }
 
 .input-suffix.max-button {
@@ -141,27 +140,24 @@ input.tm-field {
   animation: fade 2s infinite;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.2s;
-}
-
-.page-enter,
-.page-leave-to {
-  opacity: 0;
-}
-
 h1 {
   font-size: 24px;
-  color: var(--bright);
+  color: var(--gray-800);
   font-weight: 500;
+  padding-bottom: 2rem;
+}
+
+@media screen and (max-width: 667px) {
+  h1 {
+    text-align: center;
+  }
 }
 
 .loading-row {
   display: flex;
   align-items: center;
   background: var(--app-fg);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   animation: fade 2s infinite;
   justify-content: center;
   height: auto;
@@ -213,37 +209,4 @@ h1 {
   .hide-xs {
     display: none !important;
   }
-}
-
-.intercom-button {
-  cursor: pointer;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
 }

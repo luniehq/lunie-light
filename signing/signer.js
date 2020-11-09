@@ -1,32 +1,20 @@
-async function getWallet(address, password) {
-  const { getStoredWallet } = await import('@lunie/cosmos-keys')
-  const wallet = getStoredWallet(address, password)
-  return wallet
-}
+import { getWallet } from '~/common/keystore'
 
-export async function getSigner(signingType, { address, password, network }) {
+export async function getSigner(signingType, { address, password }) {
   if (signingType === `local`) {
-    const wallet = await getWallet(address, password)
-    return await getCosmosLocalSigner(wallet, network)
+    const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
+    const { wallet: serializedWallet } = getWallet(address)
+    const wallet = await Secp256k1HdWallet.deserialize(
+      serializedWallet,
+      password
+    )
+    return wallet
   }
   // else if (signingType === `ledger`) {
   //   return await getCosmosLedgerSigner({}) // gets config
   // }
 
   throw new Error(`Signing via ${signingType} is not supported`)
-}
-
-async function getCosmosLocalSigner(wallet) {
-  const { signWithPrivateKey } = await import('@lunie/cosmos-keys')
-
-  return (signMessage) => {
-    const signature = signWithPrivateKey(
-      signMessage,
-      Buffer.from(wallet.privateKey, 'hex')
-    )
-
-    return { signature: signature.toString('hex'), publicKey: wallet.publicKey }
-  }
 }
 
 // async function getCosmosLedgerSigner(config) {

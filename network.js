@@ -11,6 +11,7 @@ export default {
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
@@ -23,7 +24,6 @@ export default {
   ],
   addressPrefix: 'cosmos',
   HDPath: `m/44'/118'/0'/0/0`,
-  curve: 'ed25519',
   lockUpPeriod: `21 days`,
   fees: {
     default: {
@@ -31,9 +31,10 @@ export default {
       feeOptions: [
         {
           denom: 'ATOM',
-          amount: 0.1,
+          amount: 0.001,
         },
       ],
     },
   },
+  localSigning: false,
 }
