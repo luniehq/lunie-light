@@ -207,7 +207,7 @@ export const actions = {
     { address, pageNumber = 0 }
   ) {
     try {
-      const transactions = await api.getTransactionsV2(address, pageNumber)
+      const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
     } catch (err) {
       commit(

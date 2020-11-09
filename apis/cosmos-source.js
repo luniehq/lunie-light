@@ -79,7 +79,7 @@ class CosmosAPI {
     }
   }
 
-  async getTransactionsV2ByHeight(height) {
+  async getTransactionsByHeight(height) {
     const txs = await this.loadPaginatedTxs(`txs?tx.height=${height}`)
     return Array.isArray(txs)
       ? this.reducers.transactionsReducerV2(
@@ -91,7 +91,7 @@ class CosmosAPI {
       : []
   }
 
-  async getTransactionsV2(address, pageNumber = 0) {
+  async getTransactions(address, pageNumber = 0) {
     this.checkAddress(address)
 
     // getting page count
@@ -560,13 +560,13 @@ class CosmosAPI {
     if (blockHeight) {
       const response = await Promise.all([
         this.get(`blocks/${blockHeight}`),
-        this.getTransactionsV2ByHeight(blockHeight),
+        this.getTransactionsByHeight(blockHeight),
       ])
       block = response[0]
       transactions = response[1]
     } else {
       block = await this.get(`blocks/latest`)
-      transactions = await this.getTransactionsV2ByHeight(
+      transactions = await this.getTransactionsByHeight(
         block.block.header.height
       )
     }
