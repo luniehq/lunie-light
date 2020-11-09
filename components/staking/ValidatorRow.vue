@@ -8,7 +8,7 @@
     <td class="hide-xs">
       <Status :label="validator.status" />
     </td>
-    <td class="data-table__row__info">
+    <td class="table__row__info">
       <Avatar
         v-if="!validator || !validator.picture || validator.picture === 'null'"
         class="li-validator-image"

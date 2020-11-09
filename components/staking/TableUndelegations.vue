@@ -1,18 +1,10 @@
 <template>
   <div class="container">
-    <table class="data-table">
+    <table class="table">
       <thead>
         <PanelSort :properties="properties" show-on-mobile="endTime" />
       </thead>
-      <tbody infinite-scroll-distance="400" name="flip-list">
-        <LiUndelegation
-          v-for="(undelegation, index) in undelegations"
-          :key="undelegation.validatorAddress + undelegation.startHeight"
-          :index="index"
-          :validator="undelegation.validator"
-          :undelegation="undelegation"
-        />
-      </tbody>
+      <tbody infinite-scroll-distance="400" name="flip-list"></tbody>
     </table>
   </div>
 </template>

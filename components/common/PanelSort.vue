@@ -6,7 +6,6 @@
       :key="property.value"
       :class="{
         'sort-by': sort,
-        'hide-xs': hideXs(property),
       }"
       class="panel-sort-table-header"
     >
@@ -33,15 +32,10 @@ export default {
     },
     showOnMobile: {
       type: String,
-      required: true,
+      default: '',
     },
   },
   methods: {
-    hideXs(property) {
-      const primaryFields = ['smallName', 'block_number']
-      const hideFieldMobile = property.value !== this.showOnMobile
-      return hideFieldMobile && !primaryFields.includes(property.value)
-    },
     orderBy(property) {
       const sortBys = this.$el.querySelectorAll(`.sort-by`)
       sortBys.forEach((el) => el.classList.remove(`active`, `desc`, `asc`))

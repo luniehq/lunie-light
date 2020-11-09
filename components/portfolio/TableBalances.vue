@@ -6,7 +6,7 @@
     <div class="table-cell title actions"></div>
 
     <div v-if="!balances.length" class="loading-row left">Loading...</div>
-    <table v-else class="data-table">
+    <table v-else class="table">
       <tbody>
         <BalanceRow
           v-for="balance in balances"

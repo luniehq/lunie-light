@@ -1,32 +1,21 @@
 <template>
   <div class="container">
-    <table v-if="showingValidators.length" class="data-table">
-      <thead>
-        <PanelSort
-          :sort="sort"
-          :properties="properties"
-          :show-on-mobile="showOnMobile"
-        />
-      </thead>
-      <tbody
-        v-infinite-scroll="loadMore"
-        infinite-scroll-distance="400"
-        name="flip-list"
-      >
-        <LiValidator
-          v-for="(validator, index) in showingValidators"
-          :key="validator.operatorAddress"
-          :index="index"
-          :validator="validator"
-          :delegation="getDelegation(validator)"
-          :rewards="getRewards(validator)"
-          :show-on-mobile="showOnMobile"
-          :staking-denom="stakingDenom"
-        />
-      </tbody>
-    </table>
-    <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
-    <div v-else class="no-results">No results</div>
+    <DataTable
+      :show-table="showingValidators.length"
+      :columns="properties"
+      :sort="sort"
+    >
+      <ValidatorRow
+        v-for="(validator, index) in showingValidators"
+        :key="validator.operatorAddress"
+        :index="index"
+        :validator="validator"
+        :delegation="getDelegation(validator)"
+        :rewards="getRewards(validator)"
+        :show-on-mobile="showOnMobile"
+        :staking-denom="stakingDenom"
+      />
+    </DataTable>
   </div>
 </template>
 
@@ -61,10 +50,10 @@ export default {
   },
   data: () => ({
     sort: {
-      property: ``,
+      property: `votingPower`,
       order: `desc`,
     },
-    showing: 15,
+    showing: 25,
     stakingDenom: network.stakingDenom,
   }),
   computed: {
@@ -143,32 +132,6 @@ export default {
   text-align: center;
   margin: 3rem;
   color: var(--dim);
-}
-
-@media screen and (max-width: 550px) {
-  .data-table td {
-    overflow: hidden;
-  }
-
-  .data-table__row__info {
-    max-width: 22rem;
-  }
-}
-
-.data-table >>> th:first-child {
-  width: 5%;
-  color: var(--dim);
-  font-size: var(--text-xs);
-}
-
-.data-table >>> th:nth-child(2) {
-  width: 10%;
-  color: var(--dim);
-  font-size: var(--text-xs);
-}
-
-.data-table >>> th:nth-child(3) {
-  width: 50%;
 }
 
 .sortingOptions {
