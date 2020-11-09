@@ -1,8 +1,8 @@
 .lunie-light {
   /* theme colors */
-  --primary: var(--teal-800);
-  --primary-hover: var(--teal-900);
-  --highlight: var(--teal-600);
+  --primary: hsl(7, 88%, 70%);
+  --primary-hover: hsl(7, 88%, 65%);
+  --highlight: var(--primary);
   --link: var(--blue-500);
   --link-hover: var(--blue-600);
 
@@ -27,7 +27,7 @@
   --dim: var(--gray-700);
   --bc: var(--gray-500);
   --bc-dim: var(--gray-200);
-  --input-bc: hsl(229, 20%, 26%);
+  --input-bc: var(--gray-800);
   --success: var(--green-700);
   --warning: var(--orange-400);
   --danger: var(--red-400);
