@@ -18,7 +18,6 @@ module.exports = {
   plugins: ['prettier', 'wdio'],
   // add your custom rules here
   rules: {
-    camelcase: 0,
     'no-console': 0,
   },
 }

@@ -771,8 +771,9 @@ function transactionReducer(network, transaction, reducers) {
       involvedAddresses: Array.isArray(transaction.logs)
         ? uniq(
             extractInvolvedAddresses(
-              transaction.logs.find(({ msg_index }) => msg_index === index)
-                .events
+              transaction.logs.find(
+                ({ msg_index: msgIndex }) => msgIndex === index
+              ).events
             )
           )
         : [],
