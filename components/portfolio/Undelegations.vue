@@ -54,20 +54,7 @@ export default {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 2rem 8rem;
-}
-
-.balance-row {
-  display: flex;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem 2rem 2rem;
-  width: 100%;
+  padding: 0 3rem 4rem;
 }
 
 .header-container button {
@@ -81,12 +68,8 @@ export default {
 
 @media screen and (max-width: 667px) {
   .table-container {
-    padding: 0 1rem 8rem;
-  }
-
-  .header-container {
-    flex-direction: column;
-    padding: 0 1rem 1rem 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 </style>

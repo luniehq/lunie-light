@@ -147,12 +147,6 @@ h1 {
   padding-bottom: 2rem;
 }
 
-@media screen and (max-width: 667px) {
-  h1 {
-    text-align: center;
-  }
-}
-
 .loading-row {
   display: flex;
   align-items: center;

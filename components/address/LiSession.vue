@@ -46,6 +46,7 @@ export default {
   background: var(--app-fg);
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
+  box-shadow: 0 0 1px 0 var(--gray-500);
 }
 
 .li-session.card {

@@ -8,13 +8,16 @@
   background: var(--white);
 }
 
+.data-table th,
+.data-table td {
+  padding: 0.5rem 1.5rem;
+}
+
 .data-table th {
-  padding: 0.5rem 2rem;
   text-align: left;
 }
 
 .data-table td {
-  padding: 0.5rem 2rem;
   position: relative;
   vertical-align: middle;
   width: 100%;

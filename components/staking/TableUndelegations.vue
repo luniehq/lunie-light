@@ -67,20 +67,6 @@ export default {
 }
 </script>
 <style scoped>
-.container {
-  margin: 1.5rem;
-}
-
-@media screen and (max-width: 550px) {
-  .data-table td {
-    overflow: hidden;
-  }
-
-  .data-table__row__info {
-    max-width: 22rem;
-  }
-}
-
 .data-table >>> th:first-child {
   width: 5%;
   color: var(--dim);

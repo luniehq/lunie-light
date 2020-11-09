@@ -4,12 +4,11 @@
       <div class="header">
         <h1>Your Balances</h1>
         <div class="buttons">
-          <Button
-            class="send-button"
-            value="Send"
-            type="secondary"
-            @click.native="onSend()"
-          />
+          <div class="icon-button-container send-button">
+            <button class="icon-button" @click="onSend()">
+              <i class="material-icons">send</i></button
+            ><span>Send</span>
+          </div>
           <!-- <Button
             :disabled="!readyToWithdraw"
             class="withdraw-rewards"
@@ -120,17 +119,56 @@ export default {
   align-items: center;
 }
 
+.icon-button-container {
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-width: 3rem;
+}
+
+.icon-button-container span {
+  display: block;
+  font-size: var(--text-xs);
+  text-align: center;
+  color: var(--dim);
+  padding-top: 2px;
+}
+
+.icon-button {
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  outline: none;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.25s ease;
+}
+
+.icon-button:hover {
+  background: var(--primary-hover);
+  cursor: pointer;
+}
+
+.icon-button i {
+  font-size: 14px;
+  color: var(--menu-bright);
+  font-weight: 900;
+}
+
 @media screen and (max-width: 667px) {
   .header {
-    flex-direction: column;
-    padding: 0 1rem;
+    padding: 0 0 3rem;
   }
 }
 
 @media screen and (min-width: 1254px) {
   .stake-button,
   .unstake-button,
-  .button.send-button {
+  .send-button {
     display: none;
   }
 }

@@ -102,7 +102,7 @@ export default {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 4rem 3rem;
+  padding: 3rem;
 }
 
 .tm-form-msg--desc {
@@ -111,7 +111,8 @@ export default {
 
 @media screen and (max-width: 667px) {
   .table-container {
-    padding: 4rem 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 </style>

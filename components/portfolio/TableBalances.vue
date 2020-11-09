@@ -82,7 +82,7 @@ export default {
 
 @media screen and (max-width: 667px) {
   .table {
-    padding: 1rem;
+    padding: 0;
   }
 
   .table-cell.big {
