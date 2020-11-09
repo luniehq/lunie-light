@@ -10,6 +10,7 @@ export const state = () => ({
   delegations: [],
   undelegations: [],
   validators: [],
+  proposals: [],
   accountInfo: undefined,
   transactions: [],
   transactionsLoaded: undefined,
@@ -215,6 +216,21 @@ export const actions = {
         {
           type: 'danger',
           message: 'Getting transactions failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+  },
+  async getProposals({ commit, state: { api } }) {
+    try {
+      const proposals = await api.getProposals(this.state.validators)
+      commit('setProposals', proposals)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting proposals failed:' + err.message,
         },
         { root: true }
       )

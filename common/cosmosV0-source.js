@@ -386,10 +386,12 @@ class CosmosV0API {
   }
 
   async getProposal(proposal, totalBondedTokens, validators, firstBlock) {
-    const [tally, detailedVotes] = await Promise.all([
-      this.query(`gov/proposals/${proposal.id}/tally`),
-      this.getDetailedVotes(proposal),
-    ])
+    const tally = {}
+    const detailedVotes = []
+    // const [tally, detailedVotes] = await Promise.all([
+    //   this.query(`gov/proposals/${proposal.id}/tally`),
+    //   this.getDetailedVotes(proposal),
+    // ])
     const proposer = await this.getProposer(proposal, firstBlock)
     return this.reducers.proposalReducer(
       this.network.id,
@@ -403,7 +405,7 @@ class CosmosV0API {
     )
   }
 
-  async getAllProposals(validators) {
+  async getProposals(validators) {
     const [
       proposalsResponse,
       firstBlock,
