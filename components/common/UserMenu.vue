@@ -6,12 +6,13 @@
         <UserMenuAddress :address="session.address" />
       </div>
       <i class="material-icons icon-button" @click="$router.push('/address')">
-        settings
+        person
       </i>
     </div>
     <template v-else>
       <Button
         value="Get Started"
+        class="menu-button"
         type="secondary"
         @click.native="$router.push('/address')"
       />
@@ -67,13 +68,21 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gray-500);
+  color: var(--link);
   font-size: var(--text-base);
   background: var(--gray-800);
 }
 
 .icon-button:hover {
   cursor: pointer;
-  color: var(--gray-600);
+  color: var(--link-hover);
+}
+
+.button.menu-button {
+  box-shadow: 0 0 2px 0 rgba(210, 210, 210, 0.1);
+}
+
+.button.menu-button.secondary:hover:not(:disabled) {
+  background: rgba(210, 210, 210, 0.1);
 }
 </style>
