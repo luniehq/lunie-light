@@ -547,10 +547,8 @@ export function getTransactionLogs(transaction, index) {
   if (!transaction.logs || !transaction.logs[index]) {
     return JSON.parse(JSON.stringify(transaction.raw_log)).message
   }
-  const logs = transaction.logs[index]
-  return logs[index].log
-    ? logs[index].log || logs[0] // failing txs show the first logs
-    : logs[0].log || ''
+  const log = transaction.logs[index]
+  return log.success === false ? transaction.logs[0].log : log.log // failing txs show the first logs
 }
 
 export function transactionReducer(transaction) {
@@ -607,14 +605,11 @@ export function transactionReducer(transaction) {
         fees,
         success: setTransactionSuccess(transaction, messageIndex),
         log: getTransactionLogs(transaction, messageIndex),
-        involvedAddresses: Array.isArray(transaction.logs)
-          ? extractInvolvedAddresses(
-              // TODO check
-              transaction.logs.find(
-                ({ msg_index: msgIndex }) => msgIndex === messageIndex
-              ).events
-            )
-          : [],
+        involvedAddresses: extractInvolvedAddresses(
+          transaction.logs.find(
+            ({ msg_index: msgIndex }) => msgIndex === messageIndex
+          ).events
+        ),
       })
     )
     return returnedMessages
