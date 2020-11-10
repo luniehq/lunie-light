@@ -9,14 +9,11 @@ function truncate(number, digits) {
 }
 
 function setDecimalLength(value, length) {
-  debugger
-
   if (value === undefined || value === null || Number.isNaN(value)) return null
 
   // rounding up the last decimal
   const roundedValue =
     Math.round(value * Math.pow(10, length)) / Math.pow(10, length)
-  debugger
   return new Intl.NumberFormat(language, {
     minimumFractionDigits: length > 3 ? length : 0,
   }).format(truncate(roundedValue, length))
