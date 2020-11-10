@@ -1,6 +1,12 @@
 <template>
-  <div class="status" :class="label.toLowerCase()">
-    {{ label }}
+  <div
+    class="status"
+    :class="{
+      active: status.color === `green`,
+      inactive: status.color === `red`,
+    }"
+  >
+    {{ status.value }}
   </div>
 </template>
 
@@ -8,8 +14,8 @@
 export default {
   name: `Status`,
   props: {
-    label: {
-      type: String,
+    status: {
+      type: Object,
       required: true,
     },
   },
