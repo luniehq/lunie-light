@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import {
   SigningCosmosClient,
   assertIsBroadcastTxSuccess,
+  BroadcastMode,
 } from '@cosmjs/launchpad'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
@@ -55,7 +56,14 @@ export async function createSignBroadcast({
     gas: String(transactionData.gasEstimate),
   }
 
-  const client = new SigningCosmosClient(network.apiURL, senderAddress, signer)
+  const client = new SigningCosmosClient(
+    network.apiURL,
+    senderAddress,
+    signer,
+    undefined,
+    undefined,
+    BroadcastMode.Async
+  )
   const broadcastResult = await client.signAndBroadcast(
     [].concat(messages),
     fee,
