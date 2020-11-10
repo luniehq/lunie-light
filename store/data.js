@@ -115,7 +115,7 @@ export const actions = {
   },
   async getValidators({ commit, dispatch, state: { api } }) {
     try {
-      const validators = await api.getAllValidators()
+      const validators = await api.getValidators()
       commit('setValidators', validators)
     } catch (err) {
       commit(

@@ -108,7 +108,7 @@ class CosmosAPI {
     return signingInfos
   }
 
-  async getAllValidatorSets(height = 'latest') {
+  async getValidatorSet(height = 'latest') {
     const response = await this.query(`validatorsets/${height}`)
     return response
   }
@@ -151,7 +151,7 @@ class CosmosAPI {
     return this.validators[address]
   }
 
-  async getAllValidators() {
+  async getValidators() {
     await this.dataReady
     return Object.values(this.validators)
   }
@@ -169,7 +169,7 @@ class CosmosAPI {
         this.query(`staking/validators?status=unbonded`),
       ]).then((validatorGroups) => [].concat(...validatorGroups)),
       this.getAnnualProvision(),
-      this.getAllValidatorSets(height),
+      this.getValidatorSet(height),
       this.getSignedBlockWindow(),
     ])
 
