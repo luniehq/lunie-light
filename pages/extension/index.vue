@@ -1,0 +1,75 @@
+<template>
+  <SessionFrame :icon="`laptop`">
+    <div class="session-container">
+      <h2 class="session-title">Use Lunie Browser Extension</h2>
+
+      <div v-if="loading" class="session-main">
+        <p>Connecting to Keplr extension...</p>
+      </div>
+
+      <div v-else-if="error" class="session-main">
+        <p>
+          There was an error connecting to the Keplr extension:<br />
+          {{ error }}
+        </p>
+      </div>
+      <div v-else-if="!initialized" class="session-main">
+        <p>
+          Looks like you don't have the Keplr browser extension installed yet.
+          Head over to the
+          <a
+            href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
+            target="_blank"
+            rel="noopener norefferer"
+            >Chrome Web Store</a
+          >
+          to quickly install the extension.
+        </p>
+      </div>
+
+      <div v-else-if="accounts.length" class="session-main">
+        <p class="extension-message">
+          Below is a list of accounts we've received from the Keplr browser
+          extension.
+        </p>
+        <AccountList
+          :accounts="accounts"
+          :button-action="signInAndRedirect"
+          :button-text="`Use Account`"
+        />
+      </div>
+
+      <div v-else class="session-main">
+        <p class="extension-message">
+          Looks like you don't have any addresses in the Keplr extension yet.
+          Click on the extension icon in your browser and add an address now.
+        </p>
+      </div>
+    </div>
+  </SessionFrame>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+export default {
+  name: `session-extension`,
+  computed: {
+    ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
+  },
+  mounted() {
+    this.$store.dispatch('keplr/init')
+  },
+  methods: {
+    signIn(account) {
+      this.$store.dispatch(`signIn`, {
+        sessionType: `extension`,
+        address: account.address,
+      })
+    },
+    async signInAndRedirect(account) {
+      await this.signIn(account)
+      this.$router.push('/portfolio')
+    },
+  },
+}
+</script>

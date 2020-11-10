@@ -87,6 +87,7 @@ export const actions = {
     try {
       const block = await api.getBlockHeader()
       commit('setBlock', block)
+      return block
     } catch (err) {
       commit(
         'notifications/add',

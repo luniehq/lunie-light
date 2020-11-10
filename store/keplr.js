@@ -3,6 +3,8 @@ import network from '~/common/network'
 export const state = () => ({
   accounts: [],
   initialized: false,
+  error: undefined,
+  loading: false,
 })
 
 export const mutations = {
@@ -12,17 +14,27 @@ export const mutations = {
   setInitialized(state) {
     state.initialized = true
   },
+  setError(state, error) {
+    state.error = error
+  },
+  setLoading(state, loading) {
+    state.loading = loading
+  },
 }
 
 export const actions = {
   async init({ commit, dispatch }, trys = 0) {
+    commit('setError', undefined)
+    commit('setLoading', true)
+
     // sometimes the page loads quicker the keplr is available
     // so we try again for a couple of times but give up at somepoint
     if (!window.keplr && trys < 3) {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       dispatch('init', trys + 1)
     }
-    if (window.keplr.experimentalSuggestChain) {
+    if (window.keplr && window.keplr.experimentalSuggestChain) {
+      const block = await dispatch('data/getBlock', undefined, { root: true })
       try {
         // Keplr v0.6.4 introduces an experimental feature that supports the feature to suggests the chain from a webpage.
         // cosmoshub-3 is integrated to Keplr so the code should return without errors.
@@ -32,7 +44,7 @@ export const actions = {
         // If the same chain id is already registered, it will resolve and not require the user interactions.
         await window.keplr.experimentalSuggestChain({
           // Chain-id of the Cosmos SDK chain.
-          chainId: network.chainId,
+          chainId: block.chainId,
           // The name of the chain to be displayed to the user.
           chainName: network.name,
           // RPC endpoint of the chain.
@@ -92,13 +104,25 @@ export const actions = {
           //     high: 0.04
           // }
         })
+        await window.keplr.enable(network.chainId)
+
+        const offlineSigner = window.getOfflineSigner(block.chainId)
+
+        // You can get the address/public keys by `getAccounts` method.
+        // It can return the array of address/public key.
+        // But, currently, Keplr extension manages only one address/public key pair.
+        // XXX: This line is needed to set the sender address for SigningCosmosClient.
+        const accounts = await offlineSigner.getAccounts()
+        commit('setAccounts', accounts)
+
+        commit('setInitialized')
       } catch (error) {
-        console.error(error)
-        alert('Failed to suggest the chain')
+        commit('setError', error.message)
+        return
       }
-      await window.keplr.enable(network.chainId)
-      commit('setInitialized')
     }
+
+    commit('setLoading', false)
   },
 }
 
