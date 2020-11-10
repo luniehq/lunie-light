@@ -1,64 +1,22 @@
 const BigNumber = require('bignumber.js')
-
-function fixDecimalsAndRoundUp(number, decimalsNumber) {
-  return (
-    (number.toFixed(decimalsNumber) * 10 ** decimalsNumber) /
-    10 ** decimalsNumber
-  )
-}
-
-function fixDecimalsAndRoundUpBigNumbers(
-  bignumber,
-  decimalsNumber,
-  network,
-  denom
-) {
-  let coinLookup = network.coinLookup.find(
-    ({ viewDenom }) => viewDenom === network.stakingDenom
-  )
-  if (denom) {
-    coinLookup = network.coinLookup.find(
-      (coinLookup) =>
-        coinLookup.chainDenom === denom || coinLookup.viewDenom === denom
-    )
-  }
-  return fixDecimalsAndRoundUp(
-    BigNumber(bignumber).times(coinLookup.chainToViewConversionFactor),
-    decimalsNumber
-  )
-}
-
-function toViewDenom(network, chainDenomAmount, denom) {
-  let coinLookup = network.coinLookup.find(
-    ({ viewDenom }) => viewDenom === network.stakingDenom
-  )
-  if (denom) {
-    coinLookup = network.coinLookup.find(
-      (coinLookup) =>
-        coinLookup.chainDenom === denom || coinLookup.viewDenom === denom
-    )
-  }
-  return BigNumber(chainDenomAmount)
-    .times(coinLookup.chainToViewConversionFactor)
-    .toFixed(6)
-}
+const SMALLEST = 1e-6
+// const language = window.navigator.userLanguage || window.navigator.language
+const language = `en` // TODO get from request, window is not available in SSR
 
 // truncate decimals to not round when using Intl.NumberFormat
 function truncate(number, digits) {
   return Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits)
 }
 
-const SMALLEST = 1e-6
-// const language = window.navigator.userLanguage || window.navigator.language
-const language = `en` // TODO get from request, window is not available in SSR
-
 function setDecimalLength(value, length) {
+  debugger
+
   if (value === undefined || value === null || Number.isNaN(value)) return null
 
   // rounding up the last decimal
   const roundedValue =
     Math.round(value * Math.pow(10, length)) / Math.pow(10, length)
-
+  debugger
   return new Intl.NumberFormat(language, {
     minimumFractionDigits: length > 3 ? length : 0,
   }).format(truncate(roundedValue, length))
@@ -165,6 +123,34 @@ function bigFigureOrPercent(number) {
   }
 }
 
+function fixDecimalsAndRoundUp(number, decimalsNumber) {
+  return (
+    (number.toFixed(decimalsNumber) * 10 ** decimalsNumber) /
+    10 ** decimalsNumber
+  )
+}
+
+function fixDecimalsAndRoundUpBigNumbers(
+  bignumber,
+  decimalsNumber,
+  network,
+  denom
+) {
+  let coinLookup = network.coinLookup.find(
+    ({ viewDenom }) => viewDenom === network.stakingDenom
+  )
+  if (denom) {
+    coinLookup = network.coinLookup.find(
+      (coinLookup) =>
+        coinLookup.chainDenom === denom || coinLookup.viewDenom === denom
+    )
+  }
+  return fixDecimalsAndRoundUp(
+    BigNumber(bignumber).times(coinLookup.chainToViewConversionFactor),
+    decimalsNumber
+  )
+}
+
 // This will take an object and for each (k,v) will return
 // v rounded such that the sum of all v is 100.
 // Used the following as a reference:
@@ -214,12 +200,10 @@ const roundObjectPercentages = (dataMap) => {
 }
 
 module.exports = {
-  fixDecimalsAndRoundUp,
-  fixDecimalsAndRoundUpBigNumbers,
-  toViewDenom,
   SMALLEST,
   shortDecimals,
   fullDecimals,
+  setDecimalLength,
   pretty,
   prettyInt,
   prettyLong,
@@ -230,4 +214,5 @@ module.exports = {
   bigFigure,
   bigFigureOrShortDecimals,
   bigFigureOrPercent,
+  fixDecimalsAndRoundUpBigNumbers,
 }

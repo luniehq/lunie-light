@@ -16,7 +16,7 @@
         @loadMore="loadTransactions"
       />
 
-      <template v-if="transactionsLoaded">
+      <template v-if="transactionsLoaded && !moreTransactionsAvailable">
         <p class="message">
           {{ oldChainDataMessage }}
         </p>

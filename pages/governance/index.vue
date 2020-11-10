@@ -31,7 +31,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import network from '~/common/network'
 
 export default {
   name: `proposals-index`,
@@ -58,7 +57,7 @@ export default {
       this.proposalsLoaded = true
 
       // get governanceOverview
-      await this.$store.dispatch('data/getGovernanceOverview', { network })
+      await this.$store.dispatch('data/getGovernanceOverview')
       this.governanceOverviewLoaded = true
     },
   },

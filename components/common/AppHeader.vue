@@ -6,6 +6,7 @@
           <img
             class="network-icon"
             :src="require(`../../assets/images/${network.logo}`)"
+            alt="network logo"
           />
           {{ network.name }}
         </nuxt-link>
