@@ -5,7 +5,7 @@
     Content-Security-Policy = '''
       default-src 'self' https://*.netlify.app;
       # Add here the RPC URLS you might need
-      # For example: wss://rpc.polkadot.io (Polkadot Parity node RPC URL)
+      # For example:  https://lcd.nylira.net (Nylira's public Cosmos node)
       connect-src 'self' https://lcd.nylira.net;
       img-src 'self' data: https://*.netlify.app;
       script-src 'self' 'unsafe-eval' https://*.netlify.app 'nonce-4AEemGbGTJptoIGFP3Nd' 'nonce-HYjB4SnB0b0lHRlAzTmQ' 'nonce-YW5hbHl0aWNzLWx1bmll';;
