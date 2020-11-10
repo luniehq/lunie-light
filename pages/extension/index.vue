@@ -56,6 +56,16 @@ export default {
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
   },
+  watch: {
+    accounts: {
+      immediate: false,
+      handler(accounts) {
+        if (accounts && accounts.length === 1) {
+          this.signInAndRedirect(accounts[0])
+        }
+      },
+    },
+  },
   mounted() {
     this.$store.dispatch('keplr/init')
   },
