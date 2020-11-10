@@ -2,8 +2,8 @@
   <div
     class="status"
     :class="{
-      active: status.color === `green`,
-      inactive: status.color === `red`,
+      active: status.active === true,
+      inactive: status.active === false,
     }"
   >
     {{ status.value }}

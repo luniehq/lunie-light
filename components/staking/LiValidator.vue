@@ -6,7 +6,7 @@
   >
     <td>{{ index + 1 }}</td>
     <td class="hide-xs">
-      <Status :label="validator.status" />
+      <Status :status="validator.status" />
     </td>
     <td class="data-table__row__info">
       <Avatar
