@@ -1,6 +1,6 @@
 import { keyBy, uniqBy } from 'lodash'
 import network from '~/common/network'
-import DataSource from '~/common/cosmosV2-source'
+import DataSource from '~/apis/cosmos-source'
 import { updateValidatorImages } from '~/common/keybase'
 
 export const state = () => ({
@@ -11,7 +11,6 @@ export const state = () => ({
   delegations: [],
   undelegations: [],
   validators: [],
-  accountInfo: undefined,
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
@@ -56,8 +55,7 @@ export const mutations = {
 
 export const actions = {
   init({ commit }) {
-    const _store = {}
-    commit('setApi', new DataSource(this.$axios, network, _store, null, null))
+    commit('setApi', new DataSource(this.$axios, network))
   },
   async refresh({ dispatch }) {
     const calls = [
@@ -85,7 +83,7 @@ export const actions = {
   },
   async getBlock({ commit, state: { api } }) {
     try {
-      const block = await api.getBlockHeader()
+      const block = await api.getBlock()
       commit('setBlock', block)
       return block
     } catch (err) {
@@ -101,11 +99,7 @@ export const actions = {
   },
   async getBalances({ commit, state: { api } }, { address, currency }) {
     try {
-      const balances = await api.getBalancesV2FromAddress(
-        address,
-        currency,
-        network
-      )
+      const balances = await api.getBalances(address, currency, network)
       commit('setBalances', balances)
       commit('setBalancesLoaded', true)
     } catch (err) {
@@ -121,7 +115,7 @@ export const actions = {
   },
   async getValidators({ commit, dispatch, state: { api } }) {
     try {
-      const validators = await api.getAllValidators()
+      const validators = await api.getValidators()
       commit('setValidators', validators)
     } catch (err) {
       commit(
@@ -155,7 +149,7 @@ export const actions = {
   },
   async getDelegations({ commit, state: { api } }, address) {
     try {
-      const delegations = await api.getDelegationsForDelegatorAddress(address)
+      const delegations = await api.getDelegationsForDelegator(address)
       commit('setDelegations', delegations)
     } catch (err) {
       commit(
@@ -170,9 +164,7 @@ export const actions = {
   },
   async getUndelegations({ commit, state: { api } }, address) {
     try {
-      const undelegations = await api.getUndelegationsForDelegatorAddress(
-        address
-      )
+      const undelegations = await api.getUndelegationsForDelegator(address)
       commit('setUndelegations', undelegations)
     } catch (err) {
       commit(
@@ -200,17 +192,12 @@ export const actions = {
       )
     }
   },
-  async getAccountInfo({ commit, state: { api } }, address) {
-    const { accountNumber, sequence } = await api.getAccountInfo(address)
-    commit('setAccountInfo', { accountNumber, sequence })
-    return { accountNumber, sequence }
-  },
   async getTransactions(
     { commit, state: { api } },
     { address, pageNumber = 0 }
   ) {
     try {
-      const transactions = await api.getTransactionsV2(address, pageNumber)
+      const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
     } catch (err) {
       commit(

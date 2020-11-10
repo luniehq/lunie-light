@@ -1,53 +1,3 @@
-const BigNumber = require('bignumber.js')
-
-function fixDecimalsAndRoundUp(number, decimalsNumber) {
-  return (
-    (number.toFixed(decimalsNumber) * 10 ** decimalsNumber) /
-    10 ** decimalsNumber
-  )
-}
-
-function fixDecimalsAndRoundUpBigNumbers(
-  bignumber,
-  decimalsNumber,
-  network,
-  denom
-) {
-  let coinLookup = network.coinLookup.find(
-    ({ viewDenom }) => viewDenom === network.stakingDenom
-  )
-  if (denom) {
-    coinLookup = network.coinLookup.find(
-      (coinLookup) =>
-        coinLookup.chainDenom === denom || coinLookup.viewDenom === denom
-    )
-  }
-  return fixDecimalsAndRoundUp(
-    BigNumber(bignumber).times(coinLookup.chainToViewConversionFactor),
-    decimalsNumber
-  )
-}
-
-function toViewDenom(network, chainDenomAmount, denom) {
-  let coinLookup = network.coinLookup.find(
-    ({ viewDenom }) => viewDenom === network.stakingDenom
-  )
-  if (denom) {
-    coinLookup = network.coinLookup.find(
-      (coinLookup) =>
-        coinLookup.chainDenom === denom || coinLookup.viewDenom === denom
-    )
-  }
-  return BigNumber(chainDenomAmount)
-    .times(coinLookup.chainToViewConversionFactor)
-    .toFixed(6)
-}
-
-// truncate decimals to not round when using Intl.NumberFormat
-function truncate(number, digits) {
-  return Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits)
-}
-
 const SMALLEST = 1e-6
 // const language = window.navigator.userLanguage || window.navigator.language
 const language = `en` // TODO get from request, window is not available in SSR
@@ -61,7 +11,7 @@ function setDecimalLength(value, length) {
 
   return new Intl.NumberFormat(language, {
     minimumFractionDigits: length > 3 ? length : 0,
-  }).format(truncate(roundedValue, length))
+  }).format(roundedValue)
 }
 
 function shortDecimals(value) {
@@ -214,9 +164,6 @@ const roundObjectPercentages = (dataMap) => {
 }
 
 module.exports = {
-  fixDecimalsAndRoundUp,
-  fixDecimalsAndRoundUpBigNumbers,
-  toViewDenom,
   SMALLEST,
   shortDecimals,
   fullDecimals,

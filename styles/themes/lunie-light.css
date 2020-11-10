@@ -3,8 +3,8 @@
   --primary: hsl(7, 88%, 70%);
   --primary-hover: hsl(7, 88%, 65%);
   --highlight: var(--primary);
-  --link: var(--blue-500);
-  --link-hover: var(--blue-600);
+  --link: var(--blue-700);
+  --link-hover: var(--blue-800);
 
   /* background-colors */
   --app-fg: var(--gray-100);
@@ -16,8 +16,8 @@
   /* menu styles */
   --app-nav: var(--gray-1000);
   --app-nav-hover: var(--gray-900);
-  --menu-link: var(--link);
-  --menu-link-hover: var(--link-hover);
+  --menu-link: var(--blue-500);
+  --menu-link-hover: var(--blue-600);
   --menu-bright: var(--white);
   --menu-text: var(--gray-100);
 
