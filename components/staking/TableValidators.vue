@@ -39,10 +39,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
-    },
     searchTerm: {
       type: Boolean,
       default: () => false,
@@ -128,6 +124,10 @@ export default {
 }
 </script>
 <style scoped>
+.container {
+  overflow: auto;
+}
+
 .no-results {
   text-align: center;
   margin: 3rem;

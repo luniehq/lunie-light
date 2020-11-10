@@ -30,10 +30,6 @@ export default {
       type: Array,
       required: true,
     },
-    showOnMobile: {
-      type: String,
-      default: '',
-    },
   },
   methods: {
     orderBy(property) {

@@ -5,7 +5,7 @@
     @click="$router.push(`/validators/${validator.operatorAddress}`)"
   >
     <td>{{ index + 1 }}</td>
-    <td class="hide-xs">
+    <td>
       <Status :label="validator.status" />
     </td>
     <td class="table__row__info">
@@ -46,14 +46,14 @@
         </div>
       </div>
     </td>
-    <td :class="{ 'hide-xs': showOnMobile !== 'expectedReturns' }">
+    <td>
       {{
         validator.expectedReturns
           ? bigFigureOrPercent(validator.expectedReturns)
           : `--`
       }}
     </td>
-    <td :class="{ 'hide-xs': showOnMobile !== 'voting-power' }">
+    <td>
       {{ validator.votingPower | bigFigureOrPercent }}
     </td>
   </tr>
@@ -90,11 +90,6 @@ export default {
     index: {
       type: Number,
       required: true,
-    },
-    /* istanbul ignore next */
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
     },
     stakingDenom: {
       type: String,
