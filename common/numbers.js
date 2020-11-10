@@ -1,33 +1,3 @@
-const BigNumber = require('bignumber.js')
-
-function fixDecimalsAndRoundUp(number, decimalsNumber) {
-  return (
-    (BigNumber(number).toFixed(decimalsNumber) * 10 ** decimalsNumber) /
-    10 ** decimalsNumber
-  )
-}
-
-function fixDecimalsAndRoundUpBigNumbers(
-  bignumber,
-  decimalsNumber,
-  network,
-  denom
-) {
-  const coinLookup = network.getCoinLookup(
-    denom || network.stakingDenom,
-    'viewDenom'
-  )
-  return fixDecimalsAndRoundUp(
-    BigNumber(bignumber).times(coinLookup.chainToViewConversionFactor),
-    decimalsNumber
-  )
-}
-
-// truncate decimals to not round when using Intl.NumberFormat
-function truncate(number, digits) {
-  return Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits)
-}
-
 const SMALLEST = 1e-6
 // const language = window.navigator.userLanguage || window.navigator.language
 const language = `en` // TODO get from request, window is not available in SSR
@@ -41,7 +11,7 @@ function setDecimalLength(value, length) {
 
   return new Intl.NumberFormat(language, {
     minimumFractionDigits: length > 3 ? length : 0,
-  }).format(truncate(roundedValue, length))
+  }).format(roundedValue)
 }
 
 function shortDecimals(value) {
@@ -194,8 +164,6 @@ const roundObjectPercentages = (dataMap) => {
 }
 
 module.exports = {
-  fixDecimalsAndRoundUp,
-  fixDecimalsAndRoundUpBigNumbers,
   SMALLEST,
   shortDecimals,
   fullDecimals,

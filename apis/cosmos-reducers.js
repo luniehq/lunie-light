@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { reverse, sortBy, uniq, uniqWith } from 'lodash'
 import { encodeB32, decodeB32 } from '~/common/address'
-import { fixDecimalsAndRoundUp } from '~/common/numbers.js'
 import { getProposalSummary } from '~/common/common-reducers'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
@@ -35,10 +34,12 @@ function proposalFinalized(proposal) {
   return ['Passed', 'Rejected'].includes(proposal.proposal_status)
 }
 
-function getStakingCoinViewAmount(chainStakeAmount) {
+export function getStakingCoinViewAmount(chainStakeAmount) {
+  const coinLookup = network.getCoinLookup(network.stakingDenom, 'viewDenom')
+
   return coinReducer({
     amount: chainStakeAmount,
-    denom: network.stakingDenom,
+    denom: coinLookup.chainDenom,
   }).amount
 }
 
@@ -53,11 +54,14 @@ export function coinReducer(chainCoin) {
     }
   }
 
+  const precision = coinLookup.chainToViewConversionFactor.toString().split('.')
+    .length // TODO change chainToViewConversionFactor to precision
+
   return {
     supported: true,
     amount: BigNumber(chainCoin.amount)
       .times(coinLookup.chainToViewConversionFactor)
-      .toFixed(6),
+      .toFixed(precision),
     denom: coinLookup.viewDenom,
   }
 }
@@ -108,8 +112,7 @@ function getTotalVotePercentage(proposal, totalBondedTokens, totalVoted) {
   return Number(
     BigNumber(totalVoted)
       .div(getStakingCoinViewAmount(totalBondedTokens))
-      .toNumber()
-      .toFixed(6)
+      .toFixed(4) // output is 0.1234 = 12.34%
   )
 }
 
@@ -294,7 +297,7 @@ export async function reduceFormattedRewards(
       multiDenomRewardsArray.push({
         id: `${validator.operatorAddress}_${lunieCoin.denom}`,
         denom: lunieCoin.denom,
-        amount: fixDecimalsAndRoundUp(lunieCoin.amount, 6).toString(), // TODO: refactor using a decimals number from coinLookup
+        amount: lunieCoin.amount,
         validator,
       })
     })
@@ -550,7 +553,7 @@ export function getTransactionLogs(transaction, index) {
     : logs[0].log || ''
 }
 
-export function transactionReducer(transaction, reducers) {
+export function transactionReducer(transaction) {
   try {
     let fees
     if (transaction.tx.value) {
@@ -619,24 +622,21 @@ export function transactionReducer(transaction, reducers) {
     return [] // must return something differ from undefined
   }
 }
-export function transactionsReducer(txs, reducers) {
+export function transactionsReducer(txs) {
   const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash)
   const sortedTxs = sortBy(duplicateFreeTxs, ['timestamp'])
   const reversedTxs = reverse(sortedTxs)
   // here we filter out all transactions related to validators
   return reversedTxs.reduce((collection, transaction) => {
-    return collection.concat(transactionReducer(transaction, reducers))
+    return collection.concat(transactionReducer(transaction))
   }, [])
 }
 
 export function delegationReducer(delegation, validator, active) {
-  const { amount, denom } = coinReducer({
-    amount: delegation.balance,
-    denom: network.stakingDenom,
-  })
+  const amount = getStakingCoinViewAmount(delegation.balance)
 
   return {
-    id: delegation.validator_address.concat(`-${denom}`),
+    id: delegation.validator_address,
     validatorAddress: delegation.validator_address,
     delegatorAddress: delegation.delegator_address,
     validator,
@@ -664,8 +664,7 @@ export function getValidatorUptimePercentage(validator, signedBlocksWindow) {
 export function validatorReducer(
   signedBlocksWindow,
   validator,
-  annualProvision,
-  reducers
+  annualProvision
 ) {
   const statusInfo = getValidatorStatus(validator)
   let websiteURL = validator.description.website
@@ -701,13 +700,11 @@ export function validatorReducer(
     statusDetailed: statusInfo.status_detailed,
     delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
     popularity: validator.popularity,
-    expectedReturns: reducers
-      .expectedRewardsPerToken(
-        validator,
-        validator.commission.commission_rates.rate,
-        annualProvision
-      )
-      .toFixed(6),
+    expectedReturns: expectedRewardsPerToken(
+      validator,
+      validator.commission.commission_rates.rate,
+      annualProvision
+    ).toFixed(6),
   }
 }
 

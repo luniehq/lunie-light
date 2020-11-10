@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { keyBy, orderBy, take, reverse, sortBy } from 'lodash'
 import * as reducers from './cosmos-reducers'
+import { setDecimalLength } from '~/common/numbers'
 import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
-import { fixDecimalsAndRoundUpBigNumbers } from '~/common/numbers.js'
 import network from '~/common/network'
 
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
@@ -97,7 +97,7 @@ export default class CosmosAPI {
       [].concat(...results)
     )
 
-    return this.reducers.transactionsReducer(txs, this.reducers)
+    return this.reducers.transactionsReducer(txs)
   }
 
   async getValidatorSigningInfos() {
@@ -200,8 +200,7 @@ export default class CosmosAPI {
       this.reducers.validatorReducer(
         signedBlocksWindow,
         validator,
-        annualProvision,
-        this.reducers
+        annualProvision
       )
     )
   }
@@ -228,7 +227,7 @@ export default class CosmosAPI {
       .plus(tally.no_with_veto)
     const formattedDeposits = deposits
       ? deposits.map((deposit) =>
-          this.reducers.depositReducer(deposit, this.network, this.validators)
+          this.reducers.depositReducer(deposit, this.validators)
         )
       : undefined
     const depositsSum = formattedDeposits
@@ -380,8 +379,7 @@ export default class CosmosAPI {
 
     return this.reducers.governanceParameterReducer(
       depositParameters,
-      tallyingParamers,
-      this.network
+      tallyingParamers
     )
   }
 
@@ -408,26 +406,18 @@ export default class CosmosAPI {
       this.query('/distribution/community_pool'),
       this.getTopVoters(),
     ])
-    const communityPool = communityPoolArray.find(
-      ({ denom }) =>
-        denom ===
-        this.network.coinLookup.find(
-          ({ viewDenom }) => viewDenom === this.network.stakingDenom
-        ).chainDenom
-    ).amount
+    const communityPool = communityPoolArray
+      .map(this.reducers.coinReducer)
+      .find(({ denom }) => denom === network.stakingDenom)
     return {
-      totalStakedAssets: fixDecimalsAndRoundUpBigNumbers(
-        totalBondedTokens,
-        2,
-        this.network,
-        this.network.stakingDenom
+      totalStakedAssets: setDecimalLength(
+        reducers.getStakingCoinViewAmount(totalBondedTokens),
+        2
       ),
       totalVoters: undefined,
-      treasurySize: fixDecimalsAndRoundUpBigNumbers(
-        communityPool,
-        2,
-        this.network,
-        this.network.stakingDenom
+      treasurySize: setDecimalLength(
+        reducers.getStakingCoinViewAmount(communityPool),
+        2
       ),
       topVoters: topVoters.map((topVoter) =>
         this.reducers.topVoterReducer(topVoter)
@@ -511,8 +501,7 @@ export default class CosmosAPI {
         this.reducers.delegationReducer(
           delegation,
           this.validators[delegation.validator_address],
-          delegationEnum.ACTIVE,
-          this.network
+          delegationEnum.ACTIVE
         )
       )
       .filter((delegation) => BigNumber(delegation.amount).gt(0))
@@ -560,8 +549,7 @@ export default class CosmosAPI {
       this.reducers.delegationReducer(
         delegation,
         validator,
-        delegationEnum.ACTIVE,
-        this.network
+        delegationEnum.ACTIVE
       )
     )
   }
