@@ -6,9 +6,9 @@
       default-src 'self' https://*.netlify.app;
       # Add here the RPC URLS you might need
       # For example: wss://rpc.polkadot.io (Polkadot Parity node RPC URL)
-      connect-src 'self' wss://kusama-rpc.polkadot.io/ wss://rpc.polkadot.io wss://westend-rpc.polkadot.io wss://*.polkastats.io/rpc wss://*.polkastats.io/ws;
+      connect-src 'self' https://lcd.nylira.net;
       img-src 'self' data: https://*.netlify.app;
-      script-src 'self' 'unsafe-eval' https://*.netlify.app;
+      script-src 'self' 'unsafe-eval' https://*.netlify.app 'nonce-4AEemGbGTJptoIGFP3Nd' 'nonce-HYjB4SnB0b0lHRlAzTmQ' 'nonce-YW5hbHl0aWNzLWx1bmll';;
       style-src 'self' 'unsafe-inline' https://*.netlify.app;
       media-src 'self' https://*.netlify.app blob:;
       object-src 'self' data: blob: https://*.netlify.app;
