@@ -1,6 +1,5 @@
 export default {
   id: 'cosmos-mainnet',
-  chainId: 'cosmoshub-3',
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',

@@ -104,7 +104,7 @@ export const actions = {
           //     high: 0.04
           // }
         })
-        await window.keplr.enable(network.chainId)
+        await window.keplr.enable(block.chainId)
 
         const offlineSigner = window.getOfflineSigner(block.chainId)
 
