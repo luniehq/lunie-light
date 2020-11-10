@@ -1,7 +1,7 @@
 <template>
   <SessionFrame :icon="`laptop`">
     <div class="session-container">
-      <h2 class="session-title">Use Lunie Browser Extension</h2>
+      <h2 class="session-title">Use Keplr Browser Extension</h2>
 
       <div v-if="loading" class="session-main">
         <p>Connecting to Keplr extension...</p>
