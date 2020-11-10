@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame :icon="`laptop`">
+  <SessionFrame icon="vpn_key">
     <div class="session-container">
       <h2 class="session-title">Use Keplr Browser Extension</h2>
 
