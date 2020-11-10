@@ -25,7 +25,7 @@
           route="/ledger"
         /> -->
         <LiSession
-          icon="person_add"
+          icon="vpn_key"
           title="Use Keplr Extension"
           route="/extension"
         />
