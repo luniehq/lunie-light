@@ -1,20 +1,19 @@
-const BigNumber = require('bignumber.js')
-const { keyBy, orderBy, take, reverse, sortBy } = require('lodash')
-const { encodeB32, decodeB32, pubkeyToAddress } = require('../common/address')
-const { fixDecimalsAndRoundUpBigNumbers } = require('../common/numbers.js')
+import BigNumber from 'bignumber.js'
+import { keyBy, orderBy, take, reverse, sortBy } from 'lodash'
+import * as reducers from './cosmos-reducers'
+import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
+import { fixDecimalsAndRoundUpBigNumbers } from '~/common/numbers.js'
+import network from '~/common/network'
 
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 const PAGE_RECORDS_COUNT = 20
 const GOLANG_NULL_TIME = `0001-01-01T00:00:00Z` // time that gets serialized from null in golang
 
-class CosmosAPI {
-  constructor(axios, network) {
-    this.baseURL = network.apiURL
-    this.axios = axios
+export default class CosmosAPI {
+  constructor(axios) {
+    this.axios = axios // passed in here to use Nuxt $axios instance
     this.network = network
-    this.delegatorBech32Prefix = network.addressPrefix
-    this.validatorConsensusBech32Prefix = `${network.addressPrefix}valcons`
-    this.reducers = require('./cosmos-reducers')
+    this.reducers = reducers
 
     // system to stop queries to proceed if store data is not yet available
     this.dataReady = new Promise((resolve) => {
@@ -29,7 +28,7 @@ class CosmosAPI {
 
   async get(url) {
     return await this.axios(
-      this.baseURL + (url.startsWith('/') ? url : '/' + url)
+      network.apiURL + (url.startsWith('/') ? url : '/' + url)
     ).then((res) => res.data)
   }
 
@@ -53,8 +52,6 @@ class CosmosAPI {
   }
 
   async getTransactions(address, pageNumber = 0) {
-    this.checkAddress(address)
-
     // getting page count
     const [senderPage, recipientPage] = await Promise.all([
       this.getPageCount(`/txs?message.sender=${address}`),
@@ -117,7 +114,7 @@ class CosmosAPI {
     const hexDelegatorAddressFromOperator = decodeB32(validator.operatorAddress)
     const delegatorAddressFromOperator = encodeB32(
       hexDelegatorAddressFromOperator,
-      this.delegatorBech32Prefix
+      this.network.addressPrefix
     )
 
     let selfDelegation
@@ -189,7 +186,7 @@ class CosmosAPI {
     validators.forEach((validator) => {
       const consensusAddress = pubkeyToAddress(
         validator.consensus_pubkey,
-        this.validatorConsensusBech32Prefix
+        network.validatorConsensusaddressPrefix
       )
       validator.votingPower = consensusValidators[consensusAddress]
         ? BigNumber(consensusValidators[consensusAddress].voting_power)
@@ -243,14 +240,7 @@ class CosmosAPI {
       deposits: formattedDeposits,
       depositsSum: deposits ? Number(depositsSum).toFixed(6) : undefined,
       percentageDepositsNeeded: deposits
-        ? percentage(
-            depositsSum,
-            fixDecimalsAndRoundUpBigNumbers(
-              depositParameters.min_deposit[0].amount,
-              6,
-              this.network
-            )
-          )
+        ? percentage(depositsSum, depositParameters.min_deposit[0].amount)
         : undefined,
       votes: votes
         ? votes.map((vote) => this.reducers.voteReducer(vote, this.validators))
@@ -613,5 +603,3 @@ function percentage(x, total) {
     ? BigNumber(x).div(total).toNumber().toFixed(4)
     : 0
 }
-
-module.exports = CosmosAPI

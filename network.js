@@ -16,6 +16,7 @@ export default {
   ],
   addressPrefix: 'cosmos',
   validatorAddressPrefix: 'cosmosvaloper',
+  validatorConsensusaddressPrefix: 'cosmosvalcons', // needed to map validators from staking queries to the validator set
   HDPath: `m/44'/118'/0'/0/0`,
   lockUpPeriod: `21 days`,
   fees: {

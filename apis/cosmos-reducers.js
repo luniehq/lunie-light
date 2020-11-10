@@ -1,10 +1,10 @@
-const BigNumber = require('bignumber.js')
-const { reverse, sortBy, uniq, uniqWith } = require('lodash')
-const { encodeB32, decodeB32 } = require('~/common/address')
-const { fixDecimalsAndRoundUp } = require('~/common/numbers.js')
-const { getProposalSummary } = require('~/common/common-reducers')
-const { lunieMessageTypes } = require('~/common/lunie-message-types')
-const network = require('~/common/network')
+import BigNumber from 'bignumber.js'
+import { reverse, sortBy, uniq, uniqWith } from 'lodash'
+import { encodeB32, decodeB32 } from '~/common/address'
+import { fixDecimalsAndRoundUp } from '~/common/numbers.js'
+import { getProposalSummary } from '~/common/common-reducers'
+import { lunieMessageTypes } from '~/common/lunie-message-types'
+import network from '~/common/network'
 
 function proposalBeginTime(proposal) {
   switch (proposal.proposal_status.toLowerCase()) {
@@ -35,18 +35,6 @@ function proposalFinalized(proposal) {
   return ['Passed', 'Rejected'].includes(proposal.proposal_status)
 }
 
-function accountInfoReducer(accountValue, accountType) {
-  if (accountType.includes(`VestingAccount`)) {
-    accountValue = accountValue.BaseVestingAccount.BaseAccount
-  }
-  return {
-    address: accountValue.address,
-    accountNumber: accountValue.account_number,
-    sequence: accountValue.sequence || 0,
-    vestingAccount: accountType.includes(`VestingAccount`),
-  }
-}
-
 function getStakingCoinViewAmount(chainStakeAmount) {
   return coinReducer({
     amount: chainStakeAmount,
@@ -54,7 +42,7 @@ function getStakingCoinViewAmount(chainStakeAmount) {
   }).amount
 }
 
-function coinReducer(chainCoin) {
+export function coinReducer(chainCoin) {
   const coinLookup = network.getCoinLookup(chainCoin.denom)
 
   if (!coinLookup) {
@@ -76,7 +64,11 @@ function coinReducer(chainCoin) {
 
 /* if you don't get this, write fabian@lunie.io */
 // expected rewards if delegator stakes x tokens
-const expectedRewardsPerToken = (validator, commission, annualProvision) => {
+export const expectedRewardsPerToken = (
+  validator,
+  commission,
+  annualProvision
+) => {
   if (validator.status === 'INACTIVE' || validator.jailed === true) {
     return 0
   }
@@ -121,7 +113,7 @@ function getTotalVotePercentage(proposal, totalBondedTokens, totalVoted) {
   )
 }
 
-function tallyReducer(proposal, tally, totalBondedTokens) {
+export function tallyReducer(proposal, tally, totalBondedTokens) {
   // if the proposal is out of voting, use the final result for the tally
   if (proposalFinalized(proposal)) {
     tally = proposal.final_tally_result
@@ -148,7 +140,7 @@ function tallyReducer(proposal, tally, totalBondedTokens) {
   }
 }
 
-function depositReducer(deposit, validators) {
+export function depositReducer(deposit, validators) {
   return {
     id: deposit.depositor,
     amount: deposit.amount.map(coinReducer),
@@ -156,7 +148,7 @@ function depositReducer(deposit, validators) {
   }
 }
 
-function voteReducer(vote, validators) {
+export function voteReducer(vote, validators) {
   return {
     id: String(vote.proposal_id.concat(`_${vote.voter}`)),
     voter: networkAccountReducer(vote.voter, validators),
@@ -180,7 +172,10 @@ function networkAccountReducer(address, validators) {
   }
 }
 
-function governanceParameterReducer(depositParameters, tallyingParamers) {
+export function governanceParameterReducer(
+  depositParameters,
+  tallyingParamers
+) {
   // for now assuming one deposit denom
   const minDeposit = coinReducer(depositParameters.min_deposit[0])
   return {
@@ -191,7 +186,7 @@ function governanceParameterReducer(depositParameters, tallyingParamers) {
   }
 }
 
-function topVoterReducer(topVoter) {
+export function topVoterReducer(topVoter) {
   return {
     name: topVoter.name,
     address: topVoter.operatorAddress,
@@ -224,7 +219,7 @@ function getValidatorStatus(validator) {
   }
 }
 
-function blockReducer(block) {
+export function blockReducer(block) {
   return {
     id: block.block_meta.block_id.hash,
     height: block.block_meta.header.height,
@@ -239,7 +234,7 @@ function blockReducer(block) {
 // amount: {"15000umuon"}, or in multidenom networks they look like this:
 // amount: {"15000ungm,100000uchf,110000ueur,2000000ujpy"}
 // That is why we need this separate function to extract those amounts in this format
-function rewardCoinReducer(reward) {
+export function rewardCoinReducer(reward) {
   const multiDenomRewardsArray = reward.split(`,`)
   const mappedMultiDenomRewardsArray = multiDenomRewardsArray.map((reward) => {
     const rewardDenom = reward.match(/[a-z]+/gi)[0]
@@ -252,7 +247,7 @@ function rewardCoinReducer(reward) {
   return mappedMultiDenomRewardsArray
 }
 
-function balanceReducer(lunieCoin, delegations, undelegations) {
+export function balanceReducer(lunieCoin, delegations, undelegations) {
   const isStakingDenom = lunieCoin.denom === network.stakingDenom
   const delegatedStake = delegations.reduce(
     (sum, { amount }) => BigNumber(sum).plus(amount),
@@ -275,7 +270,7 @@ function balanceReducer(lunieCoin, delegations, undelegations) {
   }
 }
 
-function undelegationReducer(undelegation, validator) {
+export function undelegationReducer(undelegation, validator) {
   return {
     id: `${validator.operatorAddress}_${undelegation.creation_height}`,
     delegatorAddress: undelegation.delegator_address,
@@ -286,7 +281,7 @@ function undelegationReducer(undelegation, validator) {
   }
 }
 
-async function reduceFormattedRewards(
+export async function reduceFormattedRewards(
   reward,
   validator,
   multiDenomRewardsArray
@@ -306,7 +301,7 @@ async function reduceFormattedRewards(
   )
 }
 
-async function rewardReducer(rewards, validatorsDictionary) {
+export async function rewardReducer(rewards, validatorsDictionary) {
   const formattedRewards = rewards.map((reward) => ({
     reward: reward.reward,
     validator: validatorsDictionary[reward.validator_address],
@@ -327,7 +322,7 @@ const proposalTypeEnumDictionary = {
 }
 
 // map Cosmos SDK message types to Lunie message types
-function getMessageType(type) {
+export function getMessageType(type) {
   // different networks use different prefixes for the transaction types like cosmos/MsgSend vs core/MsgSend in Terra
   const transactionTypeSuffix = type.split('/')[1]
   switch (transactionTypeSuffix) {
@@ -352,7 +347,7 @@ function getMessageType(type) {
   }
 }
 
-function setTransactionSuccess(transaction, index) {
+export function setTransactionSuccess(transaction, index) {
   // TODO identify logs per message
   if (transaction.code) {
     return false
@@ -360,7 +355,7 @@ function setTransactionSuccess(transaction, index) {
   return true
 }
 
-function sendDetailsReducer(message) {
+export function sendDetailsReducer(message) {
   return {
     from: [message.from_address],
     to: [message.to_address],
@@ -368,14 +363,14 @@ function sendDetailsReducer(message) {
   }
 }
 
-function stakeDetailsReducer(message) {
+export function stakeDetailsReducer(message) {
   return {
     to: [message.validator_address],
     amount: coinReducer(message.amount),
   }
 }
 
-function restakeDetailsReducer(message) {
+export function restakeDetailsReducer(message) {
   return {
     from: [message.validator_src_address],
     to: [message.validator_dst_address],
@@ -383,21 +378,21 @@ function restakeDetailsReducer(message) {
   }
 }
 
-function unstakeDetailsReducer(message) {
+export function unstakeDetailsReducer(message) {
   return {
     from: [message.validator_address],
     amount: coinReducer(message.amount),
   }
 }
 
-function claimRewardsDetailsReducer(message, transaction) {
+export function claimRewardsDetailsReducer(message, transaction) {
   return {
     from: message.validators,
     amounts: claimRewardsAmountReducer(transaction),
   }
 }
 
-function claimRewardsAmountReducer(transaction) {
+export function claimRewardsAmountReducer(transaction) {
   const transactionClaimEvents =
     transaction.events &&
     transaction.events.filter((event) => event.type === `transfer`)
@@ -439,7 +434,7 @@ function claimRewardsAmountReducer(transaction) {
   return claimedRewardsDenomArray.map(([denom, amount]) => ({ denom, amount }))
 }
 
-function submitProposalDetailsReducer(message) {
+export function submitProposalDetailsReducer(message) {
   return {
     proposalType: message.content.type,
     proposalTitle: message.content.value.title,
@@ -448,14 +443,14 @@ function submitProposalDetailsReducer(message) {
   }
 }
 
-function voteProposalDetailsReducer(message) {
+export function voteProposalDetailsReducer(message) {
   return {
     proposalId: message.proposal_id,
     voteOption: message.option,
   }
 }
 
-function depositDetailsReducer(message) {
+export function depositDetailsReducer(message) {
   return {
     proposalId: message.proposal_id,
     amount: coinReducer(message.amount[0]),
@@ -463,7 +458,7 @@ function depositDetailsReducer(message) {
 }
 
 // function to map cosmos messages to our details format
-function transactionDetailsReducer(type, message, transaction) {
+export function transactionDetailsReducer(type, message, transaction) {
   let details
   switch (type) {
     case lunieMessageTypes.SEND:
@@ -500,7 +495,7 @@ function transactionDetailsReducer(type, message, transaction) {
   }
 }
 
-function claimRewardsMessagesAggregator(claimMessages) {
+export function claimRewardsMessagesAggregator(claimMessages) {
   // reduce all withdraw messages to one one collecting the validators from all the messages
   const onlyValidatorsAddressesArray = claimMessages.map(
     (msg) => msg.value.validator_address
@@ -513,7 +508,7 @@ function claimRewardsMessagesAggregator(claimMessages) {
   }
 }
 
-function proposalReducer(
+export function proposalReducer(
   proposal,
   tally,
   proposer,
@@ -545,7 +540,7 @@ function proposalReducer(
   }
 }
 
-function getTransactionLogs(transaction, index) {
+export function getTransactionLogs(transaction, index) {
   if (!transaction.logs || !transaction.logs[index]) {
     return JSON.parse(JSON.stringify(transaction.raw_log)).message
   }
@@ -555,7 +550,7 @@ function getTransactionLogs(transaction, index) {
     : logs[0].log || ''
 }
 
-function transactionReducer(transaction, reducers) {
+export function transactionReducer(transaction, reducers) {
   try {
     let fees
     if (transaction.tx.value) {
@@ -624,7 +619,7 @@ function transactionReducer(transaction, reducers) {
     return [] // must return something differ from undefined
   }
 }
-function transactionsReducer(txs, reducers) {
+export function transactionsReducer(txs, reducers) {
   const duplicateFreeTxs = uniqWith(txs, (a, b) => a.txhash === b.txhash)
   const sortedTxs = sortBy(duplicateFreeTxs, ['timestamp'])
   const reversedTxs = reverse(sortedTxs)
@@ -634,7 +629,7 @@ function transactionsReducer(txs, reducers) {
   }, [])
 }
 
-function delegationReducer(delegation, validator, active) {
+export function delegationReducer(delegation, validator, active) {
   const { amount, denom } = coinReducer({
     amount: delegation.balance,
     denom: network.stakingDenom,
@@ -650,7 +645,7 @@ function delegationReducer(delegation, validator, active) {
   }
 }
 
-function getValidatorUptimePercentage(validator, signedBlocksWindow) {
+export function getValidatorUptimePercentage(validator, signedBlocksWindow) {
   if (
     validator.signing_info &&
     validator.signing_info.missed_blocks_counter &&
@@ -666,7 +661,7 @@ function getValidatorUptimePercentage(validator, signedBlocksWindow) {
   }
 }
 
-function validatorReducer(
+export function validatorReducer(
   signedBlocksWindow,
   validator,
   annualProvision,
@@ -716,7 +711,7 @@ function validatorReducer(
   }
 }
 
-function extractInvolvedAddresses(messageEvents) {
+export function extractInvolvedAddresses(messageEvents) {
   // If the transaction has failed, it doesn't get tagged
   if (!Array.isArray(messageEvents)) return []
 
@@ -741,7 +736,7 @@ function extractInvolvedAddresses(messageEvents) {
   return uniq(involvedAddresses)
 }
 
-function undelegationEndTimeReducer(transaction) {
+export function undelegationEndTimeReducer(transaction) {
   const events = transaction.logs.reduce(
     (events, log) => (log.events ? events.concat(log.events) : events),
     []
@@ -757,48 +752,4 @@ function undelegationEndTimeReducer(transaction) {
     return !!completionTimeAttribute
   })
   return completionTimeAttribute ? completionTimeAttribute.value : undefined
-}
-
-module.exports = {
-  proposalReducer,
-  networkAccountReducer,
-  governanceParameterReducer,
-  topVoterReducer,
-  tallyReducer,
-  depositReducer,
-  voteReducer,
-  validatorReducer,
-  blockReducer,
-  delegationReducer,
-  coinReducer,
-  rewardCoinReducer,
-  balanceReducer,
-  undelegationReducer,
-  rewardReducer,
-  accountInfoReducer,
-
-  proposalBeginTime,
-  proposalEndTime,
-  getDeposit,
-  getTotalVotePercentage,
-  getValidatorStatus,
-  expectedRewardsPerToken,
-  extractInvolvedAddresses,
-  getProposalSummary,
-  undelegationEndTimeReducer,
-
-  transactionsReducer,
-  transactionReducer,
-  depositDetailsReducer,
-  voteProposalDetailsReducer,
-  submitProposalDetailsReducer,
-  claimRewardsDetailsReducer,
-  stakeDetailsReducer,
-  unstakeDetailsReducer,
-  sendDetailsReducer,
-  restakeDetailsReducer,
-  setTransactionSuccess,
-  transactionDetailsReducer,
-  claimRewardsMessagesAggregator,
-  getMessageType,
 }
