@@ -3,16 +3,17 @@
     <div class="session-container">
       <h2 class="session-title">Use Keplr Browser Extension</h2>
 
-      <div v-if="loading" class="session-main">
-        <p>Connecting to Keplr extension...</p>
-      </div>
-
-      <div v-else-if="error" class="session-main">
+      <div v-if="error" class="session-main">
         <p>
           There was an error connecting to the Keplr extension:<br />
           {{ error }}
         </p>
       </div>
+
+      <div v-else-if="loading" class="session-main">
+        <p>Connecting to Keplr extension...</p>
+      </div>
+
       <div v-else-if="!initialized" class="session-main">
         <p>
           Looks like you don't have the Keplr browser extension installed yet.
