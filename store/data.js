@@ -11,6 +11,7 @@ export const state = () => ({
   undelegations: [],
   validators: [],
   proposals: [],
+  governanceOverview: {},
   accountInfo: undefined,
   transactions: [],
   transactionsLoaded: undefined,
@@ -231,6 +232,21 @@ export const actions = {
         {
           type: 'danger',
           message: 'Getting proposals failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+  },
+  async getGovernanceOverview({ commit, state: { api } }, { network }) {
+    try {
+      const governanceOverview = await api.getGovernanceOverview(network)
+      commit('setGovernanceOverview', governanceOverview)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting governanceOverview failed:' + err.message,
         },
         { root: true }
       )

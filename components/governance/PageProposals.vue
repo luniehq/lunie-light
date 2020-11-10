@@ -13,25 +13,26 @@
         </div>
       </div>
 
-      <!-- <div class="data-row">
+      <div class="data-row">
         <div>
           <h4>Community Pool</h4>
           <p>
-            {{ governanceOverview.treasurySize | prettyInt }} {{ stakingDenom }}
+            {{ governanceOverview.treasurySize | prettyInt }}
+            {{ network.stakingDenom }}
           </p>
         </div>
         <div>
           <h4>Total Staked</h4>
           <p>
             {{ governanceOverview.totalStakedAssets | prettyInt }}
-            {{ stakingDenom }}
+            {{ network.stakingDenom }}
           </p>
         </div>
         <div v-if="governanceOverview.totalVoters">
           <h4>Total Voters</h4>
           <p>{{ governanceOverview.totalVoters | prettyInt }}</p>
         </div>
-      </div> -->
+      </div>
     </div>
 
     <!-- v-ifing ModalPropose until we enable the "propose" action in Substrate -->
@@ -52,7 +53,7 @@
       />
     </template>
 
-    <!-- <ParticipantList
+    <ParticipantList
       v-if="
         governanceOverview.topVoters && governanceOverview.topVoters.length > 0
       "
@@ -63,14 +64,14 @@
     <ProposalDescription
       v-if="governanceOverview.links && governanceOverview.links.length > 0"
       :supporting-links="governanceOverview.links"
-    /> -->
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { prettyInt } from '~/common/numbers'
-// import network from '~/common/network'
+import network from '~/common/network'
 
 export default {
   name: `page-proposals`,
@@ -91,6 +92,7 @@ export default {
     parameters: {
       depositDenom: '',
     },
+    network,
   }),
   computed: {
     ...mapState([`connection`]),

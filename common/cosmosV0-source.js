@@ -267,7 +267,7 @@ class CosmosV0API {
     )
   }
 
-  async getDetailedVotes(proposal) {
+  async getDetailedVotes(proposal, network) {
     await this.dataReady
     const [
       votes,
@@ -275,14 +275,12 @@ class CosmosV0API {
       tally,
       tallyingParameters,
       depositParameters,
-      links,
     ] = await Promise.all([
       this.query(`/gov/proposals/${proposal.id}/votes`),
       this.query(`/gov/proposals/${proposal.id}/deposits`),
       this.query(`/gov/proposals/${proposal.id}/tally`),
       this.query(`/gov/parameters/tallying`),
       this.query(`/gov/parameters/deposit`),
-      this.db.getNetworkLinks(this.network.id),
     ])
     const totalVotingParticipation = BigNumber(tally.yes)
       .plus(tally.abstain)
@@ -334,7 +332,7 @@ class CosmosV0API {
               .toNumber()
               .toFixed(2)
           : 0,
-      links,
+      links: network.links,
       timeline: [
         proposal.submit_time
           ? { title: `Created`, time: proposal.submit_time }
@@ -473,13 +471,12 @@ class CosmosV0API {
     )
   }
 
-  async getGovernanceOverview() {
+  async getGovernanceOverview(network) {
     const { bonded_tokens: totalBondedTokens } = await this.query(
       '/staking/pool'
     )
-    const [communityPoolArray, links, topVoters] = await Promise.all([
+    const [communityPoolArray, topVoters] = await Promise.all([
       this.query('/distribution/community_pool'),
-      this.db.getNetworkLinks(this.network.id),
       this.getTopVoters(),
     ])
     const communityPool = communityPoolArray.find(
@@ -506,7 +503,7 @@ class CosmosV0API {
       topVoters: topVoters.map((topVoter) =>
         this.reducers.topVoterReducer(topVoter)
       ),
-      links,
+      links: network.links,
     }
   }
 

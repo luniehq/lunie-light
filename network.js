@@ -30,5 +30,24 @@ export default {
       ],
     },
   },
+  icon: '~/assets/images/currencies/atom.png',
+  links: [
+    {
+      title: 'Cosmos Governance Docs',
+      type: 'docs',
+      link: 'https://docs.cosmos.network/master/modules/gov/',
+    },
+    {
+      title: 'Cosmos Governance Forum',
+      type: 'forum',
+      link: 'https://forum.cosmos.network/c/governance/16',
+    },
+    {
+      title: 'Lunie Cosmos Staking Guide',
+      type: 'guide',
+      link:
+        'http://help.lunie.io/en/articles/3625860-how-cosmos-governance-works',
+    },
+  ],
   localSigning: false,
 }

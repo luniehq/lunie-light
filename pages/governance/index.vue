@@ -1,6 +1,11 @@
 <template>
   <div>
-    <div v-if="!proposalsLoaded" class="loading-row">Loading...</div>
+    <div
+      v-if="!proposalsLoaded && !governanceOverviewLoaded"
+      class="loading-row"
+    >
+      Loading...
+    </div>
 
     <Card v-else-if="!proposals.length">
       <div slot="title">No proposals</div>
@@ -12,7 +17,7 @@
       <PageProposals
         class="page"
         :proposals="proposals"
-        :governance-overview="{}"
+        :governance-overview="governanceOverview"
       />
 
       <template v-if="proposalsLoaded">
@@ -26,14 +31,16 @@
 
 <script>
 import { mapState } from 'vuex'
+import network from '~/common/network'
 
 export default {
   name: `proposals-index`,
   data: () => ({
     proposalsLoaded: false,
+    governanceOverviewLoaded: false,
   }),
   computed: {
-    ...mapState('data', [`proposals`]),
+    ...mapState('data', [`proposals`, `governanceOverview`]),
     ...mapState(['session']),
     oldChainDataMessage() {
       return `If you expected to see proposals here that are missing, 
@@ -49,6 +56,10 @@ export default {
       await this.$store.dispatch('data/getValidators')
       await this.$store.dispatch('data/getProposals')
       this.proposalsLoaded = true
+
+      // get governanceOverview
+      await this.$store.dispatch('data/getGovernanceOverview', { network })
+      this.governanceOverviewLoaded = true
     },
   },
 }
