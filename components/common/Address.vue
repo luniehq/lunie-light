@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { formatAddress } from '../../common/address'
+import { formatAddress } from '~/common/address'
 
 export default {
   name: `lunie-address`,

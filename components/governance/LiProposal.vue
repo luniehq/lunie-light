@@ -1,24 +1,16 @@
 <template>
-  <div
-    class="li-proposal"
-    @click="
-      $router.push({
-        name: 'proposal',
-        params: { proposalId: String(proposal.id) },
-      })
-    "
-  >
+  <div class="li-proposal" @click="$router.push(`/governance/${proposal.id}`)">
     <div class="proposal-content">
       <div>
         <div class="status-and-id">
-          <!-- <Status :label="status" /> -->
+          <Status :label="status.value" />
         </div>
         <h3 class="title">
           {{ proposal.title }}
         </h3>
       </div>
       <span v-if="proposal.creationTime" class="time">{{
-        proposal.creationTime | dayjs
+        proposal.creationTime | fromNow
       }}</span>
       <span v-else class="time">n/a</span>
     </div>
@@ -27,15 +19,13 @@
 
 <script>
 import { mapState } from 'vuex'
-import dayjs from 'dayjs'
+import { fromNow } from '~/common/time'
 import { getProposalStatus } from '~/common/proposal-status'
 
 export default {
   name: `li-proposal`,
   filters: {
-    dayjs(date) {
-      return dayjs(date).from()
-    },
+    fromNow,
   },
   props: {
     proposal: {

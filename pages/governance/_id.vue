@@ -25,10 +25,10 @@
         <Timeline :timeline="proposal.detailedVotes.timeline" />
       </template> -->
 
-    <ProposalDescription
+    <!-- <ProposalDescription
       :proposal="proposal"
       :supporting-links="proposal.detailedVotes.links"
-    />
+    /> -->
 
     <!-- <ModalDeposit
         v-if="status.value === governanceStatusEnum.DEPOSITING"
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import BigNumber from 'bignumber.js'
 import { percent, prettyInt } from '~/common/numbers'
 import { date, fromNow } from '~/common/time'
@@ -70,14 +71,7 @@ export default {
     lowerCase: (text) => (text ? text.toLowerCase() : ''),
   },
   data: () => ({
-    proposals: [],
     vote: undefined,
-    proposal: {
-      status: '',
-      proposer: '',
-      tally: {},
-      validator: {},
-    },
     parameters: {
       depositDenom: '',
     },
@@ -87,11 +81,15 @@ export default {
     governanceStatusEnum,
   }),
   computed: {
+    ...mapState('data', ['proposals']),
+    proposal() {
+      return this.proposals.find(({ id }) => id === this.proposalId)
+    },
     proposalId() {
-      return this.$route.params.proposalId
+      return Number(this.$route.params.id)
     },
     status() {
-      return getProposalStatus(this.proposal)
+      return this.proposal ? getProposalStatus(this.proposal) : null
     },
     noVotes() {
       return BigNumber(this.proposal.tally.total).eq(0)
