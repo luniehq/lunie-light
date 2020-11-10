@@ -36,14 +36,16 @@ export async function createSignBroadcast({
   password,
   HDPath,
   feeDenom,
+  chainId,
 }) {
-  // TODO signer doesn't respect HDPATH
-  const signer = await getSigner(signingType, {
-    address: senderAddress,
-    password,
-    network,
-    HDPath,
-  })
+  const signer = await getSigner(
+    signingType,
+    {
+      address: senderAddress,
+      password,
+    },
+    chainId
+  )
 
   const messages = messageCreators[messageType](senderAddress, message, network)
 
