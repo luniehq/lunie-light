@@ -145,7 +145,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--app-fg);
+  background: var(--app-bg);
   border-radius: var(--border-radius);
   z-index: 90;
   padding: 0.75rem 1rem;
@@ -161,7 +161,7 @@ export default {
 }
 
 .transaction:hover {
-  background: var(--app-fg-hover);
+  background: var(--gray-100);
 }
 
 .left {
@@ -210,6 +210,7 @@ h3 {
   width: 1.25rem;
   margin: 0 0.5rem 0 0;
   border-radius: 50%;
+  box-shadow: 0 0 3px 0 var(--gray-500);
 }
 
 .launch {

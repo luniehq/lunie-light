@@ -1,33 +1,15 @@
 <template>
-  <div class="balances-container">
-    <div class="balances">
-      <div class="header">
-        <h1>Your Balances</h1>
-        <div class="buttons">
-          <div class="icon-button-container send-button">
-            <button class="icon-button" @click="onSend()">
-              <i class="material-icons">send</i></button
-            ><span>Send</span>
-          </div>
-          <!-- <Button
-            :disabled="!readyToWithdraw"
-            class="withdraw-rewards"
-            value="Claim Rewards"
-            @click.native="readyToWithdraw && onWithdrawal()"
-          /> -->
-        </div>
-      </div>
+  <div class="table-container">
+    <h1>Your Balances</h1>
+    <TableBalances
+      :balances="balances"
+      :total-rewards-per-denom="totalRewardsPerDenom"
+    />
 
-      <TableBalances
-        :balances="balances"
-        :total-rewards-per-denom="totalRewardsPerDenom"
-      />
-
-      <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
-      <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
+    <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
+    <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
       <StakeModal ref="StakeModal" />
       <UnstakeModal ref="UnstakeModal" /> -->
-    </div>
   </div>
 </template>
 <script>
@@ -86,37 +68,10 @@ export default {
 }
 </script>
 <style scoped>
-.balances-container {
+.table-container {
   width: 100%;
-  background: var(--app-bg);
-}
-
-.balances {
+  padding: 2rem 4rem;
   margin: 0 auto;
-  max-width: 1100px;
-  padding: 1.5rem 1rem;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1.5rem 2rem 1rem;
-  width: 100%;
-}
-
-.header h1 {
-  padding-bottom: 0;
-}
-
-.header button:last-child {
-  margin-left: 0.5rem;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
 }
 
 .icon-button-container {
@@ -160,16 +115,9 @@ export default {
 }
 
 @media screen and (max-width: 667px) {
-  .header {
-    padding: 0 0 3rem;
-  }
-}
-
-@media screen and (min-width: 1254px) {
-  .stake-button,
-  .unstake-button,
-  .send-button {
-    display: none;
+  .table-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 </style>

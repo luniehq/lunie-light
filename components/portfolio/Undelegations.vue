@@ -1,11 +1,9 @@
 <template>
-  <div v-if="undelegations.length > 0" class="undelegations">
-    <div class="table-container">
-      <div class="header-container">
-        <h1>Unstaking</h1>
-      </div>
-      <TableUndelegations :undelegations="undelegations" />
+  <div v-if="undelegations.length > 0" class="table-container">
+    <div class="header-container">
+      <h1>Unstaking</h1>
     </div>
+    <TableUndelegations :undelegations="undelegations" />
     <!-- <ModalWithdrawUnstaked ref="WithdrawModal" /> -->
   </div>
 </template>
@@ -46,24 +44,10 @@ export default {
 }
 </script>
 <style scoped>
-.undelegations {
-  background: var(--app-fg);
-}
-
 .table-container {
-  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 3rem 4rem;
-}
-
-.header-container button {
-  margin-right: 0.5rem;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
+  padding: 2rem 4rem;
 }
 
 @media screen and (max-width: 667px) {

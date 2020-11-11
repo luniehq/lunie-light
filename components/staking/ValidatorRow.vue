@@ -120,7 +120,7 @@ export default {
 }
 </script>
 <style scoped>
-tr {
+.validator-row {
   border-bottom: 1px solid var(--bc-dim);
 }
 
@@ -138,7 +138,7 @@ h5 {
   font-size: var(--text-xs);
 }
 
-.validator-row:hover td {
+.validator-row:hover {
   cursor: pointer;
   background: var(--gray-100);
   color: var(--bright);
@@ -156,10 +156,13 @@ h5 {
 .validator-info {
   min-width: 20rem;
   display: flex;
+  align-items: center;
 }
 
 .row {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .validator-name {

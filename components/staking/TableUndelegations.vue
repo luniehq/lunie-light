@@ -1,19 +1,17 @@
 <template>
-  <div class="container">
-    <DataTable
-      :show-table="undelegations.length"
-      :columns="properties"
-      :sort="sort"
-    >
-      <ValidatorRow
-        v-for="(undelegation, index) in undelegations"
-        :key="undelegation.validatorAddress + undelegation.startHeight"
-        :index="index"
-        :validator="undelegation.validator"
-        :undelegation="undelegation"
-      />
-    </DataTable>
-  </div>
+  <DataTable
+    :show-table="undelegations.length"
+    :columns="properties"
+    :sort="sort"
+  >
+    <ValidatorRow
+      v-for="(undelegation, index) in undelegations"
+      :key="undelegation.validatorAddress + undelegation.startHeight"
+      :index="index"
+      :validator="undelegation.validator"
+      :undelegation="undelegation"
+    />
+  </DataTable>
 </template>
 
 <script>

@@ -1,9 +1,9 @@
 <template>
   <tr class="header-row">
-    <th class="cell index"></th>
+    <th v-if="showRowCount" class="cell index"></th>
     <th v-for="property in properties" :key="property.value" class="cell">
       <a
-        v-if="sort"
+        v-if="property.title"
         class="sort-link"
         :class="{
           asc: activeProperty === property.value && sortOrder === 'asc',
@@ -29,6 +29,10 @@ export default {
     properties: {
       type: Array,
       required: true,
+    },
+    showRowCount: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

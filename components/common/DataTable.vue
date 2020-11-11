@@ -2,7 +2,11 @@
   <div class="container">
     <table class="table">
       <thead>
-        <TableHeader :sort="sort" :properties="columns" />
+        <TableHeader
+          :sort="sort"
+          :properties="columns"
+          :show-row-count="showRowCount"
+        />
       </thead>
       <tbody :infinite-scroll-distance="infiniteScrollDistance">
         <slot v-if="showTable"></slot>
@@ -16,6 +20,11 @@
 <script>
 export default {
   name: 'data-table',
+  data() {
+    return {
+      searchTerm: false,
+    }
+  },
   props: {
     showTable: {
       type: Number,
@@ -40,6 +49,10 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+    showRowCount: {
+      type: Boolean,
+      default: true,
     },
   },
 }

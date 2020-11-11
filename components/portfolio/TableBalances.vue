@@ -1,23 +1,18 @@
 <template>
-  <div class="table four-columns">
-    <div class="table-cell big title">Total</div>
-    <div class="table-cell title">Rewards</div>
-    <div class="table-cell title available">Available</div>
-    <div class="table-cell title actions"></div>
-
-    <div v-if="!balances.length" class="loading-row left">Loading...</div>
-    <table v-else class="table">
-      <tbody>
-        <BalanceRow
-          v-for="balance in balances"
-          :key="balance.id"
-          :balance="balance"
-          :total-rewards-per-denom="totalRewardsPerDenom"
-          :send="true"
-        />
-      </tbody>
-    </table>
-  </div>
+  <DataTable
+    :show-table="balances.length"
+    :columns="properties"
+    :sort="sort"
+    :show-row-count="false"
+  >
+    <BalanceRow
+      v-for="balance in balances"
+      :key="balance.id"
+      :balance="balance"
+      :total-rewards-per-denom="totalRewardsPerDenom"
+      :send="true"
+    />
+  </DataTable>
 </template>
 
 <script>
@@ -39,70 +34,27 @@ export default {
       order: `desc`,
     },
   }),
+  computed: {
+    properties() {
+      return [
+        {
+          title: `Total`,
+          value: `total`,
+        },
+        {
+          title: `Rewards`,
+          value: `rewards`,
+        },
+        {
+          title: `Available`,
+          value: `available`,
+        },
+        {
+          title: ``,
+          value: `actions`,
+        },
+      ]
+    },
+  },
 }
 </script>
-<style scoped>
-.table {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 1rem 2rem 3rem;
-  margin: 0 auto;
-}
-
-.table-cell {
-  flex-grow: 1;
-  padding: 0.5rem 0.5rem 0.5rem 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  width: 20%;
-  position: relative;
-  white-space: nowrap;
-}
-
-.table-cell.big {
-  width: 40%;
-  padding-left: 1rem;
-}
-
-.table-cell.big.title {
-  padding-left: 0;
-}
-
-.title {
-  color: var(--dim);
-  font-size: var(--text-xs);
-  padding-bottom: 1rem;
-  padding-left: 0;
-}
-
-.loading-row {
-  width: 100%;
-}
-
-@media screen and (max-width: 667px) {
-  .table {
-    padding: 0;
-  }
-
-  .table-cell.big {
-    width: 60%;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .table-cell {
-    width: 40%;
-  }
-
-  .available {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 1254px) {
-  .actions {
-    display: none;
-  }
-}
-</style>

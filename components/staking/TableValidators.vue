@@ -1,21 +1,19 @@
 <template>
-  <div class="container">
-    <DataTable
-      :show-table="showingValidators.length"
-      :columns="properties"
-      :sort="sort"
-    >
-      <ValidatorRow
-        v-for="(validator, index) in showingValidators"
-        :key="validator.operatorAddress"
-        :index="index"
-        :validator="validator"
-        :delegation="getDelegation(validator)"
-        :rewards="getRewards(validator)"
-        :staking-denom="stakingDenom"
-      />
-    </DataTable>
-  </div>
+  <DataTable
+    :show-table="showingValidators.length"
+    :columns="properties"
+    :sort="sort"
+  >
+    <ValidatorRow
+      v-for="(validator, index) in showingValidators"
+      :key="validator.operatorAddress"
+      :index="index"
+      :validator="validator"
+      :delegation="getDelegation(validator)"
+      :rewards="getRewards(validator)"
+      :staking-denom="stakingDenom"
+    />
+  </DataTable>
 </template>
 
 <script>
