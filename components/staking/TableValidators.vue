@@ -1,5 +1,5 @@
 <template>
-  <DataTable
+  <TableContainer
     :show-table="showingValidators.length"
     :columns="properties"
     :sort="sort"
@@ -13,7 +13,7 @@
       :rewards="getRewards(validator)"
       :staking-denom="stakingDenom"
     />
-  </DataTable>
+  </TableContainer>
 </template>
 
 <script>

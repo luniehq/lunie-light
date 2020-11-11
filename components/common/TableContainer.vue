@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'DataTable',
+  name: 'TableContainer',
   props: {
     showTable: {
       type: Number,

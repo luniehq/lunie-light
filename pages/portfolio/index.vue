@@ -1,7 +1,7 @@
 <template>
   <div>
     <Balances :balances="balances" :rewards="rewards" />
-    <DelegationsOverview
+    <Delegations
       :balances="balances"
       :rewards="rewards"
       :delegations="delegations"

@@ -1,5 +1,5 @@
 <template>
-  <DataTable
+  <TableContainer
     :show-table="undelegations.length"
     :columns="properties"
     :sort="sort"
@@ -11,7 +11,7 @@
       :validator="undelegation.validator"
       :undelegation="undelegation"
     />
-  </DataTable>
+  </TableContainer>
 </template>
 
 <script>

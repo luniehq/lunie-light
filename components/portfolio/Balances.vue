@@ -1,10 +1,20 @@
 <template>
   <div class="table-container">
     <h1>Your Balances</h1>
-    <TableBalances
-      :balances="balances"
-      :total-rewards-per-denom="totalRewardsPerDenom"
-    />
+    <TableContainer
+      :show-table="balances.length"
+      :columns="properties"
+      :sort="sort"
+      :show-row-count="false"
+    >
+      <BalanceRow
+        v-for="balance in balances"
+        :key="balance.id"
+        :balance="balance"
+        :total-rewards-per-denom="totalRewardsPerDenom"
+        :send="true"
+      />
+    </TableContainer>
 
     <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
     <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
@@ -16,7 +26,7 @@
 import network from '../../network'
 
 export default {
-  name: `balances`,
+  name: `Balances`,
   props: {
     balances: {
       type: Array,
@@ -27,6 +37,12 @@ export default {
       default: () => [],
     },
   },
+  data: () => ({
+    sort: {
+      property: `id`,
+      order: `desc`,
+    },
+  }),
   computed: {
     // readyToWithdraw() {
     //   return Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
@@ -49,6 +65,26 @@ export default {
     },
     totalRewards() {
       return this.totalRewardsPerDenom[network.stakingDenom] || 0
+    },
+    properties() {
+      return [
+        {
+          title: `Total`,
+          value: `total`,
+        },
+        {
+          title: `Rewards`,
+          value: `rewards`,
+        },
+        {
+          title: `Available`,
+          value: `available`,
+        },
+        {
+          title: ``,
+          value: `actions`,
+        },
+      ]
     },
   },
   methods: {

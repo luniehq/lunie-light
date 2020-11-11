@@ -8,15 +8,12 @@
         :total-rewards-per-denom="totalRewardsPerDenom"
       />
       <TableValidators
-        v-if="delegations.length > 0"
         :validators="delegations.map(({ validator }) => validator)"
         :delegations="delegations"
         class="table-validators"
       />
     </div>
-    <div v-if="!delegations.length && !balances.length" class="loading-row">
-      Loading...
-    </div>
+
     <Card v-else-if="delegations.length === 0">
       <div slot="title">No validators in your portfolio</div>
       <div slot="subtitle">
@@ -33,7 +30,7 @@ import { mapState } from 'vuex'
 import network from '../../network'
 
 export default {
-  name: `delegations-overview`,
+  name: `Delegations`,
   props: {
     balances: {
       type: Array,
