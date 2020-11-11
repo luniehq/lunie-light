@@ -9753,6 +9753,11 @@ vue-server-renderer@^2.6.12:
     serialize-javascript "^3.1.0"
     source-map "0.5.6"
 
+vue-simple-progress@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/vue-simple-progress/-/vue-simple-progress-1.1.1.tgz#5159be55ce6708a98635a6280bf354fece9e7d89"
+  integrity sha512-ltLWYBA5eVQHWyt1NwZeGeK0VQC69JVh1oqUdro0po7r8Hc8SEMEyEfuwyCO4s27h5I3jbD99BKKkyPSQZgoZA==
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"

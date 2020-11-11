@@ -34,6 +34,7 @@
     "nuxt-material-design-icons": "^1.0.4",
     "vue-clipboard2": "^0.3.1",
     "vue-infinite-scroll": "^2.0.2",
+    "vue-simple-progress": "^1.1.1",
     "vuelidate": "^0.7.6"
   },
   "devDependencies": {
