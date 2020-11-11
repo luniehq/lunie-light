@@ -22,7 +22,7 @@
         :governance-overview="governanceOverview"
       />
 
-      <template v-if="proposals.length === 0">
+      <template>
         <p class="message">
           {{ oldChainDataMessage }}
         </p>
