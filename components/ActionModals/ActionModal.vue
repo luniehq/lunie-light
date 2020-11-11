@@ -72,6 +72,9 @@
           The transaction will be send to the Keplr Browser Extension for
           signing.
         </div>
+        <div v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
+          The transaction will be send to the Ledger Nano for signing.
+        </div>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
         <Card icon="hourglass_empty" :spin="true">
