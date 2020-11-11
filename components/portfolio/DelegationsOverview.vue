@@ -16,7 +16,15 @@
           show-on-mobile="expectedReturns"
         />
       </div>
-      <div v-if="!delegations.length && !balances.length" class="loading-row">
+      <div
+        v-if="
+          !delegations.length &&
+          !balances.length &&
+          !delegationsLoaded &&
+          !balancesLoaded
+        "
+        class="loading-row"
+      >
         Loading...
       </div>
       <Card v-else-if="delegations.length === 0">
@@ -56,6 +64,7 @@ export default {
   }),
   computed: {
     ...mapState([`session`]),
+    ...mapState(`data`, [`delegationsLoaded`, `balancesLoaded`]),
     stakedBalance() {
       // balances not loaded yet
       if (!this.balances.length) {
