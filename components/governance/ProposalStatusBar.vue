@@ -3,7 +3,7 @@
     <div v-if="status.value === governanceStatusEnum.DEPOSITING">
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
-          Entered {{ status.title }} {{ statusBeginTime | moment }}
+          Entered {{ status.title }} {{ statusBeginTime | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
       </div>
@@ -22,7 +22,7 @@
     <div v-if="status.value === governanceStatusEnum.VOTING">
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
-          Entered Voting Period {{ new Date(statusBeginTime) | moment }}
+          Entered Voting Period {{ new Date(statusBeginTime) | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
       </div>
