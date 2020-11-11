@@ -7,7 +7,7 @@
     title="Deposit"
     class="modal-deposit"
     submission-error-prefix="Depositing failed"
-    :transaction-type="messageType.DEPOSIT"
+    :transaction-type="lunieMessageTypes.DEPOSIT"
     :transaction-data="transactionData"
     :notify-message="notifyMessage"
     feature-flag="deposit"
@@ -67,7 +67,7 @@
 
 <script>
 import { SMALLEST, decimal } from '~/common/numbers'
-import { messageType } from '~/common/lunie-message-types'
+import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 export default {
@@ -96,7 +96,7 @@ export default {
       amount: null,
       denom: ``,
     },
-    messageType,
+    lunieMessageTypes,
     smallestAmount: SMALLEST,
     network,
   }),
@@ -106,7 +106,7 @@ export default {
         return {}
       }
       return {
-        type: messageType.DEPOSIT,
+        type: lunieMessageTypes.DEPOSIT,
         proposalId: this.proposalId,
         amount: {
           amount: this.amount,

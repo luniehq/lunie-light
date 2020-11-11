@@ -40,14 +40,14 @@
         :deposits="proposal.detailedVotes.deposits"
         @success="() => afterDeposit()"
       />
-      <!-- <VoteModal
-          v-else
-          ref="modalVote"
-          :proposal-id="proposalId"
-          :proposal-title="proposal.title || ''"
-          :last-vote-option="vote"
-          @success="() => afterVote()"
-        /> -->
+      <VoteModal
+        v-else
+        ref="modalVote"
+        :proposal-id="proposalId"
+        :proposal-title="proposal.title || ''"
+        :last-vote-option="vote"
+        @success="() => afterVote()"
+      />
     </div>
     <div v-else class="loading-row">Loading...</div>
   </div>
