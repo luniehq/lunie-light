@@ -2,7 +2,7 @@
   <div class="container">
     <table class="table">
       <thead>
-        <PanelSort :properties="properties" show-on-mobile="endTime" />
+        <TableHeader :properties="properties" />
       </thead>
       <tbody infinite-scroll-distance="400" name="flip-list"></tbody>
     </table>

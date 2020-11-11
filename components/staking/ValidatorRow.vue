@@ -1,28 +1,21 @@
 <template>
   <tr
-    class="li-validator"
+    class="validator-row"
     :data-name="validator.name"
     @click="$router.push(`/validators/${validator.operatorAddress}`)"
   >
-    <td>{{ index + 1 }}</td>
-    <td>
+    <td class="cell index">{{ index + 1 }}</td>
+    <td class="cell">
       <Status :label="validator.status" />
     </td>
-    <td class="table__row__info">
+    <td class="cell validator-info">
       <Avatar
-        v-if="!validator || !validator.picture || validator.picture === 'null'"
-        class="li-validator-image"
+        class="validator-image"
         alt="generic validator logo - generated avatar from address"
         :address="validator.operatorAddress"
       />
-      <img
-        v-else-if="validator && validator.picture"
-        :src="validator.picture"
-        class="li-validator-image"
-        :alt="`validator logo for ` + validator.name"
-      />
-      <div class="validator-info">
-        <h3 class="li-validator-name">
+      <div>
+        <h3 class="validator-name">
           {{ validator.name }}
         </h3>
         <div v-if="delegation.amount > 0" class="stake-amount">
@@ -33,7 +26,7 @@
             v-if="
               rewards.find(
                 (reward) =>
-                  reward.denom === stakingDenom && reward.amount > 0.001
+                  reward.denom === stakingDenom && reward.amount > 0.000001
               )
             "
           >
@@ -46,14 +39,14 @@
         </div>
       </div>
     </td>
-    <td>
+    <td class="cell">
       {{
         validator.expectedReturns
           ? bigFigureOrPercent(validator.expectedReturns)
           : `--`
       }}
     </td>
-    <td>
+    <td class="cell">
       {{ validator.votingPower | bigFigureOrPercent }}
     </td>
   </tr>
@@ -66,7 +59,7 @@ import {
 } from '../../common/numbers'
 
 export default {
-  name: `li-validator`,
+  name: `validator-row`,
   components: {},
   filters: {
     bigFigureOrShortDecimals,
@@ -109,63 +102,53 @@ export default {
 }
 </script>
 <style scoped>
-.li-validator {
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.25rem;
-  border-bottom: 1px solid var(--bc-dim);
-  border-radius: var(--border-radius);
+tr {
+  display: contents;
 }
 
-.validator-info {
-  display: flex;
-  flex-direction: column;
-  padding-left: 1rem;
+td {
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--bc-dim);
+  width: 100%;
 }
 
-.li-validator h4,
-.li-validator h5 {
+.index {
+  justify-content: center;
+}
+
+h4,
+h5 {
   font-size: var(--text-xs);
-  display: inline-block;
 }
 
-.li-validator h5 {
-  padding-left: 0.5rem;
-  color: var(--success);
-}
-
-.li-validator:hover {
+.validator-row:hover td {
   cursor: pointer;
   background: var(--gray-100);
   color: var(--bright);
 }
 
-.li-validator-name {
-  font-size: 1rem;
-  line-height: 20px;
-  font-weight: 500;
-  color: var(--bright);
-  display: inline-block;
-  max-width: 20rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.li-validator-image {
+.validator-image {
   border-radius: 50%;
   height: 2.5rem;
   width: 2.5rem;
   min-width: 2.5rem;
+  margin-right: 1rem;
+  box-shadow: 0 0 3px 0 var(--gray-500);
 }
 
-.stake-amount {
-  line-height: 16px;
+.validator-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-@media screen and (max-width: 768px) {
-  .li-validator-name {
-    max-width: 11rem;
-  }
+.validator-name {
+  font-weight: 500;
 }
 </style>

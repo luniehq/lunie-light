@@ -12,7 +12,6 @@
         :validator="validator"
         :delegation="getDelegation(validator)"
         :rewards="getRewards(validator)"
-        :show-on-mobile="showOnMobile"
         :staking-denom="stakingDenom"
       />
     </DataTable>
@@ -126,6 +125,9 @@ export default {
 <style scoped>
 .container {
   overflow: auto;
+  box-shadow: 0 0 3px 0 var(--gray-500);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .no-results {
@@ -139,7 +141,7 @@ export default {
 }
 
 .sortingOptions li.active {
-  color: var(--highlight);
+  color: var(--primary);
 }
 
 .sortingOptions li {

@@ -13,7 +13,6 @@
           :validators="delegations.map(({ validator }) => validator)"
           :delegations="delegations"
           class="table-validators"
-          show-on-mobile="expectedReturns"
         />
       </div>
       <div v-if="!delegations.length && !balances.length" class="loading-row">
