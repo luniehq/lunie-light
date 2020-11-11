@@ -3,7 +3,7 @@ import { getLedger } from '~/common/ledger'
 export const state = () => ({
   ledger: undefined,
   accounts: [],
-  loaded: false,
+  loading: false,
   error: undefined,
 })
 
@@ -22,8 +22,8 @@ export const mutations = {
 }
 
 export const actions = {
-  async connect({ commit }) {
-    commit('setLoaded', false)
+  async init({ commit }) {
+    commit('setLoading', true)
     try {
       const ledger = await getLedger()
       commit('setLedger', ledger)
@@ -33,6 +33,6 @@ export const actions = {
     } catch (err) {
       commit('setError', err.message)
     }
-    commit('setLoaded', true)
+    commit('setLoading', false)
   },
 }
