@@ -31,16 +31,16 @@
         :supporting-links="proposal.detailedVotes.links"
       />
 
-      <!-- <ModalDeposit
-          v-if="status.value === governanceStatusEnum.DEPOSITING"
-          ref="modalDeposit"
-          :proposal-id="proposalId"
-          :proposal-title="proposal.title || ''"
-          :denom="parameters.depositDenom || currentNetwork.stakingDenom"
-          :deposits="proposal.detailedVotes.deposits"
-          @success="() => afterDeposit()"
-        />
-        <ModalVote
+      <DepositModal
+        v-if="status.value === governanceStatusEnum.DEPOSITING"
+        ref="modalDeposit"
+        :proposal-id="proposalId"
+        :proposal-title="proposal.title || ''"
+        :denom="parameters.depositDenom || network.stakingDenom"
+        :deposits="proposal.detailedVotes.deposits"
+        @success="() => afterDeposit()"
+      />
+      <!-- <VoteModal
           v-else
           ref="modalVote"
           :proposal-id="proposalId"
