@@ -31,7 +31,7 @@ export default {
     },
   },
   icon: '~/assets/images/currencies/atom.png',
-  links: [
+  governanceLinks: [
     {
       title: 'Cosmos Governance Docs',
       type: 'docs',

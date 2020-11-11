@@ -12,7 +12,9 @@ export const state = () => ({
   undelegations: [],
   validators: [],
   proposals: [],
+  proposalsLoaded: false,
   governanceOverview: {},
+  governanceOverviewLoaded: false,
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
@@ -59,11 +61,14 @@ export const actions = {
   init({ commit }) {
     commit('setApi', new DataSource(this.$axios, network))
   },
+  // this is never awaited in the code
   async refresh({ dispatch }) {
     const calls = [
       dispatch('getValidators'),
       dispatch('getBlock'),
       dispatch('refreshSession'),
+      dispatch('getProposals'),
+      dispatch('getGovernanceOverview'),
     ]
     await Promise.all(calls)
   },
@@ -216,6 +221,7 @@ export const actions = {
     try {
       const proposals = await api.getProposals(this.state.validators)
       commit('setProposals', proposals)
+      commit('setProposalsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -231,6 +237,7 @@ export const actions = {
     try {
       const governanceOverview = await api.getGovernanceOverview()
       commit('setGovernanceOverview', governanceOverview)
+      commit('setGovernanceOverviewLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -276,13 +283,5 @@ export const actions = {
   },
   resetSessionData({ commit }) {
     commit('resetSessionData')
-  },
-  async loadProposals({ dispatch }) {
-    // load proposals non-blocking
-    // first grab the validators
-    dispatch('getValidators')
-    dispatch('getProposals')
-
-    dispatch('getGovernanceOverview')
   },
 }

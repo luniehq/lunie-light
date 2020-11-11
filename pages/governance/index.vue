@@ -1,64 +1,104 @@
 <template>
   <div>
     <div
-      v-if="
-        proposals.length === 0 || Object.keys(governanceOverview).length === 0
-      "
+      v-if="!proposalsLoaded || !governanceOverviewLoaded"
       class="loading-row"
     >
       Loading...
     </div>
 
-    <Card v-else-if="!proposals.length">
-      <div slot="title">No proposals</div>
-      <!-- TODO: add some actionable button / link -->
-      <div slot="subtitle">Submit now your own proposal to this blockchain</div>
-    </Card>
-
     <template v-else>
-      <PageProposals
-        class="page"
-        :proposals="proposals"
-        :governance-overview="governanceOverview"
-      />
+      <div class="overview-header">
+        <div class="overview-top">
+          <h1>Governance Overview</h1>
+        </div>
+
+        <div class="data-row">
+          <div>
+            <h4>Community Pool</h4>
+            <p>
+              {{ governanceOverview.treasurySize }}
+              {{ network.stakingDenom }}
+            </p>
+          </div>
+          <div>
+            <h4>Total Staked</h4>
+            <p>
+              {{ governanceOverview.totalStakedAssets }}
+              {{ network.stakingDenom }}
+            </p>
+          </div>
+          <div v-if="governanceOverview.totalVoters">
+            <h4>Total Voters</h4>
+            <p>{{ governanceOverview.totalVoters | prettyInt }}</p>
+          </div>
+        </div>
+      </div>
 
       <template>
-        <p class="message">
-          {{ oldChainDataMessage }}
-        </p>
+        <h4>Proposals</h4>
+        <LiProposal
+          v-for="proposal in proposals"
+          :key="proposal.id"
+          :proposal="proposal"
+        />
+
+        <Card v-if="!proposals.length">
+          <div slot="title">No proposals</div>
+          <div slot="subtitle">
+            Noone created a proposal on this blockchain yet
+          </div>
+        </Card>
       </template>
+
+      <ParticipantList
+        v-if="
+          governanceOverview.topVoters &&
+          governanceOverview.topVoters.length > 0
+        "
+        :title="`Top Voters`"
+        :participants="governanceOverview.topVoters"
+      />
+
+      <section class="links">
+        <aside
+          v-if="governanceOverview.links && governanceOverview.links.length > 0"
+        >
+          <h4>Supporting Links</h4>
+          <ul>
+            <li v-for="link in governanceOverview.links" :key="link.link">
+              <a :href="link.link" target="_blank" rel="noopener norefferer">{{
+                link.title
+              }}</a>
+              <i class="material-icons notranslate">link</i>
+            </li>
+          </ul>
+        </aside>
+      </section>
     </template>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import network from '~/common/network'
 
 export default {
-  name: `proposals-index`,
+  name: `governance-overview`,
+  data: () => ({
+    network,
+  }),
   computed: {
-    ...mapState('data', [`proposals`, `governanceOverview`]),
-    ...mapState(['session']),
-    oldChainDataMessage() {
-      return `If you expected to see proposals here that are missing, 
-      it's possible the proposals may have occured on a previous version of this blockchain.`
-    },
+    ...mapState('data', [
+      `proposals`,
+      `governanceOverview`,
+      `proposalsLoaded`,
+      `governanceOverviewLoaded`,
+    ]),
   },
 }
 </script>
 <style scoped>
-.message {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background: var(--app-fg);
-  border-radius: var(--border-radius);
-  margin: 1rem;
-  padding: 2rem;
-  font-size: 12px;
-  color: var(--txt);
-}
-
 .loading-row {
   display: flex;
   align-items: center;
@@ -70,10 +110,122 @@ export default {
   animation: fade 2s infinite;
 }
 
-.page {
-  margin: 1rem;
+.proposals {
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 32px;
+  max-width: 500px;
+  color: var(--bright);
+}
+
+h4 {
+  font-size: 12px;
+  color: var(--dim);
+  font-weight: 400;
+  max-width: 1024px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.overview-header {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+  width: 100%;
+}
+
+.overview-top {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.overview-top div {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.overview-top .button {
+  margin-left: 1rem;
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.data-row div {
+  font-size: 22px;
+  color: var(--txt);
   padding: 1rem;
+  border: 2px solid var(--bc);
+  border-radius: 0.25rem;
+  width: 100%;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+}
+
+.data-row div:first-child {
+  margin-left: 0;
+}
+
+.data-row div:last-child {
+  margin-right: 0;
+}
+
+.links {
+  padding: 2rem;
+  background: var(--app-fg);
+  width: 100%;
+}
+
+.links aside {
+  width: 100%;
+  max-width: 400px;
+  padding: 0 0 4rem 0;
+  font-size: 14px;
+}
+
+.links li {
+  border-bottom: 2px solid var(--bc-dim);
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.links i {
+  font-size: 18px;
+  color: var(--dim);
+}
+
+@media screen and (max-width: 1023px) {
+  .tutorial-btn {
+    display: none;
+  }
+
+  #propose-btn {
+    margin: 2rem 0 0;
+  }
+
+  .overview-top {
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 2rem;
+  }
+
+  .data-row {
+    flex-direction: column;
+  }
+
+  .data-row div {
+    margin: -2px 0 0;
+    border-radius: 0;
+  }
 }
 </style>
