@@ -61,7 +61,7 @@ export default {
       if (this.allValidators) {
         return this.validators
       } else {
-        return this.validators.filter(({ status }) => status === 'ACTIVE')
+        return this.validators.filter(({ status }) => status.value === 'ACTIVE')
       }
     },
   },
