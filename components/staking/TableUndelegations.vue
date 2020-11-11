@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: `table-undelegations`,
+  name: `TableUndelegations`,
   props: {
     undelegations: {
       type: Array,

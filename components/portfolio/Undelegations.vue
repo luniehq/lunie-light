@@ -1,8 +1,6 @@
 <template>
-  <div v-if="undelegations.length > 0" class="table-container">
-    <div class="header-container">
-      <h1>Unstaking</h1>
-    </div>
+  <div class="table-container">
+    <h1>Unstaking</h1>
     <TableUndelegations :undelegations="undelegations" />
     <!-- <ModalWithdrawUnstaked ref="WithdrawModal" /> -->
   </div>

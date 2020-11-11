@@ -145,22 +145,6 @@ h1 {
   padding-bottom: 2.5rem;
 }
 
-.loading-row {
-  display: flex;
-  align-items: center;
-  background: var(--app-fg);
-  border-radius: var(--border-radius);
-  animation: fade 2s infinite;
-  justify-content: center;
-  height: auto;
-  width: auto;
-  padding: 2rem;
-}
-
-.loading-row.left {
-  justify-content: left;
-}
-
 @keyframes fade {
   0% {
     opacity: 0.6;

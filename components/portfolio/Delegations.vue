@@ -1,26 +1,24 @@
 <template>
   <div class="table-container">
-    <div v-if="delegations.length > 0 || stakedBalance.total > 0">
-      <h1>Your Stake</h1>
-      <BalanceRow
-        v-if="stakedBalance.total > 0"
-        :balance="stakedBalance"
-        :total-rewards-per-denom="totalRewardsPerDenom"
-      />
-      <TableValidators
-        :validators="delegations.map(({ validator }) => validator)"
-        :delegations="delegations"
-        class="table-validators"
-      />
-    </div>
+    <h1>Your Stake</h1>
+    <BalanceRow
+      v-if="stakedBalance.total > 0"
+      :balance="stakedBalance"
+      :total-rewards-per-denom="totalRewardsPerDenom"
+    />
+    <TableValidators
+      :validators="delegations.map(({ validator }) => validator)"
+      :delegations="delegations"
+      class="table-validators"
+    />
 
-    <Card v-else-if="delegations.length === 0">
+    <!-- <Card v-else-if="delegations.length === 0">
       <div slot="title">No validators in your portfolio</div>
       <div slot="subtitle">
         Head over to the
         <a @click="goToValidators()">validator list</a>&nbsp;to start staking.
       </div>
-    </Card>
+    </Card> -->
     <!-- <UnstakeModal ref="UnstakeModal" /> -->
   </div>
 </template>
