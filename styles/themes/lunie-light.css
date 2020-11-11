@@ -2,8 +2,8 @@
   /* theme colors */
   --primary: hsl(7, 88%, 70%);
   --primary-hover: hsl(7, 88%, 65%);
-  --link: var(--blue-500);
-  --link-hover: var(--blue-600);
+  --link: var(--blue-700);
+  --link-hover: var(--blue-800);
 
   /* background-colors */
   --app-fg: var(--gray-100);

@@ -155,7 +155,7 @@ export default {
 
 .icon-button i {
   font-size: 14px;
-  color: var(--menu-bright);
+  color: var(--white);
   font-weight: 900;
 }
 
