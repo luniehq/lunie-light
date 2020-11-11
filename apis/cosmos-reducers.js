@@ -693,7 +693,6 @@ export function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: {
       value: statusInfo.status,
-      active: statusInfo.status === `ACTIVE`,
     },
     statusDetailed: statusInfo.status_detailed,
     delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
