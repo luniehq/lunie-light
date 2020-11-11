@@ -42,7 +42,15 @@
       <div class="proposer-and-summary-container">
         <div v-if="proposal.proposer" class="proposer">
           Proposed By:
-          {{ proposal.proposer.address | formatAddress }}
+          <div v-if="proposal.proposer.validator" class="proposer-details">
+            <div class="proposer-image">
+              <Avatar :address="proposal.proposer.address" />
+            </div>
+            <nuxt-link :to="`/validators/${proposal.proposer.address}`">{{
+              proposal.proposer.name
+            }}</nuxt-link>
+          </div>
+          <Address v-else :address="proposal.proposer.address" />
         </div>
         <p class="summary">{{ proposal.summary }}</p>
       </div>
@@ -174,6 +182,9 @@ h2 {
   padding: 1rem;
   border: 2px solid var(--bc);
   border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .summary {
@@ -197,6 +208,23 @@ h2 {
 
 .outer-status {
   display: none;
+}
+
+.proposer-details {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+.proposer-details .proposer-image {
+  margin-right: 1rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.proposer-details a {
+  margin-top: 0.7rem;
 }
 
 @media screen and (max-width: 667px) {
@@ -234,6 +262,14 @@ h2 {
 
   .page-links li {
     padding: 2rem 2rem;
+  }
+
+  .proposer {
+    flex-direction: row;
+  }
+
+  .proposer-details {
+    padding-left: 1rem;
   }
 }
 </style>
