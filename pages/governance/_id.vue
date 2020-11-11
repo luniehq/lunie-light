@@ -26,10 +26,10 @@
         <Timeline :timeline="proposal.detailedVotes.timeline" />
       </template>
 
-      <!-- <ProposalDescription
+      <ProposalDescription
         :proposal="proposal"
         :supporting-links="proposal.detailedVotes.links"
-      /> -->
+      />
 
       <!-- <ModalDeposit
           v-if="status.value === governanceStatusEnum.DEPOSITING"

@@ -121,7 +121,7 @@ pre {
   }
 
   .description {
-    margin: 0;
+    margin: auto;
   }
 }
 </style>
