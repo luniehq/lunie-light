@@ -1,6 +1,7 @@
 <template>
   <menu class="app-menu">
     <div>
+      <UserMenu />
       <nuxt-link
         class="app-menu-item"
         to="/portfolio"
@@ -43,7 +44,6 @@
       </nuxt-link>
     </div>
     <div>
-      <UserMenu />
       <ConnectedNetwork @close-menu="handleClick" />
     </div>
   </menu>
@@ -71,10 +71,6 @@ export default {
   padding-top: 3rem;
 }
 
-.app-menu-item {
-  color: var(--menu-text);
-}
-
 .app-menu-item:hover {
   background: var(--app-nav-hover);
 }
@@ -87,26 +83,19 @@ export default {
   margin: 0.5rem 1rem;
   font-weight: 400;
   font-size: 14px;
-  color: var(--menu-text);
+  color: var(--gray-500);
   border-radius: var(--border-radius);
   transition: all 0.5s ease;
 }
 
 .app-menu .app-menu-item--link:hover {
-  color: var(--menu-link-hover);
+  color: var(--link-hover);
 }
 
 .app-menu .app-menu-item.nuxt-link-active {
   background: var(--app-nav-hover);
   box-shadow: 0 0 1px 0 var(--gray-700);
-}
-
-.app-menu .app-menu-item.nuxt-link-active i {
-  color: var(--highlight);
-}
-
-.app-menu .app-menu-item.nuxt-link-active h2 {
-  color: var(--menu-bright);
+  color: var(--gray-100);
 }
 
 @media screen and (min-width: 1024px) {
@@ -139,7 +128,7 @@ export default {
     line-height: 1.125;
     font-weight: 600;
     letter-spacing: 0.004em;
-    color: var(--menu-bright);
+    color: var(--white);
   }
 }
 

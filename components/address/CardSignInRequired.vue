@@ -25,6 +25,11 @@
           route="/ledger"
         /> -->
         <LiSession
+          icon="vpn_key"
+          title="Use Keplr Extension"
+          route="/extension"
+        />
+        <LiSession
           id="explore-with-address"
           icon="language"
           title="Explore with any address"

@@ -109,10 +109,6 @@ export default {
   padding-bottom: 1rem;
 }
 
-.tm-data-msg {
-  margin-top: 1rem;
-}
-
 @media screen and (max-width: 667px) {
   .table-container {
     padding: 4rem 1rem;

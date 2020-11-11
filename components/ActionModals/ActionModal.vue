@@ -20,7 +20,7 @@
         <span class="action-modal-title">{{ title }}</span>
         <Steps
           v-if="[defaultStep, feeStep, signStep].includes(step)"
-          :steps="['Details', 'Fees', 'Sign']"
+          :steps="steps"
           :active-step="step"
         />
       </div>
@@ -35,17 +35,18 @@
       <div v-else-if="step === feeStep" class="action-modal-form">
         <TableInvoice
           v-model="feeDenom"
-          :amounts="subTotal"
+          :amounts="amounts"
           :fees="networkFees.feeOptions"
         />
-        <!-- <FormMessage
-            type="custom"
-            :msg="`You don't have enough ${selectedDenom} to proceed.`"
-          /> -->
+        <FormMessage
+          v-if="$v.invoiceTotal.$error && $v.invoiceTotal.$invalid"
+          type="custom"
+          :msg="`Your balance is not enough to proceed.`"
+        />
       </div>
       <div v-else-if="step === signStep" class="action-modal-form">
         <form
-          v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
+          v-if="session.sessionType === SESSION_TYPES.LOCAL"
           @submit.prevent="validateChangeStep"
         >
           <FormGroup
@@ -60,12 +61,17 @@
               type="password"
               placeholder="Password"
             />
-            <!-- <FormMessage
-                name="Password"
-                type="required"
-              /> -->
+            <FormMessage
+              v-if="$v.password.$error && $v.password.$invalid"
+              name="Password"
+              type="required"
+            />
           </FormGroup>
         </form>
+        <div v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
+          The transaction will be send to the Keplr Browser Extension for
+          signing.
+        </div>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
         <Card icon="hourglass_empty" :spin="true">
@@ -146,7 +152,7 @@
 <script>
 import BigNumber from 'bignumber.js'
 import { mapState } from 'vuex'
-// import { requiredIf } from 'vuelidate/lib/validators'
+import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '~/common/numbers'
 import network from '~/common/network'
 import fees from '~/common/fees'
@@ -157,17 +163,11 @@ const signStep = `sign`
 const inclusionStep = `send`
 const successStep = `success`
 
-const SIGN_METHODS = {
+const SESSION_TYPES = {
   LOCAL: `local`,
   // LEDGER: `ledger`,
-  // EXTENSION: `extension`,
-}
-
-const sessionType = {
-  EXPLORE: 'explore',
-  LOCAL: SIGN_METHODS.LOCAL,
-  // LEDGER: SIGN_METHODS.LEDGER,
-  // EXTENSION: SIGN_METHODS.EXTENSION,
+  EXTENSION: `extension`,
+  EXPLORE: `explore`,
 }
 
 export default {
@@ -227,14 +227,13 @@ export default {
     sending: false,
     submissionError: null,
     show: false,
-    balancesLoaded: false,
     txHash: null,
     defaultStep,
     feeStep,
     signStep,
     inclusionStep,
     successStep,
-    SIGN_METHODS,
+    SESSION_TYPES,
     includedHeight: undefined,
     smallestAmount: SMALLEST,
     network,
@@ -242,24 +241,21 @@ export default {
   }),
   computed: {
     ...mapState(['session', 'currrentModalOpen']),
-    ...mapState(['data', ['balances']]),
+    ...mapState('data', ['balances', 'balancesLoaded']),
     networkFees() {
       return fees.getFees(this.transactionData.type)
     },
-    selectedSignMethod() {
-      return sessionType.LOCAL
-    },
     requiresSignIn() {
-      return !this.session || this.session.type === sessionType.EXPLORE
+      return !this.session || this.session.sessionType === SESSION_TYPES.EXPLORE
     },
-    subTotal() {
-      return this.transactionType === 'UnstakeTx' ? 0 : this.amounts
-    },
-    invoiceTotal() {
-      return (
-        Number(this.subTotal) +
-        Number(fees[this.transactionData.type].fee.amount)
-      )
+    steps() {
+      const isExtensionSession =
+        this.session.sessionType === SESSION_TYPES.EXTENSION
+      return [
+        'Details',
+        isExtensionSession ? undefined : 'Fees',
+        'Sign',
+      ].filter((x) => !!x)
     },
     isValidChildForm() {
       // here we trigger the validation of the child form
@@ -283,26 +279,31 @@ export default {
       this.$refs.next.$el.focus()
     }
   },
-  // validations() {
-  //   return {
-  //     password: {
-  //       required: requiredIf(
-  //         () =>
-  //           this.selectedSignMethod === SIGN_METHODS.LOCAL &&
-  //           this.step === signStep
-  //       ),
-  //     },
-  //     invoiceTotal: {
-  //       max: (x) =>
-  //         networkFeesLoaded &&
-  //         networkFees.transactionFee.denom !== this.selectedDenom
-  //           ? true
-  //           : Number(x) <= this.selectedBalance.amount,
-  //     },
-  //   }
-  // },
-  mounted() {
-    this.loadBalances()
+  validations() {
+    return {
+      password: {
+        required: requiredIf(
+          () =>
+            this.session.sessionType === SESSION_TYPES.LOCAL &&
+            this.step === signStep
+        ),
+      },
+      invoiceTotal: {
+        available: () =>
+          this.amounts
+            .concat(
+              this.networkFees.feeOptions.find(
+                ({ denom }) => denom === this.feeDenom
+              )
+            )
+            .every(({ amount, denom }) => {
+              const balance = this.balances.find(
+                (balance) => balance.denom === denom
+              )
+              return !!balance && balance.available >= amount
+            }),
+      },
+    }
   },
   methods: {
     confirmModalOpen() {
@@ -348,15 +349,18 @@ export default {
       this.$router.push('/address')
     },
     isValidInput(property) {
-      //   this.$v[property].$touch()
+      this.$v[property].$touch()
 
-      //   return !this.$v[property].$invalid
-      return true
+      return !this.$v[property].$invalid
     },
     previousStep() {
       switch (this.step) {
         case signStep:
-          this.step = feeStep
+          // Keplr is handling fees
+          this.step =
+            this.session.sessionType === SESSION_TYPES.EXTENSION
+              ? defaultStep
+              : feeStep
           break
         case feeStep:
           this.step = defaultStep
@@ -372,7 +376,11 @@ export default {
           if (!this.isValidChildForm) {
             return
           }
-          this.step = feeStep
+          // Keplr is handling fees
+          this.step =
+            this.session.sessionType === SESSION_TYPES.EXTENSION
+              ? signStep
+              : feeStep
           return
         case feeStep:
           if (!this.isValidInput(`invoiceTotal`)) {
@@ -407,38 +415,27 @@ export default {
       const { type, memo, ...message } = this.transactionData
 
       try {
-        if (!this.transactionManager) {
-          // Lazy import as a bunch of big libraries are imported here
-          const { default: TransactionManager } = await import(
-            '~/signing/transaction-manager'
-          )
-          this.transactionManager = new TransactionManager()
-        }
+        // Lazy import as a bunch of big libraries are imported here
+        const { createSignBroadcast } = await import(
+          '~/signing/transaction-manager'
+        )
 
-        const accountInfo = await this.$store.dispatch(
-          'data/getAccountInfo',
-          this.session.address
-        )
-        const transactionData = await this.transactionManager.getTransactionMetaData(
-          type,
-          memo,
-          this.feeDenom,
-          accountInfo
-        )
         // TODO currently not respected
         const HDPath = network.HDPath
-        const curve = network.curve
 
-        const hashResult = await this.transactionManager.createSignBroadcast({
+        const block = await this.$store.dispatch('data/getBlock')
+
+        const hashResult = await createSignBroadcast({
           messageType: type,
           message,
-          transactionData,
           senderAddress: this.session.address,
           network,
-          signingType: this.selectedSignMethod,
+          signingType: this.session.sessionType,
           password: this.password,
           HDPath,
-          curve,
+          memo,
+          feeDenom: this.feeDenom,
+          chainId: block.chainId,
         })
 
         const { hash } = hashResult
@@ -487,18 +484,6 @@ export default {
             `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
           )
         )
-      }
-    },
-    async loadBalances() {
-      const session = this.$cookies.get('lunie-session')
-      const currency = this.$cookies.get('currency') || 'USD'
-      if (session) {
-        // do we need to refetch the data?
-        await this.$store.dispatch('data/getBalances', {
-          address: session.address,
-          currency,
-        })
-        this.balancesLoaded = true
       }
     },
     refreshData() {
