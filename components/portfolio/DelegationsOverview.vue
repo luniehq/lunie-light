@@ -94,7 +94,7 @@ export default {
 .table-container {
   margin: 0 auto;
   width: 100%;
-  padding: 2rem 6rem;
+  padding: 3rem 6rem;
   background: var(--gray-200);
 }
 

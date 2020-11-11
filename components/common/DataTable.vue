@@ -19,16 +19,11 @@
 
 <script>
 export default {
-  name: 'data-table',
-  data() {
-    return {
-      searchTerm: false,
-    }
-  },
+  name: 'DataTable',
   props: {
     showTable: {
       type: Number,
-      default: false,
+      default: () => 0,
     },
     columns: {
       type: Array,
@@ -54,6 +49,11 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      searchTerm: false,
+    }
   },
 }
 </script>

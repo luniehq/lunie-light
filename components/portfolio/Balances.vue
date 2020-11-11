@@ -70,7 +70,7 @@ export default {
 <style scoped>
 .table-container {
   width: 100%;
-  padding: 2rem 6rem;
+  padding: 3rem 6rem;
   margin: 0 auto;
 }
 
