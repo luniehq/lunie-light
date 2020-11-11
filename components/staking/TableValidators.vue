@@ -125,7 +125,7 @@ export default {
 <style scoped>
 .container {
   overflow: auto;
-  box-shadow: 0 0 3px 0 var(--gray-500);
+  box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
 }

@@ -25,6 +25,7 @@ export default {
   border-radius: var(--border-radius);
   width: fit-content;
   text-align: center;
+  box-shadow: 0 0 2px 0 var(--gray-500);
 }
 
 .status.inactive {
