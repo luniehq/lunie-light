@@ -29,7 +29,7 @@ export default {
     },
     sort: {
       type: Object,
-      default: {},
+      default: () => {},
     },
     infiniteScrollDistance: {
       type: String,
@@ -45,19 +45,8 @@ export default {
 
 <style scoped>
 table {
-  display: grid;
+  table-layout: auto;
   border-collapse: collapse;
   min-width: 100%;
-  grid-template-columns:
-    5rem
-    7rem
-    minmax(22rem, 40rem)
-    minmax(8rem, 1fr)
-    minmax(8rem, 1fr);
-}
-
-thead,
-tbody {
-  display: contents;
 }
 </style>

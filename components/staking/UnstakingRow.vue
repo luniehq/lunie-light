@@ -1,6 +1,6 @@
 <template>
   <tr
-    class="li-validator"
+    class="validator"
     :data-moniker="validator.name"
     @click="
       $router.push({
@@ -10,21 +10,14 @@
     "
   >
     <td>{{ index + 1 }}</td>
-    <td class="data-table__row__info">
+    <td>
       <Avatar
-        v-if="!validator || !validator.picture"
-        class="li-validator-image"
+        class="validator-image"
         alt="generic validator logo - generated avatar from address"
         :address="validator.operatorAddress"
       />
-      <img
-        v-else-if="validator && validator.picture"
-        :src="validator.picture"
-        class="li-validator-image"
-        :alt="`validator logo for ` + validator.name"
-      />
       <div class="validator-info">
-        <h3 class="li-validator-name">
+        <h3 class="validator-name">
           {{ validator.name }}
         </h3>
         <h4>
@@ -42,7 +35,7 @@
 import { fromNow } from '~/common/time'
 
 export default {
-  name: `li-undelegation`,
+  name: `undelegation`,
   filters: {
     fromNow,
   },
@@ -63,7 +56,7 @@ export default {
 }
 </script>
 <style scoped>
-.li-validator {
+.validator {
   padding: 0.5rem 1rem;
   margin-bottom: 0.25rem;
   border-bottom: 1px solid var(--bc-dim);
@@ -77,24 +70,24 @@ export default {
   text-overflow: ellipsis;
 }
 
-.li-validator h4,
-.li-validator h5 {
+.validator h4,
+.validator h5 {
   font-size: var(--text-xs);
   display: inline-block;
 }
 
-.li-validator h5 {
+.validator h5 {
   padding-left: 0.5rem;
   color: var(--success);
 }
 
-.li-validator:hover {
+.validator:hover {
   cursor: pointer;
   background: var(--app-fg-hover);
   color: var(--bright);
 }
 
-.li-validator-name {
+.validator-name {
   font-size: 1rem;
   line-height: 20px;
   font-weight: 500;
@@ -102,7 +95,7 @@ export default {
   display: inline-block;
 }
 
-.li-validator-image {
+.validator-image {
   border-radius: var(--border-radius);
   height: 2.5rem;
   width: 2.5rem;

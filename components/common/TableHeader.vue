@@ -63,10 +63,6 @@ export default {
   border-bottom: 1px solid var(--bc-dim);
 }
 
-tr {
-  display: contents;
-}
-
 th {
   padding: 0.5rem 0.75rem;
   overflow: hidden;

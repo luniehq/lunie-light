@@ -14,7 +14,7 @@
         alt="generic validator logo - generated avatar from address"
         :address="validator.operatorAddress"
       />
-      <div>
+      <div class="row">
         <h3 class="validator-name">
           {{ validator.name }}
         </h3>
@@ -103,7 +103,7 @@ export default {
 </script>
 <style scoped>
 tr {
-  display: contents;
+  border-bottom: 1px solid var(--bc-dim);
 }
 
 td {
@@ -112,14 +112,7 @@ td {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--bc-dim);
-  width: 100%;
-}
-
-.index {
-  justify-content: center;
+  vertical-align: middle;
 }
 
 h4,
@@ -143,9 +136,12 @@ h5 {
 }
 
 .validator-info {
+  min-width: 20rem;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+}
+
+.row {
+  display: inline-block;
 }
 
 .validator-name {
