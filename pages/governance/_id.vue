@@ -16,15 +16,15 @@
         :proposal="proposal"
       />
 
-      <!--  <ParticipantList
-          v-if="participants"
-          :participants="participants"
-          :show-amounts="true"
-        />
+      <ParticipantList
+        v-if="participants"
+        :participants="participants"
+        :show-amounts="true"
+      />
 
-        <template v-if="proposal.detailedVotes.timeline.length">
-          <Timeline :timeline="proposal.detailedVotes.timeline" />
-        </template> -->
+      <template v-if="proposal.detailedVotes.timeline.length">
+        <Timeline :timeline="proposal.detailedVotes.timeline" />
+      </template>
 
       <!-- <ProposalDescription
         :proposal="proposal"
