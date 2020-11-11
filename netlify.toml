@@ -1,14 +1,14 @@
 # CSP headers are a great security practice. Feel free to add or remove any links you might need for your app to work.
+# Add in the 'connect-src' line the RPC URLS you might need
+# For example:  https://lcd.nylira.net (Nylira's public Cosmos node)
 [[headers]]
   for = "/*"
   [headers.values]
     Content-Security-Policy = '''
       default-src 'self' https://*.netlify.app;
-      # Add here the RPC URLS you might need
-      # For example:  https://lcd.nylira.net (Nylira's public Cosmos node)
       connect-src 'self' https://lcd.nylira.net;
       img-src 'self' data: https://*.netlify.app;
-      script-src 'self' 'unsafe-eval' https://*.netlify.app 'nonce-4AEemGbGTJptoIGFP3Nd' 'nonce-HYjB4SnB0b0lHRlAzTmQ' 'nonce-YW5hbHl0aWNzLWx1bmll';;
+      script-src 'self' 'unsafe-eval' https://*.netlify.app 'nonce-4AEemGbGTJptoIGFP3Nd' 'nonce-HYjB4SnB0b0lHRlAzTmQ' 'nonce-YW5hbHl0aWNzLWx1bmll';
       style-src 'self' 'unsafe-inline' https://*.netlify.app;
       media-src 'self' https://*.netlify.app blob:;
       object-src 'self' data: blob: https://*.netlify.app;
