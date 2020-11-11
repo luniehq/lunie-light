@@ -4,6 +4,7 @@
       class="transaction"
       :href="network.apiURL + '/txs/' + transaction.hash"
       target="_blank"
+      rel="nofollow noreferrer noopener"
     >
       <div class="left">
         <img
