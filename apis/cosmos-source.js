@@ -205,7 +205,7 @@ export default class CosmosAPI {
     )
   }
 
-  async getDetailedVotes(proposal, network) {
+  async getDetailedVotes(proposal) {
     await this.dataReady
     const [
       votes,

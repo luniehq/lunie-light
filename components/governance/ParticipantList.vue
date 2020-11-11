@@ -77,11 +77,11 @@ export default {
   },
   data: () => ({
     showing: 5,
-    maxReached: false,
     network,
   }),
   computed: {
     showingParticipants() {
+      // if we don't clone this logic triggers vuex to complain about mutations
       return JSON.parse(JSON.stringify(this.participants))
         .sort((a, b) => !!b.picture - !!a.picture)
         .slice(0, this.showing)
@@ -92,15 +92,8 @@ export default {
   },
   methods: {
     loadMore() {
-      if (!this.maxReached) {
+      if (this.moreAvailable) {
         this.showing += 5
-
-        if (
-          this.showing > this.participants.length - 100 &&
-          !this.moreAvailable
-        ) {
-          this.maxReached = true
-        }
       }
     },
   },
