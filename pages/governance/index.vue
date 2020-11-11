@@ -1,7 +1,9 @@
 <template>
   <div>
     <div
-      v-if="!proposalsLoaded && !governanceOverviewLoaded"
+      v-if="
+        proposals.length === 0 || Object.keys(governanceOverview).length === 0
+      "
       class="loading-row"
     >
       Loading...
@@ -20,7 +22,7 @@
         :governance-overview="governanceOverview"
       />
 
-      <template v-if="proposalsLoaded">
+      <template v-if="proposals.length === 0">
         <p class="message">
           {{ oldChainDataMessage }}
         </p>
@@ -34,31 +36,12 @@ import { mapState } from 'vuex'
 
 export default {
   name: `proposals-index`,
-  data: () => ({
-    proposalsLoaded: false,
-    governanceOverviewLoaded: false,
-  }),
   computed: {
     ...mapState('data', [`proposals`, `governanceOverview`]),
     ...mapState(['session']),
     oldChainDataMessage() {
       return `If you expected to see proposals here that are missing, 
       it's possible the proposals may have occured on a previous version of this blockchain.`
-    },
-  },
-  mounted() {
-    this.loadProposals()
-  },
-  methods: {
-    async loadProposals() {
-      // first grab the validators
-      await this.$store.dispatch('data/getValidators')
-      await this.$store.dispatch('data/getProposals')
-      this.proposalsLoaded = true
-
-      // get governanceOverview
-      await this.$store.dispatch('data/getGovernanceOverview')
-      this.governanceOverviewLoaded = true
     },
   },
 }

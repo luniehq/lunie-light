@@ -26,5 +26,6 @@ export const actions = {
     }
     commit('setSession', session)
     dispatch('data/refresh')
+    dispatch('data/loadProposals')
   },
 }

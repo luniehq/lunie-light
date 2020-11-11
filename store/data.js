@@ -277,4 +277,12 @@ export const actions = {
   resetSessionData({ commit }) {
     commit('resetSessionData')
   },
+  async loadProposals({ dispatch }) {
+    // load proposals non-blocking
+    // first grab the validators
+    dispatch('getValidators')
+    dispatch('getProposals')
+
+    dispatch('getGovernanceOverview')
+  },
 }
