@@ -94,11 +94,19 @@ export default {
 .table-container {
   margin: 0 auto;
   width: 100%;
-  padding: 2rem 4rem;
+  padding: 2rem 6rem;
+  background: var(--gray-200);
 }
 
 .tm-form-msg--desc {
   padding-bottom: 1rem;
+}
+
+@media screen and (max-width: 1023px) {
+  .table-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
 }
 
 @media screen and (max-width: 667px) {

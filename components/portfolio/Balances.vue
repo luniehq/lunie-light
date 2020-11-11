@@ -70,7 +70,7 @@ export default {
 <style scoped>
 .table-container {
   width: 100%;
-  padding: 2rem 4rem;
+  padding: 2rem 6rem;
   margin: 0 auto;
 }
 
@@ -112,6 +112,13 @@ export default {
   font-size: 14px;
   color: var(--white);
   font-weight: 900;
+}
+
+@media screen and (max-width: 1023px) {
+  .table-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
 }
 
 @media screen and (max-width: 667px) {
