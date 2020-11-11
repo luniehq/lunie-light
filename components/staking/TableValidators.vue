@@ -123,13 +123,6 @@ export default {
 }
 </script>
 <style scoped>
-.container {
-  overflow: auto;
-  box-shadow: 0 0 3px 0 var(--gray-400);
-  border-radius: var(--border-radius);
-  background: var(--white);
-}
-
 .no-results {
   text-align: center;
   margin: 3rem;

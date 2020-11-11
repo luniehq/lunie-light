@@ -35,6 +35,10 @@ export default {
     properties() {
       return [
         {
+          title: `Status`,
+          value: `status`,
+        },
+        {
           title: `Name`,
           value: `smallName`,
         },

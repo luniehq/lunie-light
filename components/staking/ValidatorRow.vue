@@ -18,37 +18,49 @@
         <h3 class="validator-name">
           {{ validator.name }}
         </h3>
-        <div v-if="delegation.amount > 0" class="stake-amount">
-          <h4>
-            {{ delegation.amount | bigFigureOrShortDecimals }}
-          </h4>
-          <h5
-            v-if="
-              rewards.find(
-                (reward) =>
-                  reward.denom === stakingDenom && reward.amount > 0.000001
-              )
-            "
-          >
-            <span
-              >+{{
-                filterStakingDenomReward() | bigFigureOrShortDecimals
-              }}</span
+        <template v-if="!undelegation">
+          <div v-if="delegation.amount > 0">
+            <h4>
+              {{ delegation.amount | bigFigureOrShortDecimals }}
+            </h4>
+            <h5
+              v-if="
+                rewards.find(
+                  (reward) =>
+                    reward.denom === stakingDenom && reward.amount > 0.000001
+                )
+              "
             >
-          </h5>
-        </div>
+              <span
+                >+{{
+                  filterStakingDenomReward() | bigFigureOrShortDecimals
+                }}</span
+              >
+            </h5>
+          </div>
+        </template>
+        <template v-else>
+          <h4>{{ undelegation.amount }}</h4>
+        </template>
       </div>
     </td>
-    <td class="cell">
-      {{
-        validator.expectedReturns
-          ? bigFigureOrPercent(validator.expectedReturns)
-          : `--`
-      }}
-    </td>
-    <td class="cell">
-      {{ validator.votingPower | bigFigureOrPercent }}
-    </td>
+    <template v-if="!undelegation">
+      <td class="cell">
+        {{
+          validator.expectedReturns
+            ? bigFigureOrPercent(validator.expectedReturns)
+            : `--`
+        }}
+      </td>
+      <td class="cell">
+        {{ validator.votingPower | bigFigureOrPercent }}
+      </td>
+    </template>
+    <template v-else>
+      <td>
+        {{ undelegation.endTime | fromNow }}
+      </td>
+    </template>
   </tr>
 </template>
 
@@ -57,6 +69,7 @@ import {
   bigFigureOrPercent,
   bigFigureOrShortDecimals,
 } from '../../common/numbers'
+import { fromNow } from '~/common/time'
 
 export default {
   name: `validator-row`,
@@ -64,6 +77,7 @@ export default {
   filters: {
     bigFigureOrShortDecimals,
     bigFigureOrPercent,
+    fromNow,
   },
   props: {
     validator: {
@@ -78,7 +92,7 @@ export default {
     /* istanbul ignore next */
     rewards: {
       type: Array,
-      default: () => ({}),
+      default: () => [],
     },
     index: {
       type: Number,
@@ -87,6 +101,10 @@ export default {
     stakingDenom: {
       type: String,
       default: '',
+    },
+    undelegation: {
+      type: Object,
+      default: () => null,
     },
   },
   methods: {

@@ -1,14 +1,16 @@
 <template>
-  <table class="table">
-    <thead>
-      <TableHeader :sort="sort" :properties="columns" />
-    </thead>
-    <tbody :infinite-scroll-distance="infiniteScrollDistance">
-      <slot v-if="showTable"></slot>
-      <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
-      <div v-else class="no-results">No results</div>
-    </tbody>
-  </table>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <TableHeader :sort="sort" :properties="columns" />
+      </thead>
+      <tbody :infinite-scroll-distance="infiniteScrollDistance">
+        <slot v-if="showTable"></slot>
+        <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
+        <div v-else class="no-results">No results</div>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -44,6 +46,13 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  overflow: auto;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
+}
+
 table {
   table-layout: auto;
   border-collapse: collapse;

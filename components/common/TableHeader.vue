@@ -69,9 +69,6 @@ th {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--bc-dim);
 }
 
 .sort-link {
