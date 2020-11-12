@@ -16,20 +16,6 @@
           <p v-else>{{ proposal.description }}</p>
         </div>
       </section>
-      <aside
-        v-if="supportingLinks && supportingLinks.length > 0"
-        class="supporting-links"
-      >
-        <h4>Supporting Links</h4>
-        <ul>
-          <li v-for="link in supportingLinks" :key="link.link">
-            <a :href="link.link" target="_blank" rel="noopener norefferer">{{
-              link.title
-            }}</a>
-            <i class="material-icons notranslate">link</i>
-          </li>
-        </ul>
-      </aside>
     </div>
   </div>
 </template>
@@ -41,10 +27,6 @@ export default {
     proposal: {
       type: Object,
       default: () => {},
-    },
-    supportingLinks: {
-      type: Array,
-      default: () => [],
     },
   },
 }
@@ -78,26 +60,6 @@ h4 {
   color: var(--txt);
 }
 
-.supporting-links {
-  width: 100%;
-  max-width: 400px;
-  padding: 0 0 4rem 0;
-  font-size: 14px;
-}
-
-.supporting-links li {
-  border-bottom: 2px solid var(--bc-dim);
-  padding: 1rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.supporting-links i {
-  font-size: 18px;
-  color: var(--dim);
-}
-
 pre {
   font-family: 'Menlo', 'Consolas', monospace;
   background: var(--app-nav);
@@ -121,7 +83,7 @@ pre {
   }
 
   .description {
-    margin: auto;
+    margin: 0;
   }
 }
 </style>

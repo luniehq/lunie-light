@@ -9,9 +9,7 @@
       >
         <div class="first-column">
           <span class="icon">
-            <img v-if="participant.picture" :src="participant.picture" />
-            <!-- TODO: investigate why this doesn't work -->
-            <img v-else :src="network.icon" />
+            <Avatar :address="participant.address" />
           </span>
           <span v-if="participant.name" class="name">{{
             participant.name
@@ -79,11 +77,11 @@ export default {
   },
   data: () => ({
     showing: 5,
-    maxReached: false,
     network,
   }),
   computed: {
     showingParticipants() {
+      // if we don't clone this logic triggers vuex to complain about mutations
       return JSON.parse(JSON.stringify(this.participants))
         .sort((a, b) => !!b.picture - !!a.picture)
         .slice(0, this.showing)
@@ -94,15 +92,8 @@ export default {
   },
   methods: {
     loadMore() {
-      if (!this.maxReached) {
+      if (this.moreAvailable) {
         this.showing += 5
-
-        if (
-          this.showing > this.participants.length - 100 &&
-          !this.moreAvailable
-        ) {
-          this.maxReached = true
-        }
       }
     },
   },
@@ -139,7 +130,6 @@ h4 {
 .participant div {
   display: flex;
   align-items: center;
-  max-width: 33%;
   width: 100%;
   justify-content: flex-end;
 }
@@ -179,13 +169,6 @@ h4 {
 .icon {
   height: 2.25rem;
   width: 2.25rem;
-}
-
-.icon img {
-  border: 2px solid var(--bc);
-  height: 2.25rem;
-  width: 2.25rem;
-  border-radius: 50%;
 }
 
 .loadmore-button-container {

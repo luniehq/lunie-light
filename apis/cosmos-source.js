@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js'
 import { keyBy, orderBy, take, reverse, sortBy } from 'lodash'
 import * as reducers from './cosmos-reducers'
 import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
+import { setDecimalLength } from '~/common/numbers'
 import network from '~/common/network'
-const { fixDecimalsAndRoundUpBigNumbers } = require('~/common/numbers')
 
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
 const PAGE_RECORDS_COUNT = 20
@@ -205,7 +205,7 @@ export default class CosmosAPI {
     )
   }
 
-  async getDetailedVotes(proposal, network) {
+  async getDetailedVotes(proposal) {
     await this.dataReady
     const [
       votes,
@@ -254,7 +254,6 @@ export default class CosmosAPI {
         BigNumber(tally.no).plus(tally.no_with_veto),
         totalVotingParticipation
       ),
-      links: this.network.links,
       timeline: [
         proposal.submit_time
           ? { title: `Created`, time: proposal.submit_time }
@@ -314,7 +313,7 @@ export default class CosmosAPI {
     return [tally, detailedVotes, proposer]
   }
 
-  async getProposals(validators) {
+  async getProposals() {
     await this.dataReady
     const [
       proposalsResponse,
@@ -338,7 +337,7 @@ export default class CosmosAPI {
           proposer,
           totalBondedTokens,
           detailedVotes,
-          validators
+          this.validators
         )
       })
     )
@@ -408,31 +407,26 @@ export default class CosmosAPI {
       this.query('/distribution/community_pool'),
       this.getTopVoters(),
     ])
+    const stakingChainDenom = this.network.getCoinLookup(
+      this.network.stakingDenom,
+      'viewDenom'
+    ).chainDenom
     const communityPool = communityPoolArray.find(
-      ({ denom }) =>
-        denom ===
-        this.network.coinLookup.find(
-          ({ viewDenom }) => viewDenom === this.network.stakingDenom
-        ).chainDenom
+      ({ denom }) => denom === stakingChainDenom
     ).amount
     return {
-      totalStakedAssets: fixDecimalsAndRoundUpBigNumbers(
-        totalBondedTokens,
-        2,
-        this.network,
-        this.network.stakingDenom
+      totalStakedAssets: setDecimalLength(
+        reducers.getStakingCoinViewAmount(totalBondedTokens),
+        2
       ),
       totalVoters: undefined,
-      treasurySize: fixDecimalsAndRoundUpBigNumbers(
-        communityPool,
-        2,
-        this.network,
-        this.network.stakingDenom
+      treasurySize: setDecimalLength(
+        reducers.getStakingCoinViewAmount(communityPool),
+        2
       ),
       topVoters: topVoters.map((topVoter) =>
         this.reducers.topVoterReducer(topVoter)
       ),
-      links: this.network.links,
     }
   }
 

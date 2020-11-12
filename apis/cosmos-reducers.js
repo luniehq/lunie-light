@@ -169,7 +169,7 @@ function networkAccountReducer(address, validators) {
       : undefined
   return {
     name: validator ? validator.name : undefined,
-    address: address || '',
+    address: validator ? proposerValAddress : address || '',
     picture: validator ? validator.picture : '',
     validator,
   }
@@ -693,7 +693,6 @@ export function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: {
       value: statusInfo.status,
-      active: statusInfo.status === `ACTIVE`,
     },
     statusDetailed: statusInfo.status_detailed,
     delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares

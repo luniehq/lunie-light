@@ -2,6 +2,7 @@
   <div>
     <div v-if="proposal" class="proposal">
       <ProposalHeader
+        id="proposal-description"
         :proposal="proposal"
         :status="status"
         @open-vote-modal="onVote"
@@ -26,10 +27,7 @@
         <Timeline :timeline="proposal.detailedVotes.timeline" />
       </template>
 
-      <ProposalDescription
-        :proposal="proposal"
-        :supporting-links="proposal.detailedVotes.links"
-      />
+      <ProposalDescription :proposal="proposal" />
 
       <DepositModal
         v-if="status.value === governanceStatusEnum.DEPOSITING"

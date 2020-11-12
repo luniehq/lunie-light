@@ -11,15 +11,7 @@
         </div>
 
         <div class="buttons">
-          <button
-            v-clipboard:copy="currentRoute"
-            v-clipboard:success="() => onCopy()"
-            class="share-button"
-          >
-            <span v-if="copySuccess" class="copy-message">Copied!</span>
-            <i v-if="copySuccess" class="material-icons check-icon">check</i>
-            <i v-else class="material-icons">link</i>
-          </button>
+          <CopyButton :value="currentRoute" />
           <Button
             v-if="status.value === governanceStatusEnum.DEPOSITING"
             id="deposit-btn"
@@ -50,7 +42,15 @@
       <div class="proposer-and-summary-container">
         <div v-if="proposal.proposer" class="proposer">
           Proposed By:
-          {{ proposal.proposer.address | formatAddress }}
+          <div v-if="proposal.proposer.validator" class="proposer-details">
+            <div class="proposer-image">
+              <Avatar :address="proposal.proposer.address" />
+            </div>
+            <nuxt-link :to="`/validators/${proposal.proposer.address}`">{{
+              proposal.proposer.name
+            }}</nuxt-link>
+          </div>
+          <Address v-else :address="proposal.proposer.address" />
         </div>
         <p class="summary">{{ proposal.summary }}</p>
       </div>
@@ -58,11 +58,11 @@
 
     <nav>
       <ul class="page-links">
-        <li><a v-scroll-to="'#proposal-votes'" href="#">Votes</a></li>
-        <li><a v-scroll-to="'#proposal-timeline'" href="#">Timeline</a></li>
         <li>
           <a v-scroll-to="'#proposal-description'" href="#">Description</a>
         </li>
+        <li><a v-scroll-to="'#proposal-votes'" href="#">Votes</a></li>
+        <li><a v-scroll-to="'#proposal-timeline'" href="#">Timeline</a></li>
       </ul>
     </nav>
   </header>
@@ -89,7 +89,6 @@ export default {
     },
   },
   data: () => ({
-    copySuccess: false,
     governanceStatusEnum,
   }),
   computed: {
@@ -98,21 +97,10 @@ export default {
       return location.href
     },
     showVoteButton() {
-      // when the proposal is a Treasury proposal we won't show the Vote button
-      // for all Polkadot proposals we display the Vote button except for treasuries
-      // in Cosmos only for the ones in Voting Period (we consider Polkadot democracies proposals as Deposit Period)
       return (
         this.proposal.type !== `TREASURY` &&
         this.status.value === this.governanceStatusEnum.VOTING
       )
-    },
-  },
-  methods: {
-    onCopy() {
-      this.copySuccess = true
-      setTimeout(() => {
-        this.copySuccess = false
-      }, 2500)
     },
   },
 }
@@ -191,32 +179,15 @@ h2 {
   padding: 1rem;
   border: 2px solid var(--bc);
   border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .summary {
   font-size: 12px;
   padding: 2rem 0 0 2px;
   font-style: italic;
-}
-
-.share-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  outline: none;
-  height: 2.25rem;
-  font-size: 14px;
-  background: transparent;
-  color: #7a88b8;
-  border: 2px solid rgb(122, 136, 184, 0.1);
-  cursor: pointer;
-  width: 3rem;
-  position: relative;
-}
-
-.share-button:hover {
-  background-color: var(--bc);
 }
 
 .icon-container {
@@ -236,16 +207,21 @@ h2 {
   display: none;
 }
 
-.check-icon {
-  font-size: 18px;
-  color: var(--success);
+.proposer-details {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
 }
 
-.copy-message {
-  position: absolute;
-  font-size: 10px;
-  top: -1.25rem;
-  color: var(--success);
+.proposer-details .proposer-image {
+  margin-right: 1rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.proposer-details a {
+  margin-top: 0.7rem;
 }
 
 @media screen and (max-width: 667px) {
@@ -283,6 +259,14 @@ h2 {
 
   .page-links li {
     padding: 2rem 2rem;
+  }
+
+  .proposer {
+    flex-direction: row;
+  }
+
+  .proposer-details {
+    padding-left: 1rem;
   }
 }
 </style>
