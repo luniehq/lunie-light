@@ -5,9 +5,6 @@
 
 /* reset-html5() */
 
-/* --- MODULES --- */
-@import "./table.css";
-
 /* --- BASICS --- */
 html,
 body,
@@ -36,7 +33,7 @@ textarea {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -59,6 +56,7 @@ a:hover {
 
 #app {
   font-size: var(--text-base);
+  background: var(--app-fg);
   line-height: 1.5;
   color: var(--txt);
   display: flex;
@@ -144,29 +142,7 @@ h1 {
   font-size: 24px;
   color: var(--gray-800);
   font-weight: 500;
-  padding-bottom: 2rem;
-}
-
-@media screen and (max-width: 667px) {
-  h1 {
-    text-align: center;
-  }
-}
-
-.loading-row {
-  display: flex;
-  align-items: center;
-  background: var(--app-fg);
-  border-radius: var(--border-radius);
-  animation: fade 2s infinite;
-  justify-content: center;
-  height: auto;
-  width: auto;
-  padding: 2rem;
-}
-
-.loading-row.left {
-  justify-content: left;
+  padding-bottom: 2.5rem;
 }
 
 @keyframes fade {
@@ -202,11 +178,5 @@ h1 {
   #app-content {
     display: flex;
     min-width: 0;
-  }
-}
-
-@media screen and (max-width: 667px) {
-  .hide-xs {
-    display: none !important;
   }
 }

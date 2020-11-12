@@ -132,7 +132,7 @@ export default {
 
 .mobile-menu-action,
 .header-menu-section a {
-  color: var(--menu-bright);
+  color: var(--white);
 }
 
 .app-header .header-item {

@@ -1,27 +1,41 @@
 <template>
-  <div v-if="undelegations.length > 0" class="undelegations">
-    <div class="table-container">
-      <div class="header-container">
-        <h1>Unstaking</h1>
-      </div>
-      <TableUndelegations :undelegations="undelegations" />
-    </div>
+  <div
+    v-if="undelegations.length && undelegationsLoaded"
+    class="table-container"
+  >
+    <h1>Unstaking</h1>
+    <TableContainer
+      :length="undelegations.length"
+      :columns="properties"
+      :sort="sort"
+      :loaded="undelegationsLoaded"
+    >
+      <ValidatorRow
+        v-for="(undelegation, index) in undelegations"
+        :key="undelegation.validatorAddress + undelegation.startHeight"
+        :index="index"
+        :validator="undelegation.validator"
+        :undelegation="undelegation"
+      />
+    </TableContainer>
     <!-- <ModalWithdrawUnstaked ref="WithdrawModal" /> -->
   </div>
 </template>
 
 <script>
-import network from '../../network'
+import { mapState } from 'vuex'
+import network from '~/network'
 
 export default {
-  name: `undelegations`,
-  props: {
-    undelegations: {
-      type: Array,
-      default: () => [],
+  name: `Undelegations`,
+  data: () => ({
+    sort: {
+      property: `endTime`,
+      order: `desc`,
     },
-  },
+  }),
   computed: {
+    ...mapState('data', ['undelegations', 'undelegationsLoaded']),
     balances() {
       return this.undelegations.map((undelegation) => {
         return {
@@ -37,6 +51,22 @@ export default {
         return new Date(endTime) <= now
       })
     },
+    properties() {
+      return [
+        {
+          title: `Status`,
+          value: `status`,
+        },
+        {
+          title: `Name`,
+          value: `smallName`,
+        },
+        {
+          title: `End Time`,
+          value: `endTime`,
+        },
+      ]
+    },
   },
   methods: {
     onWithdraw() {
@@ -46,47 +76,24 @@ export default {
 }
 </script>
 <style scoped>
-.undelegations {
-  background: var(--app-fg);
-}
-
 .table-container {
-  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 2rem 8rem;
+  padding: 3rem 4rem;
+  background: var(--gray-200);
 }
 
-.balance-row {
-  display: flex;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem 2rem 2rem;
-  width: 100%;
-}
-
-.header-container button {
-  margin-right: 0.5rem;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
+@media screen and (max-width: 1023px) {
+  .table-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
 }
 
 @media screen and (max-width: 667px) {
   .table-container {
-    padding: 0 1rem 8rem;
-  }
-
-  .header-container {
-    flex-direction: column;
-    padding: 0 1rem 1rem 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 </style>

@@ -26,7 +26,7 @@
       :delegations="delegations"
       :rewards="rewards"
       :search-term="searchTerm ? true : false"
-      show-on-mobile="expectedReturns"
+      :loaded="delegationsLoaded"
     />
   </div>
 </template>
@@ -42,7 +42,12 @@ export default {
     allValidators: false,
   }),
   computed: {
-    ...mapState('data', ['validators', 'delegations', 'rewards']),
+    ...mapState('data', [
+      'validators',
+      'delegations',
+      'delegationsLoaded',
+      'rewards',
+    ]),
     filteredValidators() {
       if (this.searchTerm) {
         return this.sortedValidators.filter(({ name, operatorAddress }) => {
@@ -137,21 +142,5 @@ export default {
 
 .filter-toggle {
   margin-left: 1em;
-}
-
-@media screen and (max-width: 768px) {
-  .filterContainer {
-    margin: 0 0.75rem 1rem;
-  }
-
-  .filterContainer .toggle-button {
-    min-width: 64px;
-  }
-}
-
-@media screen and (max-width: 360px) {
-  .filterContainer {
-    margin: 0.5em 1em 0.5em;
-  }
 }
 </style>

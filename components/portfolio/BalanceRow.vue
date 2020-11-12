@@ -1,21 +1,23 @@
 <template>
-  <div class="balance-row">
-    <div :key="balance.denom" class="table-cell big">
-      <img
-        class="token-icon"
-        :src="image"
-        :alt="`${balance.denom}` + ' currency'"
-      />
-      <div class="total">
-        {{ balance.total | bigFigureOrShortDecimals }}
-        {{ balance.denom }}
+  <tr class="balance-row">
+    <td :key="balance.denom">
+      <div class="row">
+        <img
+          class="token-icon"
+          :src="image"
+          :alt="`${balance.denom}` + ' currency'"
+        />
+        <div class="total">
+          {{ balance.total | bigFigureOrShortDecimals }}
+          {{ balance.denom }}
+        </div>
       </div>
-    </div>
+    </td>
 
-    <div
+    <td
       v-if="!unstakingBalance"
       :key="balance.denom + '_rewards'"
-      class="table-cell rewards"
+      class="rewards"
     >
       <h2
         v-if="
@@ -26,22 +28,22 @@
         {{ balance.denom }}
       </h2>
       <h2 v-else-if="!unstake">0</h2>
-    </div>
+    </td>
 
-    <div
+    <td
       v-if="!unstakingBalance"
       :key="balance.denom + '_available'"
-      class="table-cell available"
+      class="available"
     >
       <span v-if="balance.type === 'STAKE'" class="available-amount">
         {{ balance.available | bigFigureOrShortDecimals }}
       </span>
-    </div>
+    </td>
 
-    <div
+    <td
       v-if="!unstakingBalance"
       :key="balance.denom + '_actions'"
-      class="table-cell actions"
+      class="actions"
     >
       <div v-if="send" class="icon-button-container">
         <button class="icon-button" @click="onSend(balance.denom)">
@@ -58,12 +60,12 @@
           <i class="material-icons">arrow_downward</i></button
         ><span>Unstake</span>
       </div>
-    </div>
+    </td>
 
     <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
     <!-- <StakeModal ref="StakeModal" />
     <UnstakeModal ref="UnstakeModal" /> -->
-  </div>
+  </tr>
 </template>
 <script>
 import { bigFigureOrShortDecimals } from '~/common/numbers'
@@ -122,7 +124,7 @@ export default {
 </script>
 <style scoped>
 .balance-row {
-  display: flex;
+  border-bottom: 1px solid var(--bc-dim);
 }
 
 .balance-row:not(:first-child) {
@@ -130,18 +132,22 @@ export default {
 }
 
 .balance-row:not(:last-child) {
-  border-bottom: 1px solid var(--bc);
+  border-bottom: 1px solid var(--bc-dim);
 }
 
-.table-cell {
-  flex-grow: 1;
-  padding: 0.75rem 0.75rem 0.75rem 0;
+td {
+  padding: 0.5rem 0.75rem;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.row {
   display: flex;
   align-items: center;
-  width: 20%;
-  position: relative;
-  white-space: nowrap;
+  min-width: 12rem;
 }
 
 .rewards {
@@ -161,15 +167,6 @@ export default {
   border-radius: 50%;
 }
 
-.table-cell.big {
-  width: 40%;
-  padding-left: 1rem;
-}
-
-.table-cell.big.title {
-  padding-left: 0;
-}
-
 .icon-button-container {
   margin-right: 1rem;
   display: flex;
@@ -180,7 +177,7 @@ export default {
 
 .icon-button-container span {
   display: block;
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
   color: var(--dim);
   padding-top: 2px;
@@ -206,45 +203,7 @@ export default {
 
 .icon-button i {
   font-size: 14px;
-  color: var(--menu-bright);
+  color: var(--white);
   font-weight: 900;
-}
-
-@media screen and (max-width: 667px) {
-  .available {
-    display: none;
-  }
-
-  .table {
-    padding: 1rem;
-  }
-
-  .table-cell {
-    width: 40%;
-  }
-
-  .table-cell.big {
-    width: 60%;
-  }
-
-  .rewards {
-    font-size: 12px;
-  }
-
-  .endtime {
-    font-size: 12px;
-  }
-}
-
-@media screen and (min-width: 1254px) {
-  .button.send-button {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 1254px) {
-  .actions {
-    display: none;
-  }
 }
 </style>

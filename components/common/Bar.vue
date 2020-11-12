@@ -104,13 +104,13 @@ export default {
 
 .bar .link {
   text-decoration: underline;
-  color: var(--menu-bright);
+  color: var(--white);
   cursor: pointer;
 }
 
 .bar .button {
   background-color: transparent;
-  color: var(--menu-bright);
+  color: var(--white);
   border-radius: var(--border-radius);
   padding: 0.1rem 0.5rem;
   cursor: pointer;
