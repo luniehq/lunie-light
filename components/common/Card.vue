@@ -60,7 +60,7 @@ export default {
   padding: 2rem;
   display: flex;
   align-items: center;
-  margin: 0 auto;
+  margin: 2rem auto;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
@@ -84,13 +84,14 @@ export default {
 
 .card__title {
   font-weight: 500;
+  padding-bottom: 1rem;
   color: var(--bright);
   font-size: var(--text-lg);
 }
 
 .card__subtitle {
   color: var(--txt);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   word-break: break-word;
 }
 
