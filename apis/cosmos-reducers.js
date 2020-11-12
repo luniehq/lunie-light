@@ -600,7 +600,7 @@ export function transactionReducer(transaction) {
           value,
           transaction
         ),
-        rawMessage: value,
+        rawTransaction: transaction,
         timestamp: transaction.timestamp,
         memo: transaction.tx.value.memo,
         fees,
@@ -650,7 +650,7 @@ export function getValidatorUptimePercentage(validator, signedBlocksWindow) {
     return (
       1 -
       Number(validator.signing_info.missed_blocks_counter) /
-        Number(signedBlocksWindow)
+      Number(signedBlocksWindow)
     )
   } else {
     return 1
