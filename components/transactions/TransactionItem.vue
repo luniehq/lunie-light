@@ -7,13 +7,7 @@
       rel="nofollow noreferrer noopener"
     >
       <div class="left">
-        <img
-          class="icon"
-          :src="
-            require(`../../assets/images/transactions/${transactionCaption}.svg`)
-          "
-          alt="simple icon line drawing"
-        />
+        <div class="icon" :style="`background-image: url(${imagePath})`"></div>
         <div class="title-and-images">
           <div>
             <h3>{{ transactionCaption }}</h3>
@@ -112,10 +106,19 @@ export default {
         case lunieMessageTypes.CLAIM_REWARDS:
           return `Claim Rewards`
         case lunieMessageTypes.UNKNOWN:
-          return `Unknown`
+          return this.transaction.rawTransaction.tx.value.msg[0].type.split(
+            '/Msg'
+          )[1]
         /* istanbul ignore next */
         default:
           return ``
+      }
+    },
+    imagePath() {
+      try {
+        return require(`../../assets/images/transactions/${this.transactionCaption}.svg`)
+      } catch {
+        return require('../../assets/images/transactions/Unknown.svg')
       }
     },
     includesValidatorAddresses() {
@@ -157,7 +160,10 @@ export default {
 .icon {
   height: 2.75rem;
   width: 2.75rem;
+  border-radius: 50%;
   display: inline-flex;
+  background-color: var(--gray-300);
+  background-size: contain;
 }
 
 .transaction:hover {
