@@ -600,6 +600,7 @@ export function transactionReducer(transaction) {
           value,
           transaction
         ),
+        rawMessage: value,
         timestamp: transaction.timestamp,
         memo: transaction.tx.value.memo,
         fees,
