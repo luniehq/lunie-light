@@ -8,73 +8,80 @@
     </div>
 
     <template v-else>
-      <div class="overview-header">
-        <div class="overview-top">
-          <h1>Governance Overview</h1>
+      <div class="proposals">
+        <div class="overview-header">
+          <div class="overview-top">
+            <h1>Governance Overview</h1>
+          </div>
+
+          <div class="data-row">
+            <div>
+              <h4>Community Pool</h4>
+              <p>
+                {{ governanceOverview.treasurySize }}
+                {{ network.stakingDenom }}
+              </p>
+            </div>
+            <div>
+              <h4>Total Staked</h4>
+              <p>
+                {{ governanceOverview.totalStakedAssets }}
+                {{ network.stakingDenom }}
+              </p>
+            </div>
+            <div v-if="governanceOverview.totalVoters">
+              <h4>Total Voters</h4>
+              <p>{{ governanceOverview.totalVoters | prettyInt }}</p>
+            </div>
+          </div>
         </div>
 
-        <div class="data-row">
-          <div>
-            <h4>Community Pool</h4>
-            <p>
-              {{ governanceOverview.treasurySize }}
-              {{ network.stakingDenom }}
-            </p>
-          </div>
-          <div>
-            <h4>Total Staked</h4>
-            <p>
-              {{ governanceOverview.totalStakedAssets }}
-              {{ network.stakingDenom }}
-            </p>
-          </div>
-          <div v-if="governanceOverview.totalVoters">
-            <h4>Total Voters</h4>
-            <p>{{ governanceOverview.totalVoters | prettyInt }}</p>
-          </div>
-        </div>
-      </div>
+        <template>
+          <h4>Proposals</h4>
+          <LiProposal
+            v-for="proposal in proposals"
+            :key="proposal.id"
+            :proposal="proposal"
+          />
 
-      <template>
-        <h4>Proposals</h4>
-        <LiProposal
-          v-for="proposal in proposals"
-          :key="proposal.id"
-          :proposal="proposal"
+          <Card v-if="!proposals.length">
+            <div slot="title">No proposals</div>
+            <div slot="subtitle">
+              Noone created a proposal on this blockchain yet
+            </div>
+          </Card>
+        </template>
+
+        <ParticipantList
+          v-if="
+            governanceOverview.topVoters &&
+            governanceOverview.topVoters.length > 0
+          "
+          :title="`Top Voters`"
+          :participants="governanceOverview.topVoters"
         />
 
-        <Card v-if="!proposals.length">
-          <div slot="title">No proposals</div>
-          <div slot="subtitle">
-            Noone created a proposal on this blockchain yet
-          </div>
-        </Card>
-      </template>
-
-      <ParticipantList
-        v-if="
-          governanceOverview.topVoters &&
-          governanceOverview.topVoters.length > 0
-        "
-        :title="`Top Voters`"
-        :participants="governanceOverview.topVoters"
-      />
-
-      <section class="links">
-        <aside
-          v-if="governanceOverview.links && governanceOverview.links.length > 0"
-        >
-          <h4>Supporting Links</h4>
-          <ul>
-            <li v-for="link in governanceOverview.links" :key="link.link">
-              <a :href="link.link" target="_blank" rel="noopener norefferer">{{
-                link.title
-              }}</a>
-              <i class="material-icons notranslate">link</i>
-            </li>
-          </ul>
-        </aside>
-      </section>
+        <section class="links">
+          <aside
+            v-if="
+              governanceOverview.links && governanceOverview.links.length > 0
+            "
+          >
+            <h4>Supporting Links</h4>
+            <ul>
+              <li v-for="link in governanceOverview.links" :key="link.link">
+                <a
+                  :href="link.link"
+                  target="_blank"
+                  rel="noopener norefferer"
+                  >{{ link.title }}</a
+                >
+                <i class="material-icons notranslate">link</i>
+              </li>
+            </ul>
+          </aside>
+        </section>
+      </div>
     </template>
   </div>
 </template>
@@ -111,6 +118,7 @@ export default {
 }
 
 .proposals {
+  margin: 2rem;
   padding: 0 1rem;
 }
 

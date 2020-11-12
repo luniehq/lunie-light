@@ -2,8 +2,8 @@
   <div
     class="status"
     :class="{
-      active: status.value === `ACTIVE`,
-      inactive: status.value !== `ACTIVE`,
+      active: status.value === `ACTIVE` || status.value === `PASSED`,
+      inactive: status.value !== `ACTIVE` || status.value === `REJECTED`,
     }"
   >
     {{ status.value }}
