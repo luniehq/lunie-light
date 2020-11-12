@@ -193,6 +193,11 @@ export default {
   display: inline-flex;
 }
 
+.validator-images img {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
 .right {
   display: flex;
   flex-direction: row;

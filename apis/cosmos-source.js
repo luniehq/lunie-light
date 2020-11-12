@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { keyBy, orderBy, take, reverse, sortBy } from 'lodash'
 import * as reducers from './cosmos-reducers'
-import { setDecimalLength } from '~/common/numbers'
 import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
+import { setDecimalLength } from '~/common/numbers'
 import network from '~/common/network'
 
 const delegationEnum = { ACTIVE: 'ACTIVE', INACTIVE: 'INACTIVE' }
@@ -213,7 +213,6 @@ export default class CosmosAPI {
       tally,
       tallyingParameters,
       depositParameters,
-      links,
     ] = await Promise.all([
       this.query(`/gov/proposals/${proposal.id}/votes`),
       this.query(`/gov/proposals/${proposal.id}/deposits`),
@@ -239,7 +238,10 @@ export default class CosmosAPI {
       deposits: formattedDeposits,
       depositsSum: deposits ? Number(depositsSum).toFixed(6) : undefined,
       percentageDepositsNeeded: deposits
-        ? percentage(depositsSum, depositParameters.min_deposit[0].amount)
+        ? percentage(
+            depositsSum,
+            BigNumber(depositParameters.min_deposit[0].amount)
+          )
         : undefined,
       votes: votes
         ? votes.map((vote) => this.reducers.voteReducer(vote, this.validators))
@@ -252,7 +254,6 @@ export default class CosmosAPI {
         BigNumber(tally.no).plus(tally.no_with_veto),
         totalVotingParticipation
       ),
-      links,
       timeline: [
         proposal.submit_time
           ? { title: `Created`, time: proposal.submit_time }
@@ -402,13 +403,17 @@ export default class CosmosAPI {
     const { bonded_tokens: totalBondedTokens } = await this.query(
       '/staking/pool'
     )
-    const [communityPoolArray, links, topVoters] = await Promise.all([
+    const [communityPoolArray, topVoters] = await Promise.all([
       this.query('/distribution/community_pool'),
       this.getTopVoters(),
     ])
-    const communityPool = communityPoolArray
-      .map(this.reducers.coinReducer)
-      .find(({ denom }) => denom === network.stakingDenom)
+    const stakingChainDenom = this.network.getCoinLookup(
+      this.network.stakingDenom,
+      'viewDenom'
+    ).chainDenom
+    const communityPool = communityPoolArray.find(
+      ({ denom }) => denom === stakingChainDenom
+    ).amount
     return {
       totalStakedAssets: setDecimalLength(
         reducers.getStakingCoinViewAmount(totalBondedTokens),
@@ -422,7 +427,6 @@ export default class CosmosAPI {
       topVoters: topVoters.map((topVoter) =>
         this.reducers.topVoterReducer(topVoter)
       ),
-      links,
     }
   }
 

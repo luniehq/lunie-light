@@ -8,7 +8,6 @@ function setDecimalLength(value, length) {
   // rounding up the last decimal
   const roundedValue =
     Math.round(value * Math.pow(10, length)) / Math.pow(10, length)
-
   return new Intl.NumberFormat(language, {
     minimumFractionDigits: length > 3 ? length : 0,
   }).format(roundedValue)
@@ -167,6 +166,7 @@ module.exports = {
   SMALLEST,
   shortDecimals,
   fullDecimals,
+  setDecimalLength,
   pretty,
   prettyInt,
   prettyLong,

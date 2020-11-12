@@ -15,6 +15,10 @@ export const state = () => ({
   undelegationsLoaded: false,
   validators: [],
   validatorsLoaded: false,
+  proposals: [],
+  proposalsLoaded: false,
+  governanceOverview: {},
+  governanceOverviewLoaded: false,
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
@@ -60,11 +64,14 @@ export const actions = {
   init({ commit }) {
     commit('setApi', new DataSource(this.$axios, network))
   },
+  // this is never awaited in the code
   async refresh({ dispatch }) {
     const calls = [
       dispatch('getValidators'),
       dispatch('getBlock'),
       dispatch('refreshSession'),
+      dispatch('getProposals'),
+      dispatch('getGovernanceOverview'),
     ]
     await Promise.all(calls)
   },
@@ -213,6 +220,38 @@ export const actions = {
         {
           type: 'danger',
           message: 'Getting transactions failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+  },
+  async getProposals({ commit, state: { api } }) {
+    try {
+      const proposals = await api.getProposals(this.state.validators)
+      commit('setProposals', proposals)
+      commit('setProposalsLoaded', true)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting proposals failed:' + err.message,
+        },
+        { root: true }
+      )
+    }
+  },
+  async getGovernanceOverview({ commit, state: { api } }) {
+    try {
+      const governanceOverview = await api.getGovernanceOverview()
+      commit('setGovernanceOverview', governanceOverview)
+      commit('setGovernanceOverviewLoaded', true)
+    } catch (err) {
+      commit(
+        'notifications/add',
+        {
+          type: 'danger',
+          message: 'Getting governanceOverview failed:' + err.message,
         },
         { root: true }
       )

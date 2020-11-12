@@ -1,6 +1,12 @@
 <template>
-  <div class="status" :class="label.toLowerCase()">
-    {{ label }}
+  <div
+    class="status"
+    :class="{
+      active: status.value === `ACTIVE` || status.value === `PASSED`,
+      inactive: status.value !== `ACTIVE` || status.value === `REJECTED`,
+    }"
+  >
+    {{ status.value }}
   </div>
 </template>
 
@@ -8,8 +14,8 @@
 export default {
   name: `Status`,
   props: {
-    label: {
-      type: String,
+    status: {
+      type: Object,
       required: true,
     },
   },
