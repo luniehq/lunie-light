@@ -48,6 +48,7 @@ export default {
   }),
   computed: {
     ...mapState([`session`]),
+    ...mapState(`data`, [`delegationsLoaded`, `balancesLoaded`]),
     stakedBalance() {
       // balances not loaded yet
       if (!this.balances.length) {
