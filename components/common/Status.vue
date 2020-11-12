@@ -44,8 +44,8 @@ export default {
 }
 
 .status.voting {
-  background: var(--blue-200);
-  color: var(--blue-800);
+  background: var(--teal-200);
+  color: var(--teal-800);
 }
 
 .status.depositing {
