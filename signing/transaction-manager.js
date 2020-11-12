@@ -72,6 +72,6 @@ export async function createSignBroadcast({
   assertIsBroadcastTxSuccess(broadcastResult)
 
   return {
-    hash: broadcastResult.txhash,
+    hash: broadcastResult.transactionHash,
   }
 }
