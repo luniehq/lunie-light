@@ -1,8 +1,9 @@
 <template>
   <TableContainer
-    :show-table="showingValidators.length"
+    :length="showingValidators.length"
     :columns="properties"
     :sort="sort"
+    :loaded="loaded"
   >
     <ValidatorRow
       v-for="(validator, index) in showingValidators"
@@ -13,6 +14,9 @@
       :rewards="getRewards(validator)"
       :staking-denom="stakingDenom"
     />
+    <template slot="empty">
+      <slot name="empty"></slot>
+    </template>
   </TableContainer>
 </template>
 
@@ -38,7 +42,11 @@ export default {
     },
     searchTerm: {
       type: Boolean,
-      default: () => false,
+      default: false,
+    },
+    loaded: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({

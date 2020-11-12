@@ -60,11 +60,10 @@ export default {
   padding: 2rem;
   display: flex;
   align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
-  background: var(--app-bg);
-  margin: 2rem auto;
-  border: 2px solid var(--app-fg-hover);
-  box-shadow: 0 0 2px 0 var(--gray-300);
+  background: var(--white);
 }
 
 .card__icon {
@@ -84,14 +83,14 @@ export default {
 }
 
 .card__title {
-  font-weight: 400;
+  font-weight: 500;
   color: var(--bright);
-  font-size: var(--text-2xl);
+  font-size: var(--text-lg);
 }
 
 .card__subtitle {
   color: var(--txt);
-  font-size: 1rem;
+  font-size: var(--text-base);
   word-break: break-word;
 }
 

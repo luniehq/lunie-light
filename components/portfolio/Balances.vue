@@ -2,10 +2,11 @@
   <div class="table-container">
     <h1>Your Balances</h1>
     <TableContainer
-      :show-table="balances.length"
+      :length="balances.length"
       :columns="properties"
       :sort="sort"
       :show-row-count="false"
+      :loaded="balancesLoaded"
     >
       <BalanceRow
         v-for="balance in balances"
@@ -23,20 +24,11 @@
   </div>
 </template>
 <script>
-import network from '../../network'
+import { mapState } from 'vuex'
+import network from '~/network'
 
 export default {
   name: `Balances`,
-  props: {
-    balances: {
-      type: Array,
-      default: () => [],
-    },
-    rewards: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data: () => ({
     sort: {
       property: `id`,
@@ -44,6 +36,7 @@ export default {
     },
   }),
   computed: {
+    ...mapState(`data`, ['balances', 'balancesLoaded', 'rewards']),
     // readyToWithdraw() {
     //   return Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
     // },
@@ -62,9 +55,6 @@ export default {
           [reward.denom]: parseFloat(reward.amount) + (all[reward.denom] || 0),
         }
       }, {})
-    },
-    totalRewards() {
-      return this.totalRewardsPerDenom[network.stakingDenom] || 0
     },
     properties() {
       return [
@@ -106,7 +96,7 @@ export default {
 <style scoped>
 .table-container {
   width: 100%;
-  padding: 3rem 6rem;
+  padding: 3rem 4rem;
   margin: 0 auto;
 }
 

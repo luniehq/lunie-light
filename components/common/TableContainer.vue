@@ -9,15 +9,22 @@
         />
       </thead>
       <tbody :infinite-scroll-distance="infiniteScrollDistance">
-        <slot v-if="showTable"></slot>
-        <!-- <tr v-else-if="!showTable && !searchTerm" class="loading-row">
+        <tr v-if="!loaded" class="loading-row">
           <img :src="require(`../../assets/images/loader.svg`)" />
-        </tr> -->
-        <tr v-else class="no-results">
-          No results
         </tr>
+        <template v-else-if="length">
+          <slot></slot>
+        </template>
       </tbody>
     </table>
+
+    <template v-if="loaded && !length">
+      <slot name="empty">
+        <tr class="no-results">
+          No Results
+        </tr>
+      </slot>
+    </template>
   </div>
 </template>
 
@@ -25,7 +32,7 @@
 export default {
   name: 'TableContainer',
   props: {
-    showTable: {
+    length: {
       type: Number,
       default: () => 0,
     },
@@ -45,7 +52,7 @@ export default {
       type: String,
       default: '400',
     },
-    loading: {
+    loaded: {
       type: Boolean,
       default: false,
     },
@@ -81,6 +88,11 @@ table {
   padding: 2rem;
   height: 4rem;
   display: table-cell;
+}
+
+.no-results h2 {
+  font-weight: 500;
+  font-size: var(--text-lg);
 }
 
 .loading-row.left {
