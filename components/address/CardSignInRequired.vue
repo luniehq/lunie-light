@@ -18,12 +18,12 @@
           title="Create a new address"
           route="/create"
         />
-        <!-- <LiSession
+        <LiSession
           id="use-ledger-nano"
           icon="vpn_key"
           title="Ledger Nano"
           route="/ledger"
-        /> -->
+        />
         <LiSession
           icon="vpn_key"
           title="Use Keplr Extension"

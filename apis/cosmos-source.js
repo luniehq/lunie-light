@@ -492,13 +492,11 @@ export default class CosmosAPI {
         denom: this.network.stakingDenom,
       })
     }
-    return await Promise.all(
-      coins
-        .map((coin) => {
-          return this.reducers.balanceReducer(coin, delegations, undelegations)
-        })
-        .filter(({ supported }) => supported)
-    )
+    return coins
+      .filter(({ supported }) => supported)
+      .map((coin) => {
+        return this.reducers.balanceReducer(coin, delegations, undelegations)
+      })
   }
 
   async getDelegationsForDelegator(address) {
