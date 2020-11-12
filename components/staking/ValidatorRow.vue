@@ -6,7 +6,7 @@
   >
     <td class="cell index">{{ index + 1 }}</td>
     <td class="cell">
-      <Status :label="validator.status" />
+      <Status :status="validator.status" />
     </td>
     <td class="cell validator-info">
       <Avatar
@@ -147,7 +147,7 @@ h5 {
 .validator-image {
   border-radius: 50%;
   height: 2.5rem;
-  width: 2.5rem;
+  width: 2.5rem !important;
   min-width: 2.5rem;
   margin-right: 1rem;
   box-shadow: 0 0 3px 0 var(--gray-500);

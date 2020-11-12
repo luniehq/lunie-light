@@ -245,8 +245,14 @@ export default {
 </script>
 <style scoped>
 .loading-row {
-  margin: 1rem;
-  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-fg);
+  height: 10rem;
+  border-radius: var(--border-radius);
+  margin: 0.5rem 1rem 1rem 2rem;
+  animation: fade 2s infinite;
 }
 
 span {
@@ -263,9 +269,9 @@ span {
 }
 
 .li-validator-image {
-  border-radius: 50%;
-  height: 4rem;
-  min-width: 4rem;
+  border-radius: 50% !important;
+  height: 4rem !important;
+  width: 4rem !important;
 }
 
 .li-validator-name {

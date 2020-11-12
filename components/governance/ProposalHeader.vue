@@ -43,8 +43,11 @@
         <div v-if="proposal.proposer" class="proposer">
           Proposed By:
           <div v-if="proposal.proposer.validator" class="proposer-details">
-            <div class="proposer-image">
-              <Avatar :address="proposal.proposer.address" />
+            <div>
+              <Avatar
+                class="proposer-image"
+                :address="proposal.proposer.address"
+              />
             </div>
             <nuxt-link :to="`/validators/${proposal.proposer.address}`">{{
               proposal.proposer.name
@@ -217,7 +220,8 @@ h2 {
 .proposer-details .proposer-image {
   margin-right: 1rem;
   height: 2.5rem;
-  width: 2.5rem;
+  width: 2.5rem !important;
+  border-radius: 50% !important;
 }
 
 .proposer-details a {
