@@ -3,7 +3,7 @@
     <div class="proposal-content">
       <div>
         <div class="status-and-id">
-          <Status :status="status" />
+          <Status :label="status.value" />
         </div>
         <h3 class="title">
           {{ proposal.title }}

@@ -7,7 +7,7 @@
         <BackButton />
       </div>
       <div class="status-container">
-        <Status :status="validator.status" />
+        <Status :label="validator.status" />
       </div>
       <tr class="li-validator">
         <td class="data-table__row__info">
