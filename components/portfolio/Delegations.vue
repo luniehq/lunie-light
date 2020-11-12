@@ -24,7 +24,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import network from '~/network'
 
 export default {
   name: `Delegations`,
