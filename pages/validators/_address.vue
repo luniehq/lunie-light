@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-if="!validatorsLoaded" class="loading-row">
-      Loading...
-    </div>
+    <div v-if="!validatorsLoaded" class="loading-row">Loading...</div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
     <div v-else class="readable-width">
       <div class="back-button-container">
