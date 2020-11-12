@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!validators.length && !validatorsLoaded" class="loading-row">
+    <div v-if="!validatorsLoaded" class="loading-row">
       Loading...
     </div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>

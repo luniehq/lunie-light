@@ -18,8 +18,6 @@
       </div>
       <div
         v-if="
-          !delegations.length &&
-          !balances.length &&
           !delegationsLoaded &&
           !balancesLoaded
         "
