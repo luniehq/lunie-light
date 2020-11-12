@@ -9,9 +9,7 @@
               proposal.type === `PARAMETER_CHANGE` ||
               proposal.type === `TREASURY`
             "
-          >
-          {{ proposal.description }}
-        </pre
+            >{{ proposal.description }}</pre
           >
           <p v-else>{{ proposal.description }}</p>
         </div>
@@ -62,12 +60,11 @@ h4 {
 
 pre {
   font-family: 'Menlo', 'Consolas', monospace;
-  background: var(--app-nav);
   border-radius: 0.25rem;
-  color: var(--menu-text);
+  background: var(--app-nav-hover);
+  color: var(--gray-500);
   font-size: 14px;
   padding: 1rem;
-  white-space: pre-line;
   word-break: break-word;
 }
 
