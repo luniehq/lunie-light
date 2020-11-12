@@ -1,6 +1,7 @@
 <template>
   <img
     v-if="validatorAddress && validatorPicture"
+    class="validator-image"
     alt="validator logo - from keybase API"
     :src="validatorPicture"
     @click.prevent.self
