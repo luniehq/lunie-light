@@ -89,9 +89,6 @@ export default {
       return location.href
     },
     showVoteButton() {
-      // when the proposal is a Treasury proposal we won't show the Vote button
-      // for all Polkadot proposals we display the Vote button except for treasuries
-      // in Cosmos only for the ones in Voting Period (we consider Polkadot democracies proposals as Deposit Period)
       return (
         this.proposal.type !== `TREASURY` &&
         this.status.value === this.governanceStatusEnum.VOTING
