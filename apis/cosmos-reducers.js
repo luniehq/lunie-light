@@ -650,7 +650,7 @@ export function getValidatorUptimePercentage(validator, signedBlocksWindow) {
     return (
       1 -
       Number(validator.signing_info.missed_blocks_counter) /
-      Number(signedBlocksWindow)
+        Number(signedBlocksWindow)
     )
   } else {
     return 1
