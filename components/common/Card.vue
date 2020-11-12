@@ -1,8 +1,7 @@
 <template>
   <div class="card">
-    <div class="card__icon" :class="{ success: success }">
+    <div v-if="icon" class="card__icon" :class="{ success: success }">
       <i
-        v-if="icon"
         :style="`background: ${iconColor}`"
         class="material-icons notranslate"
         >{{ icon }}</i
@@ -57,10 +56,10 @@ export default {
 
 <style scoped>
 .card {
-  padding: 2rem;
+  padding: 2rem 3rem;
   display: flex;
   align-items: center;
-  margin: 2rem auto;
+  margin: 2rem;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
