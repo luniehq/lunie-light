@@ -20,7 +20,7 @@
         <span class="action-modal-title">{{ title }}</span>
         <Steps
           v-if="[defaultStep, feeStep, signStep].includes(step)"
-          :steps="['Details', 'Fees', 'Sign']"
+          :steps="steps"
           :active-step="step"
         />
       </div>
@@ -46,7 +46,7 @@
       </div>
       <div v-else-if="step === signStep" class="action-modal-form">
         <form
-          v-if="selectedSignMethod === SIGN_METHODS.LOCAL"
+          v-if="session.sessionType === SESSION_TYPES.LOCAL"
           @submit.prevent="validateChangeStep"
         >
           <FormGroup
@@ -68,6 +68,13 @@
             />
           </FormGroup>
         </form>
+        <div v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
+          The transaction will be send to the Keplr Browser Extension for
+          signing.
+        </div>
+        <div v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
+          The transaction will be sent to the Ledger Nano for signing.
+        </div>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
         <Card icon="hourglass_empty" :spin="true">
@@ -159,17 +166,11 @@ const signStep = `sign`
 const inclusionStep = `send`
 const successStep = `success`
 
-const SIGN_METHODS = {
+const SESSION_TYPES = {
   LOCAL: `local`,
-  // LEDGER: `ledger`,
-  // EXTENSION: `extension`,
-}
-
-const sessionType = {
-  EXPLORE: 'explore',
-  LOCAL: SIGN_METHODS.LOCAL,
-  // LEDGER: SIGN_METHODS.LEDGER,
-  // EXTENSION: SIGN_METHODS.EXTENSION,
+  LEDGER: `ledger`,
+  EXTENSION: `extension`,
+  EXPLORE: `explore`,
 }
 
 export default {
@@ -235,7 +236,7 @@ export default {
     signStep,
     inclusionStep,
     successStep,
-    SIGN_METHODS,
+    SESSION_TYPES,
     includedHeight: undefined,
     smallestAmount: SMALLEST,
     network,
@@ -247,11 +248,17 @@ export default {
     networkFees() {
       return fees.getFees(this.transactionData.type)
     },
-    selectedSignMethod() {
-      return sessionType.LOCAL
-    },
     requiresSignIn() {
-      return !this.session || this.session.type === sessionType.EXPLORE
+      return !this.session || this.session.sessionType === SESSION_TYPES.EXPLORE
+    },
+    steps() {
+      const isExtensionSession =
+        this.session.sessionType === SESSION_TYPES.EXTENSION
+      return [
+        'Details',
+        isExtensionSession ? undefined : 'Fees',
+        'Sign',
+      ].filter((x) => !!x)
     },
     isValidChildForm() {
       // here we trigger the validation of the child form
@@ -280,7 +287,7 @@ export default {
       password: {
         required: requiredIf(
           () =>
-            this.selectedSignMethod === SIGN_METHODS.LOCAL &&
+            this.session.sessionType === SESSION_TYPES.LOCAL &&
             this.step === signStep
         ),
       },
@@ -352,7 +359,11 @@ export default {
     previousStep() {
       switch (this.step) {
         case signStep:
-          this.step = feeStep
+          // Keplr is handling fees
+          this.step =
+            this.session.sessionType === SESSION_TYPES.EXTENSION
+              ? defaultStep
+              : feeStep
           break
         case feeStep:
           this.step = defaultStep
@@ -368,7 +379,11 @@ export default {
           if (!this.isValidChildForm) {
             return
           }
-          this.step = feeStep
+          // Keplr is handling fees
+          this.step =
+            this.session.sessionType === SESSION_TYPES.EXTENSION
+              ? signStep
+              : feeStep
           return
         case feeStep:
           if (!this.isValidInput(`invoiceTotal`)) {
@@ -411,16 +426,19 @@ export default {
         // TODO currently not respected
         const HDPath = network.HDPath
 
+        const block = await this.$store.dispatch('data/getBlock')
+
         const hashResult = await createSignBroadcast({
           messageType: type,
           message,
           senderAddress: this.session.address,
           network,
-          signingType: this.selectedSignMethod,
+          signingType: this.session.sessionType,
           password: this.password,
           HDPath,
           memo,
           feeDenom: this.feeDenom,
+          chainId: block.chainId,
         })
 
         const { hash } = hashResult
@@ -450,7 +468,7 @@ export default {
       const MAX_POLL_ITERATIONS = 30
       let txFound = false
       try {
-        await fetch(`${network.api_url}/txs/${hash}`).then((res) => {
+        await fetch(`${network.apiURL}/txs/${hash}`).then((res) => {
           if (res.status === 200) {
             txFound = true
           }

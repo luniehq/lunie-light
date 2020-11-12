@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!validators.length" class="loading-row">Loading...</div>
+    <div v-if="!validatorsLoaded" class="loading-row">Loading...</div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
     <div v-else class="readable-width">
       <div class="back-button-container">
@@ -169,7 +169,12 @@ export default {
     validatorDelegations: [],
   }),
   computed: {
-    ...mapState('data', ['validators', 'delegations', 'rewards']),
+    ...mapState('data', [
+      'validators',
+      'delegations',
+      'rewards',
+      'validatorsLoaded',
+    ]),
     validator() {
       return this.validators.find(
         ({ operatorAddress }) => operatorAddress === this.address

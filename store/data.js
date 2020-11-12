@@ -6,11 +6,15 @@ import { updateValidatorImages } from '~/common/keybase'
 export const state = () => ({
   block: undefined,
   balances: [],
-  balancesLoaded: undefined,
+  balancesLoaded: false,
   rewards: [],
+  rewardsLoaded: false,
   delegations: [],
+  delegationsLoaded: false,
   undelegations: [],
+  undelegationsLoaded: false,
   validators: [],
+  validatorsLoaded: false,
   proposals: [],
   proposalsLoaded: false,
   governanceOverview: {},
@@ -42,7 +46,6 @@ export const mutations = {
     } else {
       state.transactions = transactions
     }
-    state.transactionsLoaded = true
     state.moreTransactionsAvailable = transactions.length > 0
   },
   resetSessionData(state) {
@@ -124,6 +127,7 @@ export const actions = {
     try {
       const validators = await api.getValidators()
       commit('setValidators', validators)
+      commit('setValidatorsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -158,6 +162,7 @@ export const actions = {
     try {
       const delegations = await api.getDelegationsForDelegator(address)
       commit('setDelegations', delegations)
+      commit('setDelegationsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -173,6 +178,7 @@ export const actions = {
     try {
       const undelegations = await api.getUndelegationsForDelegator(address)
       commit('setUndelegations', undelegations)
+      commit('setUndelegationsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -188,6 +194,7 @@ export const actions = {
     try {
       const rewards = await api.getRewards(address, currency, network)
       commit('setRewards', rewards)
+      commit('setRewardsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -206,6 +213,7 @@ export const actions = {
     try {
       const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
+      commit('setTransactionsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
