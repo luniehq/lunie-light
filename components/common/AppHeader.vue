@@ -3,7 +3,11 @@
     <div class="container" :class="{ open: isOpen }">
       <div class="header-item" :class="{ open: isOpen }">
         <nuxt-link to="/">
-          <img class="network-icon" src="~/assets/images/currencies/atom.png" />
+          <img
+            class="network-icon"
+            :src="require(`../../assets/images/${network.logo}`)"
+            alt="network logo"
+          />
           {{ network.name }}
         </nuxt-link>
         <div class="header-menu-section">
@@ -26,6 +30,7 @@
 
 <script>
 import network from '~/common/network'
+
 export default {
   name: `app-header`,
   data: () => ({
@@ -155,7 +160,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     color: var(--link);
     cursor: pointer;
   }

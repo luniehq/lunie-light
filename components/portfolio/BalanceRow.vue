@@ -188,7 +188,7 @@ export default {
 
 .icon-button {
   border-radius: 50%;
-  background: var(--link);
+  background: var(--primary);
   border: none;
   outline: none;
   height: 2rem;
@@ -200,7 +200,7 @@ export default {
 }
 
 .icon-button:hover {
-  background: var(--link-hover);
+  background: var(--primary-hover);
   cursor: pointer;
 }
 

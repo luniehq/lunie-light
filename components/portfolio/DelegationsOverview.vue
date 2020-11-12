@@ -16,19 +16,16 @@
           show-on-mobile="expectedReturns"
         />
       </div>
-      <div v-if="!delegations.length && !balances.length" class="loading-row">
+      <div v-if="!delegationsLoaded && !balancesLoaded" class="loading-row">
         Loading...
       </div>
-      <TmDataMsg
-        v-else-if="delegations.length === 0"
-        icon="sentiment_dissatisfied"
-      >
+      <Card v-else-if="delegations.length === 0">
         <div slot="title">No validators in your portfolio</div>
         <div slot="subtitle">
           Head over to the
           <a @click="goToValidators()">validator list</a>&nbsp;to start staking.
         </div>
-      </TmDataMsg>
+      </Card>
       <!-- <UnstakeModal ref="UnstakeModal" /> -->
     </div>
   </div>
@@ -59,6 +56,7 @@ export default {
   }),
   computed: {
     ...mapState([`session`]),
+    ...mapState(`data`, [`delegationsLoaded`, `balancesLoaded`]),
     stakedBalance() {
       // balances not loaded yet
       if (!this.balances.length) {
@@ -97,13 +95,6 @@ export default {
 }
 </script>
 <style scoped>
-h1 {
-  font-size: 24px;
-  color: var(--bright);
-  font-weight: 500;
-  padding-bottom: 2rem;
-}
-
 .delegations-overview {
   background: var(--app-fg);
 }
@@ -112,31 +103,14 @@ h1 {
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding: 4rem 2rem;
-}
-
-.table-validators {
-  margin-top: 2rem;
+  padding: 4rem 3rem;
 }
 
 .tm-form-msg--desc {
   padding-bottom: 1rem;
 }
 
-.tm-data-msg {
-  margin-top: 1rem;
-}
-
 @media screen and (max-width: 667px) {
-  h1 {
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .loading-image-container {
-    padding: 2rem;
-  }
-
   .table-container {
     padding: 4rem 1rem;
   }

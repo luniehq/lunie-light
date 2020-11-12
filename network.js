@@ -1,9 +1,9 @@
 export default {
   id: 'cosmos-mainnet',
-  chain_id: 'cosmos-hub-3', // TODO get from chain?
   name: 'Cosmos Hub',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+  logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'https://lcd.nylira.net',
   stakingDenom: 'ATOM',
@@ -15,16 +15,20 @@ export default {
     },
   ],
   addressPrefix: 'cosmos',
+  validatorAddressPrefix: 'cosmosvaloper',
+  validatorConsensusaddressPrefix: 'cosmosvalcons', // needed to map validators from staking queries to the validator set
   HDPath: `m/44'/118'/0'/0/0`,
-  curve: 'ed25519',
   lockUpPeriod: `21 days`,
   fees: {
     default: {
       gasEstimate: 350000,
-      fee: {
-        denom: 'ATOM',
-        amount: 0.1,
-      },
+      feeOptions: [
+        {
+          denom: 'ATOM',
+          amount: 0.001,
+        },
+      ],
     },
   },
+  localSigning: false,
 }

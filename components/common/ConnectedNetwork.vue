@@ -47,20 +47,23 @@ export default {
 
 <style scoped>
 .container {
-  margin: 0.5rem;
-  padding: 0.5rem 1.25rem;
   display: flex;
   align-items: center;
-  font-size: var(--xs);
-  color: var(--menu-text-dim);
+  font-size: var(--text-xs);
+  color: var(--gray-500);
   justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  margin: 1rem;
+  border-radius: var(--border-radius);
+  background: var(--app-nav-hover);
+  box-shadow: 0 0 1px 0 var(--gray-700);
 }
 
 .status {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  margin-right: 0.5rem;
+  margin-right: 0.6rem;
 }
 
 .connected {
@@ -69,7 +72,7 @@ export default {
 }
 
 .connected .status {
-  background: var(--success);
+  background: var(--green-500);
   animation: pulse 2.5s infinite;
 }
 
@@ -84,14 +87,14 @@ export default {
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 var(--success-faded);
+    box-shadow: 0 0 0 0 hsla(120, 61%, 45%, 0.15);
   }
   70% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 5px var(--success-faded);
+    box-shadow: 0 0 0 5px hsla(120, 61%, 45%, 0.15);
   }
   100% {
-    box-shadow: 0 0 0 0 var(--success-faded);
+    box-shadow: 0 0 0 0 hsla(120, 61%, 45%, 0.15);
   }
 }
 </style>

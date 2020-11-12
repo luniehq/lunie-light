@@ -3,7 +3,7 @@
     id="delegation-modal"
     ref="actionModal"
     :validate="validateForm"
-    :amount="amount"
+    :amounts="[{ amount, denom: stakingDenom }]"
     title="Stake"
     class="delegation-modal"
     submission-error-prefix="Staking failed"
@@ -14,84 +14,81 @@
     @close="clear"
     @txIncluded="onSuccess"
   >
-    <TmFormGroup
+    <FormGroup
       v-if="Object.keys(targetValidator).length > 0"
       class="action-modal-form-group"
       field-id="to"
       field-label="To"
     >
-      <TmField id="to" :value="enhancedTargetValidator" type="text" readonly />
-    </TmFormGroup>
+      <Field id="to" :value="enhancedTargetValidator" type="text" readonly />
+    </FormGroup>
 
-    <TmFormGroup
+    <FormGroup
       :error="$v.amount.$error && $v.amount.$invalid"
       class="action-modal-form-group"
       field-id="amount"
       field-label="Amount"
     >
       <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
-      <TmFieldGroup>
-        <TmField
-          id="amount"
-          v-model="amount"
-          v-focus
-          placeholder="0"
-          class="tm-field-addon"
-          type="number"
-          @keyup.enter.native="enterPressed"
-        />
-        <TmBtn
-          type="button"
-          class="secondary addon-max"
-          value="Set Max"
-          :disabled="session.addressRole === `controller`"
-          @click.native="setMaxAmount()"
-        />
-      </TmFieldGroup>
+      <Field
+        id="amount"
+        v-model="amount"
+        v-focus
+        placeholder="0"
+        class="tm-field-addon"
+        type="number"
+        @keyup.enter.native="enterPressed"
+      />
+      <Button
+        type="button"
+        class="secondary addon-max"
+        value="Max"
+        @click.native="setMaxAmount()"
+      />
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
         {{ network.stakingDenom }}s
       </span>
-      <TmFormMsg
+      <FormMessage
         v-if="balance.available === '0'"
         :msg="`doesn't have any ${network.stakingDenom}s`"
         name="Wallet"
         type="custom"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.decimal"
         name="Amount"
         type="numeric"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
         type="required"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.max"
         type="custom"
         :msg="`You don't have enough ${network.stakingDenom} to proceed.`"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.min"
         :min="smallestAmount"
         name="Amount"
         type="min"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="$v.amount.$error && !$v.amount.maxDecimals"
         name="Amount"
         type="maxDecimals"
       />
-      <TmFormMsg
+      <FormMessage
         v-else-if="isMaxAmount()"
         msg="You are about to use all your tokens for this transaction. Consider leaving a little bit left over to cover the network fees."
         type="custom"
         class="tm-form-msg--desc"
       />
-    </TmFormGroup>
+    </FormGroup>
   </ActionModal>
 </template>
 

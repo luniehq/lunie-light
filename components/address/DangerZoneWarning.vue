@@ -11,20 +11,20 @@
 <style scoped>
 .danger-zone {
   border: 2px solid var(--danger);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius);
   margin: 1rem 0;
   padding: 1rem;
 }
 
 .danger-zone p {
-  font-size: var(--sm);
+  font-size: var(--text-xs);
   color: var(--danger);
   margin: 0;
 }
 
 .danger-zone h2 {
   font-weight: 700;
-  font-size: var(--m);
+  font-size: var(--text-base);
   color: var(--danger);
   padding-bottom: 0.25rem;
 }

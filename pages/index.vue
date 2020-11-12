@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-    <!-- <img class="network-icon" src="~/assets/images/currencies/atom.png" /> -->
     <h1>{{ network.name }}</h1>
     <h2>{{ network.description }}</h2>
     <div class="card-sign-in">
@@ -20,23 +19,34 @@
       </div>
     </div>
     <div class="list-container">
+      <h3>Helpful Links</h3>
       <ul>
-        <h3>Helpful Links</h3>
         <li>
-          <a :href="network.website" target="_blank">Project Website</a>
+          <a
+            :href="network.website"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            >Project Website</a
+          >
         </li>
         <li>
-          <a :href="network.apiURL + '/node_info'" target="_blank">Node Info</a>
+          <a
+            :href="network.apiURL + '/node_info'"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            >Node Info</a
+          >
         </li>
         <!-- <li>
           <a
             href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
             target="_blank"
+            rel="nofollow noreferrer noopener"
             >Keplr Browser Extension</a
           >
         </li>
         <li>
-          <a href="https://www.ledger.com/" target="_blank"
+          <a href="https://www.ledger.com/" target="_blank" rel="nofollow noreferrer noopener"
             >Ledger Hardware Wallet</a
           >
         </li> -->
@@ -62,7 +72,7 @@ export default {
 
 <style scoped>
 .content {
-  padding: 1rem 2rem;
+  padding: 5rem 2rem 2rem;
   margin: 0 auto;
   max-width: 800px;
 }
@@ -74,18 +84,16 @@ export default {
 }
 
 h1 {
-  font-size: 44px;
-  font-weight: 700;
-  padding-bottom: 1rem;
+  font-size: var(--text-4xl);
 }
 
 h2 {
-  font-size: 18px;
+  font-size: var(--text-lg);
   padding-bottom: 2rem;
 }
 
 h3 {
-  font-size: 12px;
+  font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -102,6 +110,7 @@ ul {
 
 .list-container {
   display: flex;
+  flex-direction: column;
   padding: 2rem 0 4rem;
 }
 

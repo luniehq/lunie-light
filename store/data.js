@@ -1,16 +1,20 @@
-import { keyBy } from 'lodash'
+import { keyBy, uniqBy } from 'lodash'
 import network from '~/common/network'
-import DataSource from '~/common/cosmosV2-source'
+import DataSource from '~/apis/cosmos-source'
 import { updateValidatorImages } from '~/common/keybase'
 
 export const state = () => ({
   block: undefined,
   balances: [],
+  balancesLoaded: false,
   rewards: [],
+  rewardsLoaded: false,
   delegations: [],
+  delegationsLoaded: false,
   undelegations: [],
+  undelegationsLoaded: false,
   validators: [],
-  accountInfo: undefined,
+  validatorsLoaded: false,
   transactions: [],
   transactionsLoaded: undefined,
   moreTransactionsAvailable: true,
@@ -31,11 +35,13 @@ export const mutations = {
   ),
   setTransactions(state, { transactions, pageNumber }) {
     if (pageNumber > 0) {
-      state.transactions = state.transactions.concat(transactions)
+      state.transactions = uniqBy(
+        state.transactions.concat(transactions),
+        'key'
+      )
     } else {
       state.transactions = transactions
     }
-    state.transactionsLoaded = true
     state.moreTransactionsAvailable = transactions.length > 0
   },
   resetSessionData(state) {
@@ -52,8 +58,7 @@ export const mutations = {
 
 export const actions = {
   init({ commit }) {
-    const _store = {}
-    commit('setApi', new DataSource(this.$axios, network, _store, null, null))
+    commit('setApi', new DataSource(this.$axios, network))
   },
   async refresh({ dispatch }) {
     const calls = [
@@ -72,6 +77,7 @@ export const actions = {
       calls.push(
         dispatch('getBalances', { address, currency }),
         dispatch('getRewards', { address, currency }),
+        dispatch('getTransactions', { address }),
         dispatch('getDelegations', address),
         dispatch('getUndelegations', address)
       )
@@ -80,8 +86,9 @@ export const actions = {
   },
   async getBlock({ commit, state: { api } }) {
     try {
-      const block = await api.getBlockHeader()
+      const block = await api.getBlock()
       commit('setBlock', block)
+      return block
     } catch (err) {
       commit(
         'notifications/add',
@@ -95,12 +102,9 @@ export const actions = {
   },
   async getBalances({ commit, state: { api } }, { address, currency }) {
     try {
-      const balances = await api.getBalancesV2FromAddress(
-        address,
-        currency,
-        network
-      )
+      const balances = await api.getBalances(address, currency, network)
       commit('setBalances', balances)
+      commit('setBalancesLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -114,8 +118,9 @@ export const actions = {
   },
   async getValidators({ commit, dispatch, state: { api } }) {
     try {
-      const validators = await api.getAllValidators()
+      const validators = await api.getValidators()
       commit('setValidators', validators)
+      commit('setValidatorsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -148,8 +153,9 @@ export const actions = {
   },
   async getDelegations({ commit, state: { api } }, address) {
     try {
-      const delegations = await api.getDelegationsForDelegatorAddress(address)
+      const delegations = await api.getDelegationsForDelegator(address)
       commit('setDelegations', delegations)
+      commit('setDelegationsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -163,10 +169,9 @@ export const actions = {
   },
   async getUndelegations({ commit, state: { api } }, address) {
     try {
-      const undelegations = await api.getUndelegationsForDelegatorAddress(
-        address
-      )
+      const undelegations = await api.getUndelegationsForDelegator(address)
       commit('setUndelegations', undelegations)
+      commit('setUndelegationsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -182,6 +187,7 @@ export const actions = {
     try {
       const rewards = await api.getRewards(address, currency, network)
       commit('setRewards', rewards)
+      commit('setRewardsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',
@@ -193,18 +199,14 @@ export const actions = {
       )
     }
   },
-  async getAccountInfo({ commit, state: { api } }, address) {
-    const { accountNumber, sequence } = await api.getAccountInfo(address)
-    commit('setAccountInfo', { accountNumber, sequence })
-    return { accountNumber, sequence }
-  },
   async getTransactions(
     { commit, state: { api } },
     { address, pageNumber = 0 }
   ) {
     try {
-      const transactions = await api.getTransactionsV2(address, pageNumber)
+      const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
+      commit('setTransactionsLoaded', true)
     } catch (err) {
       commit(
         'notifications/add',

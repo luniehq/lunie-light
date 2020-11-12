@@ -43,8 +43,8 @@ export default {
   display: flex;
   padding: 1.5rem;
   margin: 0.5rem 0;
-  background-color: var(--app-fg);
-  border-radius: 0.25rem;
+  background: var(--app-fg);
+  border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
 }
 
@@ -59,11 +59,11 @@ export default {
 }
 
 .li-session.card:first-child {
-  background-color: var(--primary-faded);
+  background: var(--primary-faded);
 }
 
 .li-session.card:first-child:hover {
-  background-color: var(--primary-faded-hover);
+  background: var(--primary-faded-hover);
 }
 
 .arrow {
@@ -96,8 +96,8 @@ export default {
 }
 
 .title {
-  color: var(--dim);
-  font-size: var(--h4);
+  color: var(--bright);
+  font-size: var(--text-lg);
   font-weight: 400;
 }
 

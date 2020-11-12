@@ -1,43 +1,43 @@
 <template>
-  <TmFormStruct :submit="onSubmit">
+  <Form :submit="onSubmit">
     <h2 class="session-title">Choose a password</h2>
     <div>
-      <TmFormGroup
+      <FormGroup
         :error="$v.fieldPassword.$error"
         field-id="sign-up-password"
         field-label="Password"
       >
-        <TmField
+        <Field
           id="sign-up-password"
           v-model="fieldPassword"
           v-focus
           type="password"
           placeholder="Must be at least 10 characters"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldPassword.$error && !$v.fieldPassword.required"
           name="Password"
           type="required"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="$v.fieldPassword.$error && !$v.fieldPassword.minLength"
           name="Password"
           type="minLength"
           min="10"
         />
-      </TmFormGroup>
-      <TmFormGroup
+      </FormGroup>
+      <FormGroup
         :error="$v.fieldPasswordConfirm.$error"
         field-id="sign-up-password-confirm"
         field-label="Confirm Password"
       >
-        <TmField
+        <Field
           id="sign-up-password-confirm"
           v-model="fieldPasswordConfirm"
           type="password"
           placeholder="Enter password again"
         />
-        <TmFormMsg
+        <FormMessage
           v-if="
             $v.fieldPasswordConfirm.$error &&
             !$v.fieldPasswordConfirm.sameAsPassword
@@ -45,12 +45,12 @@
           name="Password confirmation"
           type="match"
         />
-      </TmFormGroup>
+      </FormGroup>
       <div class="session-footer">
-        <TmBtn value="Next" type="submit" />
+        <Button value="Next" type="submit" />
       </div>
     </div>
-  </TmFormStruct>
+  </Form>
 </template>
 
 <script>

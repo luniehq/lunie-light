@@ -1,9 +1,22 @@
 <template>
-  <div class="user-menu">
-    <UserMenuAddress :address="session ? session.address : undefined" />
-    <button class="icon-button" @click="$router.push('/address')">
-      <i class="material-icons">person</i>
-    </button>
+  <div class="container">
+    <div v-if="session" class="user-menu">
+      <div>
+        <h4>Your Address</h4>
+        <UserMenuAddress :address="session.address" />
+      </div>
+      <i class="material-icons icon-button" @click="$router.push('/address')">
+        person
+      </i>
+    </div>
+    <template v-else>
+      <Button
+        value="Get Started"
+        class="menu-button"
+        type="secondary"
+        @click.native="$router.push('/address')"
+      />
+    </template>
   </div>
 </template>
 
@@ -19,41 +32,57 @@ export default {
 </script>
 
 <style scoped>
+.container,
 .user-menu {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 1rem;
+  justify-content: space-between;
+}
+
+.container {
+  margin: 1rem 1rem 3rem;
+}
+
+.user-menu {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+  background: var(--app-nav-hover);
+  box-shadow: 0 0 1px 0 var(--gray-700);
+}
+
+h4 {
+  font-size: var(--text-xs);
+  color: var(--gray-500);
+}
+
+.container .button.secondary {
+  color: var(--gray-300);
   width: 100%;
 }
 
 .icon-button {
   border-radius: 50%;
-  background: var(--app-fg);
-  border: none;
-  outline: none;
-  height: 2rem;
-  width: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
   display: flex;
-  margin-left: 0.25rem;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.25s ease;
+  color: var(--link);
+  font-size: var(--text-base);
+  background: var(--gray-800);
 }
 
 .icon-button:hover {
   cursor: pointer;
+  color: var(--link-hover);
 }
 
-.icon-button i {
-  font-size: 18px;
-  color: var(--link);
-  font-weight: 900;
+.button.menu-button {
+  box-shadow: 0 0 2px 0 rgba(210, 210, 210, 0.1);
 }
 
-@media screen and (max-width: 667px) {
-  .user-menu {
-    justify-content: center;
-  }
+.button.menu-button.secondary:hover:not(:disabled) {
+  background: rgba(210, 210, 210, 0.1);
 }
 </style>

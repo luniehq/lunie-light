@@ -1,5 +1,5 @@
 <template>
-  <TmField
+  <Field
     :value="value"
     class="tm-field-seed"
     type="textarea"
@@ -39,7 +39,7 @@ export default {
 }
 
 .field-seed {
-  line-height: var(--lg);
+  line-height: var(--text-xl);
   padding: 0.75rem;
   resize: none;
 }
