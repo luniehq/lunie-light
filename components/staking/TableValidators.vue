@@ -4,6 +4,7 @@
     :columns="properties"
     :sort="sort"
     :loaded="loaded"
+    @loadMore="loadMore"
   >
     <ValidatorRow
       v-for="(validator, index) in showingValidators"

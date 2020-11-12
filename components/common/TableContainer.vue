@@ -8,7 +8,10 @@
           :show-row-count="showRowCount"
         />
       </thead>
-      <tbody :infinite-scroll-distance="infiniteScrollDistance">
+      <tbody
+        v-infinite-scroll="loadMore"
+        :infinite-scroll-distance="infiniteScrollDistance"
+      >
         <tr v-if="!loaded" class="loading-row">
           <img :src="require(`../../assets/images/loader.svg`)" />
         </tr>
@@ -50,7 +53,7 @@ export default {
     },
     infiniteScrollDistance: {
       type: String,
-      default: '400',
+      default: '380',
     },
     loaded: {
       type: Boolean,
@@ -66,12 +69,19 @@ export default {
       searchTerm: false,
     }
   },
+  methods: {
+    loadMore() {
+      if (this.loaded) {
+        this.$emit('loadMore')
+      }
+    },
+  },
 }
 </script>
 
 <style scoped>
 .container {
-  overflow: auto;
+  /* overflow: auto; vue infinite scroll doesn't like this */
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
