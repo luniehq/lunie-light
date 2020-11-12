@@ -10,9 +10,9 @@
       </thead>
       <tbody :infinite-scroll-distance="infiniteScrollDistance">
         <slot v-if="showTable"></slot>
-        <tr v-else-if="!showTable && !searchTerm" class="loading-row">
+        <!-- <tr v-else-if="!showTable && !searchTerm" class="loading-row">
           <img :src="require(`../../assets/images/loader.svg`)" />
-        </tr>
+        </tr> -->
         <tr v-else class="no-results">
           No results
         </tr>
@@ -76,6 +76,7 @@ table {
   min-width: 100%;
 }
 
+.no-results,
 .loading-row {
   padding: 2rem;
   height: 4rem;
