@@ -7,13 +7,7 @@
       rel="nofollow noreferrer noopener"
     >
       <div class="left">
-        <img
-          class="icon"
-          :src="
-            require(`../../assets/images/transactions/${transactionCaption}.svg`)
-          "
-          alt="simple icon line drawing"
-        />
+        <div class="icon" :style="`background-image: url(${imagePath})`"></div>
         <div class="title-and-images">
           <div>
             <h3>{{ transactionCaption }}</h3>
@@ -112,10 +106,19 @@ export default {
         case lunieMessageTypes.CLAIM_REWARDS:
           return `Claim Rewards`
         case lunieMessageTypes.UNKNOWN:
-          return `Unknown`
+          return this.transaction.rawTransaction.tx.value.msg[0].type.split(
+            '/Msg'
+          )[1]
         /* istanbul ignore next */
         default:
           return ``
+      }
+    },
+    imagePath() {
+      try {
+        return require(`../../assets/images/transactions/${this.transactionCaption}.svg`)
+      } catch {
+        return require('../../assets/images/transactions/Unknown.svg')
       }
     },
     includesValidatorAddresses() {
@@ -145,7 +148,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--app-fg);
+  background: var(--app-bg);
   border-radius: var(--border-radius);
   z-index: 90;
   padding: 0.75rem 1rem;
@@ -157,11 +160,14 @@ export default {
 .icon {
   height: 2.75rem;
   width: 2.75rem;
+  border-radius: 50%;
   display: inline-flex;
+  background-color: var(--gray-300);
+  background-size: contain;
 }
 
 .transaction:hover {
-  background: var(--app-fg-hover);
+  background: var(--gray-100);
 }
 
 .left {
@@ -210,6 +216,7 @@ h3 {
   width: 1.25rem;
   margin: 0 0.5rem 0 0;
   border-radius: 50%;
+  box-shadow: 0 0 3px 0 var(--gray-500);
 }
 
 .launch {

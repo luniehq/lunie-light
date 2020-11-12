@@ -1,0 +1,114 @@
+<template>
+  <tr class="header-row">
+    <th v-if="showRowCount" class="cell index"></th>
+    <th v-for="property in properties" :key="property.value" class="cell">
+      <a
+        v-if="property.title"
+        class="sort-link"
+        :class="{
+          asc: activeProperty === property.value && sortOrder === 'asc',
+          desc: activeProperty === property.value && sortOrder === 'desc',
+        }"
+        @click="orderBy(property.value)"
+      >
+        {{ property.title }}
+        <i class="material-icons notranslate">arrow_drop_up</i>
+      </a>
+    </th>
+  </tr>
+</template>
+
+<script>
+export default {
+  name: `table-header`,
+  props: {
+    sort: {
+      type: Object,
+      default: null,
+    },
+    properties: {
+      type: Array,
+      required: true,
+    },
+    showRowCount: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      activeProperty: '',
+    }
+  },
+  computed: {
+    sortOrder() {
+      return this.sort.order
+    },
+  },
+  methods: {
+    orderBy(property) {
+      this.activeProperty = property
+      if (this.sort.property === property) {
+        if (this.sort.order === `asc`) {
+          this.sort.order = `desc`
+        } else {
+          this.sort.order = `asc`
+        }
+      } else {
+        this.sort.property = property
+      }
+    },
+  },
+}
+</script>
+
+<style scoped>
+.header-row {
+  border-bottom: 1px solid var(--bc-dim);
+}
+
+th {
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.sort-link {
+  font-size: var(--text-xs);
+  color: var(--dim);
+}
+
+.sort-link i {
+  font-size: var(--text-xl);
+  position: relative;
+  top: 6px;
+  right: 4px;
+}
+
+.sort-link a {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  color: var(--dim);
+}
+
+.sort-link a:hover {
+  color: var(--link);
+}
+
+.sort-link.asc,
+.sort-link.desc {
+  color: var(--primary);
+}
+
+.sort-link.asc i {
+  color: var(--primary);
+}
+
+.sort-link.desc i {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+</style>

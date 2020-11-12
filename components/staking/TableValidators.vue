@@ -1,33 +1,24 @@
 <template>
-  <div class="container">
-    <table v-if="showingValidators.length" class="data-table">
-      <thead>
-        <PanelSort
-          :sort="sort"
-          :properties="properties"
-          :show-on-mobile="showOnMobile"
-        />
-      </thead>
-      <tbody
-        v-infinite-scroll="loadMore"
-        infinite-scroll-distance="400"
-        name="flip-list"
-      >
-        <LiValidator
-          v-for="(validator, index) in showingValidators"
-          :key="validator.operatorAddress"
-          :index="index"
-          :validator="validator"
-          :delegation="getDelegation(validator)"
-          :rewards="getRewards(validator)"
-          :show-on-mobile="showOnMobile"
-          :staking-denom="stakingDenom"
-        />
-      </tbody>
-    </table>
-    <div v-else-if="!searchTerm" class="loading-row">Loading...</div>
-    <div v-else class="no-results">No results</div>
-  </div>
+  <TableContainer
+    :length="showingValidators.length"
+    :columns="properties"
+    :sort="sort"
+    :loaded="loaded"
+    @loadMore="loadMore"
+  >
+    <ValidatorRow
+      v-for="(validator, index) in showingValidators"
+      :key="validator.operatorAddress"
+      :index="index"
+      :validator="validator"
+      :delegation="getDelegation(validator)"
+      :rewards="getRewards(validator)"
+      :staking-denom="stakingDenom"
+    />
+    <template slot="empty">
+      <slot name="empty"></slot>
+    </template>
+  </TableContainer>
 </template>
 
 <script>
@@ -50,21 +41,21 @@ export default {
       type: Array,
       default: () => [],
     },
-    showOnMobile: {
-      type: String,
-      default: () => 'returns',
-    },
     searchTerm: {
       type: Boolean,
-      default: () => false,
+      default: false,
+    },
+    loaded: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({
     sort: {
-      property: ``,
+      property: `votingPower`,
       order: `desc`,
     },
-    showing: 15,
+    showing: 25,
     stakingDenom: network.stakingDenom,
   }),
   computed: {
@@ -145,38 +136,12 @@ export default {
   color: var(--dim);
 }
 
-@media screen and (max-width: 550px) {
-  .data-table td {
-    overflow: hidden;
-  }
-
-  .data-table__row__info {
-    max-width: 22rem;
-  }
-}
-
-.data-table >>> th:first-child {
-  width: 5%;
-  color: var(--dim);
-  font-size: var(--text-xs);
-}
-
-.data-table >>> th:nth-child(2) {
-  width: 10%;
-  color: var(--dim);
-  font-size: var(--text-xs);
-}
-
-.data-table >>> th:nth-child(3) {
-  width: 50%;
-}
-
 .sortingOptions {
   margin: 0.5rem 1rem;
 }
 
 .sortingOptions li.active {
-  color: var(--highlight);
+  color: var(--primary);
 }
 
 .sortingOptions li {

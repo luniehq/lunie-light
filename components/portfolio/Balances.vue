@@ -1,52 +1,42 @@
 <template>
-  <div class="balances-container">
-    <div class="balances">
-      <div class="header">
-        <h1>Your Balances</h1>
-        <div class="buttons">
-          <Button
-            class="send-button"
-            value="Send"
-            type="secondary"
-            @click.native="onSend()"
-          />
-          <!-- <Button
-            :disabled="!readyToWithdraw"
-            class="withdraw-rewards"
-            value="Claim Rewards"
-            @click.native="readyToWithdraw && onWithdrawal()"
-          /> -->
-        </div>
-      </div>
-
-      <TableBalances
-        :balances="balances"
+  <div class="table-container">
+    <h1>Your Balances</h1>
+    <TableContainer
+      :length="balances.length"
+      :columns="properties"
+      :sort="sort"
+      :show-row-count="false"
+      :loaded="balancesLoaded"
+    >
+      <BalanceRow
+        v-for="balance in balances"
+        :key="balance.id"
+        :balance="balance"
         :total-rewards-per-denom="totalRewardsPerDenom"
+        :send="true"
       />
+    </TableContainer>
 
-      <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
-      <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
+    <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
+    <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
       <StakeModal ref="StakeModal" />
       <UnstakeModal ref="UnstakeModal" /> -->
-    </div>
   </div>
 </template>
 <script>
-import network from '../../network'
+import { mapState } from 'vuex'
+import network from '~/network'
 
 export default {
-  name: `balances`,
-  props: {
-    balances: {
-      type: Array,
-      default: () => [],
+  name: `Balances`,
+  data: () => ({
+    sort: {
+      property: `id`,
+      order: `desc`,
     },
-    rewards: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  }),
   computed: {
+    ...mapState(`data`, ['balances', 'balancesLoaded', 'rewards']),
     // readyToWithdraw() {
     //   return Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
     // },
@@ -66,8 +56,25 @@ export default {
         }
       }, {})
     },
-    totalRewards() {
-      return this.totalRewardsPerDenom[network.stakingDenom] || 0
+    properties() {
+      return [
+        {
+          title: `Total`,
+          value: `total`,
+        },
+        {
+          title: `Rewards`,
+          value: `rewards`,
+        },
+        {
+          title: `Available`,
+          value: `available`,
+        },
+        {
+          title: ``,
+          value: `actions`,
+        },
+      ]
     },
   },
   methods: {
@@ -87,51 +94,63 @@ export default {
 }
 </script>
 <style scoped>
-.balances-container {
+.table-container {
   width: 100%;
-  background: var(--app-bg);
-}
-
-.balances {
+  padding: 3rem 4rem;
   margin: 0 auto;
-  max-width: 1100px;
-  padding: 1.5rem 1rem;
 }
 
-.header {
+.icon-button-container {
+  margin-right: 1rem;
   display: flex;
   align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1.5rem 2rem 1rem;
-  width: 100%;
+  flex-direction: column;
+  min-width: 3rem;
 }
 
-.header h1 {
-  padding-bottom: 0;
+.icon-button-container span {
+  display: block;
+  font-size: var(--text-xs);
+  text-align: center;
+  color: var(--dim);
+  padding-top: 2px;
 }
 
-.header button:last-child {
-  margin-left: 0.5rem;
-}
-
-.buttons {
+.icon-button {
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  outline: none;
+  height: 2rem;
+  width: 2rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: background-color 0.25s ease;
 }
 
-@media screen and (max-width: 667px) {
-  .header {
-    flex-direction: column;
-    padding: 0 1rem;
+.icon-button:hover {
+  background: var(--primary-hover);
+  cursor: pointer;
+}
+
+.icon-button i {
+  font-size: 14px;
+  color: var(--white);
+  font-weight: 900;
+}
+
+@media screen and (max-width: 1023px) {
+  .table-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
 }
 
-@media screen and (min-width: 1254px) {
-  .stake-button,
-  .unstake-button,
-  .button.send-button {
-    display: none;
+@media screen and (max-width: 667px) {
+  .table-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 </style>

@@ -1,21 +1,19 @@
 <template>
-  <div class="tm-data-msg">
-    <div class="tm-data-msg__icon" :class="{ success: success }">
+  <div class="card">
+    <div v-if="icon" class="card__icon" :class="{ success: success }">
       <i
-        v-if="icon"
         :style="`background: ${iconColor}`"
-        :class="spinnerClass"
         class="material-icons notranslate"
         >{{ icon }}</i
       >
     </div>
-    <div class="tm-data-msg__text">
-      <h2 class="tm-data-msg__title">
+    <div class="card__text">
+      <h2 class="card__title">
         <slot name="title">
           {{ title }}
         </slot>
       </h2>
-      <h3 class="tm-data-msg__subtitle">
+      <h3 class="card__subtitle">
         <slot name="subtitle">
           {{ subtitle }}
         </slot>
@@ -53,50 +51,46 @@ export default {
       default: `var(--warning)`,
     },
   },
-  computed: {
-    spinnerClass({ spin } = this) {
-      return spin ? `fa-spin` : ``
-    },
-  },
 }
 </script>
 
 <style scoped>
-.tm-data-msg {
-  padding: 2rem;
-  margin: 1rem;
+.card {
+  padding: 2rem 3rem;
   display: flex;
   align-items: center;
+  margin: 2rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
-  background: var(--app-fg);
-  border: 2px solid var(--app-fg-hover);
+  background: var(--white);
 }
 
-.tm-data-msg__icon {
+.card__icon {
   margin-right: 1.5rem;
 }
 
-.tm-data-msg__icon i.material-icons {
+.card__icon i.material-icons {
   font-size: 2rem;
-  color: var(--menu-bright);
+  color: var(--white);
   background: var(--warning);
   padding: 0.5rem;
   border-radius: 50%;
 }
 
-.tm-data-msg__icon.success i.material-icons {
+.card__icon.success i.material-icons {
   background: var(--success);
 }
 
-.tm-data-msg__title {
-  font-weight: 400;
+.card__title {
+  font-weight: 500;
+  padding-bottom: 1rem;
   color: var(--bright);
-  font-size: var(--text-2xl);
+  font-size: var(--text-lg);
 }
 
-.tm-data-msg__subtitle {
+.card__subtitle {
   color: var(--txt);
-  font-size: 1rem;
+  font-size: var(--text-sm);
   word-break: break-word;
 }
 
@@ -115,19 +109,19 @@ export default {
 }
 
 @media screen and (max-width: 767px) {
-  .tm-data-msg {
+  .card {
     padding: 2rem 1rem;
     margin: 1rem;
   }
 }
 
 @media screen and (max-width: 1023px) {
-  .tm-data-msg {
+  .card {
     display: block;
     padding: 2rem;
   }
 
-  .tm-data-msg__icon {
+  .card__icon {
     margin-bottom: 1rem;
   }
 }
