@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="li-proposal" @click="$router.push(`/governance/${proposal.id}`)"> -->
+  <!-- <div class="li-proposal" @click="$router.push(`/proposals/${proposal.id}`)"> -->
   <div class="li-proposal">
     <div class="proposal-content">
       <div>

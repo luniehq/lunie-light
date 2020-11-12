@@ -24,7 +24,7 @@
 
       <nuxt-link
         class="app-menu-item"
-        to="/governance"
+        to="/proposals"
         title="Proposals"
         @click.native="handleClick()"
       >
