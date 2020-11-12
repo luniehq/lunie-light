@@ -254,7 +254,6 @@ export default class CosmosAPI {
         BigNumber(tally.no).plus(tally.no_with_veto),
         totalVotingParticipation
       ),
-      links: this.network.governanceLinks,
       timeline: [
         proposal.submit_time
           ? { title: `Created`, time: proposal.submit_time }
@@ -428,7 +427,6 @@ export default class CosmosAPI {
       topVoters: topVoters.map((topVoter) =>
         this.reducers.topVoterReducer(topVoter)
       ),
-      links: this.network.governanceLinks,
     }
   }
 

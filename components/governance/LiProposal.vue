@@ -37,7 +37,6 @@ export default {
   computed: {
     ...mapState('data', [`proposals`]),
     status() {
-      console.log('STATUS', getProposalStatus(this.proposal))
       return getProposalStatus(this.proposal)
     },
   },

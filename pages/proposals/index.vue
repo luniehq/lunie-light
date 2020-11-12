@@ -60,27 +60,6 @@
           :title="`Top Voters`"
           :participants="governanceOverview.topVoters"
         />
-
-        <section class="links">
-          <aside
-            v-if="
-              governanceOverview.links && governanceOverview.links.length > 0
-            "
-          >
-            <h4>Supporting Links</h4>
-            <ul>
-              <li v-for="link in governanceOverview.links" :key="link.link">
-                <a
-                  :href="link.link"
-                  target="_blank"
-                  rel="noopener norefferer"
-                  >{{ link.title }}</a
-                >
-                <i class="material-icons notranslate">link</i>
-              </li>
-            </ul>
-          </aside>
-        </section>
       </div>
     </template>
   </div>
@@ -184,32 +163,6 @@ h4 {
 
 .data-row div:last-child {
   margin-right: 0;
-}
-
-.links {
-  padding: 2rem;
-  background: var(--app-fg);
-  width: 100%;
-}
-
-.links aside {
-  width: 100%;
-  max-width: 400px;
-  padding: 0 0 4rem 0;
-  font-size: 14px;
-}
-
-.links li {
-  border-bottom: 2px solid var(--bc-dim);
-  padding: 1rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.links i {
-  font-size: 18px;
-  color: var(--dim);
 }
 
 @media screen and (max-width: 1023px) {

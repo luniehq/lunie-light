@@ -27,7 +27,6 @@
 
     <!-- <ProposalDescription
       :proposal="proposal"
-      :supporting-links="proposal.detailedVotes.links"
     /> -->
 
     <!-- <ModalDeposit
