@@ -5,7 +5,7 @@
     <div class="table-cell title available">Available</div>
     <div class="table-cell title actions"></div>
 
-    <div v-if="!balances.length" class="loading-row left">Loading...</div>
+    <div v-if="!balancesLoaded" class="loading-row left">Loading...</div>
     <table v-else class="data-table">
       <tbody>
         <BalanceRow
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: `table-balances`,
   props: {
@@ -39,6 +41,9 @@ export default {
       order: `desc`,
     },
   }),
+  computed: {
+    ...mapState(`data`, [`balancesLoaded`]),
+  },
 }
 </script>
 <style scoped>
