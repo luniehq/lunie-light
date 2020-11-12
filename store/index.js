@@ -1,3 +1,5 @@
+export const strict = false
+
 export const state = () => ({
   session: undefined,
   currrentModalOpen: false,
