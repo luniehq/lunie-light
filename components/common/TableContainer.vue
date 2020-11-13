@@ -8,10 +8,7 @@
           :show-row-count="showRowCount"
         />
       </thead>
-      <tbody
-        v-infinite-scroll="loadMore"
-        :infinite-scroll-distance="infiniteScrollDistance"
-      >
+      <tbody>
         <tr v-if="!loaded" class="loading-row">
           <img :src="require(`../../assets/images/loader.svg`)" />
         </tr>
@@ -51,10 +48,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    infiniteScrollDistance: {
-      type: String,
-      default: '380',
-    },
     loaded: {
       type: Boolean,
       default: false,
@@ -68,13 +61,6 @@ export default {
     return {
       searchTerm: false,
     }
-  },
-  methods: {
-    loadMore() {
-      if (this.loaded) {
-        this.$emit('loadMore')
-      }
-    },
   },
 }
 </script>
