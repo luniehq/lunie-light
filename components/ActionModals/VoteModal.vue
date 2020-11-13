@@ -97,7 +97,7 @@ export default {
     transactionData() {
       return {
         type: lunieMessageTypes.VOTE,
-        proposalId: this.proposalId,
+        proposalId: String(this.proposalId),
         voteOption: this.vote,
       }
     },

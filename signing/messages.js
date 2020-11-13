@@ -39,6 +39,18 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
   }
 }
 
+export function VoteTx(senderAddress, { proposalId, voteOption }) {
+  /* istanbul ignore next */
+  return {
+    type: `cosmos-sdk/MsgVote`,
+    value: {
+      voter: senderAddress,
+      proposal_id: proposalId,
+      option: voteOption,
+    },
+  }
+}
+
 export function Coin({ amount, denom }, coinLookup) {
   const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom)
   return {
@@ -53,4 +65,5 @@ export default {
   SendTx,
   StakeTx,
   UnstakeTx,
+  VoteTx,
 }
