@@ -1,12 +1,10 @@
 <template>
-  <img
-    v-if="validatorAddress && validatorPicture"
-    alt="validator logo - from keybase API"
-    :src="validatorPicture"
+  <div
+    class="validator-image"
+    :style="`background-image: url(${validatorPicture}); background-color: ${hex};`"
     @click.prevent.self
     @click="$router.push(`/validators/${address}`)"
   />
-  <div v-else class="validator-image" :style="{ background: hex }"></div>
 </template>
 
 <script>
@@ -26,11 +24,10 @@ export default {
       return !!this.address.includes('valoper')
     },
     validatorPicture() {
-      const validatorDict = this.validators.reduce(
-        (map, obj) => ((map[obj.operatorAddress] = obj.picture), map), // eslint-disable-line
-        {}
+      const validator = this.validators.find(
+        ({ operatorAddress }) => operatorAddress === this.address
       )
-      return validatorDict[this.address]
+      return validator ? validator.picture : undefined
     },
     hash() {
       let hash = 0
@@ -49,7 +46,10 @@ export default {
 <style scoped>
 .validator-image {
   border-radius: 50%;
-  height: 100%;
-  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  background-size: contain;
+  height: 2.5rem;
+  width: 2.5rem;
 }
 </style>

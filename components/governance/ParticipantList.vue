@@ -14,9 +14,9 @@
           <span v-if="participant.name" class="name">{{
             participant.name
           }}</span>
-          <span v-else class="name">{{
-            participant.address | formatAddress
-          }}</span>
+          <span v-else class="name">
+            <Address :address="participant.address" />
+          </span>
         </div>
         <template v-if="participant.votingPower">
           <div v-if="network.network_type === `cosmos`">

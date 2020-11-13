@@ -7,7 +7,7 @@
         </div>
 
         <div class="inner-status">
-          <Status :status="status" />
+          <Status :label="status.value" />
         </div>
 
         <div class="buttons">
@@ -32,7 +32,7 @@
       </div>
 
       <div class="outer-status">
-        <Status :status="status" />
+        <Status :label="status.value" />
       </div>
     </div>
 
