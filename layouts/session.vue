@@ -1,3 +1,59 @@
+<template>
+  <div
+    v-focus-last
+    class="session-frame lunie-light"
+    tabindex="0"
+    @keyup.esc="closeModal()"
+  >
+    <div class="session-outer-container">
+      <div class="session">
+        <div class="session-header">
+          <a :class="{ invisible: hideBack }" @click="goBack">
+            <i class="material-icons notranslate circle back">arrow_back</i>
+          </a>
+          <div class="session-close">
+            <a @click="closeModal()">
+              <i class="material-icons notranslate circle back">close</i>
+            </a>
+          </div>
+        </div>
+        <Nuxt></Nuxt>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: `session-frame`,
+  components: {},
+  props: {
+    hideBack: {
+      type: Boolean,
+      default: false,
+    },
+    icon: {
+      type: String,
+      default: ``,
+    },
+    onBack: {
+      type: Function,
+      default: undefined,
+    },
+  },
+  methods: {
+    closeModal() {
+      this.$router.push(`/`)
+    },
+    goBack() {
+      if (this.onBack) this.onBack()
+      else this.$router.go(`-1`)
+    },
+  },
+}
+</script>
+
+<style>
 .session-frame {
   position: fixed;
   top: 0;
@@ -5,7 +61,7 @@
   z-index: var(--z-modal);
   width: 100vw;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--app-fg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,9 +86,10 @@
 .session {
   display: flex;
   flex-direction: column;
-  background: var(--app-bg);
+  background: var(--white);
   max-width: 560px;
   border-radius: var(--border-radius);
+  box-shadow: 0 0 3px 0 var(--gray-400);
   padding: 2rem;
   position: relative;
   overflow: auto;
@@ -215,7 +272,7 @@
     width: 100%;
   }
 
-  .form-main>div {
+  .form-main > div {
     display: flex;
     flex-direction: column;
     align-items: space-between;
@@ -246,3 +303,32 @@
     display: none;
   }
 }
+
+.invisible {
+  visibility: hidden;
+}
+
+.icon-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--app-fg);
+  color: var(--dim);
+  border-radius: 50%;
+  padding: 2.5rem;
+  position: absolute;
+  top: 0.6rem;
+  left: 40%;
+  z-index: 1;
+  width: 4rem;
+  height: 4rem;
+}
+
+.icon-image {
+  width: 2rem;
+  height: 2rem;
+  transform: scaleX(-1);
+  filter: invert(85%) sepia(9%) saturate(18%) hue-rotate(6deg) brightness(85%)
+    contrast(87%); /* converts to same than var(--dim) */
+}
+</style>

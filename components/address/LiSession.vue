@@ -54,8 +54,8 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 12rem;
-  padding: 2rem;
+  height: 10rem;
+  padding: 1.5rem;
   margin: 0;
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame icon="vpn_key">
+  <div>
     <div class="session-container">
       <h2 class="session-title">Use Keplr Browser Extension</h2>
 
@@ -47,13 +47,14 @@
         </p>
       </div>
     </div>
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
   name: `session-extension`,
+  layout: 'session',
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
   },

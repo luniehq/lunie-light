@@ -72,9 +72,12 @@ export default {
 
 <style scoped>
 .content {
-  padding: 5rem 2rem 2rem;
-  margin: 0 auto;
-  max-width: 800px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 750px;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .network-icon {
