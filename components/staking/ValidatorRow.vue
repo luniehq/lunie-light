@@ -154,7 +154,6 @@ h5 {
 }
 
 .validator-info {
-  min-width: 20rem;
   display: flex;
   align-items: center;
 }
@@ -163,9 +162,16 @@ h5 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .validator-name {
   font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 18rem;
 }
 </style>

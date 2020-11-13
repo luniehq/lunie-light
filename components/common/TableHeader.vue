@@ -6,8 +6,8 @@
         v-if="property.title"
         class="sort-link"
         :class="{
-          asc: activeProperty === property.value && sortOrder === 'asc',
-          desc: activeProperty === property.value && sortOrder === 'desc',
+          asc: sort.property === property.value && sort.order === 'asc',
+          desc: sort.property === property.value && sort.order === 'desc',
         }"
         @click="orderBy(property.value)"
       >
@@ -35,11 +35,6 @@ export default {
       default: true,
     },
   },
-  data() {
-    return {
-      activeProperty: '',
-    }
-  },
   computed: {
     sortOrder() {
       return this.sort.order
@@ -47,7 +42,6 @@ export default {
   },
   methods: {
     orderBy(property) {
-      this.activeProperty = property
       if (this.sort.property === property) {
         if (this.sort.order === `asc`) {
           this.sort.order = `desc`
