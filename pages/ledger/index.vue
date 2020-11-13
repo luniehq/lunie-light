@@ -3,16 +3,17 @@
     <h2 class="session-title">Use Ledger Hardware Wallet</h2>
 
     <div class="session-main">
-      <p v-if="error">
-        There was an error connecting to the Ledger Nano:<br />
-        {{ error }}
-      </p>
-
       <Button
-        value="Connect Ledger Nano"
+        value="Connect Ledger"
         :loading="loading"
         @click.native="connect"
       />
+    </div>
+    <div class="error-container">
+      <p>There was an error connecting to the Ledger Nano:<br /></p>
+      <p v-if="error" class="error">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>
@@ -54,9 +55,7 @@ export default {
 </script>
 <style scoped>
 .session-main {
-  flex: 1;
-  align-items: center;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 </style>

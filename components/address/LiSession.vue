@@ -126,4 +126,10 @@ export default {
   border-radius: 50%;
   padding: 0.5rem;
 }
+
+@media screen and (max-width: 667px) {
+  .li-session {
+    padding: 1rem;
+  }
+}
 </style>

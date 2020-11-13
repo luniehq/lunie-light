@@ -1,5 +1,5 @@
 <template>
-  <div class="card-sign-in">
+  <div class="welcome">
     <h2 class="session-title">Welcome 👋</h2>
 
     <div class="session-list">
@@ -37,8 +37,8 @@
         title="Recover with backup code"
         route="/recover"
       />
-      <span class="footnote" @click="signOut"> Continue without address </span>
     </div>
+    <a class="footnote" @click="signOut">Continue without address</a>
   </div>
 </template>
 
@@ -60,36 +60,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-h2,
-h3 {
-  text-align: center;
-}
-
-.footnote {
-  padding-left: 1.5rem;
-  font-size: 12px;
-  color: var(--link);
-  cursor: pointer;
-}
-
-.card-sign-in {
-  max-width: 600px;
-  padding: 1rem 0;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.session-list {
-  width: 100%;
-  padding: 2rem 0;
-}
-
-@media screen and (max-width: 667px) {
-  h2,
-  h3 {
-    text-align: center;
-    padding-left: 0;
-  }
-}
-</style>
