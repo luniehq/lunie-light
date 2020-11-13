@@ -569,7 +569,7 @@ export default class CosmosAPI {
     const rewards = (result.rewards || []).filter(
       ({ reward }) => reward && reward.length > 0
     )
-    return this.reducers.rewardReducer(rewards, this.validators)
+    return await this.reducers.rewardReducer(rewards, this.validators)
   }
 
   async loadPaginatedTxs(url, page = 1) {
