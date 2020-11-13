@@ -200,7 +200,7 @@ export function topVoterReducer(topVoter) {
 }
 
 function getValidatorStatus(validator) {
-  if (validator.status === 2) {
+  if (validator.status === 3) {
     return {
       status: 'ACTIVE',
       status_detailed: 'active',
@@ -224,12 +224,12 @@ function getValidatorStatus(validator) {
 
 export function blockReducer(block) {
   return {
-    id: block.block_meta.block_id.hash,
-    height: block.block_meta.header.height,
-    chainId: block.block_meta.header.chain_id,
-    hash: block.block_meta.block_id.hash,
-    time: block.block_meta.header.time,
-    proposer_address: block.block_meta.header.proposer_address,
+    id: block.block_id.hash,
+    height: block.block.header.height,
+    chainId: block.block.header.chain_id,
+    hash: block.block_id.hash,
+    time: block.block.header.time,
+    proposer_address: block.block.header.proposer_address,
   }
 }
 
@@ -553,21 +553,26 @@ export function getTransactionLogs(transaction, index) {
 
 export function transactionReducer(transaction) {
   try {
+    // TODO check if this is anywhere not an array
     let fees
-    if (transaction.tx.value) {
+    if (
+      transaction.tx.value &&
+      Array.isArray(transaction.tx.value.fee.amount)
+    ) {
       fees = transaction.tx.value.fee.amount.map((coin) => {
-        return coinReducer(coin)
+        const coinLookup = network.getCoinLookup(network, coin.denom)
+        return coinReducer(coin, coinLookup)
       })
     } else {
       fees = transaction.tx.auth_info.fee.amount.map((fee) => {
-        return coinReducer(fee)
+        const coinLookup = network.getCoinLookup(network, fee.denom)
+        return coinReducer(fee, coinLookup)
       })
     }
-    // We do display only the transactions we support in Lunie
-    const filteredMessages = transaction.tx.value.msg.filter(
-      ({ type }) => getMessageType(type) !== 'Unknown'
-    )
-    const { claimMessages, otherMessages } = filteredMessages.reduce(
+    const {
+      claimMessages,
+      otherMessages,
+    } = transaction.tx.body.messages.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
         if (getMessageType(message.type) === lunieMessageTypes.CLAIM_REWARDS) {
@@ -589,22 +594,22 @@ export function transactionReducer(transaction) {
       ? otherMessages.concat(claimMessage) // add aggregated claim message
       : otherMessages
     const returnedMessages = allMessages.map(
-      ({ value, type }, messageIndex) => ({
+      ({ value: message, type }, messageIndex) => ({
         id: transaction.txhash,
         type: getMessageType(type),
         hash: transaction.txhash,
+        networkId: network.id,
         key: `${transaction.txhash}_${messageIndex}`,
         height: transaction.height,
         details: transactionDetailsReducer(
           getMessageType(type),
-          value,
+          message,
           transaction
         ),
-        rawTransaction: transaction,
         timestamp: transaction.timestamp,
-        memo: transaction.tx.value.memo,
+        memo: transaction.tx.body.memo,
         fees,
-        success: setTransactionSuccess(transaction, messageIndex),
+        success: setTransactionSuccess(transaction, messageIndex, network.id),
         log: getTransactionLogs(transaction, messageIndex),
         involvedAddresses: extractInvolvedAddresses(
           transaction.logs.find(
@@ -615,6 +620,7 @@ export function transactionReducer(transaction) {
     )
     return returnedMessages
   } catch (error) {
+    console.error(error)
     return [] // must return something differ from undefined
   }
 }
@@ -629,12 +635,13 @@ export function transactionsReducer(txs) {
 }
 
 export function delegationReducer(delegation, validator, active) {
-  const amount = getStakingCoinViewAmount(delegation.balance)
+  const coinLookup = network.getCoinLookup(network, delegation.balance.denom)
+  const { amount, denom } = coinReducer(delegation.balance, coinLookup)
 
   return {
-    id: delegation.validator_address,
-    validatorAddress: delegation.validator_address,
-    delegatorAddress: delegation.delegator_address,
+    id: delegation.delegation.validator_address.concat(`-${denom}`),
+    validatorAddress: delegation.delegation.validator_address,
+    delegatorAddress: delegation.delegation.delegator_address,
     validator,
     amount,
     active,
@@ -694,8 +701,6 @@ export function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: statusInfo.status,
     statusDetailed: statusInfo.status_detailed,
-    delegatorShares: validator.delegator_shares, // needed to calculate delegation token amounts from shares
-    popularity: validator.popularity,
     expectedReturns: expectedRewardsPerToken(
       validator,
       validator.commission.commission_rates.rate,
