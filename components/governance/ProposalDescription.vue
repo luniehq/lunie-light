@@ -64,7 +64,7 @@ pre {
   font-family: 'Menlo', 'Consolas', monospace;
   background: var(--app-nav);
   border-radius: 0.25rem;
-  color: var(--menu-text);
+  color: var(--app-bg);
   font-size: 14px;
   padding: 1rem;
   white-space: pre-line;
