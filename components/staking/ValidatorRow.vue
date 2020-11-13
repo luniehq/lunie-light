@@ -6,7 +6,7 @@
   >
     <td class="cell index">{{ index + 1 }}</td>
     <td class="cell">
-      <Status :status="validator.status" />
+      <Status :label="validator.status" />
     </td>
     <td class="cell validator-info">
       <Avatar
