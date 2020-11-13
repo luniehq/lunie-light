@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame icon="person_add" :on-back="onBack">
+  <div>
     <Steps :steps="steps" :active-step="step" />
     <ImportSeedStep v-if="step === 'Recover'" :seed="seed" @submit="setSeed" />
     <ImportNameStep
@@ -14,7 +14,7 @@
       @submit="setPassword"
     />
     <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
@@ -24,6 +24,7 @@ import { getHDPath } from '~/common/hdpath'
 
 export default {
   name: `recover`,
+  layout: 'session',
   data: () => ({
     steps: [`Recover`, `Name`, `Password`],
     step: 'Recover',

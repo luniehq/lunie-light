@@ -1,33 +1,31 @@
 <template>
-  <SessionFrame :icon="`language`">
-    <Form :submit="onSubmit">
-      <h2 class="session-title bottom-indent">Explore with any address</h2>
-      <div class="session-main">
-        <FormGroup field-id="sign-in-name" field-label="Your Address">
-          <Field
-            v-model.trim="address"
-            type="text"
-            placeholder
-            vue-focus="vue-focus"
-          />
-          <Card
-            v-if="$v.address.$error && !$v.address.required"
-            name="Address"
-            type="required"
-          />
-          <Card
-            v-else-if="$v.address.$error && !$v.address.addressValidate"
-            type="custom"
-            :msg="addressError"
-          />
-          <Card v-if="error" :name="error" type="custom" />
-        </FormGroup>
-      </div>
-      <div class="session-footer">
-        <Button value="Explore" />
-      </div>
-    </Form>
-  </SessionFrame>
+  <Form :submit="onSubmit">
+    <h2 class="session-title bottom-indent">Explore with any address</h2>
+    <div class="session-main">
+      <FormGroup field-id="sign-in-name" field-label="Your Address">
+        <Field
+          v-model.trim="address"
+          type="text"
+          placeholder
+          vue-focus="vue-focus"
+        />
+        <Card
+          v-if="$v.address.$error && !$v.address.required"
+          name="Address"
+          type="required"
+        />
+        <Card
+          v-else-if="$v.address.$error && !$v.address.addressValidate"
+          type="custom"
+          :msg="addressError"
+        />
+        <Card v-if="error" :name="error" type="custom" />
+      </FormGroup>
+    </div>
+    <div class="session-footer">
+      <Button value="Explore" />
+    </div>
+  </Form>
 </template>
 
 <script>
@@ -37,6 +35,7 @@ import network from '~/common/network'
 
 export default {
   name: `session-explore`,
+  layout: 'session',
   data: () => ({
     address: ``,
     error: ``,

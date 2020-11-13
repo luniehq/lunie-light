@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <table class="table">
+    <div v-if="!loaded">
+      <Loader />
+    </div>
+    <table v-else-if="length" class="table">
       <thead>
         <TableHeader
           :sort="sort"
@@ -9,16 +12,10 @@
         />
       </thead>
       <tbody>
-        <tr v-if="!loaded" class="loading-row">
-          <img :src="require(`../../assets/images/loader.svg`)" />
-        </tr>
-        <template v-else-if="length">
-          <slot></slot>
-        </template>
+        <slot></slot>
       </tbody>
     </table>
-
-    <template v-if="loaded && !length">
+    <template v-else-if="!length">
       <slot name="empty">
         <tr class="no-results">
           No Results
@@ -79,8 +76,7 @@ table {
   min-width: 100%;
 }
 
-.no-results,
-.loading-row {
+.no-results {
   padding: 2rem;
   height: 4rem;
   display: table-cell;
@@ -89,9 +85,5 @@ table {
 .no-results h2 {
   font-weight: 500;
   font-size: var(--text-lg);
-}
-
-.loading-row.left {
-  justify-content: left;
 }
 </style>
