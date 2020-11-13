@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container" v-if="!transactionsLoaded">
+    <div v-if="!transactionsLoaded" class="container">
       <Loader />
     </div>
 
