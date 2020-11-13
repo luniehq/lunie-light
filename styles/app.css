@@ -141,8 +141,8 @@ input.tm-field {
 h1 {
   font-size: 24px;
   color: var(--gray-800);
-  font-weight: 500;
-  padding-bottom: 2.5rem;
+  font-weight: 600;
+  padding-bottom: 2rem;
 }
 
 @keyframes fade {
