@@ -16,6 +16,10 @@
         @loadMore="loadTransactions"
       />
 
+      <div v-if="transactionsLoaded && transactionsLoading" class="loading-row">
+        Loading...
+      </div>
+
       <template v-if="transactionsLoaded && !moreTransactionsAvailable">
         <p class="message">
           {{ oldChainDataMessage }}
@@ -38,6 +42,7 @@ export default {
       `validators`,
       `transactions`,
       `transactionsLoaded`,
+      `transactionsLoading`,
       `moreTransactionsAvailable`,
     ]),
     ...mapState(['session']),
@@ -48,7 +53,7 @@ export default {
   },
   methods: {
     async loadTransactions() {
-      if (this.moreTransactionsAvailable) {
+      if (this.moreTransactionsAvailable && !this.transactionsLoading) {
         await this.$store.dispatch('data/getTransactions', {
           address: this.session.address,
           pageNumber: this.pageNumber++,
