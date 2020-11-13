@@ -18,8 +18,8 @@
     </TableContainer>
 
     <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
-    <!-- <ModalWithdrawRewards ref="ModalWithdrawRewards" />
-      <StakeModal ref="StakeModal" />
+    <ClaimModal ref="ClaimModal" :address="session.address" />
+    <!--  <StakeModal ref="StakeModal" />
       <UnstakeModal ref="UnstakeModal" /> -->
   </div>
 </template>
@@ -36,6 +36,7 @@ export default {
     },
   }),
   computed: {
+    ...mapState([`session`]),
     ...mapState(`data`, ['balances', 'balancesLoaded', 'rewards']),
     // readyToWithdraw() {
     //   return Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
@@ -79,7 +80,7 @@ export default {
   },
   methods: {
     onWithdrawal() {
-      this.$refs.ModalWithdrawRewards.open()
+      this.$refs.ClaimModal.open()
     },
     onSend(denom = undefined) {
       this.$refs.SendModal.open(denom)
