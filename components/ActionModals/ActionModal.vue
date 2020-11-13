@@ -349,7 +349,7 @@ export default {
     goToSession() {
       this.close()
 
-      this.$router.push('/address')
+      this.$router.push('/welcome')
     },
     isValidInput(property) {
       this.$v[property].$touch()

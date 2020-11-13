@@ -5,7 +5,7 @@
         <h4>Your Address</h4>
         <UserMenuAddress :address="session.address" />
       </div>
-      <i class="material-icons icon-button" @click="$router.push('/address')">
+      <i class="material-icons icon-button" @click="$router.push('/welcome')">
         person
       </i>
     </div>
@@ -14,7 +14,7 @@
         value="Get Started"
         class="menu-button"
         type="secondary"
-        @click.native="$router.push('/address')"
+        @click.native="$router.push('/welcome')"
       />
     </template>
   </div>

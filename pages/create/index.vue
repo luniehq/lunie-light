@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame icon="person_add" :on-back="onBack">
+  <div>
     <Steps :steps="steps" :active-step="step" />
     <NameStep v-if="step === 'Name'" :name="name" @submit="setName" />
     <PasswordStep
@@ -15,7 +15,7 @@
       @submit="confirmSeed"
     />
     <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
@@ -27,6 +27,7 @@ const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
   name: `sign-up`,
+  layout: 'session',
   data: () => ({
     steps,
     step: 'Name',
