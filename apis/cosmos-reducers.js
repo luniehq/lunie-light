@@ -43,14 +43,17 @@ export function getStakingCoinViewAmount(chainStakeAmount) {
   }).amount
 }
 
-export function coinReducer(chainCoin) {
-  const coinLookup = network.getCoinLookup(chainCoin.denom)
+export function coinReducer(chainCoin, ibcInfo) {
+  const chainDenom = ibcInfo ? ibcInfo.denom : chainCoin.denom
+  const coinLookup = network.getCoinLookup(chainDenom)
+  const sourceChain = ibcInfo ? ibcInfo[0] : undefined
 
   if (!coinLookup) {
     return {
       supported: false,
-      amount: -1,
-      denom: '[NOT SUPPORTED] ' + chainCoin.denom,
+      amount: chainCoin.amount,
+      denom: chainDenom,
+      sourceChain,
     }
   }
 
@@ -63,6 +66,7 @@ export function coinReducer(chainCoin) {
       .times(coinLookup.chainToViewConversionFactor)
       .toFixed(precision),
     denom: coinLookup.viewDenom,
+    sourceChain,
   }
 }
 
