@@ -1,6 +1,14 @@
 <template>
   <div class="table-container">
-    <h1>Your Balances</h1>
+    <div class="header-container">
+      <h1>Your Balances</h1>
+      <Button
+        id="claim-button"
+        :disabled="!readyToWithdraw"
+        value="Claim Rewards"
+        @click.native="readyToWithdraw && onClaim()"
+      />
+    </div>
     <TableContainer
       :length="balances.length"
       :columns="properties"
@@ -16,9 +24,13 @@
         :send="true"
       />
     </TableContainer>
-
     <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
-    <ClaimModal ref="ClaimModal" :address="session.address" />
+    <ClaimModal
+      ref="ClaimModal"
+      :address="session.address"
+      :rewards="rewards"
+      :balances="balances"
+    />
     <!--  <StakeModal ref="StakeModal" />
       <UnstakeModal ref="UnstakeModal" /> -->
   </div>
@@ -38,9 +50,11 @@ export default {
   computed: {
     ...mapState([`session`]),
     ...mapState(`data`, ['balances', 'balancesLoaded', 'rewards']),
-    // readyToWithdraw() {
-    //   return Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
-    // },
+    readyToWithdraw() {
+      return Boolean(
+        Object.values(this.totalRewardsPerDenom).find((value) => value > 0)
+      )
+    },
     getAllDenoms() {
       if (this.balances.length > 0) {
         const balances = this.balances
@@ -91,14 +105,30 @@ export default {
     onUnstake(amount) {
       this.$refs.UnstakeModal.open()
     },
+    onClaim() {
+      this.$refs.ClaimModal.open()
+    },
   },
 }
 </script>
 <style scoped>
+h1 {
+  padding-bottom: 0;
+}
+
 .table-container {
   width: 100%;
   padding: 3rem 4rem;
   margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem 2rem 3rem;
+  width: 100%;
 }
 
 .icon-button-container {
