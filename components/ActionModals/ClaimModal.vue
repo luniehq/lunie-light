@@ -68,27 +68,29 @@ export default {
       type: String,
       required: true,
     },
+    rewards: {
+      type: Array,
+      required: true,
+    },
+    balances: {
+      type: Array,
+      required: true,
+    },
   },
   data: () => ({
-    rewards: [],
-    balances: [],
     getTop5RewardsValidators,
     lunieMessageTypes,
     network,
   }),
-  asyncComputed: {
-    async transactionData() {
+  computed: {
+    transactionData() {
       if (this.totalRewards.length === 0) return {}
-      if (this.network.network_type === 'cosmos') {
-        return {
-          type: lunieMessageTypes.CLAIM_REWARDS,
-          amounts: this.totalRewards,
-          from: this.top5Validators,
-        }
+      return {
+        type: lunieMessageTypes.CLAIM_REWARDS,
+        amounts: this.totalRewards,
+        from: this.top5Validators,
       }
     },
-  },
-  computed: {
     top5Validators() {
       if (this.rewards && this.rewards.length > 0) {
         const top5Validators = this.getTop5RewardsValidators(this.rewards)
@@ -111,7 +113,7 @@ export default {
       }
     },
     feeDenom() {
-      // since it is cheaper to pay fees with the staking denom (at least in Tendermint), we return this denom
+      // since it is cheaper to pay fees with the staking denom, we return this denom
       // as default if there is any available balance. Otherwise, we return the first balance over 0
       // TODO: change to be preferrably the same token that is shown as claimed, although not so important
       if (this.balances && this.balances.length > 0) {
