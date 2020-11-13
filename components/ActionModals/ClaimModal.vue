@@ -13,10 +13,7 @@
     :rewards="rewards"
     :disable="validatorsWithRewards"
   >
-    <span
-      v-if="network.network_type === 'cosmos'"
-      class="form-message notice withdraw-limit"
-    >
+    <span class="form-message withdraw-limit">
       Lunie will only withdraw rewards from 5 validators at a time because of a
       limitation with the Ledger Nano&nbsp;S.
     </span>
@@ -32,11 +29,7 @@
         :key="reward.denom"
         class="rewards-list-item"
       >
-        <input
-          class="tm-field-addon"
-          disabled="disabled"
-          :value="reward.amount | fullDecimals"
-        />
+        <Field disabled="disabled" :value="reward.amount | fullDecimals" />
         <span class="input-suffix">{{ reward.denom }}</span>
       </div>
     </FormGroup>
@@ -150,6 +143,13 @@ export default {
 </script>
 
 <style scoped>
+.tm-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
 .form-message.withdraw-limit {
   white-space: normal;
 }
@@ -160,5 +160,6 @@ export default {
 
 .rewards-list-item {
   position: relative;
+  width: 100%;
 }
 </style>
