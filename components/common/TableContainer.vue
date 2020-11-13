@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
 .container {
-  /* overflow: auto; vue infinite scroll doesn't like this */
+  overflow: auto;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
