@@ -25,7 +25,6 @@ export default {
   border-radius: var(--border-radius);
   width: fit-content;
   text-align: center;
-  box-shadow: 0 0 2px 0 var(--gray-500);
 }
 
 .status.inactive {
@@ -33,8 +32,24 @@ export default {
   color: var(--orange-800);
 }
 
+.status.passed,
 .status.active {
   background: var(--green-200);
   color: var(--green-800);
+}
+
+.status.rejected {
+  background: var(--red-200);
+  color: var(--red-800);
+}
+
+.status.voting {
+  background: var(--teal-200);
+  color: var(--teal-800);
+}
+
+.status.depositing {
+  background: var(--purple-200);
+  color: var(--purple-800);
 }
 </style>

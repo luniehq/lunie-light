@@ -169,7 +169,7 @@ function networkAccountReducer(address, validators) {
       : undefined
   return {
     name: validator ? validator.name : undefined,
-    address: address || '',
+    address: validator ? proposerValAddress : address || '',
     picture: validator ? validator.picture : '',
     validator,
   }
@@ -600,6 +600,7 @@ export function transactionReducer(transaction) {
           value,
           transaction
         ),
+        rawTransaction: transaction,
         timestamp: transaction.timestamp,
         memo: transaction.tx.value.memo,
         fees,

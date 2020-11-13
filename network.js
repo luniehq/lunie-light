@@ -30,5 +30,6 @@ export default {
       ],
     },
   },
+  icon: '~/assets/images/currencies/atom.png',
   localSigning: false,
 }

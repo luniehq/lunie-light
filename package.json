@@ -24,7 +24,7 @@
   "dependencies": {
     "@cosmjs/launchpad": "^0.23.1",
     "@cosmjs/launchpad-ledger": "^0.23.1",
-    "@ledgerhq/hw-transport-webusb": "^5.28.0",
+    "@ledgerhq/hw-transport-webusb": "^5.29.0",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
     "bignumber.js": "^9.0.1",
@@ -36,6 +36,8 @@
     "nuxt-material-design-icons": "^1.0.4",
     "vue-clipboard2": "^0.3.1",
     "vue-infinite-scroll": "^2.0.2",
+    "vue-scrollto": "^2.20.0",
+    "vue-simple-progress": "^1.1.1",
     "vuelidate": "^0.7.6"
   },
   "devDependencies": {

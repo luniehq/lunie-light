@@ -38,6 +38,7 @@ export default {
     '@/plugins/infinite-scroll.client.js',
     '@/plugins/init.client.js',
     '@/plugins/validate.client.js',
+    '@/plugins/scroll-to.client.js',
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

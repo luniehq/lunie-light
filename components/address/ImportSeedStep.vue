@@ -21,14 +21,14 @@
         <FormMessage
           v-else-if="$v.fieldSeed.$error && !$v.fieldSeed.seedHasCorrectLength"
           name="Seed"
-          :type="isPolkadot ? 'incorrectPolkadotSeed' : 'words12or24'"
+          type="words12or24"
         />
         <FormMessage
           v-else-if="
             $v.fieldSeed.$error && !$v.fieldSeed.seedIsLowerCaseAndSpaces
           "
           name="Seed"
-          :type="isPolkadot ? 'incorrectPolkadotSeed' : 'lowercaseAndSpaces'"
+          type="lowercaseAndSpaces"
         />
       </FormGroup>
     </div>
