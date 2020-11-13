@@ -508,15 +508,15 @@ export default class CosmosAPI {
     )
     const trace = result.denom_trace
     const chainTrace = await Promise.all(
-      chunk(trace.path.split('/'), 2).map(async (port, channel) => {
+      chunk(trace.path.split('/'), 2).map(async ([port, channel]) => {
         const result = await this.get(
-          `/ibc/channel/v1beta1/channels/${channel}/ports/${port}`
+          `/ibc/channel/v1beta1/channels/${channel}/ports/${port}/client_state`
         )
-        return result.chain_id
+        return result.identified_client_state.client_state.chain_id
       })
     )
     return {
-      denom: result.base_denom,
+      denom: trace.base_denom,
       chainTrace,
     }
   }

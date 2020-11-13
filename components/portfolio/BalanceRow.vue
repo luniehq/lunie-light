@@ -2,14 +2,16 @@
   <tr class="balance-row">
     <td :key="balance.denom">
       <div class="row">
-        <img
+        <div
           class="token-icon"
-          :src="image"
-          :alt="`${balance.denom}` + ' currency'"
+          :style="`background-image: url(${image}); background-color: ${hex};`"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
           {{ balance.denom }}
+        </div>
+        <div v-if="balance.sourceChain" class="chain">
+          {{ balance.sourceChain }}
         </div>
       </div>
     </td>
@@ -105,7 +107,25 @@ export default {
     },
     image() {
       const fileName = this.balance.denom.toLowerCase() + '.png'
-      return require(`../../assets/images/currencies/${fileName}`)
+      try {
+        return require(`../../assets/images/currencies/${fileName}`)
+      } catch (err) {
+        return undefined
+      }
+    },
+    hex() {
+      const string = this.balance.denom
+      let hash = 0
+      for (let i = 0; i < string.length; i++) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash)
+      }
+      let colour = '#'
+      for (let i = 0; i < 3; i++) {
+        // eslint-disable-next-line prettier/prettier
+        const value = (hash >> (i * 8)) & 0xFF
+        colour += ('00' + value.toString(16)).substr(-2)
+      }
+      return colour
     },
   },
   methods: {
@@ -156,6 +176,12 @@ td {
 
 .total {
   color: var(--bright);
+}
+
+.chain {
+  font-size: 10px;
+  margin-left: 0.5rem;
+  margin-top: 0.3rem;
 }
 
 .token-icon {

@@ -46,7 +46,7 @@ export function getStakingCoinViewAmount(chainStakeAmount) {
 export function coinReducer(chainCoin, ibcInfo) {
   const chainDenom = ibcInfo ? ibcInfo.denom : chainCoin.denom
   const coinLookup = network.getCoinLookup(chainDenom)
-  const sourceChain = ibcInfo ? ibcInfo[0] : undefined
+  const sourceChain = ibcInfo ? ibcInfo.chainTrace[0] : undefined
 
   if (!coinLookup) {
     return {
@@ -274,6 +274,7 @@ export function balanceReducer(lunieCoin, delegations, undelegations) {
     denom: lunieCoin.denom,
     available: lunieCoin.amount,
     staked: delegatedStake.amount || 0,
+    sourceChain: lunieCoin.sourceChain,
   }
 }
 
