@@ -36,7 +36,7 @@
         :proposal-title="proposal.title || ''"
         :denom="parameters.depositDenom || network.stakingDenom"
         :deposits="proposal.detailedVotes.deposits"
-        @success="() => afterDeposit()"
+        @success="() => afterVoteOrDeposit()"
       />
       <VoteModal
         v-else
@@ -44,7 +44,7 @@
         :proposal-id="proposalId"
         :proposal-title="proposal.title || ''"
         :last-vote-option="vote"
-        @success="() => afterVote()"
+        @success="() => afterVoteOrDeposit()"
       />
     </div>
     <div v-else class="loading-row">Loading...</div>
@@ -132,15 +132,11 @@ export default {
     onVote() {
       this.$refs.modalVote.open()
     },
-    afterVote() {
-      this.$apollo.queries.vote.refetch()
+    afterVoteOrDeposit() {
+      this.$store.dispatch('data/getProposals')
     },
     onDeposit() {
       this.$refs.modalDeposit.open()
-    },
-    afterDeposit() {
-      // TODO
-      this.$store.dispatch('data/getProposalDeposits', this.proposal)
     },
   },
 }
