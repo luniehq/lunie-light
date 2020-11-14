@@ -6,8 +6,8 @@
         v-if="property.title"
         class="sort-link"
         :class="{
-          asc: sortProperty === property.value && sortOrder === 'asc',
-          desc: sortProperty === property.value && sortOrder === 'desc',
+          asc: sort.property === property.value && sort.order === 'asc',
+          desc: sort.property === property.value && sort.order === 'desc',
         }"
         @click="orderBy(property.value)"
       >
@@ -21,12 +21,6 @@
 <script>
 export default {
   name: `table-header`,
-  data() {
-    return {
-      sortProperty: this.sort.property,
-      sortOrder: this.sort.order,
-    }
-  },
   props: {
     sort: {
       type: Object,
@@ -43,14 +37,14 @@ export default {
   },
   methods: {
     orderBy(property) {
-      if (this.sortProperty === property) {
-        if (this.sortOrder === `asc`) {
-          this.sortOrder = `desc`
+      if (this.sort.property === property) {
+        if (this.sort.order === `asc`) {
+          this.sort.order = `desc`
         } else {
-          this.sortOrder = `asc`
+          this.sort.order = `asc`
         }
       } else {
-        this.sortProperty = property
+        this.sort.property = property
       }
     },
   },
