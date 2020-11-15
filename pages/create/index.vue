@@ -84,7 +84,7 @@ export default {
         )
         this.$store.dispatch('signIn', {
           address: wallet.address,
-          type: 'local',
+          sessionType: 'local',
         })
         this.$router.push({
           name: 'portfolio',
