@@ -51,6 +51,18 @@ export function VoteTx(senderAddress, { proposalId, voteOption }) {
   }
 }
 
+export function DepositTx(senderAddress, { proposalId, amount }, network) {
+  /* istanbul ignore next */
+  return {
+    type: `cosmos-sdk/MsgDeposit`,
+    value: {
+      depositor: senderAddress,
+      proposal_id: proposalId,
+      amount: [Coin(amount, network.coinLookup)],
+    },
+  }
+}
+
 export function Coin({ amount, denom }, coinLookup) {
   const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom)
   return {
