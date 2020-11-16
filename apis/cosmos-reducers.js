@@ -284,24 +284,18 @@ export function undelegationReducer(undelegation, validator) {
   }
 }
 
-export async function reduceFormattedRewards(
-  reward,
-  validator,
-  multiDenomRewardsArray
-) {
-  await Promise.all(
-    reward.map((denomReward) => {
-      const lunieCoin = coinReducer(denomReward)
-      if (lunieCoin.amount < 0.000001) return
+export function reduceFormattedRewards(reward, validator) {
+  return reward.map((denomReward) => {
+    const lunieCoin = coinReducer(denomReward)
+    if (Number(lunieCoin.amount) < 0.000001) return
 
-      multiDenomRewardsArray.push({
-        id: `${validator.operatorAddress}_${lunieCoin.denom}`,
-        denom: lunieCoin.denom,
-        amount: lunieCoin.amount,
-        validator,
-      })
-    })
-  )
+    return {
+      id: `${validator.operatorAddress}_${lunieCoin.denom}`,
+      denom: lunieCoin.denom,
+      amount: lunieCoin.amount,
+      validator,
+    }
+  })
 }
 
 export async function rewardReducer(rewards, validatorsDictionary) {
@@ -309,13 +303,12 @@ export async function rewardReducer(rewards, validatorsDictionary) {
     reward: reward.reward,
     validator: validatorsDictionary[reward.validator_address],
   }))
-  const multiDenomRewardsArray = []
-  await Promise.all(
+  const multiDenomRewardsArray = await Promise.all(
     formattedRewards.map(({ reward, validator }) =>
-      reduceFormattedRewards(reward, validator, multiDenomRewardsArray)
+      reduceFormattedRewards(reward, validator)
     )
   )
-  return multiDenomRewardsArray
+  return multiDenomRewardsArray.flat()
 }
 
 const proposalTypeEnumDictionary = {
