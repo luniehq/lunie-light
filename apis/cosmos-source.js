@@ -455,7 +455,17 @@ export default class CosmosAPI {
       this.getDelegationsForDelegator(address),
       this.getUndelegationsForDelegator(address),
     ])
-    const balances = balancesResponse || []
+    const balances =
+      balancesResponse.length > 0
+        ? balancesResponse
+        : [
+            {
+              amount: 0,
+              denom: network.coinLookup.find(
+                (coinLookup) => coinLookup.viewDenom === network.stakingDenom
+              ).chainDenom,
+            },
+          ]
     const coins = balances.map(this.reducers.coinReducer)
     // also check if there are any denoms as rewards the user has not as a balance
     // we need to show those as well in the balance overview as we show the rewards there
