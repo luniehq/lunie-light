@@ -309,7 +309,7 @@ export async function rewardReducer(rewards, validatorsDictionary) {
       reduceFormattedRewards(reward, validator)
     )
   )
-  return multiDenomRewardsArray.flat()
+  return multiDenomRewardsArray.flat().filter((reward) => reward)
 }
 
 const proposalTypeEnumDictionary = {
