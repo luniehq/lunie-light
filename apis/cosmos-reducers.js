@@ -54,8 +54,9 @@ export function coinReducer(chainCoin) {
     }
   }
 
-  const precision = coinLookup.chainToViewConversionFactor.toString().split('.')
-    .length // TODO change chainToViewConversionFactor to precision
+  const precision = coinLookup.chainToViewConversionFactor
+    .toString()
+    .split('.')[1].length
 
   return {
     supported: true,
