@@ -287,7 +287,7 @@ export function undelegationReducer(undelegation, validator) {
 export function reduceFormattedRewards(reward, validator) {
   return reward.map((denomReward) => {
     const lunieCoin = coinReducer(denomReward)
-    if (Number(lunieCoin.amount) < 0.000001) return
+    if (Number(lunieCoin.amount) < 0.000001) return null
 
     return {
       id: `${validator.operatorAddress}_${lunieCoin.denom}`,
