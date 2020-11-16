@@ -6,8 +6,8 @@
         v-if="property.title"
         class="sort-link"
         :class="{
-          asc: sort.property === property.value && sort.order === 'asc',
-          desc: sort.property === property.value && sort.order === 'desc',
+          asc: sortProperty === property.value && sortOrder === 'asc',
+          desc: sortProperty === property.value && sortOrder === 'desc',
         }"
         @click="orderBy(property.value)"
       >
@@ -35,16 +35,34 @@ export default {
       default: true,
     },
   },
+  computed: {
+    sortOrder: {
+      get() {
+        return this.sort.order
+      },
+      set(value) {
+        this.sort.order = value
+      },
+    },
+    sortProperty: {
+      get() {
+        return this.sort.property
+      },
+      set(value) {
+        this.sort.property = value
+      },
+    },
+  },
   methods: {
     orderBy(property) {
-      if (this.sort.property === property) {
-        if (this.sort.order === `asc`) {
-          this.sort.order = `desc`
+      if (this.sortProperty === property) {
+        if (this.sortOrder === `asc`) {
+          this.sortOrder = `desc`
         } else {
-          this.sort.order = `asc`
+          this.sortOrder = `asc`
         }
       } else {
-        this.sort.property = property
+        this.sortProperty = property
       }
     },
   },
