@@ -56,7 +56,7 @@ const lowerCaseAndSpaces = (param) => {
 }
 
 export default {
-  name: `import-seed-step`,
+  name: `ImportSeedStep`,
   props: {
     seed: {
       type: String,

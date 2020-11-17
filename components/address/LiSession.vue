@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: `li-session`,
+  name: `LiSession`,
   props: {
     icon: {
       type: String,

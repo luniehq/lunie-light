@@ -56,7 +56,7 @@ const nameExists = (value) => {
 }
 
 export default {
-  name: `name-step`,
+  name: `NameStep`,
   props: {
     name: {
       type: String,

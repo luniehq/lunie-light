@@ -74,7 +74,7 @@ import { governanceStatusEnum } from '~/common/proposal-status'
 import { formatAddress } from '~/common/address'
 
 export default {
-  name: `proposal-header`,
+  name: `ProposalHeader`,
   filters: {
     formatAddress,
   },

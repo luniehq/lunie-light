@@ -158,7 +158,7 @@ import { fromNow } from '~/common/time'
 import network from '~/common/network'
 
 export default {
-  name: `page-validator`,
+  name: `PageValidator`,
   filters: {
     shortDecimals,
     fullDecimals,

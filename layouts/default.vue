@@ -11,6 +11,11 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  middleware({ store }) {
+    if (!store.state.data.api) {
+      store.dispatch('data/init') // init api
+    }
+  },
   computed: {
     ...mapState(['session']),
     ...mapState(['data', ['validators']]),
@@ -18,11 +23,6 @@ export default {
   mounted() {
     const session = this.$cookies.get('lunie-session')
     this.$store.dispatch('signIn', session) // calls 'data/refresh' to load the users data
-  },
-  middleware({ store }) {
-    if (!store.state.data.api) {
-      store.dispatch('data/init') // init api
-    }
   },
 }
 </script>

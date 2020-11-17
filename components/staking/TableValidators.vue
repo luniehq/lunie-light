@@ -25,7 +25,7 @@ import { orderBy } from 'lodash'
 import network from '~/common/network'
 
 export default {
-  name: `table-validators`,
+  name: `TableValidators`,
   components: {},
   props: {
     validators: {

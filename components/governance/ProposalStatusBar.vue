@@ -100,7 +100,7 @@ import { prettyInt, percentInt, percent } from '~/common/numbers'
 import network from '~/common/network'
 
 export default {
-  name: `proposal-status-bar`,
+  name: `ProposalStatusBar`,
   components: {
     ProgressBar,
   },

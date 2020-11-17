@@ -38,7 +38,7 @@
 import { sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  name: `new-seed-step`,
+  name: `NewSeedStep`,
   props: {
     seed: {
       type: String,

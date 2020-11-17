@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  name: `app-menu`,
+  name: `AppMenu`,
   methods: {
     handleClick() {
       this.$emit(`close`)

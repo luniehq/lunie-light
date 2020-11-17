@@ -22,7 +22,7 @@ import dayjs from 'dayjs'
 import { fromNow } from '~/common/time'
 
 export default {
-  name: `timeline`,
+  name: `Timeline`,
   filters: {
     fromNow,
   },

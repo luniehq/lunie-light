@@ -56,7 +56,7 @@
 
 <script>
 export default {
-  name: `field`,
+  name: `Field`,
   props: {
     type: {
       type: String,
