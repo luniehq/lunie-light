@@ -26,7 +26,7 @@
       :delegations="delegations"
       :rewards="rewards"
       :search-term="searchTerm ? true : false"
-      :loaded="delegationsLoaded"
+      :loaded="validatorsLoaded"
     />
   </div>
 </template>
@@ -44,6 +44,7 @@ export default {
   computed: {
     ...mapState('data', [
       'validators',
+      'validatorsLoaded',
       'delegations',
       'delegationsLoaded',
       'rewards',
