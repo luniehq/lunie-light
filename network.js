@@ -5,7 +5,8 @@ export default {
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
   logo: `logo.svg`,
   website: 'https://cosmos.network',
-  apiURL: 'https://api.allorigins.win/raw?url=http://34.66.55.131:1317',
+  apiURL: 'https://api.allorigins.win/raw?url=http://34.123.30.100:1317',
+  rpcURL: 'http://34.123.30.100:26657',
   stakingDenom: 'MUON',
   coinLookup: [
     {
