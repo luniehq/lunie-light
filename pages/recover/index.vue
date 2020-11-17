@@ -23,7 +23,7 @@ import network from '~/common/network'
 import { getHDPath } from '~/common/hdpath'
 
 export default {
-  name: `Recover`,
+  name: `SessionRecover`,
   layout: 'session',
   middleware: 'localSigning',
   data: () => ({

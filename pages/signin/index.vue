@@ -55,7 +55,7 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import { getWallet, getWalletIndex } from '~/common/keystore'
 
 export default {
-  name: `SignIn`,
+  name: `SessionSignIn`,
   layout: 'session',
   middleware: 'localSigning',
   data: () => ({

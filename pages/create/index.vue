@@ -26,7 +26,7 @@ import network from '~/common/network'
 const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
-  name: `SignUp`,
+  name: `SessionCreate`,
   layout: 'session',
   middleware: 'localSigning',
   data: () => ({
