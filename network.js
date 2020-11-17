@@ -6,6 +6,7 @@ export default {
   logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'https://api.allorigins.win/raw?url=http://34.123.30.100:1317',
+  rpcURL: 'ws://34.123.30.100:26657/websocket',
   stakingDenom: 'MUON',
   coinLookup: [
     {

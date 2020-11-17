@@ -1,9 +1,11 @@
 import BigNumber from 'bignumber.js'
 import {
-  SigningCosmosClient,
+  SigningStargateClient,
+  QueryClient,
   assertIsBroadcastTxSuccess,
-  BroadcastMode,
-} from '@cosmjs/launchpad'
+} from '@cosmjs/stargate'
+import { BroadcastMode } from '@cosmjs/launchpad'
+import { Client as TendermintClient } from '@cosmjs/tendermint-rpc'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
 import fees from '~/common/fees'
@@ -47,6 +49,7 @@ export async function createSignBroadcast({
     },
     chainId
   )
+  console.log('Will signer be useful for something?', signer)
 
   const messages = messageCreators[messageType](senderAddress, message, network)
 
@@ -55,14 +58,12 @@ export async function createSignBroadcast({
     amount: transactionData.fee,
     gas: String(transactionData.gasEstimate),
   }
-
-  const client = new SigningCosmosClient(
-    network.apiURL,
-    senderAddress,
-    signer,
-    undefined,
-    undefined,
-    BroadcastMode.Async
+  const tendermintClient = await TendermintClient.connect(network.rpcURL)
+  const queryClient = new QueryClient(tendermintClient)
+  const client = new SigningStargateClient(
+    tendermintClient,
+    queryClient,
+    BroadcastMode.Async // check
   )
   const broadcastResult = await client.signAndBroadcast(
     [].concat(messages),
