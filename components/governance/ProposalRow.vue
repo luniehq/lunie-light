@@ -1,8 +1,8 @@
 <template>
-  <div class="li-proposal" @click="$router.push(`/proposals/${proposal.id}`)">
+  <div class="proposal" @click="$router.push(`/proposals/${proposal.id}`)">
     <div class="proposal-content">
       <div>
-        <div class="status-and-id">
+        <div class="status">
           <Status :label="status.value" />
         </div>
         <h3 class="title">
@@ -23,7 +23,7 @@ import { fromNow } from '~/common/time'
 import { getProposalStatus } from '~/common/proposal-status'
 
 export default {
-  name: `LiProposal`,
+  name: `ProposalRow`,
   filters: {
     fromNow,
   },
@@ -43,43 +43,36 @@ export default {
 </script>
 
 <style scoped>
-.title {
+.proposal {
+  padding: 1.5rem;
+  margin: 0 auto 1rem;
+  display: block;
+  max-width: 1024px;
+  width: 100%;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
+}
+
+h3 {
   font-size: 22px;
   color: var(--bright);
   font-weight: 500;
   max-width: 600px;
+  padding-top: 1rem;
 }
 
-.li-proposal {
-  padding: 2rem 0;
-  margin: 0 auto;
-  display: block;
-  cursor: pointer;
-  max-width: 1024px;
-  width: 100%;
-  border-bottom: 2px solid var(--bc-dim);
-}
-
-.li-proposal:first-child {
-  border-top: 2px solid var(--bc-dim);
-}
-
-.li-proposal:hover {
+.proposal:hover {
   cursor: pointer;
 }
 
-.li-proposal:hover .title {
+.proposal:hover .title {
   color: var(--link);
 }
 
 .proposal-content {
   display: flex;
   justify-content: space-between;
-}
-
-.status-and-id {
-  display: flex;
-  padding-bottom: 1rem;
 }
 
 .time {
