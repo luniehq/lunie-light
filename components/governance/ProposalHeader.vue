@@ -41,7 +41,7 @@
 
       <div class="proposer-and-summary-container">
         <div v-if="proposal.proposer" class="proposer">
-          Proposed By:
+          <span>Proposed By:</span>
           <div v-if="proposal.proposer.validator" class="proposer-details">
             <div class="proposer-image">
               <Avatar :address="proposal.proposer.address" />
@@ -109,7 +109,6 @@ export default {
 <style scoped>
 .header {
   padding: 2rem 0 0;
-  border-bottom: 2px solid var(--bc-dim);
   max-width: 1024px;
   margin: 0 auto;
   width: 100%;
@@ -170,17 +169,13 @@ h2 {
   justify-content: space-between;
 }
 
-.proposer-and-summary-container {
-  max-width: 320px;
-}
-
 .proposer {
   font-size: 12px;
   padding: 1rem;
-  border: 2px solid var(--bc);
-  border-radius: 0.25rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
   display: flex;
-  align-items: center;
   flex-direction: column;
 }
 
@@ -207,15 +202,17 @@ h2 {
   display: none;
 }
 
+.proposer-and-summary-container {
+  max-width: 300px;
+}
+
 .proposer-details {
   display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: center;
+  align-items: center;
 }
 
 .proposer-details .proposer-image {
-  margin-right: 1rem;
+  margin: 1rem 1rem 0 0;
   height: 2.5rem;
   width: 2.5rem;
 }

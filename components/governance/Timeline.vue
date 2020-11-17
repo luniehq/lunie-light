@@ -1,19 +1,21 @@
 <template>
-  <section id="proposal-timeline">
-    <ul class="timeline">
-      <li
-        v-for="phase in timeline"
-        :key="phase.title"
-        class="phase"
-        :class="{ done: wasInThePast(phase.time) }"
-      >
-        <h4>{{ phase.title }}</h4>
-        <span class="time">
-          <template v-if="phase.time">{{ phase.time | fromNow }}</template>
-          <template v-else>?</template>
-        </span>
-      </li>
-    </ul>
+  <section id="proposal-timeline" class="container">
+    <div class="timeline-container">
+      <ul class="timeline">
+        <li
+          v-for="phase in timeline"
+          :key="phase.title"
+          class="phase"
+          :class="{ done: wasInThePast(phase.time) }"
+        >
+          <h4>{{ phase.title }}</h4>
+          <span class="time">
+            <template v-if="phase.time">{{ phase.time | fromNow }}</template>
+            <template v-else>?</template>
+          </span>
+        </li>
+      </ul>
+    </div>
   </section>
 </template>
 
@@ -41,10 +43,12 @@ export default {
 </script>
 
 <style scoped>
-section {
-  padding: 2rem 0;
-  margin: 2rem 0;
-  border-top: 2px solid var(--bc);
+.container {
+  padding: 1rem 0 0;
+  margin: 3rem 0;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .timeline {
@@ -54,6 +58,12 @@ section {
   align-items: center;
   margin: 0 auto;
   width: 100%;
+}
+
+.timeline-container {
+  padding: 2rem;
+  margin: 3rem 0;
+  border-top: 2px solid var(--gray-200);
 }
 
 .phase {
@@ -72,13 +82,15 @@ section {
   border-radius: 50%;
   margin: -2.7rem auto 1rem;
   background: var(--app-bg);
+  color: var(--success);
 }
 
 .done.phase::before {
-  content: '\2714';
-  line-height: 14px;
-  color: var(--success);
+  content: '\2713';
+  line-height: 12px;
+  font-weight: 900;
   border-color: var(--success);
+  background: var(--green-100);
 }
 
 .time {
