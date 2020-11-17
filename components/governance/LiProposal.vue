@@ -23,7 +23,7 @@ import { fromNow } from '~/common/time'
 import { getProposalStatus } from '~/common/proposal-status'
 
 export default {
-  name: `li-proposal`,
+  name: `LiProposal`,
   filters: {
     fromNow,
   },

@@ -35,7 +35,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `page-validators`,
+  name: `PageValidators`,
   data: () => ({
     searchTerm: '',
     activeOnly: true,

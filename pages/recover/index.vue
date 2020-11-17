@@ -23,8 +23,9 @@ import network from '~/common/network'
 import { getHDPath } from '~/common/hdpath'
 
 export default {
-  name: `recover`,
+  name: `Recover`,
   layout: 'session',
+  middleware: 'localSigning',
   data: () => ({
     steps: [`Recover`, `Name`, `Password`],
     step: 'Recover',
@@ -34,7 +35,6 @@ export default {
     address: undefined,
     errorMessage: undefined,
   }),
-  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = this.steps.findIndex((step) => step === this.step)

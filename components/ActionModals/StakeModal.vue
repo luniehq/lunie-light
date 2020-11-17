@@ -101,7 +101,7 @@ import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 export default {
-  name: `stake-modal`,
+  name: `StakeModal`,
   filters: {
     validatorEntry,
   },

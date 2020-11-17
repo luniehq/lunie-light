@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: `bar`,
+  name: `Bar`,
   props: {
     barType: {
       type: String,

@@ -174,7 +174,7 @@ const SESSION_TYPES = {
 }
 
 export default {
-  name: `action-modal`,
+  name: `ActionModal`,
   filters: {
     prettyInt,
   },

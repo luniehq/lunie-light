@@ -19,5 +19,7 @@ module.exports = {
   rules: {
     'no-console': 0,
     'vue/comment-directive': 0,
+    'vue/no-mutating-props': 0,
+    'vue/custom-event-name-casing': 0,
   },
 }

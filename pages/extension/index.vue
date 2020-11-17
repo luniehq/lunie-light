@@ -51,7 +51,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `session-extension`,
+  name: `SessionExtension`,
   layout: 'session',
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),

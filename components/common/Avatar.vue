@@ -11,7 +11,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `avatar`,
+  name: `Avatar`,
   props: {
     address: {
       type: String,

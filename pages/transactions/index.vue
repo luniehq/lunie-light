@@ -35,7 +35,8 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `page-transactions`,
+  name: `PageTransactions`,
+  middleware: 'addressRequired',
   data: () => ({
     pageNumber: 0,
   }),
@@ -63,7 +64,6 @@ export default {
       }
     },
   },
-  middleware: 'addressRequired',
 }
 </script>
 <style scoped>
