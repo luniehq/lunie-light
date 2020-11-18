@@ -15,6 +15,7 @@ export async function getLedger() {
   const ledger = new LedgerSigner(ledgerTransport, {
     testModeAllowed: true,
     hdPaths: [await getHDPath(network.HDPath)],
+    prefix: network.addressPrefix,
   })
   return ledger
 }
