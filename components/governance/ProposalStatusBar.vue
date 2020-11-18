@@ -37,7 +37,7 @@
       </div>
       <ProgressBar
         size="large"
-        :val="proposal.detailedVotes.votingThresholdYes"
+        :val="proposal.detailedVotes.votingThresholdYes * 100"
         :bar-border-radius="8"
         bar-color="var(--highlight)"
       />
@@ -180,10 +180,13 @@ export default {
 
 .status-bar {
   width: 100%;
-  padding: 2rem 0;
+  padding: 2rem;
   font-size: 14px;
   max-width: 1024px;
-  margin: 0 auto;
+  margin: 0 auto 2rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .top {
@@ -232,8 +235,9 @@ export default {
   color: var(--txt);
   font-size: 12px;
   letter-spacing: 0.5px;
-  border: 2px solid var(--bc);
-  border-radius: 0.25rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .vote-box:last-child {

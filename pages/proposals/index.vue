@@ -1,66 +1,52 @@
 <template>
-  <div>
+  <div class="proposals">
     <div
       v-if="!proposalsLoaded || !governanceOverviewLoaded"
       class="loading-row"
     >
-      Loading...
+      <Loader />
     </div>
-
     <template v-else>
-      <div class="proposals">
-        <div class="overview-header">
-          <div class="overview-top">
-            <h1>Governance Overview</h1>
-          </div>
-
-          <div class="data-row">
-            <div>
-              <h4>Community Pool</h4>
-              <p>
-                {{ governanceOverview.treasurySize }}
-                {{ network.stakingDenom }}
-              </p>
-            </div>
-            <div>
-              <h4>Total Staked</h4>
-              <p>
-                {{ governanceOverview.totalStakedAssets }}
-                {{ network.stakingDenom }}
-              </p>
-            </div>
-            <div v-if="governanceOverview.totalVoters">
-              <h4>Total Voters</h4>
-              <p>{{ governanceOverview.totalVoters | prettyInt }}</p>
-            </div>
-          </div>
+      <h3>Stats</h3>
+      <div class="data-row">
+        <div>
+          <h4>Community Pool</h4>
+          <p>
+            {{ governanceOverview.treasurySize }}
+            {{ network.stakingDenom }}
+          </p>
         </div>
-
-        <template>
-          <h4>Proposals</h4>
-          <LiProposal
-            v-for="proposal in proposals"
-            :key="proposal.id"
-            :proposal="proposal"
-          />
-
-          <Card v-if="!proposals.length">
-            <div slot="title">No proposals</div>
-            <div slot="subtitle">
-              Noone created a proposal on this blockchain yet
-            </div>
-          </Card>
-        </template>
-
-        <ParticipantList
-          v-if="
-            governanceOverview.topVoters &&
-            governanceOverview.topVoters.length > 0
-          "
-          :title="`Top Voters`"
-          :participants="governanceOverview.topVoters"
-        />
+        <div>
+          <h4>Total Staked</h4>
+          <p>
+            {{ governanceOverview.totalStakedAssets }}
+            {{ network.stakingDenom }}
+          </p>
+        </div>
       </div>
+
+      <h3>Proposals</h3>
+      <ProposalRow
+        v-for="proposal in proposals"
+        :key="proposal.id"
+        :proposal="proposal"
+      />
+
+      <Card v-if="!proposals.length">
+        <div slot="title">No proposals</div>
+        <div slot="subtitle">
+          There are no proposals on this blockchain yet.
+        </div>
+      </Card>
+
+      <h3>Voting Power</h3>
+      <ParticipantList
+        v-if="
+          governanceOverview.topVoters &&
+          governanceOverview.topVoters.length > 0
+        "
+        :participants="governanceOverview.topVoters"
+      />
     </template>
   </div>
 </template>
@@ -85,59 +71,20 @@ export default {
 }
 </script>
 <style scoped>
-.loading-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--app-fg);
-  height: 10rem;
-  border-radius: var(--border-radius);
-  margin: 0.5rem 1rem 1rem 2rem;
-  animation: fade 2s infinite;
-}
-
 .proposals {
-  margin: 2rem;
-  padding: 0 1rem;
+  padding: 0 4rem 3rem;
 }
 
-h1 {
-  font-size: 32px;
-  max-width: 500px;
-  color: var(--bright);
+h3 {
+  font-size: 24px;
+  color: var(--gray-800);
+  font-weight: 600;
+  padding: 3rem 0 1.5rem;
 }
 
 h4 {
-  font-size: 12px;
+  font-size: var(--text-sm);
   color: var(--dim);
-  font-weight: 400;
-  max-width: 1024px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.overview-header {
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 0 4rem;
-  width: 100%;
-}
-
-.overview-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.overview-top div {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-}
-
-.overview-top .button {
-  margin-left: 1rem;
 }
 
 .data-row {
@@ -149,44 +96,30 @@ h4 {
 .data-row div {
   font-size: 22px;
   color: var(--txt);
-  padding: 1rem;
-  border: 2px solid var(--bc);
-  border-radius: 0.25rem;
+  padding: 1rem 1.5rem;
   width: 100%;
-  margin: 0 0.5rem;
   white-space: nowrap;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .data-row div:first-child {
-  margin-left: 0;
-}
-
-.data-row div:last-child {
-  margin-right: 0;
+  margin-right: 1rem;
 }
 
 @media screen and (max-width: 1023px) {
-  .tutorial-btn {
-    display: none;
-  }
-
-  #propose-btn {
-    margin: 2rem 0 0;
-  }
-
-  .overview-top {
-    justify-content: center;
-    flex-direction: column;
-    padding-top: 2rem;
+  .proposals {
+    padding: 1rem;
   }
 
   .data-row {
     flex-direction: column;
   }
 
-  .data-row div {
-    margin: -2px 0 0;
-    border-radius: 0;
+  .data-row div:first-child {
+    margin-right: 0;
+    margin-bottom: 1rem;
   }
 }
 </style>

@@ -150,7 +150,6 @@ h5 {
   width: 2.5rem;
   min-width: 2.5rem;
   margin-right: 1rem;
-  box-shadow: 0 0 3px 0 var(--gray-500);
 }
 
 .validator-info {

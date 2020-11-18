@@ -11,6 +11,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  name: 'Layout',
   middleware({ store }) {
     if (!store.state.data.api) {
       store.dispatch('data/init') // init api
