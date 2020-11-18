@@ -291,6 +291,10 @@ export const actions = {
     }
     return []
   },
+  async getAccountInfo({ state: { api } }, address) {
+    const accountInfo = await api.getAccountInfo(address)
+    return accountInfo
+  },
   resetSessionData({ commit }) {
     commit('resetSessionData')
   },

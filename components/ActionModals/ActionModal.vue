@@ -427,11 +427,16 @@ export default {
         const HDPath = network.HDPath
 
         const block = await this.$store.dispatch('data/getBlock')
+        const accountInfo = await this.$store.dispatch(
+          'data/getAccountInfo',
+          this.session.address
+        )
 
         const hashResult = await createSignBroadcast({
           messageType: type,
           message,
           senderAddress: this.session.address,
+          accountInfo,
           network,
           signingType: this.session.sessionType,
           password: this.password,
@@ -447,6 +452,7 @@ export default {
 
         this.pollTxInclusion(hash)
       } catch (error) {
+        debugger
         this.onSendingFailed(error)
       }
     },

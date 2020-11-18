@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
 import {
-  SigningCosmosClient,
   assertIsBroadcastTxSuccess,
-  BroadcastMode,
+  makeSignDoc,
+  makeStdTx,
 } from '@cosmjs/launchpad'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
@@ -32,6 +32,7 @@ export async function createSignBroadcast({
   messageType,
   message,
   senderAddress,
+  accountInfo,
   network,
   signingType,
   password,
@@ -56,19 +57,30 @@ export async function createSignBroadcast({
     gas: String(transactionData.gasEstimate),
   }
 
-  const client = new SigningCosmosClient(
-    network.apiURL,
-    senderAddress,
-    signer,
-    undefined,
-    undefined,
-    BroadcastMode.Async
-  )
-  const broadcastResult = await client.signAndBroadcast(
+  const signDoc = makeSignDoc(
     [].concat(messages),
     fee,
-    transactionData.memo
+    chainId,
+    transactionData.memo,
+    accountInfo.accountNumber,
+    accountInfo.sequence
   )
+  const { signed, signature } = await signer.sign(senderAddress, signDoc)
+  const signedTx = makeStdTx(signed, signature)
+
+  const broadcastBody = {
+    tx: signedTx,
+    mode: 'sync',
+  }
+  // TODO use axios?
+  const broadcastResult = await fetch(
+    `https://api.allorigins.win/get?url=http://34.123.30.100:1317/txs`,
+    {
+      method: 'POST',
+      body: JSON.stringify(broadcastBody),
+    }
+  ).then((res) => res.json())
+  debugger
   assertIsBroadcastTxSuccess(broadcastResult)
 
   return {
