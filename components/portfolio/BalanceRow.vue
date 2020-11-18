@@ -72,7 +72,7 @@ import { bigFigureOrShortDecimals } from '~/common/numbers'
 import { fromNow } from '~/common/time'
 
 export default {
-  name: `balance-row`,
+  name: `BalanceRow`,
   filters: {
     bigFigureOrShortDecimals,
     fromNow,

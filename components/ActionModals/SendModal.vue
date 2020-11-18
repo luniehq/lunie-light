@@ -164,7 +164,7 @@ function availableDenoms(denoms, index, amounts) {
 }
 
 export default {
-  name: `send-modal`,
+  name: `SendModal`,
   filters: {
     availableDenoms,
   },

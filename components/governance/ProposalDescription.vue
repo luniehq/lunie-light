@@ -1,26 +1,26 @@
 <template>
   <div id="proposal-description" class="proposal-description">
-    <div class="description-content-container">
-      <section v-if="proposal && proposal.description">
-        <h4>Description</h4>
-        <div class="description">
-          <pre
-            v-if="
-              proposal.type === `PARAMETER_CHANGE` ||
-              proposal.type === `TREASURY`
-            "
-            >{{ proposal.description }}</pre
-          >
-          <p v-else>{{ proposal.description }}</p>
-        </div>
-      </section>
-    </div>
+    <section
+      v-if="proposal && proposal.description"
+      class="description-container"
+    >
+      <h4>Description</h4>
+      <div class="description">
+        <pre
+          v-if="
+            proposal.type === `PARAMETER_CHANGE` || proposal.type === `TREASURY`
+          "
+          >{{ proposal.description }}</pre
+        >
+        <p v-else>{{ proposal.description }}</p>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
 export default {
-  name: `proposal-description`,
+  name: `ProposalDescription`,
   props: {
     proposal: {
       type: Object,
@@ -32,30 +32,26 @@ export default {
 
 <style scoped>
 h4 {
-  font-size: 12px;
+  font-size: var(--text-sm);
   padding-bottom: 1rem;
   color: var(--dim);
 }
 
 .proposal-description {
   padding: 2rem;
-  background: var(--app-fg);
+  margin: 2rem 0;
   width: 100%;
-}
-
-.description-content-container {
-  max-width: 1024px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .description {
-  max-width: 640px;
-  margin: 0 4rem 0 0;
-  padding: 0 0 4rem 0;
   white-space: pre-wrap;
   color: var(--txt);
+  width: 100%;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
 }
 
 pre {

@@ -57,7 +57,7 @@
 import { required, minLength, sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  name: `password-step`,
+  name: `PasswordStep`,
   props: {
     password: {
       type: String,

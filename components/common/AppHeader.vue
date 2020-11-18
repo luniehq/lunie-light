@@ -32,7 +32,7 @@
 import network from '~/common/network'
 
 export default {
-  name: `app-header`,
+  name: `AppHeader`,
   data: () => ({
     isOpen: false,
     desktop: false,

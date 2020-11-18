@@ -174,7 +174,7 @@ const SESSION_TYPES = {
 }
 
 export default {
-  name: `action-modal`,
+  name: `ActionModal`,
   filters: {
     prettyInt,
   },
@@ -349,7 +349,7 @@ export default {
     goToSession() {
       this.close()
 
-      this.$router.push('/address')
+      this.$router.push('/welcome')
     },
     isValidInput(property) {
       this.$v[property].$touch()

@@ -1,28 +1,28 @@
 <template>
-  <SessionFrame icon="vpn_key">
-    <div class="session-container">
-      <h2 class="session-title">Use Ledger Hardware Wallet</h2>
+  <div class="session-container">
+    <h2 class="session-title">Use Ledger Hardware Wallet</h2>
 
-      <div class="session-main">
-        <p v-if="error">
-          There was an error connecting to the Ledger Nano:<br />
-          {{ error }}
-        </p>
-
-        <Button
-          value="Connect Ledger Nano"
-          :loading="loading"
-          @click.native="connect"
-        />
-      </div>
+    <div class="session-main">
+      <Button
+        value="Connect Ledger"
+        :loading="loading"
+        @click.native="connect"
+      />
     </div>
-  </SessionFrame>
+    <div class="error-container">
+      <p>There was an error connecting to the Ledger Nano:<br /></p>
+      <p v-if="error" class="error">
+        {{ error }}
+      </p>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `session-ledger`,
+  name: `SessionLedger`,
+  layout: 'session',
   computed: {
     ...mapState('ledger', [`accounts`, `error`, `loading`]),
   },
@@ -55,9 +55,7 @@ export default {
 </script>
 <style scoped>
 .session-main {
-  flex: 1;
-  align-items: center;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 </style>

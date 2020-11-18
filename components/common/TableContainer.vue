@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <table class="table">
+    <div v-if="!loaded">
+      <Loader />
+    </div>
+    <table v-else-if="length" class="table">
       <thead>
         <TableHeader
           :sort="sort"
@@ -8,20 +11,11 @@
           :show-row-count="showRowCount"
         />
       </thead>
-      <tbody
-        v-infinite-scroll="loadMore"
-        :infinite-scroll-distance="infiniteScrollDistance"
-      >
-        <tr v-if="!loaded" class="loading-row">
-          <img :src="require(`../../assets/images/loader.svg`)" />
-        </tr>
-        <template v-else-if="length">
-          <slot></slot>
-        </template>
+      <tbody>
+        <slot></slot>
       </tbody>
     </table>
-
-    <template v-if="loaded && !length">
+    <template v-else-if="!length">
       <slot name="empty">
         <tr class="no-results">
           No Results
@@ -51,10 +45,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    infiniteScrollDistance: {
-      type: String,
-      default: '380',
-    },
     loaded: {
       type: Boolean,
       default: false,
@@ -69,19 +59,12 @@ export default {
       searchTerm: false,
     }
   },
-  methods: {
-    loadMore() {
-      if (this.loaded) {
-        this.$emit('loadMore')
-      }
-    },
-  },
 }
 </script>
 
 <style scoped>
 .container {
-  /* overflow: auto; vue infinite scroll doesn't like this */
+  overflow: auto;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
@@ -93,8 +76,7 @@ table {
   min-width: 100%;
 }
 
-.no-results,
-.loading-row {
+.no-results {
   padding: 2rem;
   height: 4rem;
   display: table-cell;
@@ -103,9 +85,5 @@ table {
 .no-results h2 {
   font-weight: 500;
   font-size: var(--text-lg);
-}
-
-.loading-row.left {
-  justify-content: left;
 }
 </style>

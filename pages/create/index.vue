@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame icon="person_add" :on-back="onBack">
+  <div>
     <Steps :steps="steps" :active-step="step" />
     <NameStep v-if="step === 'Name'" :name="name" @submit="setName" />
     <PasswordStep
@@ -15,7 +15,7 @@
       @submit="confirmSeed"
     />
     <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
@@ -26,7 +26,9 @@ import network from '~/common/network'
 const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
-  name: `sign-up`,
+  name: `SessionCreate`,
+  layout: 'session',
+  middleware: 'localSigning',
   data: () => ({
     steps,
     step: 'Name',
@@ -36,7 +38,6 @@ export default {
     errorMessage: undefined,
     loading: false,
   }),
-  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = steps.findIndex((step) => step === this.step)
