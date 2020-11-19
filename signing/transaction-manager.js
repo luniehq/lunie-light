@@ -123,6 +123,7 @@ export async function pollTxInclusion(txHash, iteration = 0) {
     // ignore error
   }
   if (txFound) {
+    return true
   } else if (iteration < MAX_POLL_ITERATIONS) {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     return pollTxInclusion(txHash, iteration + 1)
