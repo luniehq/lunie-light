@@ -72,6 +72,7 @@
 <script>
 import { bigFigureOrShortDecimals } from '~/common/numbers'
 import { fromNow } from '~/common/time'
+import network from '~/common/network'
 
 export default {
   name: `BalanceRow`,
@@ -106,12 +107,8 @@ export default {
       return !!this.balance.endTime
     },
     image() {
-      const fileName = this.balance.denom.toLowerCase() + '.png'
-      try {
-        return require(`../../assets/images/currencies/${fileName}`)
-      } catch (err) {
-        return undefined
-      }
+      const coinLookup = network.getCoinLookup(this.balance.denom, 'viewDenom')
+      return coinLookup ? coinLookup.icon : undefined
     },
     hex() {
       const string = this.balance.denom
@@ -191,6 +188,7 @@ td {
   object-fit: cover;
   margin-right: 1rem;
   border-radius: 50%;
+  background-size: cover;
 }
 
 .icon-button-container {
