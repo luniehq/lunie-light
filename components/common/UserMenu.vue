@@ -24,7 +24,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `user-menu`,
+  name: `UserMenu`,
   computed: {
     ...mapState(['session']),
   },

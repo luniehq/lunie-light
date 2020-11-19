@@ -36,7 +36,7 @@ import { decodeB32 } from '~/common/address'
 import network from '~/common/network'
 
 export default {
-  name: `session-explore`,
+  name: `SessionExplore`,
   data: () => ({
     address: ``,
     error: ``,

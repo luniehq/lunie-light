@@ -55,7 +55,8 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import { getWallet, getWalletIndex } from '~/common/keystore'
 
 export default {
-  name: `sign-in`,
+  name: `SignIn`,
+  middleware: 'localSigning',
   data: () => ({
     signInAddress: undefined,
     signInPassword: ``,
@@ -74,7 +75,6 @@ export default {
       return []
     },
   },
-  middleware: 'localSigning',
   methods: {
     async onSubmit() {
       this.$v.$touch()

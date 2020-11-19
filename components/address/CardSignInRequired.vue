@@ -24,9 +24,10 @@
           title="Ledger Nano"
           route="/ledger"
         />
+        <LiSession icon="vpn_key" title="Use Keplr Extension" route="/keplr" />
         <LiSession
           icon="vpn_key"
-          title="Use Keplr Extension"
+          title="Use Lunie Extension"
           route="/extension"
         />
         <LiSession
@@ -54,7 +55,7 @@
 import network from '~/common/network'
 
 export default {
-  name: `card-sign-in-required`,
+  name: `CardSignInRequired`,
   data: () => ({
     loaded: false,
     network,

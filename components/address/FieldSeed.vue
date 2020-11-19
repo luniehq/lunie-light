@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: `field-seed`,
+  name: `FieldSeed`,
   props: {
     value: {
       type: String,

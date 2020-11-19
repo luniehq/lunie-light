@@ -63,7 +63,7 @@
 import network from '~/common/network'
 
 export default {
-  name: `home`,
+  name: `Home`,
   data: () => ({
     network,
   }),

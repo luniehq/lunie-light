@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: `proposal-description`,
+  name: `ProposalDescription`,
   props: {
     proposal: {
       type: Object,

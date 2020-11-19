@@ -1,22 +1,30 @@
 <template>
   <SessionFrame icon="vpn_key">
     <div class="session-container">
-      <h2 class="session-title">Use Lunie Browser Extension</h2>
+      <h2 class="session-title">Use Keplr Browser Extension</h2>
 
       <div v-if="error" class="session-main">
         <p>
-          There was an error connecting to the Lunie extension:<br />
+          There was an error connecting to the Keplr extension:<br />
           {{ error }}
         </p>
       </div>
 
       <div v-else-if="loading" class="session-main">
-        <p>Connecting to Lunie extension...</p>
+        <p>Connecting to Keplr extension...</p>
       </div>
 
       <div v-else-if="!initialized" class="session-main">
         <p>
-          Looks like you don't have the Lunie browser extension installed yet.
+          Looks like you don't have the Keplr browser extension installed yet.
+          Head over to the
+          <a
+            href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap"
+            target="_blank"
+            rel="noopener norefferer"
+            >Chrome Web Store</a
+          >
+          to quickly install the extension.
         </p>
       </div>
 
@@ -45,9 +53,9 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `SessionLunieExtension`,
+  name: `SessionExtension`,
   computed: {
-    ...mapState('extension', [`accounts`, `initialized`, `error`, `loading`]),
+    ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
   },
   watch: {
     accounts: {
@@ -60,12 +68,12 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('extension/init')
+    this.$store.dispatch('keplr/init')
   },
   methods: {
     signIn(account) {
       this.$store.dispatch(`signIn`, {
-        sessionType: `extension`,
+        sessionType: `keplr`,
         address: account.address,
       })
     },

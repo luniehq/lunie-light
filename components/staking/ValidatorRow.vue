@@ -72,7 +72,7 @@ import {
 import { fromNow } from '~/common/time'
 
 export default {
-  name: `validator-row`,
+  name: `ValidatorRow`,
   components: {},
   filters: {
     bigFigureOrShortDecimals,

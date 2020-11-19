@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: `session-frame`,
+  name: `SessionFrame`,
   components: {},
   props: {
     hideBack: {

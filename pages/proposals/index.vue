@@ -70,7 +70,7 @@ import { mapState } from 'vuex'
 import network from '~/common/network'
 
 export default {
-  name: `governance-overview`,
+  name: `GovernanceOverview`,
   data: () => ({
     network,
   }),

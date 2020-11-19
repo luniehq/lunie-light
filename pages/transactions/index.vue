@@ -29,7 +29,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `page-transactions`,
+  name: `PageTransactions`,
   data: () => ({
     pageNumber: 0,
   }),

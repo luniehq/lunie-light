@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: `page-address`,
+  name: `PageAddress`,
 }
 </script>

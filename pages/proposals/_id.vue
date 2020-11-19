@@ -63,7 +63,7 @@ import {
 import network from '~/common/network'
 
 export default {
-  name: `page-proposal`,
+  name: `PageProposal`,
   filters: {
     prettyInt,
     percent,

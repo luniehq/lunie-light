@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: `page-portfolio`,
+  name: `PagePortfolio`,
   middleware: 'addressRequired',
 }
 </script>

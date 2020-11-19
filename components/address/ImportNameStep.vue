@@ -59,7 +59,7 @@ const nameExists = (value) => {
 }
 
 export default {
-  name: `import-name-step`,
+  name: `ImportNameStep`,
   props: {
     address: {
       type: String,

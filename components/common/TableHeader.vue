@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: `table-header`,
+  name: `TableHeader`,
   props: {
     sort: {
       type: Object,

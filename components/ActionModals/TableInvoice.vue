@@ -64,7 +64,7 @@ import { fullDecimals } from '~/common/numbers'
 import network from '~/common/network'
 
 export default {
-  name: `table-invoice`,
+  name: `TableInvoice`,
   filters: {
     fullDecimals,
   },

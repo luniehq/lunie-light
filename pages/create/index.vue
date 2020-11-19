@@ -26,7 +26,8 @@ import network from '~/common/network'
 const steps = [`Name`, `Password`, `Backup`, `Confirm`]
 
 export default {
-  name: `sign-up`,
+  name: `SignUp`,
+  middleware: 'localSigning',
   data: () => ({
     steps,
     step: 'Name',
@@ -36,7 +37,6 @@ export default {
     errorMessage: undefined,
     loading: false,
   }),
-  middleware: 'localSigning',
   methods: {
     onBack() {
       const stepIndex = steps.findIndex((step) => step === this.step)

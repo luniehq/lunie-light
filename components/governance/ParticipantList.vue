@@ -54,7 +54,7 @@ import { prettyInt, bigFigure, bigFigureOrPercent } from '~/common/numbers'
 import network from '~/common/network'
 
 export default {
-  name: `participant-list`,
+  name: `ParticipantList`,
   filters: {
     formatAddress,
     bigFigure,
