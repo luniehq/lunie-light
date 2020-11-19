@@ -24,7 +24,7 @@ import { mapState } from 'vuex'
 import { prettyInt } from '../../common/numbers'
 
 export default {
-  name: `connected-network`,
+  name: `ConnectedNetwork`,
   filters: {
     prettyInt,
   },

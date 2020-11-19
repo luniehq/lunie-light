@@ -34,7 +34,7 @@
 import { capitalizeFirstLetter } from '~/common/strings'
 
 export default {
-  name: `account-list`,
+  name: `AccountList`,
   filters: {
     capitalizeFirstLetter,
   },

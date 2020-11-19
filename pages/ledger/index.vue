@@ -21,7 +21,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `session-ledger`,
+  name: `SessionLedger`,
   layout: 'session',
   computed: {
     ...mapState('ledger', [`accounts`, `error`, `loading`]),

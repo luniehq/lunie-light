@@ -23,7 +23,7 @@
 // Remember that v-on:submit will NOT work on this component
 // Use :submit="onSubmit on the parent component and it'll save you headaches
 export default {
-  name: `form`,
+  name: `Form`,
   props: {
     width: {
       type: String,
