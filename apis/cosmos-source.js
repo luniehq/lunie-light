@@ -46,6 +46,14 @@ export default class CosmosAPI {
     }
   }
 
+  async getAccountInfo(address) {
+    const accountInfo = await this.query(`/auth/accounts/${address}`)
+    return {
+      accountNumber: accountInfo.value.account_number,
+      sequence: accountInfo.value.sequence || '0',
+    }
+  }
+
   async getSignedBlockWindow() {
     const slashingParams = await this.query('/slashing/parameters')
     return slashingParams.signed_blocks_window

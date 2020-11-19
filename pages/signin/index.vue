@@ -88,7 +88,7 @@ export default {
         await Secp256k1HdWallet.deserialize(wallet, this.signInPassword)
         this.$store.dispatch('signIn', {
           address: this.signInAddress,
-          type: 'local',
+          sessionType: 'local',
         })
         this.$router.push('/portfolio')
       } catch (err) {
