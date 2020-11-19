@@ -98,18 +98,6 @@ export const getAccountsFromExtension = () => {
   sendMessageToContentScript({ type: 'GET_WALLETS' })
 }
 
-export const getSignQueue = async () => {
-  const { amount } = await sendAsyncMessageToContentScript(
-    {
-      type: 'LUNIE_GET_SIGN_QUEUE',
-      payload: {},
-    },
-    true
-  )
-
-  return amount
-}
-
 export const deleteAccount = async (address) => {
   const boolean = await sendAsyncMessageToContentScript(
     {

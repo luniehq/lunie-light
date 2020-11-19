@@ -14,8 +14,6 @@ export async function getSigner(signingType, { address, password }, chainId) {
     return await getLedger()
   } else if (signingType === `keplr`) {
     return window.getOfflineSigner(chainId)
-  } else if (signingType === `extension`) {
-    throw new Error('TODO')
   }
 
   throw new Error(`Signing via ${signingType} is not supported`)
