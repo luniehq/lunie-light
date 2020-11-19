@@ -63,7 +63,7 @@
 import network from '~/common/network'
 
 export default {
-  name: `home`,
+  name: `Home`,
   data: () => ({
     network,
   }),
@@ -72,9 +72,12 @@ export default {
 
 <style scoped>
 .content {
-  padding: 5rem 2rem 2rem;
-  margin: 0 auto;
-  max-width: 800px;
+  padding: 2rem;
+  margin: 3rem auto;
+  max-width: 750px;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
 }
 
 .network-icon {
@@ -127,12 +130,20 @@ span {
 }
 
 .disclaimer {
-  padding-bottom: 2rem;
   font-size: 12px;
   color: var(--txt);
 }
 
 .disclaimer p {
   font-style: italic;
+}
+
+@media screen and (max-width: 667px) {
+  .content {
+    box-shadow: none;
+    border-radius: 0;
+    background: var(--white);
+    margin: 0;
+  }
 }
 </style>

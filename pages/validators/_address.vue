@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-if="!validatorsLoaded" class="loading-row">Loading...</div>
+    <div v-if="!validatorsLoaded">
+      <Loader />
+    </div>
     <div v-else-if="validators.length && !validator">Validator Not Found</div>
     <div v-else class="readable-width">
       <div class="back-button-container">
@@ -156,7 +158,7 @@ import { fromNow } from '~/common/time'
 import network from '~/common/network'
 
 export default {
-  name: `page-validator`,
+  name: `PageValidator`,
   filters: {
     shortDecimals,
     fullDecimals,
@@ -244,11 +246,6 @@ export default {
 }
 </script>
 <style scoped>
-.loading-row {
-  margin: 1rem;
-  height: 50vh;
-}
-
 span {
   font-size: var(--text-xs);
   line-height: normal;

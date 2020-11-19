@@ -46,6 +46,14 @@ export default class CosmosAPI {
     }
   }
 
+  async getAccountInfo(address) {
+    const accountInfo = await this.query(`/auth/accounts/${address}`)
+    return {
+      accountNumber: accountInfo.value.account_number,
+      sequence: accountInfo.value.sequence || '0',
+    }
+  }
+
   async getSignedBlockWindow() {
     const slashingParams = await this.query('/slashing/parameters')
     return slashingParams.signed_blocks_window
@@ -597,7 +605,7 @@ export default class CosmosAPI {
     const rewards = (result.rewards || []).filter(
       ({ reward }) => reward && reward.length > 0
     )
-    return this.reducers.rewardReducer(rewards, this.validators)
+    return await this.reducers.rewardReducer(rewards, this.validators)
   }
 
   async loadPaginatedTxs(url, page = 1) {

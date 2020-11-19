@@ -11,7 +11,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `avatar`,
+  name: `Avatar`,
   props: {
     address: {
       type: String,
@@ -51,5 +51,6 @@ export default {
   background-size: contain;
   height: 2.5rem;
   width: 2.5rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
 }
 </style>

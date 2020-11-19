@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-if="!transactionsLoaded" class="loading-row">Loading...</div>
+    <div v-if="!transactionsLoaded" class="container">
+      <Loader />
+    </div>
 
     <Card v-else-if="!transactions.length">
       <div slot="title">No transactions</div>
@@ -16,10 +18,14 @@
         @loadMore="loadTransactions"
       />
 
+      <div v-if="transactionsLoaded && transactionsLoading" class="loading-row">
+        Loading...
+      </div>
+
       <template v-if="transactionsLoaded && !moreTransactionsAvailable">
-        <p class="message">
-          {{ oldChainDataMessage }}
-        </p>
+        <div class="container">
+          <p>{{ oldChainDataMessage }}</p>
+        </div>
       </template>
     </template>
   </div>
@@ -29,7 +35,8 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: `page-transactions`,
+  name: `PageTransactions`,
+  middleware: 'addressRequired',
   data: () => ({
     pageNumber: 0,
   }),
@@ -38,17 +45,18 @@ export default {
       `validators`,
       `transactions`,
       `transactionsLoaded`,
+      `transactionsLoading`,
       `moreTransactionsAvailable`,
     ]),
     ...mapState(['session']),
     oldChainDataMessage() {
-      return `If you expected to see transactions here that are missing, 
-      it's possible the transactions may have occured on a previous version of this blockchain.`
+      return `If you're missing transactions from this list 
+      they may have occured before the last blockchain upgrade.`
     },
   },
   methods: {
     async loadTransactions() {
-      if (this.moreTransactionsAvailable) {
+      if (this.moreTransactionsAvailable && !this.transactionsLoading) {
         await this.$store.dispatch('data/getTransactions', {
           address: this.session.address,
           pageNumber: this.pageNumber++,
@@ -56,30 +64,22 @@ export default {
       }
     },
   },
-  middleware: 'addressRequired',
 }
 </script>
 <style scoped>
-.message {
+.container {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background: var(--app-fg);
+  background: var(--white);
   border-radius: var(--border-radius);
+  box-shadow: 0 0 3px 0 var(--gray-400);
   margin: 1rem;
-  padding: 2rem;
   font-size: 12px;
   color: var(--txt);
 }
 
-.loading-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--app-fg);
-  height: 10rem;
-  border-radius: var(--border-radius);
-  margin: 0.5rem 1rem 1rem 2rem;
-  animation: fade 2s infinite;
+.container p {
+  padding: 2rem;
 }
 </style>
