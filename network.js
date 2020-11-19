@@ -5,14 +5,13 @@ export default {
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
   logo: `logo.svg`,
   website: 'https://cosmos.network',
-  apiURL:
-    'https://api.allorigins.win/raw?url=https://rest.gaiasg4.hub.hackatom.dev/',
-  rpcURL: 'https://rpc.gaiasg4.hub.hackatom.dev/',
-  stakingDenom: 'ATOM',
+  apiURL: 'http://localhost:8010/proxy', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
+  rpcURL: 'ws://34.123.30.100:26657',
+  stakingDenom: 'MUON',
   coinLookup: [
     {
-      viewDenom: 'ATOM',
-      chainDenom: 'uatom',
+      viewDenom: 'MUON',
+      chainDenom: 'umuon',
       chainToViewConversionFactor: 1e-6,
     },
   ],
@@ -26,7 +25,7 @@ export default {
       gasEstimate: 350000,
       feeOptions: [
         {
-          denom: 'ATOM',
+          denom: 'MUON',
           amount: 0.001,
         },
       ],

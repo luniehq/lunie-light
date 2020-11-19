@@ -73,13 +73,10 @@ export async function createSignBroadcast({
     mode: 'sync',
   }
   // TODO use axios?
-  const broadcastResult = await fetch(
-    `https://api.allorigins.win/get?url=http://34.123.30.100:1317/txs`,
-    {
-      method: 'POST',
-      body: JSON.stringify(broadcastBody),
-    }
-  ).then((res) => res.json())
+  const broadcastResult = await fetch(`${network.apiURL}/txs`, {
+    method: 'POST',
+    body: JSON.stringify(broadcastBody),
+  }).then((res) => res.json())
   assertIsBroadcastTxSuccess(broadcastResult)
 
   if (!assertIsBroadcastTxSuccess(broadcastResult)) {
