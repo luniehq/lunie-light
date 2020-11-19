@@ -54,8 +54,8 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 12rem;
-  padding: 2rem;
+  height: 10rem;
+  padding: 1.5rem;
   margin: 0;
 }
 
@@ -125,5 +125,11 @@ export default {
   color: var(--dim);
   border-radius: 50%;
   padding: 0.5rem;
+}
+
+@media screen and (max-width: 667px) {
+  .li-session {
+    padding: 1rem;
+  }
 }
 </style>

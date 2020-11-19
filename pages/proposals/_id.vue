@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="proposal" class="proposal">
+    <div v-if="!proposalsLoaded && !proposal">
+      <Loader />
+    </div>
+    <div v-else class="proposal">
       <ProposalHeader
         id="proposal-description"
         :proposal="proposal"
@@ -47,7 +50,6 @@
           @success="() => afterVote()"
         /> -->
     </div>
-    <div v-else class="loading-row">Loading...</div>
   </div>
 </template>
 
@@ -83,7 +85,7 @@ export default {
     network,
   }),
   computed: {
-    ...mapState('data', ['proposals']),
+    ...mapState('data', ['proposals', 'proposalsLoaded']),
     proposal() {
       if (this.proposals && this.proposals.length > 0) {
         return this.proposals.find(({ id }) => id === this.proposalId)
@@ -147,17 +149,11 @@ export default {
 </script>
 <style scoped>
 .proposal {
-  padding: 0 1rem;
-}
-
-.loading-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--app-fg);
-  height: 10rem;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
-  margin: 0.5rem 1rem 1rem 2rem;
-  animation: fade 2s infinite;
+  background: var(--white);
+  max-width: 1024px;
 }
 </style>

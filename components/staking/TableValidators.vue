@@ -1,13 +1,12 @@
 <template>
   <TableContainer
-    :length="showingValidators.length"
+    :length="sortedEnrichedValidators.length"
     :columns="properties"
     :sort="sort"
     :loaded="loaded"
-    @loadMore="loadMore"
   >
     <ValidatorRow
-      v-for="(validator, index) in showingValidators"
+      v-for="(validator, index) in sortedEnrichedValidators"
       :key="validator.operatorAddress"
       :index="index"
       :validator="validator"
@@ -55,7 +54,6 @@ export default {
       property: `votingPower`,
       order: `desc`,
     },
-    showing: 25,
     stakingDenom: network.stakingDenom,
   }),
   computed: {
@@ -69,9 +67,6 @@ export default {
         [this.sort.order]
       )
       return orderedValidators
-    },
-    showingValidators() {
-      return this.sortedEnrichedValidators.slice(0, this.showing)
     },
     properties() {
       return [
@@ -95,9 +90,6 @@ export default {
     },
   },
   methods: {
-    loadMore() {
-      this.showing += 10
-    },
     getDelegation({ operatorAddress }) {
       return this.delegations.find(
         ({ validator }) => validator.operatorAddress === operatorAddress

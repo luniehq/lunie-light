@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame icon="person_add" :on-back="onBack">
+  <div>
     <Steps :steps="steps" :active-step="step" />
     <ImportSeedStep v-if="step === 'Recover'" :seed="seed" @submit="setSeed" />
     <ImportNameStep
@@ -14,7 +14,7 @@
       @submit="setPassword"
     />
     <FormMessage v-if="errorMessage" type="custom" :msg="errorMessage" />
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
@@ -23,7 +23,8 @@ import network from '~/common/network'
 import { getHDPath } from '~/common/hdpath'
 
 export default {
-  name: `Recover`,
+  name: `SessionRecover`,
+  layout: 'session',
   middleware: 'localSigning',
   data: () => ({
     steps: [`Recover`, `Name`, `Password`],
@@ -80,7 +81,7 @@ export default {
         )
         this.$store.dispatch('signIn', {
           address: wallet.address,
-          type: 'local',
+          sessionType: 'local',
         })
         this.$router.push({
           name: 'portfolio',

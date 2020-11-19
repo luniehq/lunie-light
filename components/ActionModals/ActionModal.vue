@@ -163,6 +163,7 @@ import { requiredIf } from 'vuelidate/lib/validators'
 import { prettyInt, SMALLEST } from '~/common/numbers'
 import network from '~/common/network'
 import fees from '~/common/fees'
+import { pollTxInclusion } from '~/signing/transaction-manager'
 
 const defaultStep = `details`
 const feeStep = `fees`
@@ -354,7 +355,7 @@ export default {
     goToSession() {
       this.close()
 
-      this.$router.push('/address')
+      this.$router.push('/welcome')
     },
     isValidInput(property) {
       this.$v[property].$touch()
@@ -432,11 +433,16 @@ export default {
         const HDPath = network.HDPath
 
         const block = await this.$store.dispatch('data/getBlock')
+        const accountInfo = await this.$store.dispatch(
+          'data/getAccountInfo',
+          this.session.address
+        )
 
         const hashResult = await createSignBroadcast({
           messageType: type,
           message,
           senderAddress: this.session.address,
+          accountInfo,
           network,
           signingType: this.session.sessionType,
           password: this.password,
@@ -469,29 +475,12 @@ export default {
     maxDecimals(value, decimals) {
       return Number(BigNumber(value).toFixed(decimals)) // TODO only use bignumber
     },
-    async pollTxInclusion(hash, iteration = 0) {
-      const MAX_POLL_ITERATIONS = 30
-      let txFound = false
+    async pollTxInclusion(hash) {
       try {
-        await fetch(`${network.apiURL}/txs/${hash}`).then((res) => {
-          if (res.status === 200) {
-            txFound = true
-          }
-        })
-      } catch (err) {
-        // ignore error
-      }
-      if (txFound) {
+        await pollTxInclusion(hash)
         this.onTxIncluded()
-      } else if (iteration < MAX_POLL_ITERATIONS) {
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-        this.pollTxInclusion(hash, iteration + 1)
-      } else {
-        this.onSendingFailed(
-          new Error(
-            `The transaction wasn't included in time. Check explorers for the transaction hash ${hash}.`
-          )
-        )
+      } catch (err) {
+        this.onSendingFailed(err)
       }
     },
     refreshData() {

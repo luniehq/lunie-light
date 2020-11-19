@@ -73,12 +73,12 @@ export const actions = {
           //   bech32PrefixConsPub: string;
           // }
           bech32Config: {
-            bech32PrefixAccAddr: network.address_prefix,
-            bech32PrefixAccPub: network.address_prefix + 'pub',
-            bech32PrefixValAddr: network.address_prefix + 'valoper',
-            bech32PrefixValPub: network.address_prefix + 'valoperpub',
-            bech32PrefixConsAddr: network.address_prefix + 'valcons',
-            bech32PrefixConsPub: network.address_prefix + 'valconspub',
+            bech32PrefixAccAddr: network.addressPrefix,
+            bech32PrefixAccPub: network.addressPrefix + 'pub',
+            bech32PrefixValAddr: network.addressPrefix + 'valoper',
+            bech32PrefixValPub: network.addressPrefix + 'valoperpub',
+            bech32PrefixConsAddr: network.addressPrefix + 'valcons',
+            bech32PrefixConsPub: network.addressPrefix + 'valconspub',
           },
           // List of all coin/tokens used in this chain.
           currencies: network.coinLookup.map(({ viewDenom }) =>

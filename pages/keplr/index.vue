@@ -3,11 +3,9 @@
     <div class="session-container">
       <h2 class="session-title">Use Keplr Browser Extension</h2>
 
-      <div v-if="error" class="session-main">
-        <p>
-          There was an error connecting to the Keplr extension:<br />
-          {{ error }}
-        </p>
+      <div v-if="error" class="error-container">
+        <p>There was an error connecting to the Keplr extension:<br /></p>
+        <p class="error">{{ error }}</p>
       </div>
 
       <div v-else-if="loading" class="session-main">
@@ -24,7 +22,7 @@
             rel="noopener norefferer"
             >Chrome Web Store</a
           >
-          to quickly install the extension.
+          to install the extension.
         </p>
       </div>
 
@@ -53,7 +51,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: `SessionExtension`,
+  name: `SessionKeplrExtension`,
   computed: {
     ...mapState('keplr', [`accounts`, `initialized`, `error`, `loading`]),
   },

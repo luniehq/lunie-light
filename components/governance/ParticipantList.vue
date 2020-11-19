@@ -1,11 +1,16 @@
 <template>
-  <div class="participant-container">
-    <h4>{{ title }}</h4>
-    <ul>
+  <div>
+    <ul class="participant-list">
       <li
         v-for="(participant, index) in showingParticipants"
         :key="index"
         class="participant"
+        :class="{ isValidator: participant.name }"
+        @click="
+          participant.name
+            ? $router.push(`/validators/${participant.address}`)
+            : null
+        "
       >
         <div class="first-column">
           <span class="icon">
@@ -101,11 +106,14 @@ export default {
 </script>
 
 <style scoped>
-.participant-container {
-  padding: 4rem 0;
+.participant-list {
   max-width: 1024px;
   margin: 0 auto;
   width: 100%;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
+  overflow: auto;
 }
 
 h4 {
@@ -115,7 +123,7 @@ h4 {
 }
 
 .first-column {
-  min-width: 30%;
+  min-width: 16rem;
 }
 
 .participant {
@@ -123,8 +131,13 @@ h4 {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.75rem 0;
   font-size: 14px;
+  padding: 1rem 1.5rem;
+}
+
+.participant.isValidator:hover {
+  background: var(--gray-100);
+  cursor: pointer;
 }
 
 .participant div {

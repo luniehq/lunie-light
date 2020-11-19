@@ -1,5 +1,5 @@
 <template>
-  <SessionFrame :icon="`lock`">
+  <div>
     <Form :submit="onSubmit" class="session-container">
       <h2 class="session-title">Sign in with account</h2>
       <div class="session-main bottom-indent">
@@ -47,7 +47,7 @@
         <Button value="Sign In" :disabled="loading" />
       </div>
     </Form>
-  </SessionFrame>
+  </div>
 </template>
 
 <script>
@@ -55,7 +55,8 @@ import { required, minLength } from 'vuelidate/lib/validators'
 import { getWallet, getWalletIndex } from '~/common/keystore'
 
 export default {
-  name: `SignIn`,
+  name: `SessionSignIn`,
+  layout: 'session',
   middleware: 'localSigning',
   data: () => ({
     signInAddress: undefined,
@@ -87,7 +88,7 @@ export default {
         await Secp256k1HdWallet.deserialize(wallet, this.signInPassword)
         this.$store.dispatch('signIn', {
           address: this.signInAddress,
-          type: 'local',
+          sessionType: 'local',
         })
         this.$router.push('/portfolio')
       } catch (err) {
