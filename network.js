@@ -15,6 +15,13 @@ export default {
       chainToViewConversionFactor: 1e-6,
       icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
     },
+    {
+      viewDenom: 'slippers',
+      chainDenom:
+        'ibc/1729ECE5E5B209AB14A623312589888D6E1680427B0BE560A4BC242EF2369EEF',
+      chainToViewConversionFactor: 1e-6,
+      icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
+    },
   ],
   addressPrefix: 'cosmos',
   validatorAddressPrefix: 'cosmosvaloper',
@@ -33,5 +40,5 @@ export default {
     },
   },
   icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
-  localSigning: false,
+  localSigning: true,
 }
