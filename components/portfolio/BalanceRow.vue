@@ -2,14 +2,16 @@
   <tr class="balance-row">
     <td :key="balance.denom">
       <div class="row">
-        <img
+        <div
           class="token-icon"
-          :src="image"
-          :alt="`${balance.denom}` + ' currency'"
+          :style="`background-image: url(${image}); background-color: ${hex};`"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
           {{ balance.denom }}
+        </div>
+        <div v-if="balance.sourceChain" class="chain">
+          {{ balance.sourceChain }}
         </div>
       </div>
     </td>
@@ -70,6 +72,7 @@
 <script>
 import { bigFigureOrShortDecimals } from '~/common/numbers'
 import { fromNow } from '~/common/time'
+import network from '~/common/network'
 
 export default {
   name: `BalanceRow`,
@@ -104,8 +107,22 @@ export default {
       return !!this.balance.endTime
     },
     image() {
-      const fileName = this.balance.denom.toLowerCase() + '.png'
-      return require(`../../assets/images/currencies/${fileName}`)
+      const coinLookup = network.getCoinLookup(this.balance.denom, 'viewDenom')
+      return coinLookup ? coinLookup.icon : undefined
+    },
+    hex() {
+      const string = this.balance.denom
+      let hash = 0
+      for (let i = 0; i < string.length; i++) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash)
+      }
+      let colour = '#'
+      for (let i = 0; i < 3; i++) {
+        // eslint-disable-next-line prettier/prettier
+        const value = (hash >> (i * 8)) & 0xFF
+        colour += ('00' + value.toString(16)).substr(-2)
+      }
+      return colour
     },
   },
   methods: {
@@ -158,6 +175,12 @@ td {
   color: var(--bright);
 }
 
+.chain {
+  font-size: 10px;
+  margin-left: 0.5rem;
+  margin-top: 0.3rem;
+}
+
 .token-icon {
   width: 2.5rem;
   height: 2.5rem;
@@ -165,6 +188,7 @@ td {
   object-fit: cover;
   margin-right: 1rem;
   border-radius: 50%;
+  background-size: cover;
 }
 
 .icon-button-container {
