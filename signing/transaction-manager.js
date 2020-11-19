@@ -80,8 +80,16 @@ export async function createSignBroadcast({
       body: JSON.stringify(broadcastBody),
     }
   ).then((res) => res.json())
-  debugger
   assertIsBroadcastTxSuccess(broadcastResult)
+
+  if (
+    !assertIsBroadcastTxSuccess(broadcastResult) &&
+    broadcastResult.contents
+  ) {
+    throw new Error(
+      `Transaction failed. Error: ${JSON.parse(broadcastResult.contents).error}`
+    )
+  }
 
   return {
     hash: broadcastResult.transactionHash,

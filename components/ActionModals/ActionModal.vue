@@ -452,7 +452,6 @@ export default {
 
         this.pollTxInclusion(hash)
       } catch (error) {
-        debugger
         this.onSendingFailed(error)
       }
     },
