@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
-import { makeStdTx } from '@cosmjs/launchpad'
+import { makeStdTx, makeSignDoc } from '@cosmjs/launchpad'
 import axios from 'axios'
-import { getSignableObject } from './transaction-formating'
 import { getSigner } from './signer'
 import messageCreators from './messages.js'
 import fees from '~/common/fees'
@@ -52,12 +51,18 @@ export async function createSignBroadcast({
 
   const transactionData = getFees(messageType, feeDenom)
 
-  const signDoc = getSignableObject([].concat(messages), {
-    ...transactionData,
-    ...accountInfo,
-    memo,
+  const signDoc = makeSignDoc(
+    [].concat(messages),
+    {
+      amount: transactionData.fee,
+      gas: transactionData.gasEstimate,
+    },
     chainId,
-  })
+    memo,
+    accountInfo.accountNumber,
+    accountInfo.sequence
+  )
+
   const { signed, signature } = await signer.sign(senderAddress, signDoc)
   const signedTx = makeStdTx(signed, signature)
 
