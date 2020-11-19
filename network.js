@@ -1,17 +1,18 @@
 export default {
-  id: 'cosmos-mainnet',
-  name: 'Cosmos Hub',
+  id: 'cosmos-testnet',
+  name: 'Cosmos Stargate',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
   logo: `logo.svg`,
   website: 'https://cosmos.network',
-  apiURL: 'https://api.allorigins.win/raw?url=http://34.123.30.100:1317',
-  rpcURL: 'http://34.123.30.100:26657',
-  stakingDenom: 'MUON',
+  apiURL:
+    'https://api.allorigins.win/raw?url=https://rest.gaiasg4.hub.hackatom.dev/',
+  rpcURL: 'https://rpc.gaiasg4.hub.hackatom.dev/',
+  stakingDenom: 'ATOM',
   coinLookup: [
     {
-      viewDenom: 'MUON',
-      chainDenom: 'umuon',
+      viewDenom: 'ATOM',
+      chainDenom: 'uatom',
       chainToViewConversionFactor: 1e-6,
     },
   ],
@@ -25,7 +26,7 @@ export default {
       gasEstimate: 350000,
       feeOptions: [
         {
-          denom: 'MUON',
+          denom: 'ATOM',
           amount: 0.001,
         },
       ],
