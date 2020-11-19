@@ -14,12 +14,12 @@ const processMessage = (store, type, payload) => {
   switch (type) {
     case 'INIT_EXTENSION':
       extensionAvailable = true
-      store.commit('extension/setInitialized')
+      store.commit('setInitialized')
       getAccountsFromExtension()
       break
     case 'GET_WALLETS_RESPONSE':
-      store.commit('extension/setAccounts', payload)
-      store.commit('extension/setLoading', false)
+      store.commit('setAccounts', payload)
+      store.commit('setLoading', false)
       break
     default:
   }

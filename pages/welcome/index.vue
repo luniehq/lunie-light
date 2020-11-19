@@ -23,7 +23,8 @@
         title="Ledger Nano"
         route="/ledger"
       />
-      <LiSession icon="web" title="Use Keplr Extension" route="/extension" />
+      <LiSession icon="web" title="Use Keplr Extension" route="/keplr" />
+      <LiSession icon="web" title="Use Lunie Extension" route="/extension" />
       <LiSession
         id="explore-with-address"
         icon="language"
