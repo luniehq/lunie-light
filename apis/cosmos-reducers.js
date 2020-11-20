@@ -608,7 +608,7 @@ export function transactionReducer(transaction) {
         timestamp: transaction.timestamp,
         memo: transaction.tx.body.memo,
         fees,
-        success: setTransactionSuccess(transaction, messageIndex, network.id),
+        success: setTransactionSuccess(transaction, messageIndex),
         log: getTransactionLogs(transaction, messageIndex),
         involvedAddresses: extractInvolvedAddresses(
           transaction.logs.find(
