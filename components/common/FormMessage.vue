@@ -1,6 +1,6 @@
 <template>
   <div :class="cssClass">
-    <template> {{ name }} {{ error }} </template>
+    <div>{{ name }} {{ error }}</div>
   </div>
 </template>
 
