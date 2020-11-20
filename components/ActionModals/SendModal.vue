@@ -375,7 +375,7 @@ export default {
 
 .tm-field-token-selector >>> .tm-field-select {
   border-left: 0;
-  border-radius: 0 !important;
+  border-radius: 0 0.5em 0.5em 0 !important;
 }
 
 .tm-field-token-selector >>> .tm-field-select:focus {
@@ -394,7 +394,6 @@ export default {
 .manage-amounts-container {
   display: flex;
   justify-content: flex-end;
-  margin-top: 0.5rem;
 }
 
 .add-amount-button {
@@ -406,6 +405,7 @@ export default {
 
 .add-amount-button i {
   font-size: 1.75rem;
+  padding-top: 0.5rem;
 }
 
 .add-amount-button:hover {

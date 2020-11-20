@@ -77,6 +77,7 @@ export default {
 .tm-form-group__field {
   display: flex;
   width: 100%;
+  align-items: center;
 }
 
 .tm-form-group__sub-label ~ .tm-form-group__label {
