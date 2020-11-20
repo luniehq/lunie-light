@@ -111,8 +111,7 @@ export default {
     },
     image() {
       const coinLookup = network.getCoinLookup(this.balance.denom, 'viewDenom')
-      const icon = coinLookup ? coinLookup.icon : undefined
-      return icon
+      return coinLookup ? coinLookup.icon : undefined
     },
     hex() {
       const string = this.balance.denom
