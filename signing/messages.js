@@ -40,13 +40,19 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
 }
 
 export function VoteTx(senderAddress, { proposalId, voteOption }) {
+  const chainVoteOption = {
+    Yes: 1,
+    Abstain: 2,
+    No: 3,
+    NoWithVeto: 4,
+  }[voteOption]
   /* istanbul ignore next */
   return {
     type: `cosmos-sdk/MsgVote`,
     value: {
       voter: senderAddress,
       proposal_id: proposalId,
-      option: voteOption,
+      option: chainVoteOption,
     },
   }
 }
