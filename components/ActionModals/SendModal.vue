@@ -116,7 +116,11 @@
         >
           <i class="material-icons notranslate">remove_circle</i>
         </div>
-        <div class="add-amount-button" @click="addAmount(index + 1)">
+        <div
+          v-if="getAvailableDenoms(denomOptions, index, amounts).length > 1"
+          class="add-amount-button"
+          @click="addAmount(index + 1)"
+        >
           <i class="material-icons notranslate">add_circle</i>
         </div>
       </div>
@@ -297,6 +301,9 @@ export default {
           amount: 0,
         }
       )
+    },
+    getAvailableDenoms(denomOptions, index, amounts) {
+      return availableDenoms(denomOptions, index, amounts)
     },
     removeAmount(index) {
       this.amounts.pop()
