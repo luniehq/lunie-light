@@ -15,7 +15,6 @@
           v-focus
           type="text"
           placeholder="Must be at least 3 characters"
-          vue-focus="vue-focus"
         />
         <FormMessage
           v-if="$v.fieldName.$error && !$v.fieldName.required"

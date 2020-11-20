@@ -117,6 +117,7 @@ export const actions = {
 
         commit('setInitialized')
       } catch (error) {
+        commit('setLoading', false)
         commit('setError', error.message)
         return
       }
