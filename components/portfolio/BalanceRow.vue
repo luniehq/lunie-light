@@ -4,7 +4,10 @@
       <div class="row">
         <div
           class="token-icon"
-          :style="`background-image: url(${image}); background-color: ${hex};`"
+          :style="{
+            backgroundImage: `url(${image})`,
+            backgroundColor: hex,
+          }"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
@@ -108,7 +111,8 @@ export default {
     },
     image() {
       const coinLookup = network.getCoinLookup(this.balance.denom, 'viewDenom')
-      return coinLookup ? coinLookup.icon : undefined
+      const icon = coinLookup ? coinLookup.icon : undefined
+      return icon
     },
     hex() {
       const string = this.balance.denom
