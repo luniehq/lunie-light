@@ -3,16 +3,20 @@
     <div class="session-container">
       <h2 class="session-title">Use Keplr Browser Extension</h2>
 
+      <div class="session-main">
+        <Button
+          value="Connect Keplr"
+          :loading="loading"
+          @click.native="connect"
+        />
+      </div>
+
       <div v-if="error" class="error-container">
         <p>There was an error connecting to the Keplr extension:<br /></p>
         <p class="error">{{ error }}</p>
       </div>
 
-      <div v-else-if="loading" class="session-main">
-        <p>Connecting to Keplr extension...</p>
-      </div>
-
-      <div v-else-if="!initialized" class="session-main">
+      <div v-else-if="!loading && !initialized" class="session-main">
         <p>
           Looks like you don't have the Keplr browser extension installed yet.
           Head over to the
@@ -38,7 +42,7 @@
         />
       </div>
 
-      <div v-else class="session-main">
+      <div v-if="!accounts.length && initialized" class="session-main">
         <p class="extension-message">
           Looks like you don't have any addresses in the Keplr extension yet.
           Click on the extension icon in your browser and add an address now.
@@ -70,6 +74,9 @@ export default {
     this.$store.dispatch('keplr/init')
   },
   methods: {
+    connect() {
+      this.$store.dispatch('keplr/init')
+    },
     signIn(account) {
       this.$store.dispatch(`signIn`, {
         sessionType: `extension`,
@@ -78,8 +85,14 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.$router.push('/portfolio')
+      this.$router.push('/')
     },
   },
 }
 </script>
+<style scoped>
+.session-main {
+  display: flex;
+  justify-content: center;
+}
+</style>

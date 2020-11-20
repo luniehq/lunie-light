@@ -1,8 +1,8 @@
 <template>
-  <div class="session-frame lunie-light">
+  <div class="session-layout lunie-light">
     <div class="session">
-      <div class="session-header">
-        <a :class="{ invisible: hideBack }" @click="goBack">
+      <div v-if="$route.path !== '/welcome'" class="session-header">
+        <a @click="goBack">
           <i class="material-icons notranslate circle back">arrow_back</i>
         </a>
         <div class="session-close">
@@ -13,45 +13,43 @@
       </div>
       <Nuxt></Nuxt>
     </div>
+    <div class="disclaimer">
+      <p>
+        Use this software at your own risk. Never enter your seed phrase into
+        untrusted software. Beware of phishing scams and spoof sites. Have a
+        nice day <span>✌️</span>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: `SessionFrame`,
-  components: {},
-  props: {
-    hideBack: {
-      type: Boolean,
-      default: false,
-    },
-    icon: {
-      type: String,
-      default: ``,
-    },
-    onBack: {
-      type: Function,
-      default: undefined,
-    },
+  name: `SessionLayout`,
+  middleware({ store }) {
+    if (!store.state.data.api) {
+      store.dispatch('data/init') // init api
+    }
   },
+  components: {},
   methods: {
     closeModal() {
-      this.$router.push(`/`)
+      this.$router.push(`/validators`)
     },
     goBack() {
-      if (this.onBack) this.onBack()
-      else this.$router.go(`-1`)
+      this.$router.go(`-1`)
     },
   },
 }
 </script>
 
 <style>
-.session-frame {
+.session-layout {
   min-width: 100vw;
   min-height: 100vh;
   background: var(--app-fg);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -62,7 +60,7 @@ export default {
   background: var(--white);
   border-radius: var(--border-radius);
   box-shadow: 0 0 3px 0 var(--gray-400);
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   position: relative;
   max-width: 540px;
   width: 100%;
@@ -141,8 +139,14 @@ export default {
   background: var(--gray-300);
 }
 
-.invisible {
-  visibility: hidden;
+.disclaimer {
+  font-size: 11px;
+  color: var(--red-700);
+  text-align: center;
+  line-height: 1rem;
+  padding: 2rem;
+  max-width: 540px;
+  font-weight: 700;
 }
 
 @media screen and (max-width: 667px) {

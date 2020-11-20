@@ -31,6 +31,7 @@ export const actions = {
       const accounts = await ledger.getAccounts()
       commit('setAccounts', accounts)
     } catch (err) {
+      commit('setLoading', false)
       commit('setError', err.message)
     }
     commit('setLoading', false)

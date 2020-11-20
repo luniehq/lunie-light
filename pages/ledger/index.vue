@@ -9,9 +9,9 @@
         @click.native="connect"
       />
     </div>
-    <div class="error-container">
+    <div v-if="error" class="error-container">
       <p>There was an error connecting to the Ledger Nano:<br /></p>
-      <p v-if="error" class="error">
+      <p class="error">
         {{ error }}
       </p>
     </div>
@@ -36,6 +36,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.$store.dispatch('ledger/init')
+  },
   methods: {
     connect() {
       this.$store.dispatch('ledger/init')
@@ -48,7 +51,7 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.$router.push('/portfolio')
+      this.$router.push('/')
     },
   },
 }
