@@ -231,10 +231,10 @@ function getValidatorStatus(validator) {
 
 export function blockReducer(block) {
   return {
-    id: block.block_meta.block_id.hash,
+    id: block.block_id.hash,
     height: block.block.header.height,
     chainId: block.block.header.chain_id,
-    hash: block.block_meta.block_id.hash,
+    hash: block.block_id.hash,
     time: block.block.header.time,
     proposer_address: block.block.header.proposer_address,
   }

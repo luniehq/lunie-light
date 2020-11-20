@@ -56,7 +56,7 @@
 
 <script>
 export default {
-  name: `field`,
+  name: `Field`,
   props: {
     type: {
       type: String,
@@ -211,6 +211,7 @@ textarea.tm-field {
 
 .tm-select {
   position: relative;
+  width: 100%;
 }
 
 .tm-select select {

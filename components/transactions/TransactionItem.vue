@@ -73,7 +73,7 @@ import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 export default {
-  name: `transaction`,
+  name: `Transaction`,
   props: {
     transaction: {
       type: Object,

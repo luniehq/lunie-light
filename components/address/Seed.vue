@@ -52,7 +52,7 @@
 
 <script>
 export default {
-  name: `seed`,
+  name: `Seed`,
   props: {
     value: {
       type: String,
