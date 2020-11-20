@@ -231,10 +231,10 @@ function getValidatorStatus(validator) {
 
 export function blockReducer(block) {
   return {
-    id: block.block_id.hash,
+    id: block.block_meta.block_id.hash,
     height: block.block.header.height,
     chainId: block.block.header.chain_id,
-    hash: block.block_id.hash,
+    hash: block.block_meta.block_id.hash,
     time: block.block.header.time,
     proposer_address: block.block.header.proposer_address,
   }
@@ -519,7 +519,7 @@ function getProposalStatus(status) {
     3: 'passed',
     4: 'rejected',
     5: 'failed',
-  }
+  }[status]
 }
 
 export function proposalReducer(
@@ -539,7 +539,7 @@ export function proposalReducer(
       ? `Parameter: ${JSON.stringify(proposal.content.value.changes, null, 4)}`
       : `` + `\nDescription: ${proposal.content.value.description}`,
     creationTime: proposal.submit_time,
-    status: proposal.proposal_status,
+    status: getProposalStatus(proposal.status),
     statusBeginTime: proposalBeginTime(proposal),
     statusEndTime: proposalEndTime(proposal),
     tally: tallyReducer(proposal, tally, totalBondedTokens),
