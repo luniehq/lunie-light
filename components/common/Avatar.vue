@@ -50,7 +50,9 @@ export default {
   max-width: 100%;
   background-size: contain;
   height: 2.5rem;
+  min-height: 2.5rem;
   width: 2.5rem;
+  min-width: 2.5rem;
   box-shadow: 0 0 3px 0 var(--gray-400);
 }
 </style>

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { keyBy, orderBy, take, reverse, sortBy } from 'lodash'
+import { keyBy, orderBy, take, reverse, sortBy, chunk } from 'lodash'
 import * as reducers from './cosmos-reducers'
 import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
 import { setDecimalLength } from '~/common/numbers'
@@ -463,18 +463,16 @@ export default class CosmosAPI {
       this.getDelegationsForDelegator(address),
       this.getUndelegationsForDelegator(address),
     ])
-    const balances =
-      balancesResponse.length > 0
-        ? balancesResponse
-        : [
-            {
-              amount: 0,
-              denom: network.coinLookup.find(
-                (coinLookup) => coinLookup.viewDenom === network.stakingDenom
-              ).chainDenom,
-            },
-          ]
-    const coins = balances.map(this.reducers.coinReducer)
+    const balances = balancesResponse || []
+    const coins = await Promise.all(
+      balances.map(async (balance) => {
+        let ibcInfo
+        if (balance.denom.startsWith('ibc/')) {
+          ibcInfo = await this.getIbcInfo(balance.denom)
+        }
+        return this.reducers.coinReducer(balance, ibcInfo)
+      })
+    )
     // also check if there are any denoms as rewards the user has not as a balance
     // we need to show those as well in the balance overview as we show the rewards there
     const rewards = await this.getRewards(address)
@@ -504,11 +502,31 @@ export default class CosmosAPI {
         denom: this.network.stakingDenom,
       })
     }
-    return coins
-      .filter(({ supported }) => supported)
-      .map((coin) => {
-        return this.reducers.balanceReducer(coin, delegations, undelegations)
+    return coins.map((coin) => {
+      return this.reducers.balanceReducer(coin, delegations, undelegations)
+    })
+  }
+
+  async getIbcInfo(traceId) {
+    if (traceId.startsWith('ibc/')) {
+      traceId = traceId.split(`/`)[1]
+    }
+    const result = await this.get(
+      `/ibc_transfer/v1beta1/denom_traces/${traceId}`
+    )
+    const trace = result.denom_trace
+    const chainTrace = await Promise.all(
+      chunk(trace.path.split('/'), 2).map(async ([port, channel]) => {
+        const result = await this.get(
+          `/ibc/channel/v1beta1/channels/${channel}/ports/${port}/client_state`
+        )
+        return result.identified_client_state.client_state.chain_id
       })
+    )
+    return {
+      denom: trace.base_denom,
+      chainTrace,
+    }
   }
 
   async getDelegationsForDelegator(address) {

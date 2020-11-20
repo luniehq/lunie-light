@@ -211,6 +211,7 @@ textarea.tm-field {
 
 .tm-select {
   position: relative;
+  width: 100%;
 }
 
 .tm-select select {
