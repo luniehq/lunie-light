@@ -24,8 +24,6 @@
   "dependencies": {
     "@cosmjs/launchpad": "^0.23.1",
     "@cosmjs/launchpad-ledger": "^0.23.1",
-    "@cosmjs/stargate": "0.24.0-alpha.5",
-    "@cosmjs/tendermint-rpc": "0.24.0-alpha.7",
     "@ledgerhq/hw-transport-webusb": "^5.30.0",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
