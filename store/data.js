@@ -212,9 +212,7 @@ export const actions = {
   ) {
     try {
       commit('setTransactionsLoading', true)
-      // Deactivate for now as not working on Stargate
-      // const transactions = await api.getTransactions(address, pageNumber)
-      const transactions = await []
+      const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
       commit('setTransactionsLoaded', true)
     } catch (err) {
