@@ -315,33 +315,10 @@ export default {
     }
   },
   methods: {
-    confirmModalOpen() {
-      let confirmResult = false
-      if (this.currrentModalOpen) {
-        confirmResult = window.confirm(
-          'You are in the middle of creating a transaction. Are you sure you want to cancel this action and start a new one?'
-        )
-        if (confirmResult) {
-          this.currrentModalOpen.close()
-          this.$store.commit(`setCurrrentModalOpen`, false)
-        }
-      }
-    },
     open() {
-      // TODO creates weird loop
-      // this.confirmModalOpen()
-      // if (this.currrentModalOpen) {
-      //   return
-      // }
-      // this.$store.commit(`setCurrrentModalOpen`, this)
-      if (this.session.sessionType === SESSION_TYPES.EXTENSION) {
-        this.$store.dispatch('extension/init')
-      }
-
       this.show = true
     },
     close() {
-      this.$store.commit(`setCurrrentModalOpen`, false)
       this.submissionError = null
       this.password = null
       this.step = defaultStep
@@ -349,11 +326,6 @@ export default {
       this.sending = false
       this.includedHeight = undefined
 
-      // reset form
-      // in some cases $v is not yet set
-      // if (this.$v) {
-      //   this.$v.$reset()
-      // }
       this.$emit(`close`)
     },
     goToSession() {
@@ -423,10 +395,6 @@ export default {
       ) {
         this.onSendingFailed(new Error(`Error in transaction data`))
         return
-      }
-
-      if (this.session.sessionType === SESSION_TYPES.EXTENSION) {
-        await this.$store.dispatch('extension/awaitInitialized')
       }
 
       const { type, memo, ...message } = this.transactionData
