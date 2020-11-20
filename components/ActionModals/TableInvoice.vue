@@ -139,8 +139,8 @@ export default {
   text-align: right;
 }
 
-.total-row {
-  border-top: 2px solid var(--bc);
+.fees {
+  border-bottom: 2px solid var(--bc);
 }
 
 .fees + .total-row {
