@@ -31,8 +31,8 @@
 
   <input
     v-else
-    class="field"
     ref="numTextInput"
+    class="field"
     :type="type"
     :placeholder="placeholder"
     :value="value"

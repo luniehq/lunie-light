@@ -26,12 +26,12 @@
 <script>
 export default {
   name: `SessionLayout`,
+  components: {},
   middleware({ store }) {
     if (!store.state.data.api) {
       store.dispatch('data/init') // init api
     }
   },
-  components: {},
   methods: {
     closeModal() {
       this.$router.push(`/validators`)
