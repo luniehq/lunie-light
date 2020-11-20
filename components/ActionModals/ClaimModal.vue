@@ -52,7 +52,7 @@ function rewardsToDictionary(rewards) {
 }
 
 export default {
-  name: `claim-modal`,
+  name: `ClaimModal`,
   filters: {
     fullDecimals,
   },

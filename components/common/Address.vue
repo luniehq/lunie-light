@@ -17,7 +17,7 @@
 import { formatAddress } from '~/common/address'
 
 export default {
-  name: `lunie-address`,
+  name: `Address`,
   filters: {
     formatAddress,
   },

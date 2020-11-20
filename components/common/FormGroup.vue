@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: `form-group`,
+  name: `FormGroup`,
   props: {
     error: {
       type: Boolean,

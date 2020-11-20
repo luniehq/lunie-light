@@ -1,7 +1,7 @@
 .lunie-light {
   /* theme colors */
-  --primary: hsl(7, 88%, 70%);
-  --primary-hover: hsl(7, 88%, 65%);
+  --primary: hsl(7, 88%, 60%);
+  --primary-hover: hsl(7, 88%, 55%);
   --link: var(--blue-700);
   --link-hover: var(--blue-800);
 

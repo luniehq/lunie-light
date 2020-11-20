@@ -1,19 +1,21 @@
 require('dotenv').config()
 
 export default {
-  id: 'cosmos-hub-testnet',
-  name: 'Gaia Testnet',
+  id: 'cosmos-testnet',
+  name: 'Cosmos Stargate',
   description:
-    'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+    'Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.',
   logo: `logo.svg`,
   website: 'https://cosmos.network',
-  apiURL: `https://api.allorigins.win/raw?url=${process.env.NETWORK_API_URL}`,
+  apiURL: 'http://localhost:8010/proxy', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
+  rpcURL: 'ws://34.123.30.100:26657',
   stakingDenom: 'MUON',
   coinLookup: [
     {
       viewDenom: 'MUON',
       chainDenom: 'umuon',
       chainToViewConversionFactor: 1e-6,
+      icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
     },
   ],
   addressPrefix: 'cosmos',
@@ -32,6 +34,6 @@ export default {
       ],
     },
   },
-  icon: '~/assets/images/currencies/atom.png',
+  icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
   localSigning: false,
 }

@@ -20,7 +20,8 @@ export const state = () => ({
   governanceOverview: {},
   governanceOverviewLoaded: false,
   transactions: [],
-  transactionsLoaded: undefined,
+  transactionsLoaded: false,
+  transactionsLoading: false,
   moreTransactionsAvailable: true,
   api: undefined,
 })
@@ -55,7 +56,6 @@ export const mutations = {
     state.undelegations = []
     state.rewards = []
     state.transactions = []
-    state.transactionsLoaded = undefined
     state.moreTransactionsAvailable = true
   },
 }
@@ -211,6 +211,7 @@ export const actions = {
     { address, pageNumber = 0 }
   ) {
     try {
+      commit('setTransactionsLoading', true)
       const transactions = await api.getTransactions(address, pageNumber)
       commit('setTransactions', { transactions, pageNumber })
       commit('setTransactionsLoaded', true)
@@ -224,6 +225,7 @@ export const actions = {
         { root: true }
       )
     }
+    commit('setTransactionsLoading', false)
   },
   async getProposals({ commit, state: { api } }) {
     try {
@@ -282,12 +284,16 @@ export const actions = {
         'notifications/add',
         {
           type: 'danger',
-          message: 'Getting delegations to validator failed:' + err.message,
+          message: 'Getting validator delegations failed:' + err.message,
         },
         { root: true }
       )
     }
     return []
+  },
+  async getAccountInfo({ state: { api } }, address) {
+    const accountInfo = await api.getAccountInfo(address)
+    return accountInfo
   },
   resetSessionData({ commit }) {
     commit('resetSessionData')
