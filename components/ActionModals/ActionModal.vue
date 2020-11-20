@@ -334,6 +334,10 @@ export default {
       //   return
       // }
       // this.$store.commit(`setCurrrentModalOpen`, this)
+      if (this.session.sessionType === SESSION_TYPES.EXTENSION) {
+        this.$store.dispatch('extension/init')
+      }
+
       this.show = true
     },
     close() {
@@ -419,6 +423,10 @@ export default {
       ) {
         this.onSendingFailed(new Error(`Error in transaction data`))
         return
+      }
+
+      if (this.session.sessionType === SESSION_TYPES.EXTENSION) {
+        await this.$store.dispatch('extension/awaitInitialized')
       }
 
       const { type, memo, ...message } = this.transactionData

@@ -1,5 +1,5 @@
 export default {
-  id: 'cosmos-testnet',
+  id: 'cosmos-hub-testnet',
   name: 'Cosmos Stargate',
   description:
     'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',

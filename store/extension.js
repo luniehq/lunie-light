@@ -1,4 +1,7 @@
-import { initLunieExtension } from '~/common/extension-utils'
+import {
+  getAccountsFromExtension,
+  initLunieExtension,
+} from '~/common/extension-utils'
 
 export const state = () => ({
   accounts: [],
@@ -23,11 +26,37 @@ export const mutations = {
 }
 
 export const actions = {
-  init(store) {
-    const { commit } = store
+  async init(store) {
+    if (store.state.initialized) {
+      getAccountsFromExtension()
+      return
+    }
+
+    const { commit, dispatch } = store
     commit('setError', undefined)
     commit('setLoading', true)
 
     initLunieExtension(store)
+
+    try {
+      await dispatch('awaitInitialized')
+    } catch (err) {
+      commit('setError', err)
+    } finally {
+      commit('setLoading', false)
+    }
+  },
+  async awaitInitialized({ state, dispatch }, trys = 0) {
+    if (state.initialized) {
+      return
+    }
+
+    const maxTrys = 10
+    while (trys++ < maxTrys) {
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      return dispatch('awaitInitialized', trys + 1)
+    }
+
+    throw new Error('Could not connect to Lunie extension in time')
   },
 }
