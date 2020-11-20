@@ -51,7 +51,7 @@ export default {
         address: this.address,
         type: 'explore',
       })
-      this.$router.push('/portfolio')
+      this.$router.push('/')
     },
     bech32Validation(address) {
       try {

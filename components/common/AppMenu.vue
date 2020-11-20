@@ -4,7 +4,7 @@
       <UserMenu />
       <nuxt-link
         class="app-menu-item"
-        to="/portfolio"
+        to="/"
         exact="exact"
         title="Portfolio"
         @click.native="handleClick()"
@@ -15,6 +15,7 @@
       <nuxt-link
         class="app-menu-item"
         to="/validators"
+        exact="exact"
         title="Validators"
         @click.native="handleClick()"
       >
@@ -25,6 +26,7 @@
       <nuxt-link
         class="app-menu-item"
         to="/proposals"
+        exact="exact"
         title="Proposals"
         @click.native="handleClick()"
       >

@@ -7,10 +7,10 @@
           <Field
             id="sign-in-name"
             v-model="signInAddress"
+            v-focus
             :options="accounts"
             type="select"
             placeholder="Select account…"
-            vue-focus="vue-focus"
           />
           <FormMessage
             v-if="$v.signInAddress.$error && !$v.signInAddress.required"
@@ -90,7 +90,7 @@ export default {
           address: this.signInAddress,
           sessionType: 'local',
         })
-        this.$router.push('/portfolio')
+        this.$router.push('/')
       } catch (err) {
         this.loading = false
         this.error = `The provided username or password is wrong.`
