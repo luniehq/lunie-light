@@ -39,5 +39,5 @@ export default {
     },
   },
   icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
-  localSigning: true,
+  localSigning: false,
 }
