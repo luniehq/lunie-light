@@ -16,7 +16,7 @@ export default {
       icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
     },
     {
-      viewDenom: 'slippers',
+      viewDenom: /^[a-zA-Z0-9]*$/g,
       chainDenom: /^ibc*/g,
       chainToViewConversionFactor: 1e-6,
       icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
