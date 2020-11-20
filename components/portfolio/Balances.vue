@@ -4,7 +4,7 @@
       <h1>Your Balances</h1>
       <Button
         id="claim-button"
-        :disabled="!readyToWithdraw"
+        :disabled="!readyToWithdraw || !balancesLoaded"
         value="Claim Rewards"
         @click.native="readyToWithdraw && onClaim()"
       />
