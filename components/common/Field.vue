@@ -1,16 +1,13 @@
 <template>
   <select
     v-if="type === 'select'"
-    class="field"
-    :value="value"
     :disabled="isDisabled"
+    :value="value"
     @input="updateValue($event.target.value)"
-    @change="onChange"
-    @keyup="onKeyup"
-    @keydown="onKeydown"
+    class="field"
   >
     <option
-      v-for="(option, index) in resolvedOptions"
+      v-for="(option, index) in selectOptions"
       :key="index"
       :value="option.value"
     >
@@ -20,28 +17,22 @@
 
   <textarea
     v-else-if="type === 'textarea'"
-    class="field"
     :placeholder="placeholder"
+    :disabled="isDisabled"
     :value="value"
-    @change="onChange"
-    @keyup="onKeyup"
-    @keydown="onKeydown"
     @input="updateValue($event.target.value)"
+    class="field"
   />
 
   <input
     v-else
-    ref="numTextInput"
-    class="field"
-    :type="type"
     :placeholder="placeholder"
+    :disabled="isDisabled"
+    :type="type"
     :value="value"
     step="0.000001"
-    :disabled="isDisabled"
-    @change="onChange"
-    @keyup="onKeyup"
-    @keydown="onKeydown"
     @input="updateValue($event.target.value)"
+    class="field"
   />
 </template>
 
@@ -83,7 +74,7 @@ export default {
     },
   },
   computed: {
-    resolvedOptions() {
+    selectOptions() {
       if (this.type === `select`) {
         return this.options || []
       }
@@ -94,24 +85,11 @@ export default {
     updateValue(value) {
       let formattedValue = value
 
-      if (this.type === `number`) {
-        formattedValue = value.trim()
-      }
+      // if (this.type === `number`) {
+      //   formattedValue = value.trim()
+      // }
 
-      // Emit the number value through the input event
       this.$emit(`input`, formattedValue)
-    },
-    onChange(...args) {
-      if (this.type === `number` && this.$refs.numTextInput) {
-        this.$refs.numTextInput.focus()
-      }
-      if (this.change) return this.change(...args)
-    },
-    onKeyup(...args) {
-      if (this.keyup) return this.keyup(...args)
-    },
-    onKeydown(...args) {
-      if (this.keydown) return this.keydown(...args)
     },
   },
 }

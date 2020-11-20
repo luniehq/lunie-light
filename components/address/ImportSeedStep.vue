@@ -5,7 +5,7 @@
       <FormGroup
         :error="$v.$error && $v.fieldSeed.$invalid"
         field-id="import-seed"
-        field-label="Backup code"
+        field-label="Seed Phrase"
       >
         <FieldSeed
           id="import-seed"
@@ -64,7 +64,7 @@ export default {
     },
     title: {
       type: String,
-      default: `Recover with backup code`,
+      default: `Recover from seed phrase`,
     },
   },
   data: () => ({
