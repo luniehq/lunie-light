@@ -12,15 +12,13 @@
       <option value disabled="disabled" selected="selected" hidden="hidden">
         {{ selectPlaceholder }}
       </option>
-      <div>
-        <option
-          v-for="(option, index) in resolvedOptions"
-          :key="index"
-          :value="option.value"
-        >
-          {{ option.key }}
-        </option>
-      </div>
+      <option
+        v-for="(option, index) in resolvedOptions"
+        :key="index"
+        :value="option.value"
+      >
+        {{ option.key }}
+      </option>
     </select>
     <div class="tm-field-select-addon">
       <i class="material-icons notranslate">arrow_drop_down</i>
