@@ -68,14 +68,14 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--link);
+  color: var(--link-hover);
   font-size: var(--text-base);
-  background: var(--gray-800);
+  border: 2px solid var(--gray-800);
 }
 
 .icon-button:hover {
   cursor: pointer;
-  color: var(--link-hover);
+  color: var(--blue-700);
 }
 
 .button.menu-button {

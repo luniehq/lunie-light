@@ -36,9 +36,9 @@ export default {
   },
   computed: {
     cssClass() {
-      let value = `tm-form-msg sm`
+      let value = `form-msg`
       if (this.type) {
-        value += ` tm-form-msg--error`
+        value += ` error`
       }
       return value
     },
@@ -122,46 +122,16 @@ export default {
 </script>
 
 <style scoped>
-.tm-form-msg {
+.form-msg {
   padding: 0;
   display: flex;
-  margin: 0 !important;
-}
-
-.tm-form-msg.sm {
   font-size: var(--text-xs);
 }
 
-.tm-form-msg::before {
-  content: '';
-  /* stylelint-disable */
-  font-family: 'Material Icons';
-  padding-right: 0.35rem;
-}
-
-.tm-form-msg--error {
-  display: flex;
-  padding-top: 0.25rem;
-}
-
-.tm-form-msg.tm-form-msg--error {
+.error {
+  padding-top: 0.5rem;
   color: var(--danger);
   font-style: italic;
-  font-weight: 500;
-}
-
-.tm-form-msg.tm-form-msg--error::before {
-  content: 'error';
-  color: var(--danger);
-  font-style: normal;
-}
-
-.tm-form-msg.tm-form-msg--desc {
-  color: var(--warning);
-}
-
-.tm-form-msg.tm-form-msg--desc::before {
-  content: 'priority_high';
-  color: var(--warning);
+  font-weight: 600;
 }
 </style>

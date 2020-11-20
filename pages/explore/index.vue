@@ -2,8 +2,8 @@
   <Form :submit="onSubmit">
     <h2 class="session-title bottom-indent">Explore with any address</h2>
     <div class="session-main">
-      <FormGroup field-id="sign-in-name" field-label="Your Address">
-        <Field v-model.trim="address" type="text" placeholder />
+      <FormGroup field-label="Your Address">
+        <Field v-model.trim="address" type="text" />
         <FormMessage
           v-if="$v.address.$error && !$v.address.required"
           name="Address"

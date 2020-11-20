@@ -47,7 +47,7 @@ export default {
 }
 
 .active {
-  border-color: var(--highlight);
-  color: var(--highlight);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 </style>
