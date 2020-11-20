@@ -13,7 +13,10 @@
     :rewards="rewards"
     :disable="validatorsWithRewards"
   >
-    <span class="form-message withdraw-limit">
+    <span
+      v-if="session.sessionType === SESSION_TYPES.LEDGER"
+      class="form-message withdraw-limit"
+    >
       Lunie will only withdraw rewards from 5 validators at a time because of a
       limitation with the Ledger Nano&nbsp;S.
     </span>
@@ -37,10 +40,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { fullDecimals } from '~/common/numbers'
-import { getTop5RewardsValidators } from '~/signing/transaction-manager'
+import { getTop5RewardsValidators } from '~/common/ledger'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
+
+const SESSION_TYPES = {
+  LOCAL: `local`,
+  LEDGER: `ledger`,
+  EXTENSION: `extension`,
+  EXPLORE: `explore`,
+}
 
 function rewardsToDictionary(rewards) {
   return rewards.reduce((all, reward) => {
@@ -73,9 +84,11 @@ export default {
   data: () => ({
     getTop5RewardsValidators,
     lunieMessageTypes,
+    SESSION_TYPES,
     network,
   }),
   computed: {
+    ...mapState(['session']),
     transactionData() {
       if (this.totalRewards.length === 0) return {}
       return {
