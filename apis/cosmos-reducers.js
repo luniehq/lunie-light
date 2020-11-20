@@ -536,8 +536,12 @@ export function proposalReducer(
     type: proposalTypeEnumDictionary[proposal.content.type.split('/')[1]],
     title: proposal.content.value.title,
     description: proposal.content.value.changes
-      ? `Parameter: ${JSON.stringify(proposal.content.value.changes, null, 4)}`
-      : `` + `\nDescription: ${proposal.content.value.description}`,
+      ? `Parameter: ${JSON.stringify(
+          proposal.content.value.changes,
+          null,
+          4
+        )}\nDescription: `
+      : `` + proposal.content.value.description,
     creationTime: proposal.submit_time,
     status: getProposalStatus(proposal.status),
     statusBeginTime: proposalBeginTime(proposal),
