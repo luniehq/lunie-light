@@ -1,9 +1,6 @@
 <template>
   <div class="proposals">
-    <div
-      v-if="!proposalsLoaded || !governanceOverviewLoaded"
-      class="loading-row"
-    >
+    <div v-if="!proposalsLoaded || !governanceOverviewLoaded">
       <Loader />
     </div>
     <template v-else>
