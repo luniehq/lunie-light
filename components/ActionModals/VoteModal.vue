@@ -17,18 +17,16 @@
       <div>
         <Button
           id="vote-yes"
-          :class="{ active: vote === `Yes` }"
           :disabled="lastVoteOption === `Yes`"
-          color="secondary"
+          :type="vote === `Yes` ? 'active' : 'secondary'"
           value="Yes"
           size="md"
           @click.native="vote = 'Yes'"
         />
         <Button
           id="vote-veto"
-          :class="{ active: vote === `NoWithVeto` }"
           :disabled="lastVoteOption === `NoWithVeto`"
-          color="secondary"
+          :type="vote === `NoWithVeto` ? 'active' : 'secondary'"
           value="No With Veto"
           size="md"
           @click.native="vote = 'NoWithVeto'"
@@ -37,18 +35,16 @@
       <div>
         <Button
           id="vote-no"
-          :class="{ active: vote === `No` }"
           :disabled="lastVoteOption === `No`"
-          color="secondary"
+          :type="vote === `No` ? 'active' : 'secondary'"
           value="No"
           size="md"
           @click.native="vote = 'No'"
         />
         <Button
           id="vote-abstain"
-          :class="{ active: vote === `Abstain` }"
           :disabled="lastVoteOption === `Abstain`"
-          color="secondary"
+          :type="vote === `Abstain` ? 'active' : 'secondary'"
           value="Abstain"
           size="md"
           @click.native="vote = 'Abstain'"
@@ -154,10 +150,5 @@ export default {
   margin: 0.5rem 0;
   height: 5rem;
   width: 100%;
-}
-
-.vote-options button.active {
-  background: var(--highlight);
-  border-color: var(--highlight);
 }
 </style>
