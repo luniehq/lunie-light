@@ -46,7 +46,6 @@ export async function createSignBroadcast({
     },
     chainId
   )
-  console.log('Will signer be useful for something?', signer)
 
   const messages = messageCreators[messageType](senderAddress, message, network)
 
