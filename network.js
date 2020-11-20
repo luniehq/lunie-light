@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 export default {
   id: 'cosmos-testnet',
   name: 'Cosmos Stargate',
