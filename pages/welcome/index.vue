@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import network from '~/common/network'
 import { mapState } from 'vuex'
+import network from '~/common/network'
 
 export default {
   name: `Home`,
