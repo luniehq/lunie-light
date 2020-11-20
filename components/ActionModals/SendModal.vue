@@ -363,7 +363,7 @@ export default {
 }
 
 .tm-field-token-selector {
-  width: 80px;
+  width: 120px !important;
 }
 
 .tm-field-token-selector >>> .tm-field-select {
