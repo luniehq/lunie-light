@@ -71,7 +71,7 @@ import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 export default {
-  name: `modal-deposit`,
+  name: `ModalDeposit`,
   props: {
     proposalId: {
       type: [Number, String],

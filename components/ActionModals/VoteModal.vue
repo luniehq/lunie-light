@@ -70,7 +70,7 @@ const isValid = (option) =>
   option === `Abstain`
 
 export default {
-  name: `modal-vote`,
+  name: `ModalVote`,
   props: {
     proposalId: {
       type: [Number, String],
