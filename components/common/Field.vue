@@ -3,8 +3,8 @@
     v-if="type === 'select'"
     :disabled="isDisabled"
     :value="value"
-    @input="updateValue($event.target.value)"
     class="field"
+    @input="updateValue($event.target.value)"
   >
     <option
       v-for="(option, index) in selectOptions"
@@ -20,8 +20,8 @@
     :placeholder="placeholder"
     :disabled="isDisabled"
     :value="value"
-    @input="updateValue($event.target.value)"
     class="field"
+    @input="updateValue($event.target.value)"
   />
 
   <input
@@ -31,8 +31,8 @@
     :type="type"
     :value="value"
     step="0.000001"
-    @input="updateValue($event.target.value)"
     class="field"
+    @input="updateValue($event.target.value)"
   />
 </template>
 
@@ -83,13 +83,7 @@ export default {
   },
   methods: {
     updateValue(value) {
-      let formattedValue = value
-
-      // if (this.type === `number`) {
-      //   formattedValue = value.trim()
-      // }
-
-      this.$emit(`input`, formattedValue)
+      this.$emit(`input`, value)
     },
   },
 }
