@@ -1,7 +1,5 @@
 <template>
-  <div :class="cssClass">
-    <template> {{ name }} {{ error }} </template>
-  </div>
+  <div :class="cssClass">{{ name }} {{ error }}</div>
 </template>
 
 <script>
