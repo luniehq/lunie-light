@@ -1,5 +1,5 @@
 <template>
-  <div v-if="type === 'select'" class="tm-select">
+  <div v-if="type === 'select'" class="select">
     <select
       :class="css"
       :value="value"
@@ -22,7 +22,7 @@
         </option>
       </template>
     </select>
-    <div class="tm-field-select-addon">
+    <div class="field-select-addon">
       <i class="material-icons notranslate">arrow_drop_down</i>
     </div>
   </div>
@@ -97,11 +97,11 @@ export default {
   },
   computed: {
     css() {
-      let value = `tm-field`
+      let value = `field`
       if (this.type === `select`) {
-        value += ` tm-field-select`
+        value += ` field-select`
       }
-      if (this.size) value += ` tm-field-size-${this.size}`
+      if (this.size) value += ` field-size-${this.size}`
       return value
     },
     resolvedOptions() {
@@ -148,10 +148,10 @@ input[type='checkbox'] {
   vertical-align: middle;
 }
 
-.tm-field {
+.field {
   background: var(--transparent);
   border: 2px solid var(--input-bc);
-  border-radius: 0;
+  border-radius: var(--border-radius);
   color: var(--txt);
   display: block;
   font-size: 14px;
@@ -161,10 +161,10 @@ input[type='checkbox'] {
   -webkit-appearance: none;
 }
 
-.tm-field-addon {
+.field-addon {
   background: var(--transparent);
   border: 2px solid var(--input-bc);
-  border-radius: 0;
+  border-radius: var(--border-radius);
   color: var(--txt);
   display: block;
   font-size: 14px;
@@ -178,15 +178,15 @@ input[type='checkbox'] {
   border-bottom-right-radius: 0 !important;
 }
 
-.tm-field-group {
+.field-group {
   width: 100%;
 }
 
-.tm-field::placeholder {
+.field::placeholder {
   color: var(--dim);
 }
 
-.tm-field:disabled {
+.field:disabled {
   background: var(--app-fg);
   border: 2px solid black;
   box-shadow: none;
@@ -194,27 +194,27 @@ input[type='checkbox'] {
   text-shadow: none;
 }
 
-.tm-field:focus {
+.field:focus {
   border: 2px solid var(--link);
   box-shadow: none;
   outline: none;
 }
 
-input.tm-field {
+input.field {
   height: 2rem;
 }
 
-textarea.tm-field {
+textarea.field {
   height: 4rem;
   resize: vertical;
 }
 
-.tm-select {
+.select {
   position: relative;
   width: 100%;
 }
 
-.tm-select select {
+.select select {
   appearance: none;
   background: var(--transparent);
   border-radius: 0;
@@ -223,16 +223,16 @@ textarea.tm-field {
   width: 100%;
 }
 
-.tm-select select:invalid {
+.select select:invalid {
   color: dim;
 }
 
-.tm-select select option {
+.select select option {
   background: var(--app-bg);
   color: var(--txt);
 }
 
-.tm-select .tm-field-select-addon {
+.select .field-select-addon {
   align-items: center;
   background: var(--transparent);
   border-left: 1px solid var(--input-bc);
@@ -246,7 +246,7 @@ textarea.tm-field {
   right: 0;
   text-align: center;
   top: 0;
-  width: 2rem;
+  width: auto;
 }
 
 .input-group-addon {
@@ -259,20 +259,61 @@ textarea.tm-field {
   padding: 0 0.5rem;
 }
 
+input[readonly],
+input[disabled],
+textarea[readonly],
+textarea[disabled] {
+  background: var(--bc-dim) !important;
+}
+
+input[type='radio'] {
+  margin: 0;
+}
+
+.li-container {
+  margin-right: 1rem;
+}
+
+.input-suffix {
+  background: transparent;
+  display: inline-block;
+  position: absolute;
+  padding: 7px;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  top: 2px;
+  right: 30px;
+  letter-spacing: 1px;
+  text-align: right;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+}
+
+.input-suffix.max-button {
+  right: 124px;
+}
+
+.field-checkbox-label {
+  display: inline-block;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+  line-height: 14px;
+}
+
 @media screen and (min-width: 360px) {
   .input-group-addon {
     font-size: 1rem;
   }
 }
 
-.tm-field.tm-field-size-sm {
+.field.field-size-sm {
   font-size: 0.75rem;
   height: 1.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
-.tm-field.tm-field-size-lg {
+.field.field-size-lg {
   font-size: 1.125rem;
   height: 3rem;
   padding-left: 0.75rem;
