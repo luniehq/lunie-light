@@ -13,7 +13,7 @@ export default {
       viewDenom: 'MUON',
       chainDenom: 'umuon',
       chainToViewConversionFactor: 1e-6,
-      icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
+      icon: `currencies/muon.png`,
     },
   ],
   addressPrefix: 'cosmos',

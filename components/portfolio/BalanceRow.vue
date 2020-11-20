@@ -4,7 +4,10 @@
       <div class="row">
         <div
           class="token-icon"
-          :style="`background-image: url(${image}); background-color: ${hex};`"
+          :style="{
+            backgroundImage: `url(${image})`,
+            backgroundColor: hex,
+          }"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
