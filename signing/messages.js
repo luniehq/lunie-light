@@ -78,4 +78,5 @@ export default {
   StakeTx,
   UnstakeTx,
   VoteTx,
+  DepositTx,
 }
