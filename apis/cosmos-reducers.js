@@ -8,12 +8,12 @@ import network from '~/common/network'
 function proposalBeginTime(proposal) {
   const status = getProposalStatus(proposal.status)
   switch (status) {
-    case 'depositperiod':
+    case 'DepositPeriod':
       return proposal.submit_time
-    case 'votingperiod':
+    case 'VotingPeriod':
       return proposal.voting_start_time
-    case 'passed':
-    case 'rejected':
+    case 'Passed':
+    case 'Rejected':
       return proposal.voting_end_time
   }
 }
@@ -21,19 +21,19 @@ function proposalBeginTime(proposal) {
 function proposalEndTime(proposal) {
   const status = getProposalStatus(proposal.status)
   switch (status) {
-    case 'depositperiod':
+    case 'DepositPeriod':
       return proposal.deposit_end_time
-    case 'votingperiod':
+    case 'VotingPeriod':
     // the end time lives in the past already if the proposal is finalized
     // eslint-disable-next-line no-fallthrough
-    case 'passed':
-    case 'rejected':
+    case 'Passed':
+    case 'Rejected':
       return proposal.voting_end_time
   }
 }
 
 function proposalFinalized(proposal) {
-  return ['Passed', 'Rejected'].includes(proposal.proposal_status)
+  return ['Passed', 'Rejected'].includes(getProposalStatus(proposal.status))
 }
 
 export function getStakingCoinViewAmount(chainStakeAmount) {
@@ -514,11 +514,11 @@ export function claimRewardsMessagesAggregator(claimMessages) {
 
 function getProposalStatus(status) {
   return {
-    1: 'depositperiod',
-    2: 'votingperiod',
-    3: 'passed',
-    4: 'rejected',
-    5: 'failed',
+    1: 'DepositPeriod',
+    2: 'VotingPeriod',
+    3: 'Passed',
+    4: 'Rejected',
+    5: 'Failed',
   }[status]
 }
 
