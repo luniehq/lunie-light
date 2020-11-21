@@ -58,7 +58,7 @@ export async function createSignBroadcast({
       gas: transactionData.gasEstimate,
     },
     chainId,
-    memo,
+    memo || '',
     accountInfo.accountNumber,
     accountInfo.sequence
   )
