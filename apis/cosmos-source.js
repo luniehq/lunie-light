@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js'
 import { keyBy, orderBy, take, reverse, sortBy, chunk } from 'lodash'
+import { pubkeyToAddress } from '@cosmjs/launchpad'
 import * as reducers from './cosmos-reducers'
-import { encodeB32, decodeB32, pubkeyToAddress } from '~/common/address'
+import { encodeB32, decodeB32 } from '~/common/address'
 import { setDecimalLength } from '~/common/numbers'
 import network from '~/common/network'
 
@@ -168,11 +169,13 @@ export default class CosmosAPI {
       validatorSet,
       signedBlocksWindow,
     ] = await Promise.all([
-      Promise.all([
-        this.query(`staking/validators?status=unbonding`),
-        this.query(`staking/validators?status=bonded`),
-        this.query(`staking/validators?status=unbonded`),
-      ]).then((validatorGroups) => [].concat(...validatorGroups)),
+      this.query(`staking/validators`),
+      // queries return nothing. need to clarify if this returns all validators
+      // Promise.all([
+      // this.query(`staking/validators?status=unbonding`),
+      // this.query(`staking/validators?status=bonded`),
+      // this.query(`staking/validators?status=unbonded`),
+      // ]).then((validatorGroups) => [].concat(...validatorGroups)),
       this.getAnnualProvision(),
       this.getValidatorSet(height),
       this.getSignedBlockWindow(),
@@ -193,7 +196,10 @@ export default class CosmosAPI {
 
     validators.forEach((validator) => {
       const consensusAddress = pubkeyToAddress(
-        validator.consensus_pubkey,
+        {
+          value: validator.consensus_pubkey.value,
+          type: 'tendermint/PubKeyEd25519',
+        },
         network.validatorConsensusaddressPrefix
       )
       validator.votingPower = consensusValidators[consensusAddress]
