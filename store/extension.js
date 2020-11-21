@@ -52,7 +52,7 @@ export const actions = {
     }
 
     const maxTrys = 10
-    while (trys++ < maxTrys) {
+    if (trys < maxTrys) {
       await new Promise((resolve) => setTimeout(resolve, 300))
       return dispatch('awaitInitialized', trys + 1)
     }
