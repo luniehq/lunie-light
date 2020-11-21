@@ -179,7 +179,7 @@ export default {
     },
     delegation() {
       return this.delegations.find(
-        ({ validatorAddress }) => validatorAddress === this.address
+        ({ validator: { operatorAddress } }) => operatorAddress === this.address
       )
     },
     rewardsForValidator() {

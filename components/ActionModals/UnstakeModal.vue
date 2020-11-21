@@ -112,8 +112,8 @@ export default {
     ...mapState(`data`, [`delegations`]),
     maximum() {
       const delegation = this.delegations.find(
-        ({ validatorAddress }) =>
-          validatorAddress === this.sourceValidator.operatorAddress
+        ({ validator }) =>
+          validator.operatorAddress === this.sourceValidator.operatorAddress
       )
       return delegation ? Number(delegation.amount) : 0
     },
