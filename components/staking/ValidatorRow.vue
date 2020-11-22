@@ -147,7 +147,7 @@ h5 {
 .validator-image {
   border-radius: 50%;
   height: 2.5rem;
-  width: 2.5rem !important;
+  width: 2.5rem;
   min-width: 2.5rem;
   margin-right: 1rem;
 }

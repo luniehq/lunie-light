@@ -217,8 +217,8 @@ h2 {
 .proposer-details .proposer-image {
   margin: 1rem 1rem 0 0;
   height: 2.5rem;
-  width: 2.5rem !important;
-  border-radius: 50% !important;
+  width: 2.5rem;
+  border-radius: 50%;
 }
 
 .proposer-details a {
