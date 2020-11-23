@@ -29,26 +29,26 @@
       field-id="amount"
       field-label="Amount"
     >
-      <span class="input-suffix max-button">{{ network.stakingDenom }}</span>
-      <Field
-        id="amount"
-        v-model="amount"
-        v-focus
-        placeholder="0"
-        class="tm-field-addon"
-        type="number"
-        @keyup.enter.native="enterPressed"
-      />
-      <Button
-        type="button"
-        class="secondary addon-max"
-        value="Max"
-        @click.native="setMaxAmount()"
-      />
+      <div class="row">
+        <Field
+          id="amount"
+          v-model="amount"
+          v-focus
+          placeholder="0"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <Button
+          type="button"
+          class="secondary addon-max"
+          value="Max"
+          @click.native="setMaxAmount()"
+        />
+      </div>
       <span class="form-message">
         Available to stake:
         {{ maxAmount }}
-        {{ network.stakingDenom }}s
+        {{ network.stakingDenom }}
       </span>
       <FormMessage
         v-if="balance.available === '0'"

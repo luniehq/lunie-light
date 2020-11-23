@@ -12,7 +12,7 @@
         size="large"
         :val="depositPercentage"
         :bar-border-radius="8"
-        bar-color="var(--highlight)"
+        bar-color="var(--primary)"
       />
       <div class="bottom row">
         <div>{{ depositPercentage | prettyInt }}%</div>
@@ -39,7 +39,7 @@
         size="large"
         :val="proposal.detailedVotes.votingThresholdYes * 100"
         :bar-border-radius="8"
-        bar-color="var(--highlight)"
+        bar-color="var(--primary)"
       />
     </div>
     <div

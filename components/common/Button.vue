@@ -78,7 +78,7 @@ export default {
   transition: all 0.5s ease;
   white-space: nowrap;
   outline: none;
-  box-shadow: 0 0 2px 0 var(--gray-300);
+  box-shadow: 0 0 3px 0 var(--gray-400);
 }
 
 .button:hover {
@@ -120,25 +120,6 @@ export default {
 }
 
 .addon-max {
-  font-size: 14px;
-  font-weight: 400;
-  padding: 4px 16px;
-  min-width: 100px;
-  color: var(--bright);
-  margin: 0;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-  border-top-right-radius: 0.25rem !important;
-  border-bottom-right-radius: 0.25rem !important;
-  cursor: pointer;
-  background: transparent;
-  border: 2px solid var(--primary);
-  white-space: nowrap;
-  outline: none;
-}
-
-.addon-max:hover {
-  background: transparent;
-  border-color: var(--primary-hover);
+  margin-left: 0.25rem;
 }
 </style>

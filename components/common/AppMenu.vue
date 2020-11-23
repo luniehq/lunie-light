@@ -100,18 +100,6 @@ export default {
   color: var(--gray-100);
 }
 
-@media screen and (min-width: 1024px) {
-  .hide-m {
-    display: none !important;
-  }
-}
-
-@media screen and (max-width: 1023px) {
-  .hide-s {
-    display: none !important;
-  }
-}
-
 @media screen and (max-width: 1023px) {
   .app-menu {
     background: var(--app-nav);

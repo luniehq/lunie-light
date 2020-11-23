@@ -40,17 +40,17 @@ export async function createSignBroadcast({
   memo,
 }) {
   const feeData = getFees(messageType, feeDenom)
+  const transactionData = {
+    ...feeData,
+    memo,
+    chainId,
+    accountNumber: accountInfo.accountNumber,
+    accountSequence: accountInfo.sequence,
+  }
 
   let signedTx
 
   if (signingType === 'extension') {
-    const transactionData = {
-      ...feeData,
-      memo,
-      chainId,
-      accountNumber: accountInfo.accountNumber,
-      accountSequence: accountInfo.sequence,
-    }
     signedTx = await signWithExtension(
       messageType,
       message,
@@ -74,14 +74,18 @@ export async function createSignBroadcast({
       network
     )
 
+    //   const { signed, signature } = await signer.sign(senderAddress, signDoc)
+    //   signedTx = makeStdTx(signed, signature)
+    // }
+
     const signDoc = makeSignDoc(
       [].concat(messages),
       {
-        amount: feeData.fee,
-        gas: feeData.gasEstimate,
+        amount: transactionData.fee,
+        gas: transactionData.gasEstimate,
       },
       chainId,
-      memo,
+      memo || '',
       accountInfo.accountNumber,
       accountInfo.sequence
     )
@@ -98,13 +102,6 @@ export async function createSignBroadcast({
     .post(`${network.apiURL}/txs`, broadcastBody)
     .then((res) => res.data)
   assertIsBroadcastTxSuccess(broadcastResult)
-
-  if (!assertIsBroadcastTxSuccess(broadcastResult)) {
-    const error = broadcastResult.contents
-      ? JSON.parse(broadcastResult.contents).error
-      : `Unknown`
-    throw new Error(`Transaction failed. Error: ${error}`)
-  }
 
   return {
     hash: broadcastResult.txhash,

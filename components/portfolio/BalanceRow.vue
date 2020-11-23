@@ -4,7 +4,10 @@
       <div class="row">
         <div
           class="token-icon"
-          :style="`background-image: url(${image}); background-color: ${hex};`"
+          :style="{
+            backgroundImage: `url(${image})`,
+            backgroundColor: hex,
+          }"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
@@ -64,7 +67,10 @@
       </div>
     </td>
 
-    <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
+    <LazySendModal
+      ref="SendModal"
+      :denoms="balances.map(({ denom }) => denom)"
+    />
     <!-- <StakeModal ref="StakeModal" />
     <UnstakeModal ref="UnstakeModal" /> -->
   </tr>
@@ -81,6 +87,10 @@ export default {
     fromNow,
   },
   props: {
+    balances: {
+      type: Array,
+      required: true,
+    },
     balance: {
       type: Object,
       required: true,

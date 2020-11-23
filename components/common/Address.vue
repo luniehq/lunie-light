@@ -57,15 +57,7 @@ export default {
   color: var(--link);
 }
 
-.menu-address .address {
-  color: var(--link);
-}
-
 .copyable-address .address:hover {
-  color: var(--link-hover);
-}
-
-.menu-address .address:hover {
   color: var(--link-hover);
 }
 

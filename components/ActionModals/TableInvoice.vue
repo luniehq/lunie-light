@@ -120,7 +120,6 @@ export default {
   border-collapse: inherit;
   padding: 0 0.25rem;
   font-size: var(--text-xs);
-  letter-spacing: 0.4px;
 }
 
 .table-invoice li {
@@ -140,12 +139,12 @@ export default {
 }
 
 .total-row {
-  border-top: 2px solid var(--bc);
+  border-top: 1px solid var(--gray-300);
 }
 
 .fees + .total-row {
-  padding-top: 0.25rem;
-  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .total-column {

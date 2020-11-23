@@ -2,8 +2,13 @@
   <Form :submit="onSubmit">
     <h2 class="session-title">Create a new address</h2>
     <div class="session-main bottom-indent">
-      <DangerZoneWarning />
-
+      <Warning>
+        <h2 slot="title">🚨 Danger Zone</h2>
+        <p slot="message">
+          This feature is only for testing and development. Creating an address
+          in the browser is not advised. Proceed with caution.
+        </p>
+      </Warning>
       <FormGroup
         :error="$v.fieldName.$error"
         field-id="sign-up-name"

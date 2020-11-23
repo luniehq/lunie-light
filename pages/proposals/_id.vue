@@ -32,23 +32,23 @@
 
       <ProposalDescription :proposal="proposal" />
 
-      <!-- <ModalDeposit
-          v-if="status.value === governanceStatusEnum.DEPOSITING"
-          ref="modalDeposit"
-          :proposal-id="proposalId"
-          :proposal-title="proposal.title || ''"
-          :denom="parameters.depositDenom || currentNetwork.stakingDenom"
-          :deposits="proposal.detailedVotes.deposits"
-          @success="() => afterDeposit()"
-        />
-        <ModalVote
-          v-else
-          ref="modalVote"
-          :proposal-id="proposalId"
-          :proposal-title="proposal.title || ''"
-          :last-vote-option="vote"
-          @success="() => afterVote()"
-        /> -->
+      <DepositModal
+        v-if="status.value === governanceStatusEnum.DEPOSITING"
+        ref="modalDeposit"
+        :proposal-id="proposalId"
+        :proposal-title="proposal.title || ''"
+        :denom="parameters.depositDenom || network.stakingDenom"
+        :deposits="proposal.detailedVotes.deposits"
+        @success="() => afterVoteOrDeposit()"
+      />
+      <VoteModal
+        v-else
+        ref="modalVote"
+        :proposal-id="proposalId"
+        :proposal-title="proposal.title || ''"
+        :last-vote-option="vote"
+        @success="() => afterVoteOrDeposit()"
+      />
     </div>
   </div>
 </template>
@@ -134,15 +134,11 @@ export default {
     onVote() {
       this.$refs.modalVote.open()
     },
-    afterVote() {
-      this.$apollo.queries.vote.refetch()
+    afterVoteOrDeposit() {
+      this.$store.dispatch('data/getProposals')
     },
     onDeposit() {
       this.$refs.modalDeposit.open()
-    },
-    afterDeposit() {
-      // TODO
-      this.$store.dispatch('data/getProposalDeposits', this.proposal)
     },
   },
 }

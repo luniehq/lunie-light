@@ -1,52 +1,39 @@
 <template>
   <div class="seed-phrase">
-    <div class="seed-warning">
-      <p>
-        This backup code is all that is needed to access your account. Please
-        make sure to store it in a safe place.
+    <Warning>
+      <h2 slot="title">🚨 Warning</h2>
+      <p slot="message">
+        This seed phrase is all that is needed to access your account. Make sure
+        to store it in a safe place. If lost or stored incorrectly, this seed
+        cannot be recovered.
       </p>
-    </div>
-    <div
-      v-clipboard:copy="value"
-      v-clipboard:success="() => onCopy()"
-      class="copy-seed"
-    >
-      Copy to clipboard
-      <i
-        class="material-icons notranslate copied"
-        :class="{ active: copySuccess }"
-      >
-        check
-      </i>
-    </div>
-    <div>
-      <table class="seed-table">
-        <tr>
-          <td v-for="(word, index) in splitSeed.slice(0, 6)" :key="index">
-            <span class="word-number">{{ index + 1 }}</span>
-            {{ word }}
-          </td>
-        </tr>
-        <tr>
-          <td v-for="(word, index) in splitSeed.slice(6, 12)" :key="index">
-            <span class="word-number">{{ index + 7 }}</span>
-            {{ word }}
-          </td>
-        </tr>
-        <tr>
-          <td v-for="(word, index) in splitSeed.slice(12, 18)" :key="index">
-            <span class="word-number">{{ index + 13 }}</span>
-            {{ word }}
-          </td>
-        </tr>
-        <tr>
-          <td v-for="(word, index) in splitSeed.slice(18, 24)" :key="index">
-            <span class="word-number">{{ index + 19 }}</span>
-            {{ word }}
-          </td>
-        </tr>
-      </table>
-    </div>
+    </Warning>
+    <table class="seed-table">
+      <tr>
+        <td v-for="(word, index) in splitSeed.slice(0, 6)" :key="index">
+          <span class="word-number" notranslate>{{ index + 1 }}</span>
+          {{ word }}
+        </td>
+      </tr>
+      <tr>
+        <td v-for="(word, index) in splitSeed.slice(6, 12)" :key="index">
+          <span class="word-number" notranslate>{{ index + 7 }}</span>
+          {{ word }}
+        </td>
+      </tr>
+      <tr>
+        <td v-for="(word, index) in splitSeed.slice(12, 18)" :key="index">
+          <span class="word-number" notranslate>{{ index + 13 }}</span>
+          {{ word }}
+        </td>
+      </tr>
+      <tr>
+        <td v-for="(word, index) in splitSeed.slice(18, 24)" :key="index">
+          <span class="word-number" notranslate>{{ index + 19 }}</span>
+          {{ word }}
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -82,14 +69,16 @@ export default {
   width: calc(100% + 8px);
   border-spacing: 4px;
   border-collapse: separate;
-  margin: 0 -4px;
+  margin: 1rem -4px;
 }
 
 .seed-table td {
   text-align: center;
   width: 16.6666666666667%;
-  background-color: var(--app-fg);
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-200);
   padding: 0.5rem 0.1rem 0.5rem 0.1rem;
+  box-shadow: 0 0 2px 0 var(--gray-300);
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   color: var(--bright);
@@ -99,6 +88,7 @@ export default {
   display: block;
   width: 100%;
   opacity: 0.5;
+  font-size: 10px;
 
   /* Prevent user to copy word numbers, we only want the words in their correct order */
   -moz-user-select: none;
@@ -106,44 +96,6 @@ export default {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-
-.copy-seed {
-  display: initial;
-  float: right;
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-bottom: 0.2rem;
-  color: var(--link);
-}
-
-.copy-seed .material-icons {
-  font-size: 12px;
-}
-
-.seed-phrase .copied {
-  padding-bottom: 2px;
-  padding-right: 0;
-  transition: opacity 500ms ease;
-  color: var(--success);
-  opacity: 0;
-}
-
-.seed-phrase .copied.active {
-  opacity: 1;
-}
-
-.seed-warning {
-  border: 2px solid var(--warning);
-  border-radius: var(--border-radius);
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-}
-
-.seed-warning p {
-  font-size: var(--text-xs);
-  color: var(--warning);
-  margin: 0;
 }
 
 @media screen and (max-width: 360px) {
