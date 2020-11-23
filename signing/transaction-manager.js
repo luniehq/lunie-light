@@ -75,13 +75,6 @@ export async function createSignBroadcast({
     .then((res) => res.data)
   assertIsBroadcastTxSuccess(broadcastResult)
 
-  if (!assertIsBroadcastTxSuccess(broadcastResult)) {
-    const error = broadcastResult.contents
-      ? JSON.parse(broadcastResult.contents).error
-      : `Unknown`
-    throw new Error(`Transaction failed. Error: ${error}`)
-  }
-
   return {
     hash: broadcastResult.txhash,
   }

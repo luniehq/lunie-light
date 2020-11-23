@@ -31,7 +31,6 @@ export default {
       store.dispatch('data/init') // init api
     }
   },
-  components: {},
   methods: {
     closeModal() {
       this.$router.push(`/validators`)
