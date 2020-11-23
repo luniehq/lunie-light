@@ -52,6 +52,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  line-height: 1.5;
 }
 
 .session {

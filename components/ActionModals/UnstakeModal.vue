@@ -27,31 +27,29 @@
       field-id="amount"
       field-label="Amount"
     >
-      <span class="input-suffix max-button">{{ stakingDenom }}</span>
-      <Field
-        id="amount"
-        v-model="amount"
-        v-focus
-        class="tm-field-addon"
-        placeholder="0"
-        type="number"
-        @keyup.enter.native="enterPressed"
-      />
-      <Button
-        type="button"
-        class="secondary addon-max"
-        value="Set Max"
-        @click.native="setMaxAmount()"
-      />
+      <div class="row">
+        <Field
+          id="amount"
+          v-model="amount"
+          v-focus
+          class="tm-field-addon"
+          placeholder="0"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <Button
+          type="button"
+          class="secondary addon-max"
+          value="Set Max"
+          @click.native="setMaxAmount()"
+        />
+      </div>
       <span v-if="maximum > 0" class="form-message">
-        Currently staked: {{ maximum }} {{ stakingDenom }}s
+        Currently staked: {{ maximum }} {{ stakingDenom }}
       </span>
-      <FormMessage
-        v-if="maximum === 0"
-        :msg="`don't have any ${stakingDenom} delegated to this validator`"
-        name="You"
-        type="custom"
-      />
+      <span v-else-if="maximum === 0" class="form-message">
+        You don't have any tokens staked with this validator.
+      </span>
       <FormMessage
         v-else-if="$v.amount.$error && (!$v.amount.required || amount === 0)"
         name="Amount"
@@ -102,7 +100,7 @@ export default {
     },
   },
   data: () => ({
-    amount: 0,
+    amount: null,
     lunieMessageTypes,
     smallestAmount: SMALLEST,
     stakingDenom: network.stakingDenom,

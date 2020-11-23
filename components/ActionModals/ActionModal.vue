@@ -98,15 +98,16 @@
           </div>
         </Card>
       </div>
-      <p
+      <Card
         v-if="submissionError"
-        class="tm-form-msg sm tm-form-msg--error submission-error"
+        class="form-msg sm form-msg--error submission-error"
       >
-        {{ submissionError }}
-      </p>
+        <div slot="title">{{ submissionErrorPrefix }}</div>
+        <div slot="subtitle">{{ submissionError }}</div>
+      </Card>
       <div class="action-modal-footer">
         <slot name="action-modal-footer">
-          <FormGroup
+          <div
             v-if="[defaultStep, feeStep, signStep].includes(step)"
             class="action-modal-group"
           >
@@ -145,7 +146,7 @@
               value="Send"
               @click.native="validateChangeStep"
             />
-          </FormGroup>
+          </div>
         </slot>
       </div>
     </div>
@@ -551,7 +552,7 @@ export default {
   color: var(--link);
 }
 
-.action-modal-form .tm-form-group {
+.action-modal-form .form-group {
   display: block;
   padding: 1rem 0;
 }
@@ -559,27 +560,33 @@ export default {
 .action-modal-footer {
   padding: 1.5rem 0 1rem;
   width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.tm-form-group__field {
+.action-modal-footer button:first-child {
+  margin-right: 0.25rem;
+}
+
+.form-group__field {
   position: relative;
 }
 
-.action-modal-footer .tm-form-group .tm-form-group__field button {
+.action-modal-footer .form-group .form-group__field button {
   width: 100%;
 }
 
-.action-modal-footer .tm-form-group .tm-form-group__field {
+.action-modal-footer .form-group .form-group__field {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.action-modal-footer .tm-form-group .tm-form-group__field .secondary {
+.action-modal-footer .form-group .form-group__field .secondary {
   margin-right: 0.5rem;
 }
 
-.action-modal-footer .tm-form-group {
+.action-modal-footer .form-group {
   padding: 0;
 }
 
@@ -608,12 +615,12 @@ export default {
   opacity: 0;
 }
 /* stylelint-disable */
-#send-modal .tm-data-msg {
+#send-modal .data-msg {
   margin: 2rem 0 2rem 0;
 }
 
 @media screen and (max-width: 576px) {
-  .tm-data-msg__icon {
+  .data-msg__icon {
     margin-right: 0;
   }
 }
@@ -636,7 +643,7 @@ export default {
     width: 100%;
   }
 
-  .tm-form-group__field {
+  .form-group__field {
     width: 100%;
   }
 }

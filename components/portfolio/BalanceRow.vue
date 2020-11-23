@@ -67,7 +67,10 @@
       </div>
     </td>
 
-    <LazySendModal ref="SendModal" :denoms="[balance.denom]" />
+    <LazySendModal
+      ref="SendModal"
+      :denoms="balances.map(({ denom }) => denom)"
+    />
     <!-- <StakeModal ref="StakeModal" />
     <UnstakeModal ref="UnstakeModal" /> -->
   </tr>
@@ -84,6 +87,10 @@ export default {
     fromNow,
   },
   props: {
+    balances: {
+      type: Array,
+      required: true,
+    },
     balance: {
       type: Object,
       required: true,

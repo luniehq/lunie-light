@@ -1,53 +1,37 @@
 <template>
-  <div v-if="type === 'select'" class="tm-select">
-    <select
-      :class="css"
-      :value="value"
-      :disabled="isDisabled"
-      @input="updateValue($event.target.value)"
-      @change="onChange"
-      @keyup="onKeyup"
-      @keydown="onKeydown"
+  <select
+    v-if="type === 'select'"
+    :disabled="isDisabled"
+    :value="value"
+    class="field"
+    @input="updateValue($event.target.value)"
+  >
+    <option
+      v-for="(option, index) in selectOptions"
+      :key="index"
+      :value="option.value"
     >
-      <option value disabled="disabled" selected="selected" hidden="hidden">
-        {{ selectPlaceholder }}
-      </option>
-      <option
-        v-for="(option, index) in resolvedOptions"
-        :key="index"
-        :value="option.value"
-      >
-        {{ option.key }}
-      </option>
-    </select>
-    <div class="tm-field-select-addon">
-      <i class="material-icons notranslate">arrow_drop_down</i>
-    </div>
-  </div>
+      {{ option.key }}
+    </option>
+  </select>
 
   <textarea
     v-else-if="type === 'textarea'"
-    :class="css"
     :placeholder="placeholder"
+    :disabled="isDisabled"
     :value="value"
-    @change="onChange"
-    @keyup="onKeyup"
-    @keydown="onKeydown"
+    class="field"
     @input="updateValue($event.target.value)"
   />
 
   <input
     v-else
-    ref="numTextInput"
-    :type="type"
-    :class="css"
     :placeholder="placeholder"
+    :disabled="isDisabled"
+    :type="type"
     :value="value"
     step="0.000001"
-    :disabled="isDisabled"
-    @change="onChange"
-    @keyup="onKeyup"
-    @keydown="onKeydown"
+    class="field"
     @input="updateValue($event.target.value)"
   />
 </template>
@@ -65,10 +49,6 @@ export default {
       default: null,
     },
     placeholder: {
-      type: String,
-      default: null,
-    },
-    size: {
       type: String,
       default: null,
     },
@@ -94,186 +74,91 @@ export default {
     },
   },
   computed: {
-    css() {
-      let value = `tm-field`
-      if (this.type === `select`) {
-        value += ` tm-field-select`
-      }
-      if (this.size) value += ` tm-field-size-${this.size}`
-      return value
-    },
-    resolvedOptions() {
+    selectOptions() {
       if (this.type === `select`) {
         return this.options || []
       }
       return []
     },
-    selectPlaceholder() {
-      if (this.placeholder) return this.placeholder
-      else return `Select option...`
-    },
   },
   methods: {
     updateValue(value) {
-      let formattedValue = value
-
-      if (this.type === `number`) {
-        formattedValue = value.trim()
-      }
-
-      // Emit the number value through the input event
-      this.$emit(`input`, formattedValue)
-    },
-    onChange(...args) {
-      if (this.type === `number` && this.$refs.numTextInput) {
-        this.$refs.numTextInput.focus()
-      }
-      if (this.change) return this.change(...args)
-    },
-    onKeyup(...args) {
-      if (this.keyup) return this.keyup(...args)
-    },
-    onKeydown(...args) {
-      if (this.keydown) return this.keydown(...args)
+      this.$emit(`input`, value)
     },
   },
 }
 </script>
 
 <style scoped>
+.field {
+  background: var(--white);
+  border: 2px solid var(--input-bc);
+  border-radius: var(--border-radius);
+  color: var(--bright);
+  display: block;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+}
+
+.field::placeholder {
+  color: var(--gray-500);
+}
+
+.field:focus {
+  border: 2px solid var(--link);
+  outline: none;
+}
+
+.field-checkbox-label {
+  display: inline-block;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+  line-height: 14px;
+}
+
+select.field {
+  padding-left: 0.25rem;
+}
+
+input + select {
+  margin-left: 0.25rem;
+  max-width: 10rem;
+}
+
+select:invalid {
+  color: var(--dim);
+}
+
+select option {
+  background: var(--app-bg);
+  color: var(--txt);
+}
+
+textarea {
+  width: 100%;
+  min-height: 4rem;
+  resize: vertical;
+}
+
+input {
+  width: 100%;
+}
+
 input[type='checkbox'] {
   margin: 0.3rem 0.3rem 0.5rem 0;
   vertical-align: middle;
 }
 
-.tm-field {
-  background: var(--transparent);
-  border: 2px solid var(--input-bc);
-  border-radius: 0;
-  color: var(--txt);
-  display: block;
-  font-size: 14px;
-  min-width: 0;
-  padding: 0.5rem 0.75rem;
-  width: 100%;
-  -webkit-appearance: none;
+input[type='radio'] {
+  margin: 0;
 }
 
-.tm-field-addon {
-  background: var(--transparent);
-  border: 2px solid var(--input-bc);
-  border-radius: 0;
-  color: var(--txt);
-  display: block;
-  font-size: 14px;
-  min-width: 0;
-  padding: 0.5rem 0.5rem;
-  width: 100%;
-  -webkit-appearance: none;
-  border-top-left-radius: 0.25rem !important;
-  border-bottom-left-radius: 0.25rem !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.tm-field-group {
-  width: 100%;
-}
-
-.tm-field::placeholder {
-  color: var(--dim);
-}
-
-.tm-field:disabled {
-  background: var(--app-fg);
-  border: 2px solid black;
-  box-shadow: none;
-  color: var(--dim);
-  text-shadow: none;
-}
-
-.tm-field:focus {
-  border: 2px solid var(--link);
-  box-shadow: none;
-  outline: none;
-}
-
-input.tm-field {
-  height: 2rem;
-}
-
-textarea.tm-field {
-  height: 4rem;
-  resize: vertical;
-}
-
-.tm-select {
-  position: relative;
-  width: 100%;
-}
-
-.tm-select select {
-  appearance: none;
-  background: var(--transparent);
-  border-radius: 0;
-  color: var(--txt, #333);
-  padding-right: 2rem;
-  width: 100%;
-}
-
-.tm-select select:invalid {
-  color: dim;
-}
-
-.tm-select select option {
-  background: var(--app-bg);
-  color: var(--txt);
-}
-
-.tm-select .tm-field-select-addon {
-  align-items: center;
-  background: var(--transparent);
-  border-left: 1px solid var(--input-bc);
-  box-sizing: border-box;
-  color: var(--txt, #333);
-  display: flex;
-  height: 2rem;
-  justify-content: center;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 0;
-  width: 2rem;
-}
-
-.input-group-addon {
-  background: var(--transparent);
-  border: 2px solid var(--input-bc);
-  border-left: none;
-  color: var(--txt);
-  font-size: 0.75rem;
-  line-height: 1.875rem;
-  padding: 0 0.5rem;
-}
-
-@media screen and (min-width: 360px) {
-  .input-group-addon {
-    font-size: 1rem;
-  }
-}
-
-.tm-field.tm-field-size-sm {
-  font-size: 0.75rem;
-  height: 1.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.tm-field.tm-field-size-lg {
-  font-size: 1.125rem;
-  height: 3rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+input[readonly].field,
+input[disabled].field,
+textarea[readonly].field,
+textarea[disabled].field {
+  background: var(--gray-300);
+  border: 2px solid var(--gray-400);
+  color: var(--gray-600);
 }
 </style>

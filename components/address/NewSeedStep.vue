@@ -1,6 +1,6 @@
 <template>
   <Form :submit="onSubmit.bind(this)">
-    <h2 class="session-title">Backup code</h2>
+    <h2 class="session-title">Seed Phrase</h2>
     <div class="session-main bottom-indent reorder">
       <Seed :value="fieldSeed" />
 
@@ -18,7 +18,12 @@
               v-focus
               type="checkbox"
             />
-            I understand that lost seeds cannot be recovered.</label
+            <span class="label"
+              >I understand that I am solely responsible for the security of my
+              seed phrase, that lost seed phrases cannot be recovered, and that
+              there is inherent risk associated with non-custodial wallets and
+              managing my own keys.</span
+            ></label
           >
         </div>
         <FormMessage
@@ -72,3 +77,18 @@ export default {
   }),
 }
 </script>
+<style scoped>
+label {
+  display: flex;
+}
+
+input {
+  margin-top: 3px;
+}
+
+.label {
+  padding-left: 0.5rem;
+  font-size: var(--text-xs);
+  line-height: var(--text-sm);
+}
+</style>
