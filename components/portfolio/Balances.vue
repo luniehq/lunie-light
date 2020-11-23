@@ -11,6 +11,7 @@
       <BalanceRow
         v-for="balance in balances"
         :key="balance.id"
+        :balances="balances"
         :balance="balance"
         :total-rewards-per-denom="totalRewardsPerDenom"
         :send="true"
