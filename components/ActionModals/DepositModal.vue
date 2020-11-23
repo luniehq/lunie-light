@@ -20,7 +20,6 @@
       field-id="amount"
       field-label="Amount"
     >
-      <span class="input-suffix">{{ denom }}</span>
       <Field
         id="amount"
         v-model="amount"

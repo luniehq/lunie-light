@@ -39,6 +39,23 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
   }
 }
 
+export function ClaimRewardsTx(
+  senderAddress,
+  {
+    // amounts,
+    from,
+  }
+) {
+  /* istanbul ignore next */
+  return from.map((validatorAddress) => ({
+    type: `cosmos-sdk/MsgWithdrawDelegationReward`,
+    value: {
+      delegator_address: senderAddress,
+      validator_address: validatorAddress,
+    },
+  }))
+}
+
 export function VoteTx(senderAddress, { proposalId, voteOption }) {
   const chainVoteOption = {
     Yes: 1,
@@ -83,6 +100,7 @@ export default {
   SendTx,
   StakeTx,
   UnstakeTx,
+  ClaimRewardsTx,
   VoteTx,
   DepositTx,
 }

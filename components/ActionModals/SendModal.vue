@@ -220,7 +220,7 @@ export default {
     notifyMessage() {
       return {
         title: `Successful Send`,
-        body: `Successfully sent transaction to ${formatAddress(this.address)}`,
+        body: `Successfully sent to ${formatAddress(this.address)}`,
       }
     },
   },
