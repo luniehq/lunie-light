@@ -50,20 +50,22 @@
       field-id="amount"
       :field-label="index === 0 ? `Amount` : ``"
     >
-      <Field
-        v-model="amount.amount"
-        class="tm-field-addon amount"
-        placeholder="0"
-        type="number"
-        @keyup.enter.native="enterPressed"
-      />
-      <Field
-        v-model="amount.denom"
-        :title="`Select the token you wish to use`"
-        :options="denomOptions | availableDenoms(index, amounts)"
-        class="tm-field-token-selector"
-        type="select"
-      />
+      <div class="row">
+        <Field
+          v-model="amount.amount"
+          class="amount"
+          placeholder="0"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <Field
+          v-model="amount.denom"
+          :title="`Select the token you wish to use`"
+          :options="denomOptions | availableDenoms(index, amounts)"
+          class="tm-field-token-selector"
+          type="select"
+        />
+      </div>
 
       <FormMessage
         v-if="$v.amounts.$error && (!$v.amounts.required || amount === 0)"
@@ -224,7 +226,7 @@ export default {
   },
   methods: {
     open(denom = undefined) {
-      this.amounts = [{ amount: 0, denom: denom || this.denoms[0] }]
+      this.amounts = [{ amount: '', denom: denom || this.denoms[0] }]
       this.$v.$reset()
       this.$refs.actionModal.open()
     },
@@ -271,7 +273,7 @@ export default {
       if (address && address.startsWith(this.network.addressPrefix)) {
         return true
       } else {
-        this.addressError = `Address prefix does not match this network's prefix`
+        this.addressError = `prefix does not match this network's prefix`
         return false
       }
     },
@@ -361,31 +363,6 @@ export default {
 }
 </script>
 <style scoped>
-.tm-field-addon {
-  border-right: 0;
-}
-
-.tm-field-addon:focus {
-  border-color: var(--input-bc);
-}
-
-.tm-field-token-selector {
-  width: 80px;
-}
-
-.tm-field-token-selector >>> .tm-field-select {
-  border-left: 0;
-  border-radius: 0 0.5em 0.5em 0 !important;
-}
-
-.tm-field-token-selector >>> .tm-field-select:focus {
-  border-color: var(--input-bc);
-}
-
-.tm-field-token-selector >>> .tm-field-select-addon {
-  border: 0;
-}
-
 .memo-span {
   font-size: var(--text-xs);
   font-style: italic;

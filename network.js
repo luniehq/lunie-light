@@ -2,7 +2,7 @@ export default {
   id: 'cosmos-testnet',
   name: 'Cosmos Stargate',
   description:
-    'Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus.',
+    'Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.',
   logo: `logo.svg`,
   website: 'https://cosmos.network',
   apiURL: 'http://localhost:8010/proxy', // use `npx lcp --proxyUrl http://34.123.30.100:1317`
@@ -13,7 +13,7 @@ export default {
       viewDenom: 'MUON',
       chainDenom: 'umuon',
       chainToViewConversionFactor: 1e-6,
-      icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
+      icon: `currencies/muon.png`,
     },
     {
       viewDenom: /^[a-zA-Z0-9]*$/g,
@@ -39,5 +39,5 @@ export default {
     },
   },
   icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
-  localSigning: false,
+  localSigning: true, // this is only to be used as a developer tool - never deployed in production or for mainnet chains
 }

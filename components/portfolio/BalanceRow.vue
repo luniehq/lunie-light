@@ -4,7 +4,10 @@
       <div class="row">
         <div
           class="token-icon"
-          :style="`background-image: url(${image}); background-color: ${hex};`"
+          :style="{
+            backgroundImage: `url(${image})`,
+            backgroundColor: hex,
+          }"
         />
         <div class="total">
           {{ balance.total | bigFigureOrShortDecimals }}
@@ -129,7 +132,7 @@ export default {
         const value = (hash >> (i * 8)) & 0xFF
         colour += ('00' + value.toString(16)).substr(-2)
       }
-      return colour
+      return this.image ? '' : colour
     },
   },
   methods: {

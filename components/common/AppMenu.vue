@@ -4,7 +4,7 @@
       <UserMenu />
       <nuxt-link
         class="app-menu-item"
-        to="/portfolio"
+        to="/"
         exact="exact"
         title="Portfolio"
         @click.native="handleClick()"
@@ -15,6 +15,7 @@
       <nuxt-link
         class="app-menu-item"
         to="/validators"
+        exact="exact"
         title="Validators"
         @click.native="handleClick()"
       >
@@ -25,6 +26,7 @@
       <nuxt-link
         class="app-menu-item"
         to="/proposals"
+        exact="exact"
         title="Proposals"
         @click.native="handleClick()"
       >
@@ -96,18 +98,6 @@ export default {
   background: var(--app-nav-hover);
   box-shadow: 0 0 1px 0 var(--gray-700);
   color: var(--gray-100);
-}
-
-@media screen and (min-width: 1024px) {
-  .hide-m {
-    display: none !important;
-  }
-}
-
-@media screen and (max-width: 1023px) {
-  .hide-s {
-    display: none !important;
-  }
 }
 
 @media screen and (max-width: 1023px) {

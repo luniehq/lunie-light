@@ -94,8 +94,8 @@ export default {
 }
 
 .bar.danger {
-  border: 2px solid var(--red-800);
-  background-color: var(--red-200);
+  border: 2px solid var(--danger);
+  background-color: var(--red-100);
 }
 
 .bar.info {

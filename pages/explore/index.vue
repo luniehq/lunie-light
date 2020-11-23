@@ -2,24 +2,19 @@
   <Form :submit="onSubmit">
     <h2 class="session-title bottom-indent">Explore with any address</h2>
     <div class="session-main">
-      <FormGroup field-id="sign-in-name" field-label="Your Address">
-        <Field
-          v-model.trim="address"
-          type="text"
-          placeholder
-          vue-focus="vue-focus"
-        />
-        <Card
+      <FormGroup field-label="Your Address">
+        <Field v-model.trim="address" type="text" />
+        <FormMessage
           v-if="$v.address.$error && !$v.address.required"
           name="Address"
           type="required"
         />
-        <Card
+        <FormMessage
           v-else-if="$v.address.$error && !$v.address.addressValidate"
           type="custom"
           :msg="addressError"
         />
-        <Card v-if="error" :name="error" type="custom" />
+        <FormMessage v-if="error" :name="error" type="custom" />
       </FormGroup>
     </div>
     <div class="session-footer">
@@ -51,7 +46,7 @@ export default {
         address: this.address,
         type: 'explore',
       })
-      this.$router.push('/portfolio')
+      this.$router.push('/')
     },
     bech32Validation(address) {
       try {

@@ -6,32 +6,34 @@ import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
 function proposalBeginTime(proposal) {
-  switch (proposal.proposal_status.toLowerCase()) {
-    case 'depositperiod':
+  const status = getProposalStatus(proposal.status)
+  switch (status) {
+    case 'DepositPeriod':
       return proposal.submit_time
-    case 'votingperiod':
+    case 'VotingPeriod':
       return proposal.voting_start_time
-    case 'passed':
-    case 'rejected':
+    case 'Passed':
+    case 'Rejected':
       return proposal.voting_end_time
   }
 }
 
 function proposalEndTime(proposal) {
-  switch (proposal.proposal_status.toLowerCase()) {
-    case 'depositperiod':
+  const status = getProposalStatus(proposal.status)
+  switch (status) {
+    case 'DepositPeriod':
       return proposal.deposit_end_time
-    case 'votingperiod':
+    case 'VotingPeriod':
     // the end time lives in the past already if the proposal is finalized
     // eslint-disable-next-line no-fallthrough
-    case 'passed':
-    case 'rejected':
+    case 'Passed':
+    case 'Rejected':
       return proposal.voting_end_time
   }
 }
 
 function proposalFinalized(proposal) {
-  return ['Passed', 'Rejected'].includes(proposal.proposal_status)
+  return ['Passed', 'Rejected'].includes(getProposalStatus(proposal.status))
 }
 
 export function getStakingCoinViewAmount(chainStakeAmount) {
@@ -510,6 +512,16 @@ export function claimRewardsMessagesAggregator(claimMessages) {
   }
 }
 
+function getProposalStatus(status) {
+  return {
+    1: 'DepositPeriod',
+    2: 'VotingPeriod',
+    3: 'Passed',
+    4: 'Rejected',
+    5: 'Failed',
+  }[status]
+}
+
 export function proposalReducer(
   proposal,
   tally,
@@ -527,7 +539,7 @@ export function proposalReducer(
       ? `Parameter: ${JSON.stringify(proposal.content.value.changes, null, 4)}`
       : `` + `\nDescription: ${proposal.content.value.description}`,
     creationTime: proposal.submit_time,
-    status: proposal.proposal_status,
+    status: getProposalStatus(proposal.status),
     statusBeginTime: proposalBeginTime(proposal),
     statusEndTime: proposalEndTime(proposal),
     tally: tallyReducer(proposal, tally, totalBondedTokens),
