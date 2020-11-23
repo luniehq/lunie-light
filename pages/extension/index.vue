@@ -56,7 +56,7 @@ export default {
     accounts: {
       immediate: false,
       handler(accounts) {
-        if (accounts && accounts.length === 2) {
+        if (accounts && accounts.length === 1) {
           this.signInAndRedirect(accounts[0])
         }
       },
