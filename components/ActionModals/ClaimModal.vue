@@ -18,22 +18,19 @@
       class="form-message withdraw-limit"
     >
       Lunie will only withdraw rewards from 5 validators at a time because of a
-      limitation with the Ledger Nano&nbsp;S.
+      limitation with the Ledger&nbsp;Nano.
     </span>
     <FormGroup
       class="action-modal-form-group"
       field-id="amount"
-      :field-label="`Rewards from ${validators.length} ${
-        validators.length > 1 ? `validators` : `validator`
-      }`"
+      field-title="Amount"
     >
-      <div
-        v-for="reward in totalRewards"
-        :key="reward.denom"
-        class="rewards-list-item"
-      >
-        <Field disabled="disabled" :value="reward.amount | fullDecimals" />
-        <span class="input-suffix">{{ reward.denom }}</span>
+      <div v-for="reward in totalRewards" :key="reward.denom" class="row">
+        <Field
+          :value="reward.amount | fullDecimals"
+          :add-on="reward.denom"
+          :is-disabled="true"
+        />
       </div>
     </FormGroup>
   </ActionModal>
@@ -156,25 +153,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.tm-form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.form-message.withdraw-limit {
-  white-space: normal;
-}
-
-.tm-field-addon {
-  margin-bottom: 0.25rem;
-}
-
-.rewards-list-item {
-  position: relative;
-  width: 100%;
-}
-</style>

@@ -128,7 +128,7 @@ h1 {
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 2rem 3rem;
+  padding: 0 0 2rem;
   width: 100%;
 }
 

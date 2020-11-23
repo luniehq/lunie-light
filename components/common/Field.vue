@@ -24,16 +24,18 @@
     @input="updateValue($event.target.value)"
   />
 
-  <input
-    v-else
-    :placeholder="placeholder"
-    :disabled="isDisabled"
-    :type="type"
-    :value="value"
-    step="0.000001"
-    class="field"
-    @input="updateValue($event.target.value)"
-  />
+  <div v-else class="input-row" :class="{ field: addOn, disabled: isDisabled }">
+    <input
+      :placeholder="placeholder"
+      :disabled="isDisabled"
+      :type="type"
+      :value="value"
+      :class="{ field: !addOn }"
+      step="0.000001"
+      @input="updateValue($event.target.value)"
+    />
+    <div v-if="addOn" class="add-on">{{ addOn }}</div>
+  </div>
 </template>
 
 <script>
@@ -72,6 +74,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    addOn: {
+      type: String,
+      default: null,
+    },
   },
   computed: {
     selectOptions() {
@@ -98,6 +104,7 @@ export default {
   display: block;
   padding: 0.5rem 0.75rem;
   box-shadow: 0 0 3px 0 var(--gray-400);
+  font-size: var(--text-sm);
 }
 
 .field::placeholder {
@@ -114,6 +121,21 @@ export default {
   padding-left: 1.5rem;
   text-indent: -1.5rem;
   line-height: 14px;
+}
+
+.input-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.add-on {
+  background: var(--gray-300);
+  color: var(--gray-600);
+  font-size: var(--text-sm);
+  padding: 0 0.5rem;
+  border-radius: 2px;
+  font-weight: 500;
 }
 
 select.field {
@@ -142,6 +164,8 @@ textarea {
 
 input {
   width: 100%;
+  border: 0;
+  outline: none;
 }
 
 input[type='checkbox'] {
@@ -156,7 +180,8 @@ input[type='radio'] {
 input[readonly].field,
 input[disabled].field,
 textarea[readonly].field,
-textarea[disabled].field {
+textarea[disabled].field,
+.input-row.disabled {
   background: var(--gray-300);
   border: 2px solid var(--gray-400);
   color: var(--gray-600);
