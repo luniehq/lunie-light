@@ -3,7 +3,7 @@
     <div class="session-container">
       <h2 class="session-title">Use Lunie Browser Extension</h2>
 
-      <div class="session-main">
+      <div v-if="!accounts.length && !initialized" class="session-main">
         <Button
           value="Connect Lunie Extension"
           :loading="loading"
@@ -22,7 +22,7 @@
         </p>
       </div>
 
-      <div v-else-if="accounts.length" class="session-main">
+      <div v-else-if="accounts.length" class="session-main accounts">
         <p class="extension-message">
           Below is a list of accounts we've received from the Lunie browser
           extension.
@@ -86,5 +86,13 @@ export default {
 .session-main {
   display: flex;
   justify-content: center;
+}
+
+.accounts {
+  flex-direction: column;
+}
+
+.extension-message {
+  text-align: center;
 }
 </style>
