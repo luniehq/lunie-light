@@ -533,12 +533,11 @@ export default class CosmosAPI {
     await this.dataReady
     const delegations =
       (await this.query(`staking/delegators/${address}/delegations`)) || []
-
     return delegations
       .map((delegation) =>
         this.reducers.delegationReducer(
           delegation,
-          this.validators[delegation.validator_address],
+          this.validators[delegation.delegation.validator_address],
           delegationEnum.ACTIVE
         )
       )
