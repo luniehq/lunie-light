@@ -12,7 +12,7 @@ export async function getSigner(signingType, { address, password }, chainId) {
     return wallet
   } else if (signingType === `ledger`) {
     return await getLedger()
-  } else if (signingType === `extension`) {
+  } else if (signingType === `keplr`) {
     return window.getOfflineSigner(chainId)
   }
 

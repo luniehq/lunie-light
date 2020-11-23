@@ -8,7 +8,12 @@
         title="Explore with any address"
         route="/explore"
       />
-      <LiSession icon="web" title="Browser Extension" route="/extension" />
+      <LiSession
+        icon="web"
+        title="Lunie Browser Extension"
+        route="/extension"
+      />
+      <LiSession icon="web" title="Keplr Browser Extension" route="/keplr" />
       <LiSession icon="usb" title="Ledger Nano" route="/ledger" />
       <template v-if="network.localSigning">
         <LiSession icon="person" title="Use existing address" route="/signin" />

@@ -68,8 +68,12 @@
             />
           </FormGroup>
         </form>
-        <div v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
+        <div v-else-if="session.sessionType === SESSION_TYPES.KEPLR">
           The transaction will be send to the Keplr Browser Extension for
+          signing.
+        </div>
+        <div v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
+          The transaction will be send to the Lunie Browser Extension for
           signing.
         </div>
         <div v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
@@ -172,6 +176,7 @@ const SESSION_TYPES = {
   LOCAL: `local`,
   LEDGER: `ledger`,
   EXTENSION: `extension`,
+  KEPLR: `keplr`,
   EXPLORE: `explore`,
 }
 
@@ -255,7 +260,7 @@ export default {
     },
     steps() {
       const isExtensionSession =
-        this.session.sessionType === SESSION_TYPES.EXTENSION
+        this.session.sessionType === SESSION_TYPES.KEPLR
       return [
         'Details',
         isExtensionSession ? undefined : 'Fees',
@@ -311,29 +316,10 @@ export default {
     }
   },
   methods: {
-    confirmModalOpen() {
-      let confirmResult = false
-      if (this.currrentModalOpen) {
-        confirmResult = window.confirm(
-          'You are in the middle of creating a transaction. Are you sure you want to cancel this action and start a new one?'
-        )
-        if (confirmResult) {
-          this.currrentModalOpen.close()
-          this.$store.commit(`setCurrrentModalOpen`, false)
-        }
-      }
-    },
     open() {
-      // TODO creates weird loop
-      // this.confirmModalOpen()
-      // if (this.currrentModalOpen) {
-      //   return
-      // }
-      // this.$store.commit(`setCurrrentModalOpen`, this)
       this.show = true
     },
     close() {
-      this.$store.commit(`setCurrrentModalOpen`, false)
       this.submissionError = null
       this.password = null
       this.step = defaultStep
@@ -341,11 +327,6 @@ export default {
       this.sending = false
       this.includedHeight = undefined
 
-      // reset form
-      // in some cases $v is not yet set
-      // if (this.$v) {
-      //   this.$v.$reset()
-      // }
       this.$emit(`close`)
     },
     goToSession() {
@@ -363,7 +344,7 @@ export default {
         case signStep:
           // Keplr is handling fees
           this.step =
-            this.session.sessionType === SESSION_TYPES.EXTENSION
+            this.session.sessionType === SESSION_TYPES.KEPLR
               ? defaultStep
               : feeStep
           break
@@ -383,7 +364,7 @@ export default {
           }
           // Keplr is handling fees
           this.step =
-            this.session.sessionType === SESSION_TYPES.EXTENSION
+            this.session.sessionType === SESSION_TYPES.KEPLR
               ? signStep
               : feeStep
           return

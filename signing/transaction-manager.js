@@ -5,6 +5,7 @@ import { getSigner } from './signer'
 import messageCreators from './messages.js'
 import fees from '~/common/fees'
 import network from '~/common/network'
+import { signWithExtension } from '~/common/extension-utils'
 
 export function getFees(transactionType, feeDenom) {
   const { gasEstimate, feeOptions } = fees.getFees(transactionType)
@@ -38,33 +39,56 @@ export async function createSignBroadcast({
   chainId,
   memo,
 }) {
-  const signer = await getSigner(
-    signingType,
-    {
-      address: senderAddress,
-      password,
-    },
-    chainId
-  )
-
-  const messages = messageCreators[messageType](senderAddress, message, network)
-
-  const transactionData = getFees(messageType, feeDenom)
-
-  const signDoc = makeSignDoc(
-    [].concat(messages),
-    {
-      amount: transactionData.fee,
-      gas: transactionData.gasEstimate,
-    },
+  const feeData = getFees(messageType, feeDenom)
+  const transactionData = {
+    ...feeData,
+    memo,
     chainId,
-    memo || '',
-    accountInfo.accountNumber,
-    accountInfo.sequence
-  )
+    accountNumber: accountInfo.accountNumber,
+    accountSequence: accountInfo.sequence,
+  }
 
-  const { signed, signature } = await signer.sign(senderAddress, signDoc)
-  const signedTx = makeStdTx(signed, signature)
+  let signedTx
+
+  if (signingType === 'extension') {
+    signedTx = await signWithExtension(
+      messageType,
+      message,
+      transactionData,
+      senderAddress,
+      network
+    )
+  } else {
+    const signer = await getSigner(
+      signingType,
+      {
+        address: senderAddress,
+        password,
+      },
+      chainId
+    )
+
+    const messages = messageCreators[messageType](
+      senderAddress,
+      message,
+      network
+    )
+
+    const signDoc = makeSignDoc(
+      [].concat(messages),
+      {
+        amount: transactionData.fee,
+        gas: transactionData.gasEstimate,
+      },
+      chainId,
+      memo || '',
+      accountInfo.accountNumber,
+      accountInfo.sequence
+    )
+
+    const { signed, signature } = await signer.sign(senderAddress, signDoc)
+    signedTx = makeStdTx(signed, signature)
+  }
 
   const broadcastBody = {
     tx: signedTx,
