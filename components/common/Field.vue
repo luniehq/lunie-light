@@ -24,7 +24,11 @@
     @input="updateValue($event.target.value)"
   />
 
-  <div v-else class="input-row" :class="{ field: addOn, disabled: isDisabled }">
+  <div
+    v-else
+    class="input-row"
+    :class="{ field: addOn, disabled: isDisabled && addOn }"
+  >
     <input
       :placeholder="placeholder"
       :disabled="isDisabled"

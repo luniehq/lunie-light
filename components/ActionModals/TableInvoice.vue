@@ -7,24 +7,25 @@
       field-id="feeDenom"
       field-label="Select Fee"
     >
-      <Field
-        id="amount"
-        ref="amount"
-        :is-disabled="true"
-        :value="selectedFee.amount"
-        class="tm-field-addon"
-        placeholder="0"
-        type="number"
-        @keyup.enter.native="enterPressed"
-      />
-      <Field
-        id="token"
-        v-model="feeDenom"
-        :title="`Select the token you wish to use`"
-        :options="getDenoms"
-        class="tm-field-token-selector"
-        type="select"
-      />
+      <div class="row">
+        <Field
+          id="amount"
+          ref="amount"
+          :value="selectedFee.amount"
+          class="tm-field-addon"
+          placeholder="0"
+          type="number"
+          @keyup.enter.native="enterPressed"
+        />
+        <Field
+          id="token"
+          v-model="feeDenom"
+          :title="`Select the token you wish to use`"
+          :options="getDenoms"
+          class="tm-field-token-selector"
+          type="select"
+        />
+      </div>
     </FormGroup>
     <ul class="table-invoice">
       <li
@@ -138,13 +139,13 @@ export default {
   text-align: right;
 }
 
-.total-row {
-  border-top: 1px solid var(--gray-300);
+.fees {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--gray-300);
 }
 
 .fees + .total-row {
   padding-top: 0.5rem;
-  margin-top: 0.75rem;
 }
 
 .total-column {
