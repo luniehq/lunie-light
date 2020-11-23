@@ -74,10 +74,6 @@ export async function createSignBroadcast({
       network
     )
 
-    //   const { signed, signature } = await signer.sign(senderAddress, signDoc)
-    //   signedTx = makeStdTx(signed, signature)
-    // }
-
     const signDoc = makeSignDoc(
       [].concat(messages),
       {
