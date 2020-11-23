@@ -1,26 +1,4 @@
-const crypto = require('crypto')
 const bech32 = require('bech32')
-
-const hexToValidatorAddress = (address, validatorPrefix) => {
-  const words = bech32.toWords(Buffer.from(address, 'hex'))
-  return bech32.encode(validatorPrefix, words)
-}
-const pubkeyToAddress = (cosmosvalconspub, validatorConsensusBech32Prefix) => {
-  const words = bech32.decode(cosmosvalconspub).words
-  // publickey is prefixed somehow (probably amino)
-  const publicKey = Buffer.from(
-    Buffer.from(bech32.fromWords(words)).toString('hex').substr(10),
-    'hex'
-  )
-  // the address is the first 20 bytes of the sha256 hash of the publickey
-  const hexAddress = crypto
-    .createHash('sha256')
-    .update(publicKey)
-    .digest()
-    .toString('hex')
-    .substr(0, 40)
-  return hexToValidatorAddress(hexAddress, validatorConsensusBech32Prefix)
-}
 
 const getAddressType = (address) => {
   if (address.startsWith('0x')) return 'ethereum'
@@ -60,5 +38,4 @@ module.exports = {
   validatorEntry(validator) {
     return `${validator.name} - ${formatAddress(validator.operatorAddress, 20)}`
   },
-  pubkeyToAddress,
 }
