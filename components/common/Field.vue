@@ -44,7 +44,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: `text`,
+      required: true,
     },
     value: {
       type: [String, Number, Boolean, Array],
