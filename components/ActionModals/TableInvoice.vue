@@ -69,7 +69,6 @@ export default {
     fullDecimals,
   },
   model: {
-    prop: 'feeDenom',
     event: 'change',
   },
   props: {
@@ -109,7 +108,7 @@ export default {
   },
   watch: {
     feeDenom(feeDenom) {
-      this.$emit('change:feeDenom', feeDenom)
+      this.$emit('change', feeDenom)
     },
   },
 }
