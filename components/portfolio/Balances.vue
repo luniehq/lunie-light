@@ -75,7 +75,12 @@ export default {
     },
     sortedBalances() {
       const orderedBalances = orderBy(
-        this.balances,
+        this.balances.map((balance) => ({
+          ...balance,
+          rewards: this.totalRewardsPerDenom[balance.denom]
+            ? this.totalRewardsPerDenom[balance.denom].amount
+            : 0,
+        })),
         [this.sort.property],
         [this.sort.order]
       )
