@@ -4,6 +4,7 @@
     <TableValidators
       :validators="delegations.map(({ validator }) => validator)"
       :delegations="delegations"
+      :rewards="rewards"
       :loaded="delegationsLoaded"
       class="table-validators"
     >
@@ -28,7 +29,7 @@ import { mapState } from 'vuex'
 export default {
   name: `Delegations`,
   computed: {
-    ...mapState('data', ['delegations', 'delegationsLoaded']),
+    ...mapState('data', ['delegations', 'delegationsLoaded', 'rewards']),
   },
   methods: {
     goToValidators() {
