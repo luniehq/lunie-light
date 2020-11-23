@@ -10,14 +10,14 @@
       />
     </div>
     <TableContainer
-      :length="balances.length"
+      :length="sortedBalances.length"
       :columns="properties"
       :sort="sort"
       :show-row-count="false"
       :loaded="balancesLoaded"
     >
       <BalanceRow
-        v-for="balance in balances"
+        v-for="balance in sortedBalances"
         :key="balance.id"
         :balances="balances"
         :balance="balance"
@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+import { orderBy } from 'lodash'
 import { mapState } from 'vuex'
 import network from '~/network'
 
@@ -44,7 +45,7 @@ export default {
   name: `Balances`,
   data: () => ({
     sort: {
-      property: `id`,
+      property: `Available`,
       order: `desc`,
     },
   }),
@@ -72,6 +73,19 @@ export default {
         }
       }, {})
     },
+    sortedBalances() {
+      const orderedBalances = orderBy(
+        this.balances.map((balance) => ({
+          ...balance,
+          rewards: this.totalRewardsPerDenom[balance.denom]
+            ? this.totalRewardsPerDenom[balance.denom].amount
+            : 0,
+        })),
+        [this.sort.property],
+        [this.sort.order]
+      )
+      return orderedBalances
+    },
     properties() {
       return [
         {
@@ -85,10 +99,6 @@ export default {
         {
           title: `Available`,
           value: `available`,
-        },
-        {
-          title: ``,
-          value: `actions`,
         },
       ]
     },

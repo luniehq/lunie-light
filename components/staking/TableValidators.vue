@@ -106,18 +106,6 @@ export default {
         )
       }
     },
-    sortBy(property) {
-      if (this.sort.property === property) {
-        this.sort.property = ``
-        this.sort.order = `desc`
-      } else {
-        this.sort.property = property
-        this.sort.order = `desc`
-      }
-    },
-    isSortedBy(property) {
-      return this.sort.property === property
-    },
   },
 }
 </script>
