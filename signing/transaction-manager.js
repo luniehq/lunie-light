@@ -58,7 +58,7 @@ export async function createSignBroadcast({
       gas: transactionData.gasEstimate,
     },
     chainId,
-    memo,
+    memo || '',
     accountInfo.accountNumber,
     accountInfo.sequence
   )
@@ -74,13 +74,6 @@ export async function createSignBroadcast({
     .post(`${network.apiURL}/txs`, broadcastBody)
     .then((res) => res.data)
   assertIsBroadcastTxSuccess(broadcastResult)
-
-  if (!assertIsBroadcastTxSuccess(broadcastResult)) {
-    const error = broadcastResult.contents
-      ? JSON.parse(broadcastResult.contents).error
-      : `Unknown`
-    throw new Error(`Transaction failed. Error: ${error}`)
-  }
 
   return {
     hash: broadcastResult.txhash,

@@ -284,7 +284,7 @@ export const actions = {
         'notifications/add',
         {
           type: 'danger',
-          message: 'Getting delegations to validator failed:' + err.message,
+          message: 'Getting validator delegations failed:' + err.message,
         },
         { root: true }
       )

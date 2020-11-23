@@ -39,6 +39,36 @@ export function UnstakeTx(senderAddress, { from, amount }, network) {
   }
 }
 
+export function VoteTx(senderAddress, { proposalId, voteOption }) {
+  const chainVoteOption = {
+    Yes: 1,
+    Abstain: 2,
+    No: 3,
+    NoWithVeto: 4,
+  }[voteOption]
+  /* istanbul ignore next */
+  return {
+    type: `cosmos-sdk/MsgVote`,
+    value: {
+      voter: senderAddress,
+      proposal_id: proposalId,
+      option: chainVoteOption,
+    },
+  }
+}
+
+export function DepositTx(senderAddress, { proposalId, amount }, network) {
+  /* istanbul ignore next */
+  return {
+    type: `cosmos-sdk/MsgDeposit`,
+    value: {
+      depositor: senderAddress,
+      proposal_id: proposalId,
+      amount: [Coin(amount, network.coinLookup)],
+    },
+  }
+}
+
 export function Coin({ amount, denom }, coinLookup) {
   const lookup = coinLookup.find(({ viewDenom }) => viewDenom === denom)
   return {
@@ -53,4 +83,6 @@ export default {
   SendTx,
   StakeTx,
   UnstakeTx,
+  VoteTx,
+  DepositTx,
 }
