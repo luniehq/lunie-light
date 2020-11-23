@@ -20,8 +20,8 @@ export async function getLedger() {
   return ledger
 }
 
-// limitation of the Ledger Nano S, so we pick the top 5 rewards and inform the user.
-export function getTop5RewardsValidators(rewards) {
+// limitation of the Ledger Nano S: if top5 is true, we pick the top 5 rewards and inform the user.
+export function getRewardsValidators(rewards, top5) {
   const rewardsPerValidatorObject = rewards.reduce((all, reward) => {
     return {
       ...all,
@@ -38,8 +38,8 @@ export function getTop5RewardsValidators(rewards) {
       totalRewardAmount: Object.values(rewardsPerValidatorObject)[index],
     })
   })
-  return rewardsPerValidatorArray
+  const rewardsValidators = rewardsPerValidatorArray
     .sort((a, b) => b.totalRewardAmount - a.totalRewardAmount)
-    .slice(0, 5)
     .map((rewardPerValidator) => rewardPerValidator.validator)
+  return top5 ? rewardsValidators.slice(0, 5) : rewardsValidators
 }

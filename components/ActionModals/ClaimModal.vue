@@ -23,8 +23,8 @@
     <FormGroup
       class="action-modal-form-group"
       field-id="amount"
-      :field-label="`Rewards from ${top5Validators.length} ${
-        top5Validators.length > 1 ? `validators` : `validator`
+      :field-label="`Rewards from ${validators.length} ${
+        validators.length > 1 ? `validators` : `validator`
       }`"
     >
       <div
@@ -42,7 +42,7 @@
 <script>
 import { mapState } from 'vuex'
 import { fullDecimals } from '~/common/numbers'
-import { getTop5RewardsValidators } from '~/common/ledger'
+import { getRewardsValidators } from '~/common/ledger'
 import { lunieMessageTypes } from '~/common/lunie-message-types'
 import network from '~/common/network'
 
@@ -82,7 +82,7 @@ export default {
     },
   },
   data: () => ({
-    getTop5RewardsValidators,
+    getRewardsValidators,
     lunieMessageTypes,
     SESSION_TYPES,
     network,
@@ -94,13 +94,15 @@ export default {
       return {
         type: lunieMessageTypes.CLAIM_REWARDS,
         amounts: this.totalRewards,
-        from: this.top5Validators,
+        from: this.validators,
       }
     },
-    top5Validators() {
+    validators() {
       if (this.rewards && this.rewards.length > 0) {
-        const top5Validators = this.getTop5RewardsValidators(this.rewards)
-        return top5Validators
+        // Ledger has a limitation that prevents claiming from more than 5 validators
+        const top5 = this.session.sessionType === SESSION_TYPES.LEDGER
+        const validators = this.getRewardsValidators(this.rewards, top5)
+        return validators
       } else {
         return []
       }
@@ -138,10 +140,10 @@ export default {
     },
     totalRewards() {
       const filteredRewards = this.rewards.filter(({ validator }) => {
-        return this.top5Validators.includes(validator.operatorAddress)
+        return this.validators.includes(validator.operatorAddress)
       })
-      const top5ValidatorsRewardsObject = rewardsToDictionary(filteredRewards)
-      const rewardsDenomArray = Object.entries(top5ValidatorsRewardsObject)
+      const validatorsRewardsObject = rewardsToDictionary(filteredRewards)
+      const rewardsDenomArray = Object.entries(validatorsRewardsObject)
       return rewardsDenomArray
         .map(([denom, amount]) => ({ denom, amount }))
         .sort((a, b) => b.amount - a.amount)
