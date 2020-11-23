@@ -138,6 +138,10 @@ h5 {
   font-size: var(--text-xs);
 }
 
+h5 span {
+  color: var(--success);
+}
+
 .validator-row:hover {
   cursor: pointer;
   background: var(--gray-100);

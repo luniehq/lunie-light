@@ -299,13 +299,13 @@ h4 {
   font-weight: 500;
 }
 
-.h4,
-.h5 {
+h4,
+h5 {
   font-size: var(--text-xs);
   display: inline-block;
 }
 
-.h5 {
+h5 {
   padding-left: 0.5rem;
   color: var(--success);
 }
