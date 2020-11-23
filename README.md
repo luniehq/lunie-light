@@ -53,6 +53,6 @@ On Netlify:
 
 ## Customize to your chain
 
-If your chain is equal to the latest Cosmos SDK version you can use Lunie as a plug and play software. This is likely not the case. Your chain might be on an older version or you might have edited some of the modules. What to do now? As described in `How data flows through Lunie Light` the central files to handle the mapping for data coming from your chain to the data the user sees happens in 2 files: `cosmos-source.js` and `cosmos-reducers.js`. Go through the UI and check which data points create errors or don't show expected values. Look for the according reducers in `cosmos-reducers.js` and adjust the mapping there to fit your data model. You should be good now. 🙌
+If your chain is equal to the latest Cosmos SDK version you can use Lunie as a plug and play software. This is likely not the case. Your chain might be on an older version or you might have edited some of the modules. What to do now? As described in `How data flows through Lunie Light` the central files to handle the mapping for data coming from your chain to the data the user sees happens in 2 files: `cosmos-source.js` and `cosmos-reducers.js`. Go through the UI and check which data points create errors or don't show expected values. You check errors in the browser by opening the developer console (press F12). Look for the according reducers in `cosmos-reducers.js` and adjust the mapping there to fit your data model. You should be good now. 🙌
 
 ## Thank you kindly!
