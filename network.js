@@ -15,12 +15,6 @@ export default {
       chainToViewConversionFactor: 1e-6,
       icon: `currencies/muon.png`,
     },
-    {
-      viewDenom: /^[a-zA-Z0-9]*$/g,
-      chainDenom: /^ibc*/g,
-      chainToViewConversionFactor: 1e-6,
-      icon: `https://lunie.fra1.digitaloceanspaces.com/network-icons/cosmos.png`,
-    },
   ],
   addressPrefix: 'cosmos',
   validatorAddressPrefix: 'cosmosvaloper',
