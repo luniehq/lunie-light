@@ -5,7 +5,7 @@
 
       <div class="session-main">
         <Button
-          value="Connect Keplr"
+          value="Connect Lunie Extension"
           :loading="loading"
           @click.native="connect"
         />
@@ -24,7 +24,7 @@
 
       <div v-else-if="accounts.length" class="session-main">
         <p class="extension-message">
-          Below is a list of accounts we've received from the Keplr browser
+          Below is a list of accounts we've received from the Lunie browser
           extension.
         </p>
         <AccountList
@@ -36,7 +36,7 @@
 
       <div v-if="!accounts.length && initialized" class="session-main">
         <p class="extension-message">
-          Looks like you don't have any addresses in the Keplr extension yet.
+          Looks like you don't have any addresses in the Lunie extension yet.
           Click on the extension icon in your browser and add an address now.
         </p>
       </div>
@@ -56,7 +56,7 @@ export default {
     accounts: {
       immediate: false,
       handler(accounts) {
-        if (accounts && accounts.length === 1) {
+        if (accounts && accounts.length === 2) {
           this.signInAndRedirect(accounts[0])
         }
       },
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     connect() {
-      this.$store.dispatch('keplr/init')
+      this.$store.dispatch('extension/init')
     },
     signIn(account) {
       this.$store.dispatch(`signIn`, {
