@@ -295,6 +295,10 @@ export const actions = {
     const accountInfo = await api.getAccountInfo(address)
     return accountInfo
   },
+  async getIbcChannels({ state: { api } }) {
+    const channels = await api.getIbcChannels()
+    return channels
+  },
   resetSessionData({ commit }) {
     commit('resetSessionData')
   },

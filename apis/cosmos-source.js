@@ -620,6 +620,21 @@ export default class CosmosAPI {
     const page = await this.get(url + `&limit=${PAGE_RECORDS_COUNT}`)
     return page.page_total
   }
+
+  async getIbcChannels() {
+    const response = await this.get(`ibc/channel/v1beta1/channels`)
+    return response.channels.map(
+      ({
+        connection_hops: connectionHops,
+        channel_id: channelId,
+        port_id: portId,
+      }) => ({
+        channelId,
+        portId,
+        chainId: connectionHops[0],
+      })
+    )
+  }
 }
 
 function percentage(x, total) {

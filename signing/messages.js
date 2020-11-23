@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 
 // Bank
 
-/* istanbul ignore next */
 export function SendTx(senderAddress, { to, amounts }, network) {
   return {
     type: `cosmos-sdk/MsgSend`,
@@ -10,6 +9,18 @@ export function SendTx(senderAddress, { to, amounts }, network) {
       from_address: senderAddress,
       to_address: to[0],
       amount: amounts.map((amount) => Coin(amount, network.coinLookup)),
+    },
+  }
+}
+export function IbcSendTx(senderAddress, { to, amounts, channel }, network) {
+  return {
+    type: `cosmos-sdk/MsgTransfer`,
+    value: {
+      source_port: channel.portId,
+      source_channel: channel.channelId,
+      token: amounts.map((amount) => Coin(amount, network.coinLookup))[0], // ATTENTION only one token is supported
+      sender: senderAddress,
+      receiver: to[0],
     },
   }
 }
@@ -81,6 +92,7 @@ export function Coin({ amount, denom }, coinLookup) {
 
 export default {
   SendTx,
+  IbcSendTx,
   StakeTx,
   UnstakeTx,
   VoteTx,

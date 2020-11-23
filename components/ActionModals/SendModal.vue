@@ -19,16 +19,24 @@
       field-id="send-address"
       field-label="Send To"
     >
-      <Field
-        id="send-address"
-        ref="sendAddress"
-        v-model="address"
-        v-focus
-        type="text"
-        placeholder="Address"
-        @change.native="trimSendAddress"
-        @keyup.enter.native="refocusOnAmount"
-      />
+      <div class="row">
+        <Field
+          id="send-address"
+          ref="sendAddress"
+          v-model="address"
+          v-focus
+          type="text"
+          placeholder="Address"
+          @change.native="trimSendAddress"
+          @keyup.enter.native="refocusOnAmount"
+        />
+        <Field
+          v-model="chain"
+          :title="`Select the chain you wish to send to`"
+          :options="chains"
+          type="select"
+        />
+      </div>
       <FormMessage
         v-if="$v.address.$error && !$v.address.required"
         name="Address"
@@ -62,7 +70,6 @@
           v-model="amount.denom"
           :title="`Select the token you wish to use`"
           :options="denomOptions | availableDenoms(index, amounts)"
-          class="tm-field-token-selector"
           type="select"
         />
       </div>
@@ -108,7 +115,7 @@
         class="tm-form-msg--desc max-message"
       /> -->
       <div
-        v-if="index === amounts.length - 1 && denoms.length > 1"
+        v-if="index === amounts.length - 1 && denoms.length > 1 && !isIbcTx"
         class="manage-amounts-container"
       >
         <div
@@ -196,20 +203,31 @@ export default {
     smallestAmount: SMALLEST,
     networkFeesLoaded: false,
     network,
+    chains: [],
+    channels: [],
+    chain: network.chainId,
   }),
   computed: {
     ...mapState([`session`]),
     ...mapState(`data`, [`balances`]),
+    isIbcTx() {
+      return this.chain !== network.chainId
+    },
     transactionData() {
       if (this.amounts.find(({ amount }) => isNaN(amount)) || !this.session) {
         return {}
       }
       return {
-        type: lunieMessageTypes.SEND,
+        type: !this.isIbcTx
+          ? lunieMessageTypes.SEND
+          : lunieMessageTypes.IBC_SEND,
         to: [this.address],
         from: [this.session.address],
         amounts: this.amounts,
         memo: this.memo,
+        channel: !this.isIbcTx
+          ? undefined
+          : this.channels.find(({ chainId }) => chainId === this.chain),
       }
     },
     denomOptions(index) {
@@ -223,6 +241,25 @@ export default {
         body: `Successfully sent transaction to ${formatAddress(this.address)}`,
       }
     },
+  },
+  watch: {
+    isIbcTx(isIbcTx) {
+      if (isIbcTx) {
+        this.amounts = [this.amounts[0]] // remove multi send as in bc you can only send one denom
+      }
+    },
+  },
+  async mounted() {
+    this.channels = await this.$store.dispatch('data/getIbcChannels')
+    this.chains = this.channels
+      .map((channel) => ({
+        key: channel.chainId,
+        value: channel.chainId,
+      }))
+      .concat({
+        key: network.name,
+        value: network.chainId,
+      })
   },
   methods: {
     open(denom = undefined) {

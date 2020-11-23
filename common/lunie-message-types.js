@@ -1,5 +1,6 @@
 const lunieMessageTypes = {
   SEND: `SendTx`,
+  IBC_SEND: `IbcSendTx`,
   STAKE: `StakeTx`,
   RESTAKE: `RestakeTx`,
   UNSTAKE: `UnstakeTx`,
