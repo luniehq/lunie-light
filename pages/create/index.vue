@@ -10,7 +10,7 @@
     <NewSeedStep v-if="step === 'Backup'" :seed="seed" @submit="setSeed" />
     <ImportSeedStep
       v-if="step === 'Confirm'"
-      title="Confirm backup code"
+      title="Confirm seed phrase"
       :loading="loading"
       @submit="confirmSeed"
     />
