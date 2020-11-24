@@ -1,10 +1,12 @@
-# Lunie Light (BETA)
+# Lunie Light (Beta)
 
 Hello! 👋 Welcome to the Lunie Light Beta repo.
 
 Lunie Light is a staking interface for proof-of-stake blockchains in the Cosmos ecosystem — built for speed, simplicity, and ease-of-use.
 
 Lunie Light uses [Nuxt.js](https://nuxtjs.org), and relies on the [REST API](https://cosmos.network/rpc) of a [Cosmos node](https://docs.cosmos.network/master/interfaces/rest.html) for data.
+
+Lunie Light will work with the Keplr Browser Extension and the Ledger Nano. Local key management should only be used for testing and development purposes.
 
 Features:
 
@@ -40,6 +42,12 @@ On-chain data is managed using the [Vuex store](https://nuxtjs.org/docs/2.x/dire
 3. Actions in [`data.js`](https://github.com/luniehq/lunie-light/blob/master/store/data.js) will call query functions in the [`cosmos-source.js`](https://github.com/luniehq/lunie-light/blob/master/common/cosmosV3-source.js) file.
 4. Reducers in [`cosmos-reducers.js`](https://github.com/luniehq/lunie-light/blob/master/common/cosmosV3-reducers.js) parse the responses from the API into a format that is easy for frontend Vue components to understand and work with
 
+### Customizing for your chain
+
+Lunie Light will work out of the box with Cosmos-SDK v0.40 assuming their are no missing modules or modifications. Check the [`/apis`](https://github.com/luniehq/lunie-light/tree/master/apis) folder for the files responsible for mapping chain data to the Lunie frontend. There are deprecated Cosmos-SDK v0.39 files there for your convenience. It is recommended that you manually go through the UI and check which requests are throwing errors. You should also manually test all functions and actions to make sure everything works as expected on your chain. 
+
+_If your chain is missing modules or you have changed the Cosmos data model you will have to update the source and reducer files to accomodate these changes._
+
 ## How to deploy
 
 On Netlify:
@@ -50,5 +58,6 @@ On Netlify:
 4. Set the publish directory to `dist`
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start)
+
 
 ## Thank you kindly!
