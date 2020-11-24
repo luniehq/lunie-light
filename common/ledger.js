@@ -1,18 +1,33 @@
 import { getHDPath } from './hdpath'
 import network from './network'
 
-export async function getLedger() {
+export async function getLedger(isWindows, hasHIDEnabled) {
   const { LedgerSigner } = await import('@cosmjs/launchpad-ledger')
-  const { default: TransportWebUSB } = await import(
-    '@ledgerhq/hw-transport-webusb'
-  )
+  let transport
+  if (isWindows) {
+    if (!hasHIDEnabled) {
+      throw new Error(
+        `Your browser doesn't have HID enabled. Please enable this feature by visiting: chrome://flags/#enable-experimental-web-platform-features`
+      )
+    }
 
-  const interactiveTimeout = 120_000
-  const ledgerTransport = await TransportWebUSB.create(
-    interactiveTimeout,
-    interactiveTimeout
-  )
-  const ledger = new LedgerSigner(ledgerTransport, {
+    const { default: TransportWebHID } = await import(
+      /* webpackChunkName: "webhid" */ '@ledgerhq/hw-transport-webhid'
+    )
+    transport = await TransportWebHID.create(timeout * 1000)
+  } else {
+    // OSX, Linux
+    const { default: TransportWebUSB } = await import(
+      '@ledgerhq/hw-transport-webusb'
+    )
+
+    const interactiveTimeout = 120_000
+    transport = await TransportWebUSB.create(
+      interactiveTimeout,
+      interactiveTimeout
+    )
+  }
+  const ledger = new LedgerSigner(transport, {
     testModeAllowed: true,
     hdPaths: [await getHDPath(network.HDPath)],
     prefix: network.addressPrefix,
