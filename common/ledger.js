@@ -3,6 +3,8 @@ import network from './network'
 
 export async function getLedger(isWindows, hasHIDEnabled) {
   const { LedgerSigner } = await import('@cosmjs/launchpad-ledger')
+  const interactiveTimeout = 120_000
+
   let transport
   if (isWindows) {
     if (!hasHIDEnabled) {
@@ -14,14 +16,13 @@ export async function getLedger(isWindows, hasHIDEnabled) {
     const { default: TransportWebHID } = await import(
       /* webpackChunkName: "webhid" */ '@ledgerhq/hw-transport-webhid'
     )
-    transport = await TransportWebHID.create(timeout * 1000)
+    transport = await TransportWebHID.create(interactiveTimeout * 1000)
   } else {
     // OSX, Linux
     const { default: TransportWebUSB } = await import(
       '@ledgerhq/hw-transport-webusb'
     )
 
-    const interactiveTimeout = 120_000
     transport = await TransportWebUSB.create(
       interactiveTimeout,
       interactiveTimeout
