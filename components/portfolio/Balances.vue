@@ -23,9 +23,7 @@
         :balance="balance"
         :total-rewards-per-denom="totalRewardsPerDenom"
         :send="true"
-        @open-send-modal="openSendModal(denom)"
-        @open-stake-modal="openStakeModal(denom)"
-        @open-unstake-modal="openUnstakeModal(denom)"
+        @open-send-modal="openSendModal(balance.denom)"
       />
     </TableContainer>
     <SendModal ref="SendModal" :denoms="getAllDenoms" />

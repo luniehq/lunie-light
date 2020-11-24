@@ -51,26 +51,17 @@
       class="actions"
     >
       <div v-if="send" class="icon-button-container">
-        <button
-          class="icon-button"
-          @click="$emit('open-send-modal', balance.denom)"
-        >
+        <button class="icon-button" @click="$emit('open-send-modal')">
           <i class="material-icons">send</i></button
         ><span>Send</span>
       </div>
       <div v-if="stake" class="icon-button-container">
-        <button
-          class="icon-button"
-          @click="$emit('open-stake-modal', balance.denom)"
-        >
+        <button class="icon-button" @click="$emit('open-stake-modal')">
           <i class="material-icons">arrow_upward</i></button
         ><span>Stake</span>
       </div>
       <div v-if="unstake" class="icon-button-container">
-        <button
-          class="icon-button"
-          @click="$emit('open-unstake-modal', balance.denom)"
-        >
+        <button class="icon-button" @click="$emit('open-unstake-modal')">
           <i class="material-icons">arrow_downward</i></button
         ><span>Unstake</span>
       </div>
