@@ -1,12 +1,7 @@
 import { getWallet } from '~/common/keystore'
 import { getLedger } from '~/common/ledger'
 
-export async function getSigner(
-  signingType,
-  { address, password },
-  chainId,
-  store
-) {
+export async function getSigner(signingType, { address, password }, chainId) {
   if (signingType === `local`) {
     const { Secp256k1HdWallet } = await import('@cosmjs/launchpad')
     const { wallet: serializedWallet } = getWallet(address)

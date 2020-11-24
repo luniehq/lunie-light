@@ -38,7 +38,6 @@ export async function createSignBroadcast({
   feeDenom,
   chainId,
   memo,
-  store,
 }) {
   const feeData = getFees(messageType, feeDenom)
   const transactionData = {
@@ -66,8 +65,7 @@ export async function createSignBroadcast({
         address: senderAddress,
         password,
       },
-      chainId,
-      store
+      chainId
     )
 
     const messages = messageCreators[messageType](

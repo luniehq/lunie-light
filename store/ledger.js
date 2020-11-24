@@ -22,12 +22,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async init({
-    commit,
-    rootState: {
-      data: { isWindows, hasHIDEnabled },
-    },
-  }) {
+  async init({ commit }) {
     commit('setLoading', true)
     try {
       const ledger = await getLedger()
