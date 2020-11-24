@@ -1,9 +1,11 @@
 import { getHDPath } from './hdpath'
 import network from './network'
 
-export async function getLedger(isWindows, hasHIDEnabled) {
+export async function getLedger() {
   const { LedgerSigner } = await import('@cosmjs/launchpad-ledger')
   const interactiveTimeout = 120_000
+  const isWindows = navigator.platform.includes('Win')
+  const hasHIDEnabled = !!navigator.hid
 
   let transport
   if (isWindows) {

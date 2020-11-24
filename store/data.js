@@ -24,8 +24,6 @@ export const state = () => ({
   transactionsLoading: false,
   moreTransactionsAvailable: true,
   api: undefined,
-  isWindows: false,
-  hasHIDEnabled: false,
 })
 
 export const mutations = {
@@ -63,9 +61,8 @@ export const mutations = {
 }
 
 export const actions = {
-  init({ dispatch, commit }) {
+  init({ commit }) {
     commit('setApi', new DataSource(this.$axios, network))
-    dispatch('getLedgerSpecifications')
   },
   // this is never awaited in the code
   async refresh({ dispatch }) {
@@ -297,10 +294,6 @@ export const actions = {
   async getAccountInfo({ state: { api } }, address) {
     const accountInfo = await api.getAccountInfo(address)
     return accountInfo
-  },
-  getLedgerSpecifications({ commit }) {
-    commit('setIsWindows', navigator.platform.includes('Win'))
-    commit('setHasHIDEnabled', !!navigator.hid)
   },
   resetSessionData({ commit }) {
     commit('resetSessionData')
