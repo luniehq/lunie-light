@@ -85,9 +85,13 @@ export default {
   computed: {
     feeDenom: {
       get() {
-        return this.amounts.length > 1
-          ? network.stakingDenom
-          : this.amounts[0].denom
+        // default to a denom if there is the only one being transacted and it has feeOptions specified
+        const transactionDenom =
+          this.amounts.length === 1 &&
+          this.fees.find(({ denom }) => this.amounts[0].denom)
+            ? this.amounts[0].denom
+            : null
+        return transactionDenom || network.stakingDenom
       },
       set(value) {
         this.feeDenom = value
