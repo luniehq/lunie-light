@@ -29,7 +29,7 @@ export const actions = {
     try {
       const ledger = await getLedger(isWindows, hasHIDEnabled)
       commit('setLedger', ledger)
-      commit('setWindows', isWindows)
+      commit('setIsWindows', isWindows)
       commit('setHasHIDEnabled', hasHIDEnabled)
 
       const accounts = await ledger.getAccounts()
