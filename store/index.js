@@ -26,7 +26,7 @@ export const actions = {
     dispatch('data/refresh')
 
     // connect to the extension ahead of signing with it
-    if (session.sessionType === 'extension') {
+    if (session && session.sessionType === 'extension') {
       dispatch('extension/init', undefined, { root: true })
     }
   },
