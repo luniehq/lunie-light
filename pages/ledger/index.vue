@@ -110,17 +110,11 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('ledger/init', {
-      isWindows: this.isWindows,
-      hasHIDEnabled: this.hasHIDEnabled,
-    })
+    this.$store.dispatch('ledger/init')
   },
   methods: {
     connect() {
-      this.$store.dispatch('ledger/init', {
-        isWindows: this.isWindows,
-        hasHIDEnabled: this.hasHIDEnabled,
-      })
+      this.$store.dispatch('ledger/init')
     },
     signIn(account) {
       this.$store.dispatch(`signIn`, {

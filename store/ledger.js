@@ -24,13 +24,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async init({ commit }, { isWindows, hasHIDEnabled }) {
+  async init({ commit }) {
     commit('setLoading', true)
     try {
-      const ledger = await getLedger(isWindows, hasHIDEnabled)
+      const ledger = await getLedger(state().isWindows, state().hasHIDEnabled)
       commit('setLedger', ledger)
-      commit('setWindows', isWindows)
-      commit('setHasHIDEnabled', hasHIDEnabled)
 
       const accounts = await ledger.getAccounts()
       commit('setAccounts', accounts)
