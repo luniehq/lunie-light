@@ -44,7 +44,7 @@ On-chain data is managed using the [Vuex store](https://nuxtjs.org/docs/2.x/dire
 
 ### Customizing for your chain
 
-Lunie Light will work out of the box with Cosmos SDK v0.40 assuming their are no missing modules or modifications. Check the `/api` folder for the files responsible for mapping chain data to the Lunie frontend. There are deprecated Cosmos SDK v0.39 files for your convenience. It is recommended that you manually go through the UI and check which requests are throwing errors. Check the developer console as well.
+Lunie Light will work out of the box with Cosmos-SDK v0.40 assuming their are no missing modules or modifications. Check the [`/apis`](https://github.com/luniehq/lunie-light/tree/master/apis) folder for the files responsible for mapping chain data to the Lunie frontend. There are deprecated Cosmos-SDK v0.39 files there for your convenience. It is recommended that you manually go through the UI and check which requests are throwing errors. You should also manually test all functions and actions to make sure everything works as expected on your chain. 
 
 _If your chain is missing modules or you have changed the Cosmos data model you will have to update the source and reducer files to accomodate these changes._
 
