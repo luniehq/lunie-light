@@ -7,8 +7,8 @@
     @input="updateValue($event.target.value)"
   >
     <option
-      v-for="(option, index) in selectOptions"
-      :key="index"
+      v-for="option in selectOptions"
+      :key="option.value"
       :value="option.value"
     >
       {{ option.key }}
