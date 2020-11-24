@@ -80,7 +80,7 @@ export default {
     },
     async signInAndRedirect(account) {
       await this.signIn(account)
-      this.$router.push('/portfolio')
+      this.$router.push('/')
     },
   },
 }
