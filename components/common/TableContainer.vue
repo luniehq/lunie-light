@@ -86,4 +86,8 @@ table {
   font-weight: 500;
   font-size: var(--text-lg);
 }
+
+thead {
+  border-bottom: 1px solid var(--bc-dim);
+}
 </style>

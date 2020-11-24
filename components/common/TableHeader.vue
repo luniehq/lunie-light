@@ -70,10 +70,6 @@ export default {
 </script>
 
 <style scoped>
-.header-row {
-  border-bottom: 1px solid var(--bc-dim);
-}
-
 th {
   padding: 0.5rem 0.75rem;
   overflow: hidden;
