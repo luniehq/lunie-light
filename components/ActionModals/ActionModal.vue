@@ -427,6 +427,7 @@ export default {
           memo,
           feeDenom: this.feeDenom,
           chainId: block.chainId,
+          store: this.$store,
         })
 
         const { hash } = hashResult
