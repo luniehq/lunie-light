@@ -207,7 +207,7 @@ export function topVoterReducer(topVoter) {
 }
 
 function getValidatorStatus(validator) {
-  if (validator.status === 3) {
+  if (validator.status === 2) {
     return {
       status: 'ACTIVE',
       status_detailed: 'active',
@@ -231,12 +231,12 @@ function getValidatorStatus(validator) {
 
 export function blockReducer(block) {
   return {
-    id: block.block_id.hash,
-    height: block.block.header.height,
-    chainId: block.block.header.chain_id,
-    hash: block.block_id.hash,
-    time: block.block.header.time,
-    proposer_address: block.block.header.proposer_address,
+    id: block.block_meta.block_id.hash,
+    height: block.block_meta.header.height,
+    chainId: block.block_meta.header.chain_id,
+    hash: block.block_meta.block_id.hash,
+    time: block.block_meta.header.time,
+    proposer_address: block.block_meta.header.proposer_address,
   }
 }
 
@@ -513,13 +513,7 @@ export function claimRewardsMessagesAggregator(claimMessages) {
 }
 
 function getProposalStatus(proposal) {
-  return {
-    1: 'DepositPeriod',
-    2: 'VotingPeriod',
-    3: 'Passed',
-    4: 'Rejected',
-    5: 'Failed',
-  }[proposal.status]
+  return proposal.proposal_status
 }
 
 export function proposalReducer(
@@ -584,10 +578,7 @@ export function transactionReducer(transaction) {
         return coinReducer(fee, coinLookup)
       })
     }
-    const {
-      claimMessages,
-      otherMessages,
-    } = transaction.tx.body.messages.reduce(
+    const { claimMessages, otherMessages } = transaction.tx.value.msg.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
         if (getMessageType(message.type) === lunieMessageTypes.CLAIM_REWARDS) {
@@ -622,7 +613,7 @@ export function transactionReducer(transaction) {
           transaction
         ),
         timestamp: transaction.timestamp,
-        memo: transaction.tx.body.memo,
+        memo: transaction.tx.value.memo,
         fees,
         success: setTransactionSuccess(transaction, messageIndex),
         log: getTransactionLogs(transaction, messageIndex),
@@ -654,13 +645,15 @@ export function transactionsReducer(txs) {
 }
 
 export function delegationReducer(delegation, validator, active) {
-  const coinLookup = network.getCoinLookup(network, delegation.balance.denom)
-  const { amount, denom } = coinReducer(delegation.balance, coinLookup)
+  const { amount, denom } = coinReducer({
+    amount: delegation.balance,
+    denom: network.stakingDenom,
+  })
 
   return {
-    id: delegation.delegation.validator_address.concat(`-${denom}`),
-    validatorAddress: delegation.delegation.validator_address,
-    delegatorAddress: delegation.delegation.delegator_address,
+    id: delegation.validator_address.concat(`-${denom}`),
+    validatorAddress: delegation.validator_address,
+    delegatorAddress: delegation.delegator_address,
     validator,
     amount,
     active,
@@ -720,13 +713,11 @@ export function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: statusInfo.status,
     statusDetailed: statusInfo.status_detailed,
-    expectedReturns: annualProvision
-      ? expectedRewardsPerToken(
-          validator,
-          validator.commission.commission_rates.rate,
-          annualProvision
-        ).toFixed(6)
-      : undefined,
+    expectedReturns: expectedRewardsPerToken(
+      validator,
+      validator.commission.commission_rates.rate,
+      annualProvision
+    ).toFixed(6),
   }
 }
 

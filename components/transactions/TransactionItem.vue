@@ -106,9 +106,7 @@ export default {
         case lunieMessageTypes.CLAIM_REWARDS:
           return `Claim Rewards`
         case lunieMessageTypes.UNKNOWN:
-          return this.transaction.rawTransaction.tx.value.msg[0].type.split(
-            '/Msg'
-          )[1]
+          return this.transaction.rawMessage.type.split('/Msg')[1]
         /* istanbul ignore next */
         default:
           return ``
