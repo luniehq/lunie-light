@@ -24,6 +24,8 @@ export const state = () => ({
   transactionsLoading: false,
   moreTransactionsAvailable: true,
   api: undefined,
+  isWindows: false,
+  hasHIDEnabled: false,
 })
 
 export const mutations = {

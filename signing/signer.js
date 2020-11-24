@@ -17,8 +17,8 @@ export async function getSigner(
     return wallet
   } else if (signingType === `ledger`) {
     return await getLedger(
-      store.state.ledger.isWindows,
-      store.state.ledger.hasHIDEnabled
+      store.state.data.isWindows,
+      store.state.data.hasHIDEnabled
     )
   } else if (signingType === `keplr`) {
     return window.getOfflineSigner(chainId)

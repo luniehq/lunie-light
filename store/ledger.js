@@ -3,8 +3,6 @@ import { getLedger } from '~/common/ledger'
 export const state = () => ({
   ledger: undefined,
   accounts: [],
-  isWindows: false,
-  hasHIDEnabled: false,
   loading: false,
   error: undefined,
 })
@@ -24,10 +22,15 @@ export const mutations = {
 }
 
 export const actions = {
-  async init({ commit }) {
+  async init({
+    commit,
+    rootState: {
+      data: { isWindows, hasHIDEnabled },
+    },
+  }) {
     commit('setLoading', true)
     try {
-      const ledger = await getLedger(state().isWindows, state().hasHIDEnabled)
+      const ledger = await getLedger(isWindows, hasHIDEnabled)
       commit('setLedger', ledger)
 
       const accounts = await ledger.getAccounts()
