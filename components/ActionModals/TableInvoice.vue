@@ -1,7 +1,7 @@
 <template>
   <div>
     <FormGroup
-      v-if="getDenoms.length > 1 && amounts.length > 1"
+      v-if="getDenoms.length > 1"
       id="form-group-amount"
       class="action-modal-form-group"
       field-id="feeDenom"
@@ -82,10 +82,17 @@ export default {
       required: true,
     },
   },
-  data: () => ({
-    feeDenom: network.stakingDenom,
-  }),
   computed: {
+    feeDenom: {
+      get() {
+        return this.amounts.length > 1
+          ? network.stakingDenom
+          : this.amounts[0].denom
+      },
+      set(value) {
+        this.feeDenom = value
+      },
+    },
     getDenoms() {
       return this.fees.map(({ denom }) => ({ key: denom, value: denom }))
     },
