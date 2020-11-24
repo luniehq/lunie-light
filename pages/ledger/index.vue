@@ -58,15 +58,15 @@
       <br />
       <br />
     </div>
+    <div v-if="!isWindows && !isLinux" class="session-main">
+      <p>
+        Please use Chrome or Brave. Ledger is not supported in this browser.
+      </p>
+    </div>
     <div v-if="error" class="error-container">
       <p>There was an error connecting to the Ledger Nano:<br /></p>
       <p class="error">
         {{ error }}
-      </p>
-    </div>
-    <div v-else class="session-main">
-      <p>
-        Please use Chrome or Brave. Ledger is not supported in this browser.
       </p>
     </div>
   </div>
