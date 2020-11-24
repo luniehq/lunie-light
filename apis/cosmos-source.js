@@ -173,7 +173,7 @@ export default class CosmosAPI {
         this.query(`staking/validators?status=bonded`),
         this.query(`staking/validators?status=unbonded`),
       ]).then((validatorGroups) => [].concat(...validatorGroups)),
-      this.getAnnualProvision(),
+      this.getAnnualProvision().catch(() => undefined),
       this.getValidatorSet(height),
       this.getSignedBlockWindow(),
     ])

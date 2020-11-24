@@ -716,11 +716,13 @@ export function validatorReducer(
     maxChangeCommission: validator.commission.commission_rates.max_change_rate,
     status: statusInfo.status,
     statusDetailed: statusInfo.status_detailed,
-    expectedReturns: expectedRewardsPerToken(
-      validator,
-      validator.commission.commission_rates.rate,
-      annualProvision
-    ).toFixed(6),
+    expectedReturns: annualProvision
+      ? expectedRewardsPerToken(
+          validator,
+          validator.commission.commission_rates.rate,
+          annualProvision
+        ).toFixed(6)
+      : undefined,
   }
 }
 
