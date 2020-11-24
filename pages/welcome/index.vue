@@ -50,14 +50,14 @@ export default {
     ...mapState(['session']),
     ...mapState('extension', ['initialized']),
   },
+  mounted() {
+    this.$store.dispatch('extension/init')
+  },
   methods: {
     signOut() {
       this.$store.dispatch('signIn', undefined)
       this.$router.push('/validators')
     },
-  },
-  mounted() {
-    this.$store.dispatch('extension/init')
   },
 }
 </script>
