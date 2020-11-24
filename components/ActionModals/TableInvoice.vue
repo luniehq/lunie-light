@@ -1,7 +1,7 @@
 <template>
   <div>
     <FormGroup
-      v-if="getDenoms.length > 1"
+      v-if="getDenoms.length > 1 && amounts.length > 1"
       id="form-group-amount"
       class="action-modal-form-group"
       field-id="feeDenom"
