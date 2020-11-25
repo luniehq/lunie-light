@@ -25,12 +25,11 @@ export const actions = {
   async init({ commit }) {
     commit('setLoading', true)
     try {
-      const { ledger, transport } = await getLedger()
+      const ledger = await getLedger()
       commit('setLedger', ledger)
 
       const accounts = await ledger.getAccounts()
       commit('setAccounts', accounts)
-      transport.close()
     } catch (err) {
       commit('setLoading', false)
       commit('setError', err.message)
