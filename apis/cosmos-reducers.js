@@ -584,7 +584,7 @@ export function transactionReducer(transaction) {
         return coinReducer(fee, coinLookup)
       })
     }
-    const { claimMessages, otherMessages } = transaction.tx.value.msg.reduce(
+    const { claimMessages, otherMessages } = transaction.tx.body.messages.reduce(
       ({ claimMessages, otherMessages }, message) => {
         // we need to aggregate all withdraws as we display them together in one transaction
         if (getMessageType(message.type) === lunieMessageTypes.CLAIM_REWARDS) {
@@ -619,7 +619,7 @@ export function transactionReducer(transaction) {
           transaction
         ),
         timestamp: transaction.timestamp,
-        memo: transaction.tx.value.memo,
+        memo: transaction.tx.body.memo,
         fees,
         success: setTransactionSuccess(transaction, messageIndex),
         log: getTransactionLogs(transaction, messageIndex),
