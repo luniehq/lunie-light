@@ -1,7 +1,7 @@
 import { getHDPath } from './hdpath'
 import network from './network'
 
-export async function getLedger() {
+export async function getLedger(ledgerTransport) {
   const { LedgerSigner } = await import('@cosmjs/launchpad-ledger')
   const interactiveTimeout = 120_000
   const isWindows = navigator.platform.includes('Win')
@@ -33,12 +33,12 @@ export async function getLedger() {
       interactiveTimeout
     )
   }
-  const ledger = new LedgerSigner(transport, {
+  const ledger = new LedgerSigner(ledgerTransport || transport, {
     testModeAllowed: true,
     hdPaths: [await getHDPath(network.HDPath)],
     prefix: network.addressPrefix,
   })
-  return ledger
+  return { ledger, transport }
 }
 
 // limitation of the Ledger Nano S: if top5 is true, we pick the top 5 rewards and inform the user.

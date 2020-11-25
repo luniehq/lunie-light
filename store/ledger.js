@@ -2,6 +2,7 @@ import { getLedger } from '~/common/ledger'
 
 export const state = () => ({
   ledger: undefined,
+  transport: undefined,
   accounts: [],
   loading: false,
   error: undefined,
@@ -25,8 +26,9 @@ export const actions = {
   async init({ commit }) {
     commit('setLoading', true)
     try {
-      const ledger = await getLedger()
+      const { ledger, transport } = await getLedger()
       commit('setLedger', ledger)
+      commit('setTransport', transport)
 
       const accounts = await ledger.getAccounts()
       commit('setAccounts', accounts)
