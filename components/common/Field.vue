@@ -144,6 +144,9 @@ export default {
 
 select.field {
   padding-left: 0.25rem;
+
+  /* needed to overwrite browser defaults */
+  max-height: 37px;
 }
 
 input + select {
