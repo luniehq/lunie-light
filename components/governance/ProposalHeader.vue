@@ -145,6 +145,7 @@ h2 {
   font-size: 32px;
   margin-bottom: 2rem;
   max-width: 500px;
+  font-weight: 500;
   color: var(--bright);
   padding-right: 2rem;
 }

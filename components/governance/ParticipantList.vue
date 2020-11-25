@@ -107,7 +107,6 @@ export default {
 
 <style scoped>
 .participant-list {
-  max-width: 1024px;
   margin: 0 auto;
   width: 100%;
   box-shadow: 0 0 3px 0 var(--gray-400);
