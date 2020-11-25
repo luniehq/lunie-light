@@ -35,7 +35,8 @@ export async function getLedger(ledgerTransport) {
       interactiveTimeout
     )
   }
-  const ledger = new LedgerSigner(ledgerTransport || transport, {
+  if (!transport) transport = ledgerTransport
+  const ledger = new LedgerSigner(transport, {
     testModeAllowed: true,
     hdPaths: [await getHDPath(network.HDPath)],
     prefix: network.addressPrefix,
