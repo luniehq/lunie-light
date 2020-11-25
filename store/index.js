@@ -18,7 +18,6 @@ export const actions = {
   signIn({ commit, dispatch }, session) {
     dispatch('data/resetSessionData')
     if (!session) {
-      dispatch('ledger/close')
       this.$cookies.remove('lunie-session')
     } else {
       this.$cookies.set('lunie-session', session)

@@ -36,12 +36,4 @@ export const actions = {
     }
     commit('setLoading', false)
   },
-  close({ commit }) {
-    // close ledger connection
-    if (state().ledger) {
-      state().ledger.close()
-    }
-    commit('setLedger', undefined)
-    commit('setAccounts', [])
-  },
 }
