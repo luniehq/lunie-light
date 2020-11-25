@@ -121,7 +121,7 @@ export default {
       }
       let colour = '#'
       for (let i = 0; i < 3; i++) {
-        // eslint-disable-next-line
+        // eslint-disable-next-line prettier/prettier
         const value = (hash >> (i * 8)) & 0xff
         colour += ('00' + value.toString(16)).substr(-2)
       }

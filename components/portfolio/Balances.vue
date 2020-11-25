@@ -26,8 +26,8 @@
         @open-send-modal="openSendModal(balance.denom)"
       />
     </TableContainer>
-    <SendModal ref="SendModal" :denoms="getAllDenoms" />
-    <ClaimModal
+    <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
+    <LazyClaimModal
       ref="ClaimModal"
       :address="session.address"
       :rewards="rewards"
