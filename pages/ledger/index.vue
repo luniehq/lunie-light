@@ -1,6 +1,6 @@
 <template>
   <div class="session-container">
-    <h2 class="session-title">Use Ledger Hardware Wallet</h2>
+    <h2 class="session-title">Ledger Hardware Wallet</h2>
 
     <div class="session-main">
       <Button

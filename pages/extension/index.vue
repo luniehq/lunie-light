@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="session-container">
-      <h2 class="session-title">Use Lunie Browser Extension</h2>
+      <h2 class="session-title">Lunie Browser Extension</h2>
 
       <div v-if="!accounts.length && !initialized" class="session-main">
         <Button

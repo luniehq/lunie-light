@@ -45,7 +45,6 @@ export default {
 
 <style>
 .session-layout {
-  min-width: 100vw;
   min-height: 100vh;
   background: var(--app-fg);
   display: flex;
@@ -64,6 +63,7 @@ export default {
   padding: 2.5rem 2rem;
   position: relative;
   max-width: 540px;
+  margin: 2rem 0;
   width: 100%;
 }
 
@@ -72,6 +72,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
+  padding-bottom: 2rem;
 }
 
 .session-title {
@@ -151,10 +152,22 @@ export default {
 }
 
 @media screen and (max-width: 667px) {
+  .session-layout {
+    background: var(--white);
+  }
+
   .session {
-    padding: 1rem;
+    padding: 2rem 1rem;
     border-radius: 0;
     box-shadow: none;
+    max-width: none;
+    margin: 0;
+    min-height: 80vh;
+  }
+
+  .disclaimer {
+    max-width: none;
+    background: var(--white);
   }
 }
 </style>
