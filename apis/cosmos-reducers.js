@@ -363,7 +363,7 @@ export function sendDetailsReducer(message) {
   return {
     from: [message.from_address],
     to: [message.to_address],
-    amount: message.amount.map(coinReducer),
+    amounts: message.amount.map(coinReducer),
   }
 }
 
