@@ -3,7 +3,7 @@
     <div class="session-container">
       <h2 class="session-title">Use Lunie Browser Extension</h2>
 
-      <div v-if="!accounts.length && !initialized" class="session-main">
+      <div v-if="!filteredAccounts.length && !initialized" class="session-main">
         <Button
           value="Connect Lunie Extension"
           :loading="loading"
@@ -22,19 +22,19 @@
         </p>
       </div>
 
-      <div v-else-if="accounts.length" class="session-main accounts">
+      <div v-else-if="filteredAccounts.length" class="session-main accounts">
         <p class="extension-message">
           Below is a list of accounts we've received from the Lunie browser
           extension.
         </p>
         <AccountList
-          :accounts="accounts"
+          :accounts="filteredAccounts"
           :button-action="signInAndRedirect"
           :button-text="`Use Account`"
         />
       </div>
 
-      <div v-if="!accounts.length && initialized" class="session-main">
+      <div v-if="!filteredAccounts.length && initialized" class="session-main">
         <p class="extension-message">
           Looks like you don't have any addresses in the Lunie extension yet.
           Click on the extension icon in your browser and add an address now.
@@ -46,11 +46,16 @@
 
 <script>
 import { mapState } from 'vuex'
+import network from '~/common/network'
+
 export default {
   name: `SessionLunieExtension`,
   layout: 'session',
   computed: {
     ...mapState('extension', [`accounts`, `initialized`, `error`, `loading`]),
+    filteredAccounts() {
+      return this.accounts.filter((account) => account.network === network.id)
+    },
   },
   watch: {
     accounts: {
