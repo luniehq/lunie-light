@@ -363,7 +363,7 @@ export function sendDetailsReducer(message) {
   return {
     from: [message.from_address],
     to: [message.to_address],
-    amount: message.amount.map(coinReducer),
+    amounts: message.amount.map(coinReducer),
   }
 }
 
@@ -427,7 +427,7 @@ export function claimRewardsAmountReducer(transaction) {
       rewards.forEach((reward) => {
         all = {
           ...all,
-          [reward.denom]: reward.amount.plus(all[reward.denom] || 0),
+          [reward.denom]: BigNumber(reward.amount).plus(all[reward.denom] || 0),
         }
       })
       return all
