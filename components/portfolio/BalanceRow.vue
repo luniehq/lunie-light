@@ -121,8 +121,7 @@ export default {
       }
       let colour = '#'
       for (let i = 0; i < 3; i++) {
-        // eslint-disable-next-line prettier/prettier
-        const value = (hash >> (i * 8)) & 0xff
+        const value = (hash >> (i * 8)) & 0xFF // prettier-ignore
         colour += ('00' + value.toString(16)).substr(-2)
       }
       return this.image ? '' : colour
