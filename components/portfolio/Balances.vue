@@ -6,7 +6,7 @@
         id="claim-button"
         :disabled="!readyToWithdraw || !balancesLoaded"
         value="Claim Rewards"
-        @click.native="readyToWithdraw && onClaim()"
+        @click.native="readyToWithdraw && openClaimModal()"
       />
     </div>
     <TableContainer
@@ -23,17 +23,16 @@
         :balance="balance"
         :total-rewards-per-denom="totalRewardsPerDenom"
         :send="true"
+        @open-send-modal="openSendModal(balance.denom)"
       />
     </TableContainer>
     <LazySendModal ref="SendModal" :denoms="getAllDenoms" />
-    <ClaimModal
+    <LazyClaimModal
       ref="ClaimModal"
       :address="session.address"
       :rewards="rewards"
       :balances="balances"
     />
-    <!--  <StakeModal ref="StakeModal" />
-      <UnstakeModal ref="UnstakeModal" /> -->
   </div>
 </template>
 <script>
@@ -104,19 +103,10 @@ export default {
     },
   },
   methods: {
-    onWithdrawal() {
-      this.$refs.ClaimModal.open()
-    },
-    onSend(denom = undefined) {
+    openSendModal(denom = undefined) {
       this.$refs.SendModal.open(denom)
     },
-    onStake(amount) {
-      this.$refs.StakeModal.open()
-    },
-    onUnstake(amount) {
-      this.$refs.UnstakeModal.open()
-    },
-    onClaim() {
+    openClaimModal() {
       this.$refs.ClaimModal.open()
     },
   },

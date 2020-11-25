@@ -31,12 +31,12 @@
           </div>
         </div>
         <div class="action-buttons">
-          <Button :value="`Stake`" @click.native="onDelegation" />
+          <Button :value="`Stake`" @click.native="openStakeModal" />
           <Button
             :disabled="!delegation"
             :value="`Unstake`"
             type="secondary"
-            @click.native="onUndelegation"
+            @click.native="openUnstakeModal"
           />
         </div>
       </div>
@@ -133,9 +133,9 @@
         </div>
       </section>
     </div>
-    <LazyStakeModal ref="stakeModal" :target-validator="validator" />
+    <LazyStakeModal ref="StakeModal" :target-validator="validator" />
     <LazyUnstakeModal
-      ref="unstakeModal"
+      ref="UnstakeModal"
       :source-validator="validator"
       :is-unnomination="true"
     />
@@ -206,12 +206,12 @@ export default {
     fromNow,
     noBlanks,
     /* istanbul ignore next */
-    onDelegation() {
-      this.$refs.stakeModal.open()
+    openStakeModal() {
+      this.$refs.StakeModal.open()
     },
     /* istanbul ignore next */
-    onUndelegation() {
-      this.$refs.unstakeModal.open()
+    openUnstakeModal() {
+      this.$refs.UnstakeModal.open()
     },
     /* istanbul ignore next */
     isBlankField(field, alternateFilter) {

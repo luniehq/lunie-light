@@ -51,28 +51,21 @@
       class="actions"
     >
       <div v-if="send" class="icon-button-container">
-        <button class="icon-button" @click="onSend(balance.denom)">
+        <button class="icon-button" @click="$emit('open-send-modal')">
           <i class="material-icons">send</i></button
         ><span>Send</span>
       </div>
       <div v-if="stake" class="icon-button-container">
-        <button class="icon-button" @click="onStake(balance.denom)">
+        <button class="icon-button" @click="$emit('open-stake-modal')">
           <i class="material-icons">arrow_upward</i></button
         ><span>Stake</span>
       </div>
       <div v-if="unstake" class="icon-button-container">
-        <button class="icon-button" @click="onUnstake(balance.denom)">
+        <button class="icon-button" @click="$emit('open-unstake-modal')">
           <i class="material-icons">arrow_downward</i></button
         ><span>Unstake</span>
       </div>
     </td>
-
-    <LazySendModal
-      ref="SendModal"
-      :denoms="balances.map(({ denom }) => denom)"
-    />
-    <!-- <StakeModal ref="StakeModal" />
-    <UnstakeModal ref="UnstakeModal" /> -->
   </tr>
 </template>
 <script>
@@ -128,8 +121,7 @@ export default {
       }
       let colour = '#'
       for (let i = 0; i < 3; i++) {
-        // eslint-disable-next-line prettier/prettier
-        const value = (hash >> (i * 8)) & 0xFF
+        const value = (hash >> (i * 8)) & 0xFF // prettier-ignore
         colour += ('00' + value.toString(16)).substr(-2)
       }
       return this.image ? '' : colour
@@ -137,15 +129,6 @@ export default {
   },
   methods: {
     bigFigureOrShortDecimals,
-    onSend(denom = undefined) {
-      this.$refs.SendModal.open(denom)
-    },
-    onStake(amount) {
-      this.$refs.StakeModal.open()
-    },
-    onUnstake() {
-      this.$refs.UnstakeModal.open()
-    },
   },
 }
 </script>
