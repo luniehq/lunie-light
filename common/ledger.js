@@ -38,7 +38,7 @@ export async function getLedger() {
     hdPaths: [await getHDPath(network.HDPath)],
     prefix: network.addressPrefix,
   })
-  return ledger
+  return { ledger, transport }
 }
 
 // limitation of the Ledger Nano S: if top5 is true, we pick the top 5 rewards and inform the user.

@@ -48,7 +48,7 @@ export async function createSignBroadcast({
     accountSequence: accountInfo.sequence,
   }
 
-  let signedTx
+  let signedTx, ledgerTransport
 
   if (signingType === 'extension') {
     signedTx = await signWithExtension(
@@ -59,14 +59,28 @@ export async function createSignBroadcast({
       network
     )
   } else {
-    const signer = await getSigner(
-      signingType,
-      {
-        address: senderAddress,
-        password,
-      },
-      chainId
-    )
+    let signer
+    if (signingType === `ledger`) {
+      const { ledger, tranport } = await getSigner(
+        signingType,
+        {
+          address: senderAddress,
+          password,
+        },
+        chainId
+      )
+      ledgerTransport = tranport
+      signer = ledger
+    } else {
+      signer = await getSigner(
+        signingType,
+        {
+          address: senderAddress,
+          password,
+        },
+        chainId
+      )
+    }
 
     const messages = messageCreators[messageType](
       senderAddress,
@@ -99,6 +113,10 @@ export async function createSignBroadcast({
     .then((res) => res.data)
   assertIsBroadcastTxSuccess(broadcastResult)
 
+  // close ledger connection if there is one
+  if (ledgerTransport) {
+    ledgerTransport.close()
+  }
   return {
     hash: broadcastResult.txhash,
   }

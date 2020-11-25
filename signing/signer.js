@@ -11,7 +11,8 @@ export async function getSigner(signingType, { address, password }, chainId) {
     )
     return wallet
   } else if (signingType === `ledger`) {
-    return await getLedger()
+    const { ledger, transport } = await getLedger()
+    return { ledger, transport }
   } else if (signingType === `keplr`) {
     return window.getOfflineSigner(chainId)
   }
