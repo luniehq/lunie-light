@@ -310,7 +310,7 @@ export default {
               const balance = this.balances.find(
                 (balance) => balance.denom === denom
               )
-              return !!balance && balance.available >= amount
+              return !!balance && Number(balance.available) >= Number(amount)
             }),
       },
     }
