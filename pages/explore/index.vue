@@ -44,7 +44,7 @@ export default {
 
       this.$store.dispatch('signIn', {
         address: this.address,
-        type: 'explore',
+        sessionType: 'explore',
       })
       this.$router.push('/')
     },
