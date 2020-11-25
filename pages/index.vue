@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="portfolio">
     <Balances />
     <Delegations />
     <Undelegations />
@@ -12,3 +12,9 @@ export default {
   middleware: 'addressRequired',
 }
 </script>
+<style scoped>
+.portfolio {
+  background: var(--gray-100);
+  min-height: 100vh;
+}
+</style>
