@@ -23,10 +23,10 @@ export const mutations = {
 }
 
 export const actions = {
-  async init({ commit }) {
+  async init({ commit, rootState }) {
     commit('setLoading', true)
     try {
-      const { ledger, transport } = await getLedger()
+      const { ledger, transport } = await getLedger(rootState.ledger.transport)
       commit('setLedger', ledger)
       commit('setTransport', transport)
 
