@@ -18,10 +18,12 @@ export async function getLedger(ledgerTransport) {
     const { default: TransportWebHID } = await import(
       /* webpackChunkName: "webhid" */ '@ledgerhq/hw-transport-webhid'
     )
-    transport = await TransportWebHID.create(
-      interactiveTimeout,
-      interactiveTimeout
-    )
+    if (!ledgerTransport) {
+      transport = await TransportWebHID.create(
+        interactiveTimeout,
+        interactiveTimeout
+      )
+    }
   } else {
     // OSX, Linux
     const { default: TransportWebUSB } = await import(
