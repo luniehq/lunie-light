@@ -6,13 +6,7 @@
     >
       <h4>Description</h4>
       <div class="description">
-        <pre
-          v-if="
-            proposal.type === `PARAMETER_CHANGE` || proposal.type === `TREASURY`
-          "
-          >{{ proposal.description }}</pre
-        >
-        <p v-else>{{ proposal.description }}</p>
+        <pre>{{ proposal.description }}</pre>
       </div>
     </section>
   </div>
@@ -62,6 +56,7 @@ pre {
   font-size: 14px;
   padding: 1rem;
   word-break: break-word;
+  white-space: pre-line;
 }
 
 @media screen and (max-width: 1023px) {
