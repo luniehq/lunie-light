@@ -94,7 +94,7 @@ export default {
         return transactionDenom || network.stakingDenom
       },
       set(value) {
-        return value
+        this.$emit('change', value)
       },
     },
     getDenoms() {
@@ -116,11 +116,6 @@ export default {
         }
         return all.concat(amount)
       }, [])
-    },
-  },
-  watch: {
-    feeDenom(feeDenom) {
-      this.$emit('change', feeDenom)
     },
   },
 }

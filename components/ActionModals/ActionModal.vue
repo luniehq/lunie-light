@@ -37,6 +37,7 @@
           v-model="feeDenom"
           :amounts="amounts"
           :fees="networkFees.feeOptions"
+          @change="setFeeDenom"
         />
         <FormMessage
           v-if="$v.invoiceTotal.$error && $v.invoiceTotal.$invalid"
@@ -353,6 +354,9 @@ export default {
           this.step = defaultStep
           break
       }
+    },
+    setFeeDenom(value) {
+      this.feeDenom = value
     },
     async validateChangeStep() {
       if (this.disabled) return
