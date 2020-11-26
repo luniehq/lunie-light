@@ -645,17 +645,16 @@ export function transactionsReducer(txs) {
 }
 
 export function delegationReducer(delegation, validator, active) {
-  const { amount, denom } = coinReducer({
+  const { denom } = coinReducer({
     amount: delegation.balance,
     denom: network.stakingDenom,
   })
-
   return {
     id: delegation.validator_address.concat(`-${denom}`),
     validatorAddress: delegation.validator_address,
     delegatorAddress: delegation.delegator_address,
     validator,
-    amount,
+    amount: getStakingCoinViewAmount(delegation.balance),
     active,
   }
 }
