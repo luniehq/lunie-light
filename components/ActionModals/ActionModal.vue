@@ -25,9 +25,12 @@
         />
       </div>
       <div v-if="requiresSignIn" class="action-modal-form">
-        <p class="form-message notice">
-          You're in explore mode. Sign in or create an account to get started.
-        </p>
+        <Card icon="language">
+          <div slot="title">You're in explore mode</div>
+          <div slot="subtitle">
+            Sign in with a Ledger Nano or browser extension to proceed.
+          </div>
+        </Card>
       </div>
       <div v-else-if="step === defaultStep" class="action-modal-form">
         <slot />

@@ -1,19 +1,23 @@
 <template>
   <div class="card">
-    <div v-if="icon" class="card__icon" :class="{ success: success }">
+    <div
+      v-if="icon"
+      class="icon"
+      :class="{ success: success, 'fa-spin': spin }"
+    >
       <i
         :style="`background: ${iconColor}`"
         class="material-icons notranslate"
         >{{ icon }}</i
       >
     </div>
-    <div class="card__text">
-      <h2 class="card__title">
+    <div class="text">
+      <h2 class="title">
         <slot name="title">
           {{ title }}
         </slot>
       </h2>
-      <h3 class="card__subtitle">
+      <h3 class="subtitle">
         <slot name="subtitle">
           {{ subtitle }}
         </slot>
@@ -56,20 +60,20 @@ export default {
 
 <style scoped>
 .card {
-  padding: 2rem 3rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
-  margin: 2rem;
+  margin: 1rem;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
   background: var(--white);
 }
 
-.card__icon {
+.icon {
   margin-right: 1.5rem;
 }
 
-.card__icon i.material-icons {
+.icon i.material-icons {
   font-size: 2rem;
   color: var(--white);
   background: var(--warning);
@@ -77,18 +81,18 @@ export default {
   border-radius: 50%;
 }
 
-.card__icon.success i.material-icons {
+.icon.success i.material-icons {
   background: var(--success);
 }
 
-.card__title {
-  font-weight: 500;
-  padding-bottom: 1rem;
+.title {
+  font-weight: 600;
+  padding-bottom: 0.5rem;
   color: var(--bright);
   font-size: var(--text-lg);
 }
 
-.card__subtitle {
+.subtitle {
   color: var(--txt);
   font-size: var(--text-sm);
   word-break: break-word;
@@ -121,7 +125,7 @@ export default {
     padding: 2rem;
   }
 
-  .card__icon {
+  .icon {
     margin-bottom: 1rem;
   }
 }

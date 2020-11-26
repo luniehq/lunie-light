@@ -4,7 +4,7 @@
       <Loader />
     </div>
 
-    <Card v-else-if="!transactions.length">
+    <Card icon="receipt" v-else-if="!transactions.length">
       <div slot="title">No transactions</div>
       <div slot="subtitle">
         {{ oldChainDataMessage }}
