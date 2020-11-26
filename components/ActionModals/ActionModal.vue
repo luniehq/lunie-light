@@ -71,17 +71,24 @@
             />
           </FormGroup>
         </form>
-        <div v-else-if="session.sessionType === SESSION_TYPES.KEPLR">
-          The transaction will be send to the Keplr Browser Extension for
-          signing.
-        </div>
-        <div v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
-          The transaction will be send to the Lunie Browser Extension for
-          signing.
-        </div>
-        <div v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
-          The transaction will be sent to the Ledger Nano for signing.
-        </div>
+        <Card v-else-if="session.sessionType === SESSION_TYPES.KEPLR">
+          <div slot="subtitle">
+            The transaction will be sent to the Keplr Browser Extension for you
+            to review and approve.
+          </div>
+        </Card>
+        <Card v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
+          <div slot="subtitle">
+            The transaction will be sent to the Lunie Browser Extension for you
+            to review and approve.
+          </div>
+        </Card>
+        <Card v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
+          <div slot="subtitle">
+            The transaction will be sent to your Ledger Nano for you to review
+            and approve.
+          </div>
+        </Card>
       </div>
       <div v-else-if="step === inclusionStep" class="action-modal-form">
         <Card icon="hourglass_empty" :spin="true">
