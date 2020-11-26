@@ -94,7 +94,7 @@ export default {
         return transactionDenom || network.stakingDenom
       },
       set(value) {
-        this.feeDenom = value
+        return value
       },
     },
     getDenoms() {
