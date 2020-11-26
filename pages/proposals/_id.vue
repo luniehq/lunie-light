@@ -5,7 +5,6 @@
     </div>
     <div v-else class="proposal">
       <ProposalHeader
-        id="proposal-description"
         :proposal="proposal"
         :status="status"
         @open-vote-modal="onVote"
