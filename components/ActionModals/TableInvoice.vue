@@ -82,6 +82,9 @@ export default {
       required: true,
     },
   },
+  data: () => ({
+    selectedFeeDenom: null,
+  }),
   computed: {
     feeDenom: {
       get() {
@@ -91,10 +94,13 @@ export default {
           this.fees.find(({ denom }) => denom === this.amounts[0].denom)
             ? this.amounts[0].denom
             : null
-        return transactionDenom || network.stakingDenom
+        return this.selectedFeeDenom
+          ? this.selectedFeeDenom
+          : transactionDenom || network.stakingDenom
       },
       set(value) {
-        this.feeDenom = value
+        this.selectedFeeDenom = value
+        this.$emit('change', value)
       },
     },
     getDenoms() {
@@ -116,11 +122,6 @@ export default {
         }
         return all.concat(amount)
       }, [])
-    },
-  },
-  watch: {
-    feeDenom(feeDenom) {
-      this.$emit('change', feeDenom)
     },
   },
 }
