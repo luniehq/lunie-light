@@ -1,6 +1,6 @@
 <template>
   <div class="session-container">
-    <h2 class="session-title">Use Keplr Browser Extension</h2>
+    <h2 class="session-title">Keplr Browser Extension</h2>
 
     <div v-if="!accounts.length && !initialized" class="session-main">
       <Button

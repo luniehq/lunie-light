@@ -621,13 +621,5 @@ export default {
     border: 0;
     border-radius: 0;
   }
-
-  .action-modal-footer button {
-    width: 100%;
-  }
-
-  .form-group__field {
-    width: 100%;
-  }
 }
 </style>

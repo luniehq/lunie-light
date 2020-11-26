@@ -121,6 +121,7 @@ h1 {
   width: 100%;
   padding: 3rem 4rem;
   margin: 0 auto;
+  background: var(--white);
 }
 
 .header-container {

@@ -46,7 +46,6 @@ export default {
   margin: 0 auto;
   width: 100%;
   padding: 3rem 4rem;
-  background: var(--gray-200);
 }
 
 .tm-form-msg--desc {
