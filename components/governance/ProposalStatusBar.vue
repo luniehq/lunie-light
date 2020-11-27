@@ -22,8 +22,7 @@
     <div>
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
-          Entered
-          {{ status.value.toLowerCase() }} Status
+          {{ getStatusBeginTimeMessage(status.value) }}
           {{ new Date(statusBeginTime) | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
@@ -173,6 +172,22 @@ export default {
         Number(this.proposal.tally.abstain) /
           Number(this.proposal.tally.total) || 0
       )
+    },
+  },
+  methods: {
+    getStatusBeginTimeMessage(statusValue) {
+      switch (statusValue) {
+        case governanceStatusEnum.VOTING:
+          return `Entered Voting Period`
+        case governanceStatusEnum.DEPOSITING:
+          return `Entered Deposit Period`
+        case `REJECTED`:
+          return `Rejected`
+        case `PASSES`:
+          return `Passed`
+        default:
+          return `Last change`
+      }
     },
   },
 }
