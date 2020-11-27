@@ -2,7 +2,7 @@ export default {
   // Build the app as a static site instead of Server Side Rendered (SSR)
   // (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode/)
   ssr: false,
-  target: 'server',
+  target: 'static',
 
   // Use local 404 instead of redirecting to Netlify 404 (https://go.nuxtjs.dev/config-build)
   generate: {
@@ -70,16 +70,4 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
-
-  render: {
-    csp: {
-      hashAlgorithm: 'sha256',
-      policies: {
-        'script-src': ["'self'", 'https://*.netlify.app'],
-        'style-src': ["'self'", 'https://*.netlify.app'],
-        'report-uri': ['https://report.example.com/report-csp-violations'],
-      },
-      addMeta: true,
-    },
-  },
 }
