@@ -2,19 +2,10 @@
   <div class="session-container">
     <h2 class="session-title">Ledger Hardware Wallet</h2>
 
-    <div class="session-main">
-      <Button
-        value="Connect Ledger"
-        :loading="loading"
-        @click.native="connect"
-      />
-    </div>
     <div v-if="isWindows && !hasHIDEnabled && !error">
       Due to recent Ledger updates, using a Ledger on Windows now requires
       "Experimental Web Platform features" to be enabled.
       <div v-if="isChrome">
-        <br />
-        <br />
         <p>
           Please copy the link below into a new tab and set the "Experimental
           Web Platform features" flag to "Enabled":
@@ -32,14 +23,11 @@
             check
           </i>
         </div>
-        <br />
-        <br />
       </div>
     </div>
     <div v-else-if="isLinux && !error">
       Since we switched to WebUSB Linux users may experience connection issues
       with their devices.
-      <br />
       <br />
       Please visit the following site to learn more about how to fix them:
       <div
@@ -55,14 +43,20 @@
           check
         </i>
       </div>
-      <br />
-      <br />
     </div>
-    <div v-if="!isChromiumBrowser" class="session-main">
-      <p>
-        Please use Chrome or Brave. Ledger is not supported in this browser.
-      </p>
+    <Card v-if="!isChromiumBrowser">
+      <h2 slot="title">Please use Chrome or Brave.</h2>
+      <p slot="subtitle">Ledger is not supported in this browser.</p>
+    </Card>
+
+    <div class="session-main">
+      <Button
+        value="Connect Ledger"
+        :loading="loading"
+        @click.native="connect"
+      />
     </div>
+
     <div v-if="error" class="error-container">
       <p>There was an error connecting to the Ledger Nano:<br /></p>
       <p class="error">
