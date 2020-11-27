@@ -9,6 +9,7 @@
       </div>
       <div v-if="depositCount">{{ depositCount }} Deposits</div>
       <ProgressBar
+        v-if="depositTotal > 0"
         size="large"
         :val="depositPercentage"
         :bar-border-radius="8"
@@ -40,6 +41,7 @@
         </div>
       </div>
       <ProgressBar
+        v-if="voteCount > 0"
         size="large"
         :val="proposal.detailedVotes.votingThresholdYes * 100"
         :bar-border-radius="8"
