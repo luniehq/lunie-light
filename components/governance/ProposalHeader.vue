@@ -122,7 +122,7 @@ export default {
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 4rem;
+  padding: 0 0 2rem;
 }
 
 .header-top-column {
@@ -147,7 +147,6 @@ h2 {
   max-width: 500px;
   font-weight: 500;
   color: var(--bright);
-  padding-right: 2rem;
 }
 
 .page-links {
@@ -170,7 +169,9 @@ h2 {
 
 .content-container {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 2rem;
 }
 
 .proposer {
@@ -180,13 +181,14 @@ h2 {
   border-radius: var(--border-radius);
   background: var(--white);
   display: flex;
-  flex-direction: column;
+  align-items: center;
 }
 
 .summary {
   font-size: 12px;
   padding: 2rem 0 0 2px;
   font-style: italic;
+  text-align: justify;
 }
 
 .icon-container {
@@ -216,39 +218,15 @@ h2 {
 }
 
 .proposer-details .proposer-image {
-  margin: 1rem 1rem 0 0;
-  height: 2.5rem;
-  width: 2.5rem;
+  margin: 0 0.5rem;
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
   border-radius: 50%;
 }
 
-.proposer-details a {
-  margin-top: 0.7rem;
-}
-
-@media screen and (max-width: 667px) {
-  .inner-status {
-    display: none;
-  }
-
-  .outer-status {
-    display: initial;
-  }
-
-  .header-top-row {
-    padding: 0 0 2rem;
-  }
-
-  .header-top-column {
-    padding: 0 0 4rem;
-  }
-}
-
 @media screen and (max-width: 1023px) {
-  h2 {
-    padding-right: 0;
-  }
-
   .content-container {
     flex-direction: column;
     text-align: center;
@@ -261,14 +239,6 @@ h2 {
 
   .page-links li {
     padding: 2rem 2rem;
-  }
-
-  .proposer {
-    flex-direction: row;
-  }
-
-  .proposer-details {
-    padding-left: 1rem;
   }
 }
 </style>

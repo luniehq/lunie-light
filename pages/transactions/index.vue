@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="transactions">
     <div v-if="!transactionsLoaded" class="container">
       <Loader />
     </div>

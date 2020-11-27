@@ -80,10 +80,14 @@ table {
   padding: 2rem;
   height: 4rem;
   display: table-cell;
+  color: var(--txt);
+  font-size: var(--text-sm);
 }
 
 .no-results h2 {
-  font-weight: 500;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  color: var(--bright);
   font-size: var(--text-lg);
 }
 
