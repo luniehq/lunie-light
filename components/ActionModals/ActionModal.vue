@@ -71,22 +71,15 @@
             />
           </FormGroup>
         </form>
-        <Card v-else-if="session.sessionType === SESSION_TYPES.KEPLR">
+        <Card
+          v-if="
+            session.sessionType === SESSION_TYPES.EXTENSION ||
+            session.sessionType === SESSION_TYPES.KEPLR ||
+            session.sessionType === SESSION_TYPES.LEDGER
+          "
+        >
           <div slot="subtitle">
-            The transaction will be sent to the Keplr Browser Extension for you
-            to review and approve.
-          </div>
-        </Card>
-        <Card v-else-if="session.sessionType === SESSION_TYPES.EXTENSION">
-          <div slot="subtitle">
-            The transaction will be sent to the Lunie Browser Extension for you
-            to review and approve.
-          </div>
-        </Card>
-        <Card v-else-if="session.sessionType === SESSION_TYPES.LEDGER">
-          <div slot="subtitle">
-            The transaction will be sent to your Ledger Nano for you to review
-            and approve.
+            {{ getExternalSessionMessage(session.sessionType) }}
           </div>
         </Card>
       </div>
@@ -474,6 +467,18 @@ export default {
     },
     refreshData() {
       this.$store.dispatch('data/refresh')
+    },
+    getExternalSessionMessage(sessionType) {
+      switch (sessionType) {
+        case SESSION_TYPES.EXTENSION:
+          return `The transaction will be sent to the Lunie Browser Extension for you to review and approve.`
+        case SESSION_TYPES.LEDGER:
+          return `The transaction will be sent to your Ledger Nano for you to review and approve.`
+        case SESSION_TYPES.KEPLR:
+          return `The transaction will be sent to the Keplr Browser Extension for you to review and approve.`
+        default:
+          return ``
+      }
     },
   },
 }
