@@ -19,14 +19,19 @@
         <div>{{ depositTotal }} {{ network.stakingDenom }}</div>
       </div>
     </div>
-    <div v-if="status.value === governanceStatusEnum.VOTING">
+    <div>
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
-          Entered Voting Period {{ new Date(statusBeginTime) | fromNow }}
+          Entered
+          {{ status.value.toLowerCase() }} Period
+          {{ new Date(statusBeginTime) | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
       </div>
-      <div class="vote-data-container">
+      <div
+        v-if="status.value === governanceStatusEnum.VOTING"
+        class="vote-data-container"
+      >
         <div class="vote-data">
           <span
             >{{ votePercentage | percentInt }} of
