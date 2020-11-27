@@ -58,7 +58,7 @@
       <br />
       <br />
     </div>
-    <div v-if="!isWindows && !isLinux" class="session-main">
+    <div v-if="!isChromiumBrowser" class="session-main">
       <p>
         Please use Chrome or Brave. Ledger is not supported in this browser.
       </p>
@@ -97,6 +97,9 @@ export default {
     },
     hasHIDEnabled() {
       return !!this.navigator.hid
+    },
+    isChromiumBrowser() {
+      return !!window.chrome
     },
   },
   watch: {
