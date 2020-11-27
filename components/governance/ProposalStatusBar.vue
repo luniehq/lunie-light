@@ -23,7 +23,7 @@
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
           Entered
-          {{ status.value.toLowerCase() }} Period
+          {{ status.value.toLowerCase() }} Status
           {{ new Date(statusBeginTime) | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
