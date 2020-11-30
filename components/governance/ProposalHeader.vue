@@ -21,7 +21,7 @@
             @click.native="$emit(`open-deposit-modal`)"
           />
           <Button
-            v-if="showVoteButton"
+            v-if="status.value === this.governanceStatusEnum.VOTING"
             id="vote-btn"
             class="action-button"
             value="Vote"
@@ -98,12 +98,6 @@ export default {
     ...mapGetters([`currentNetwork`]),
     currentRoute() {
       return location.href
-    },
-    showVoteButton() {
-      return (
-        this.proposal.type !== `TREASURY` &&
-        this.status.value === this.governanceStatusEnum.VOTING
-      )
     },
   },
 }
