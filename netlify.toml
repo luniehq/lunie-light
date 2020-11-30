@@ -6,7 +6,7 @@
   [headers.values]
     Content-Security-Policy = '''
       default-src 'self' 'unsafe-inline' https://*.netlify.app;
-      connect-src 'self' https://keybase.io https://lcd.nylira.net http://localhost:8010;
+      connect-src 'self' https://keybase.io https://lcd.nylira.net;
       img-src 'self' data: https://*.netlify.app https://s3.amazonaws.com;
     '''
     X-Frame-Options = "DENY"
