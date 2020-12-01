@@ -47,17 +47,10 @@ export default class CosmosAPI {
   }
 
   async getAccountInfo(address) {
-    const result = await this.query(`/auth/accounts/${address}`)
-    let accountInfo
-    if (result.type === 'cosmos-sdk/DelayedVestingAccount') {
-      const vestingAccountType = Object.keys(result.value)[0]
-      accountInfo = result.value[vestingAccountType].BaseAccount
-    } else {
-      accountInfo = result.value
-    }
+    const accountInfo = await this.query(`/auth/accounts/${address}`)
     return {
-      accountNumber: accountInfo.account_number,
-      sequence: accountInfo.sequence || '0',
+      accountNumber: accountInfo.value.account_number,
+      sequence: accountInfo.value.sequence || '0',
     }
   }
 
