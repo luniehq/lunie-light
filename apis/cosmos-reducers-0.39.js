@@ -182,20 +182,6 @@ function networkAccountReducer(address, validators) {
   }
 }
 
-export function governanceParameterReducer(
-  depositParameters,
-  tallyingParamers
-) {
-  // for now assuming one deposit denom
-  const minDeposit = coinReducer(depositParameters.min_deposit[0])
-  return {
-    votingThreshold: tallyingParamers.threshold,
-    vetoThreshold: tallyingParamers.veto,
-    depositDenom: minDeposit.denom,
-    depositThreshold: minDeposit.amount,
-  }
-}
-
 export function topVoterReducer(topVoter) {
   return {
     name: topVoter.name,
