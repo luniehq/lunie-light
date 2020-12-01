@@ -382,16 +382,6 @@ export default class CosmosAPI {
     )
   }
 
-  async getGovernanceParameters() {
-    const depositParameters = await this.query(`gov/parameters/deposit`)
-    const tallyingParamers = await this.query(`gov/parameters/tallying`)
-
-    return this.reducers.governanceParameterReducer(
-      depositParameters,
-      tallyingParamers
-    )
-  }
-
   async getTopVoters() {
     await this.dataReady
     // for now defaulting to pick the 10 largest voting powers
