@@ -45,7 +45,7 @@ export default {
 <style scoped>
 .proposal {
   padding: 1.5rem;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
   display: block;
   width: 100%;
   box-shadow: 0 0 3px 0 var(--gray-400);
