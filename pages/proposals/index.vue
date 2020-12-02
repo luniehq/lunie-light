@@ -4,6 +4,20 @@
       <Loader />
     </div>
     <template v-else>
+      <h3>Proposals</h3>
+      <ProposalRow
+        v-for="proposal in proposals"
+        :key="proposal.id"
+        :proposal="proposal"
+      />
+
+      <Card v-if="!proposals.length">
+        <div slot="title">No proposals</div>
+        <div slot="subtitle">
+          There are no proposals on this blockchain yet.
+        </div>
+      </Card>
+
       <h3>Stats</h3>
       <div class="data-row">
         <div>
@@ -21,20 +35,6 @@
           </p>
         </div>
       </div>
-
-      <h3>Proposals</h3>
-      <ProposalRow
-        v-for="proposal in proposals"
-        :key="proposal.id"
-        :proposal="proposal"
-      />
-
-      <Card v-if="!proposals.length">
-        <div slot="title">No proposals</div>
-        <div slot="subtitle">
-          There are no proposals on this blockchain yet.
-        </div>
-      </Card>
 
       <h3>Voting Power</h3>
       <ParticipantList
