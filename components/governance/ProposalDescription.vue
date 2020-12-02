@@ -56,7 +56,7 @@ pre {
   font-size: 14px;
   padding: 1rem;
   word-break: break-word;
-  white-space: pre-line;
+  white-space: pre-wrap;
 }
 
 @media screen and (max-width: 1023px) {

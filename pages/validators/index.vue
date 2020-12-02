@@ -99,6 +99,14 @@ export default {
   justify-content: space-between;
   flex-direction: row;
   margin: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 3px 0 var(--gray-400);
+  border-radius: var(--border-radius);
+  background: var(--white);
+}
+
+.searchField {
+  max-width: 500px;
 }
 
 .toggles {
@@ -119,7 +127,7 @@ export default {
 }
 
 .toggle-button.active {
-  background: var(--gray-200);
+  background: var(--blue-200);
 }
 
 .toggle-button:last-child {
@@ -133,7 +141,7 @@ export default {
 }
 
 .toggles .toggle-button:hover:not(:disabled) {
-  background: var(--gray-200);
+  background: var(--blue-100);
   border-color: var(--input-bc);
 }
 

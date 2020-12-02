@@ -114,6 +114,7 @@ export default {
   text-align: center;
   margin: 3rem;
   color: var(--dim);
+  font-size: 12px;
 }
 
 .sortingOptions {

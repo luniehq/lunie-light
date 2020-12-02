@@ -240,7 +240,7 @@ export default {
 </script>
 <style scoped>
 .validator-container {
-  margin: 2rem auto;
+  margin: 2rem;
   padding: 1.5rem 2rem;
   box-shadow: 0 0 3px 0 var(--gray-400);
   border-radius: var(--border-radius);
@@ -352,6 +352,15 @@ section div:last-child {
   font-style: italic;
 }
 
+@media screen and (max-width: 667px) {
+  .validator-container {
+    border-radius: 0;
+    box-shadow: none;
+    max-width: none;
+    margin: 0;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .status-container {
     display: flex;
@@ -366,6 +375,13 @@ section div:last-child {
   .identity {
     flex-direction: column;
     padding: 1rem 0;
+  }
+}
+
+@media screen and (min-width: 1324px) {
+  .validator-container {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>
