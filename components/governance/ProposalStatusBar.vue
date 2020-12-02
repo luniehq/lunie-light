@@ -9,6 +9,7 @@
       </div>
       <div v-if="depositCount">{{ depositCount }} Deposits</div>
       <ProgressBar
+        v-if="depositTotal > 0"
         size="large"
         :val="depositPercentage"
         :bar-border-radius="8"
@@ -19,14 +20,18 @@
         <div>{{ depositTotal }} {{ network.stakingDenom }}</div>
       </div>
     </div>
-    <div v-if="status.value === governanceStatusEnum.VOTING">
+    <div>
       <div class="top row">
         <div v-if="statusBeginTime" class="time">
-          Entered Voting Period {{ new Date(statusBeginTime) | fromNow }}
+          {{ getStatusBeginTimeMessage(status.value) }}
+          {{ new Date(statusBeginTime) | fromNow }}
         </div>
         <div>ID: {{ proposal.proposalId }}</div>
       </div>
-      <div class="vote-data-container">
+      <div
+        v-if="status.value === governanceStatusEnum.VOTING"
+        class="vote-data-container"
+      >
         <div class="vote-data">
           <span
             >{{ votePercentage | percentInt }} of
@@ -36,6 +41,7 @@
         </div>
       </div>
       <ProgressBar
+        v-if="voteCount > 0"
         size="large"
         :val="proposal.detailedVotes.votingThresholdYes * 100"
         :bar-border-radius="8"
@@ -168,6 +174,22 @@ export default {
         Number(this.proposal.tally.abstain) /
           Number(this.proposal.tally.total) || 0
       )
+    },
+  },
+  methods: {
+    getStatusBeginTimeMessage(statusValue) {
+      switch (statusValue) {
+        case governanceStatusEnum.VOTING:
+          return `Entered Voting Period`
+        case governanceStatusEnum.DEPOSITING:
+          return `Entered Deposit Period`
+        case `REJECTED`:
+          return `Rejected`
+        case `PASSES`:
+          return `Passed`
+        default:
+          return `Last change`
+      }
     },
   },
 }

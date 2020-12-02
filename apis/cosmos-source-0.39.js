@@ -47,10 +47,17 @@ export default class CosmosAPI {
   }
 
   async getAccountInfo(address) {
-    const accountInfo = await this.query(`/auth/accounts/${address}`)
+    const result = await this.query(`/auth/accounts/${address}`)
+    let accountInfo
+    if (result.type === 'cosmos-sdk/DelayedVestingAccount') {
+      const vestingAccountType = Object.keys(result.value)[0]
+      accountInfo = result.value[vestingAccountType].BaseAccount
+    } else {
+      accountInfo = result.value
+    }
     return {
-      accountNumber: accountInfo.value.account_number,
-      sequence: accountInfo.value.sequence || '0',
+      accountNumber: accountInfo.account_number,
+      sequence: accountInfo.sequence || '0',
     }
   }
 
@@ -379,16 +386,6 @@ export default class CosmosAPI {
       totalBondedTokens,
       detailedVotes,
       this.validators
-    )
-  }
-
-  async getGovernanceParameters() {
-    const depositParameters = await this.query(`gov/parameters/deposit`)
-    const tallyingParamers = await this.query(`gov/parameters/tallying`)
-
-    return this.reducers.governanceParameterReducer(
-      depositParameters,
-      tallyingParamers
     )
   }
 

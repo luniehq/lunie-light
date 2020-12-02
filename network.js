@@ -1,5 +1,5 @@
 export default {
-  id: 'cosmos-hub-testnet',
+  id: 'cosmos-hub-testnet', // DEPRECATE, only used for Lunie extension, NOT CHAIN ID
   name: 'Cosmos Stargate',
   description:
     'Cosmos is a network of independent parallel blockchains, powered by BFT consensus algorithms like Tendermint.',
