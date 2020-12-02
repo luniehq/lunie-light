@@ -163,9 +163,9 @@ h2 {
 
 .content-container {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-bottom: 2rem;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2rem 0;
 }
 
 .proposer {
