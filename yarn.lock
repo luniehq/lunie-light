@@ -1112,29 +1112,29 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ledgerhq/devices@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-5.30.0.tgz#0e81970988a033316fc936517d4191fe75cde589"
-  integrity sha512-2ubefpOcw7SpU/6E1MM7JNLihOuwvQ73dCSPmxLloxPf1T4S6gOBh4RgB9mal/gwoOwWGVNaR3wGHvqJI8z1Gg==
+"@ledgerhq/devices@^5.30.0", "@ledgerhq/devices@^5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-5.38.0.tgz#0b805020c4f3ac40d35f1b1af6d64d04256b1e0f"
+  integrity sha512-1RZ+Dh+oVUDMeaPSCeQ56qzgiMHHy481dbkRCDUMRJEzkGqOLI3k34x7XdkVKy1NQdt8G8sYyobP/yixDry5ow==
   dependencies:
-    "@ledgerhq/errors" "^5.30.0"
-    "@ledgerhq/logs" "^5.30.0"
+    "@ledgerhq/errors" "^5.38.0"
+    "@ledgerhq/logs" "^5.38.0"
     rxjs "^6.6.3"
 
-"@ledgerhq/errors@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.30.0.tgz#f8baaf9d0a326abc567f66bbdb0b740674143182"
-  integrity sha512-pSX50OEQqK56WiZG2lIxGijy5QUwiWNDFXzAoPCh2BOGGWhBq6LaYSKQyQaRIpUXzAubt0s1lUj3sHNYTOA9vg==
+"@ledgerhq/errors@^5.30.0", "@ledgerhq/errors@^5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.38.0.tgz#1642b87de47cbabc7b75ca93005a690895920a72"
+  integrity sha512-d4gQzbOLNBoGIwDtEGFNSb0w0aYN10T5Y749e+vqiJoS3dWrB+5BCSQ/U/ALet0wi/UMIyFY/xmgd1gPaPB3Hw==
 
-"@ledgerhq/hw-transport-webhid@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.30.0.tgz#2ae105a1b8de29ab6e413d2a7a17ce09c0099f3b"
-  integrity sha512-PpKfD+oaa1HIsm1QIZ2B6iOR0NS2kbV4z4slAFGoByjduDPWFMvWl47EQtITlt6B2r+kaK88zPVmCKe3jS6hLg==
+"@ledgerhq/hw-transport-webhid@^5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.38.0.tgz#20db57add434e58045546a5201429f201b64d60f"
+  integrity sha512-gsWqLuojtRtzD9P42QUVDVXOkj5OgihHZtJdr86pdXzKYqmy7TOWaqOc0JHYpEBtlqNsYrYC+aMfFsiNIwNUVg==
   dependencies:
-    "@ledgerhq/devices" "^5.30.0"
-    "@ledgerhq/errors" "^5.30.0"
-    "@ledgerhq/hw-transport" "^5.30.0"
-    "@ledgerhq/logs" "^5.30.0"
+    "@ledgerhq/devices" "^5.38.0"
+    "@ledgerhq/errors" "^5.38.0"
+    "@ledgerhq/hw-transport" "^5.38.0"
+    "@ledgerhq/logs" "^5.38.0"
 
 "@ledgerhq/hw-transport-webusb@^5.30.0":
   version "5.30.0"
@@ -1146,19 +1146,19 @@
     "@ledgerhq/hw-transport" "^5.30.0"
     "@ledgerhq/logs" "^5.30.0"
 
-"@ledgerhq/hw-transport@^5.25.0", "@ledgerhq/hw-transport@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.30.0.tgz#6c98c00a5594dc38f4046e2ebdd342f6b14e57b7"
-  integrity sha512-86cKX9yIHP9C/wnVRhm5QnaBPqTWaSxb0Z2BlMLT0xWqQf0RVb9e4pUtfAsGNDhTyN2exQF54+G4IkspsplnKg==
+"@ledgerhq/hw-transport@^5.25.0", "@ledgerhq/hw-transport@^5.30.0", "@ledgerhq/hw-transport@^5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.38.0.tgz#b02bea73d77e729d13c367a967df1666f9ef940d"
+  integrity sha512-CAxvHukCcp+RqaEsSltmBw4Lb1yW42fiF/LTYN7JvCkZyLIQhvkndLDVCgp4hpMdtLK4bkf7RJRElqbN0vRoAQ==
   dependencies:
-    "@ledgerhq/devices" "^5.30.0"
-    "@ledgerhq/errors" "^5.30.0"
+    "@ledgerhq/devices" "^5.38.0"
+    "@ledgerhq/errors" "^5.38.0"
     events "^3.2.0"
 
-"@ledgerhq/logs@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-5.30.0.tgz#76e8d7e5a06a73c9b99da51fa5befd5cfd5309d4"
-  integrity sha512-wUhg2VTfUrWihjdGqKkH/s7TBzdIM1yyd2LiscYsfTX2I0xYDMnpE+NkMReeGU8PN3QhCPgnlg9/P9V6UWoJBA==
+"@ledgerhq/logs@^5.30.0", "@ledgerhq/logs@^5.38.0":
+  version "5.38.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-5.38.0.tgz#3c5dbd1f62c0bf5580477b218fb57c67b575643a"
+  integrity sha512-i87Yn89Cq2D9Y0KmrEzCm62XHzI2edeOTBENKH6vAyzESGzyF+SBoqtZNwrjJcKup3/9dNn/zHjpicY7ev94Vw==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
