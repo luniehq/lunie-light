@@ -1112,29 +1112,30 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@ledgerhq/devices@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-5.30.0.tgz#0e81970988a033316fc936517d4191fe75cde589"
-  integrity sha512-2ubefpOcw7SpU/6E1MM7JNLihOuwvQ73dCSPmxLloxPf1T4S6gOBh4RgB9mal/gwoOwWGVNaR3wGHvqJI8z1Gg==
+"@ledgerhq/devices@^5.30.0", "@ledgerhq/devices@^5.45.0":
+  version "5.45.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-5.45.0.tgz#f39f42c2526a98bde2cb42af111848783f2394b1"
+  integrity sha512-wAtm4kvQ8pAdqdIpDa/OqU9rhtqI0sTdwDGGp4vthHiWNdBwqwPFcKmEki+mUgPCfRqn3SifyqaPqvFpvu+oWw==
   dependencies:
-    "@ledgerhq/errors" "^5.30.0"
-    "@ledgerhq/logs" "^5.30.0"
-    rxjs "^6.6.3"
+    "@ledgerhq/errors" "^5.43.0"
+    "@ledgerhq/logs" "^5.43.0"
+    rxjs "^6.6.6"
+    semver "^7.3.4"
 
-"@ledgerhq/errors@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.30.0.tgz#f8baaf9d0a326abc567f66bbdb0b740674143182"
-  integrity sha512-pSX50OEQqK56WiZG2lIxGijy5QUwiWNDFXzAoPCh2BOGGWhBq6LaYSKQyQaRIpUXzAubt0s1lUj3sHNYTOA9vg==
+"@ledgerhq/errors@^5.30.0", "@ledgerhq/errors@^5.43.0":
+  version "5.43.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.43.0.tgz#6bec77ebc31c4333a7f8d13b1f3f4d739b859b75"
+  integrity sha512-ZjKlUQbIn/DHXAefW3Y1VyDrlVhVqqGnXzrqbOXuDbZ2OAIfSe/A1mrlCbWt98jP/8EJQBuCzBOtnmpXIL/nYg==
 
-"@ledgerhq/hw-transport-webhid@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.30.0.tgz#2ae105a1b8de29ab6e413d2a7a17ce09c0099f3b"
-  integrity sha512-PpKfD+oaa1HIsm1QIZ2B6iOR0NS2kbV4z4slAFGoByjduDPWFMvWl47EQtITlt6B2r+kaK88zPVmCKe3jS6hLg==
+"@ledgerhq/hw-transport-webhid@^5.45.0":
+  version "5.45.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webhid/-/hw-transport-webhid-5.45.0.tgz#482c85f4a7c6b0e97130031cc403bc3cb63c9479"
+  integrity sha512-pwOm1X9ieJFkYcfUnZHyK/F0NHEPQL+xUGTq+MQ5BlFKfcZyyK+dReg5PIJ/PugTKHD+A1wzGeoVYM/LUM+f+w==
   dependencies:
-    "@ledgerhq/devices" "^5.30.0"
-    "@ledgerhq/errors" "^5.30.0"
-    "@ledgerhq/hw-transport" "^5.30.0"
-    "@ledgerhq/logs" "^5.30.0"
+    "@ledgerhq/devices" "^5.45.0"
+    "@ledgerhq/errors" "^5.43.0"
+    "@ledgerhq/hw-transport" "^5.45.0"
+    "@ledgerhq/logs" "^5.43.0"
 
 "@ledgerhq/hw-transport-webusb@^5.30.0":
   version "5.30.0"
@@ -1146,19 +1147,19 @@
     "@ledgerhq/hw-transport" "^5.30.0"
     "@ledgerhq/logs" "^5.30.0"
 
-"@ledgerhq/hw-transport@^5.25.0", "@ledgerhq/hw-transport@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.30.0.tgz#6c98c00a5594dc38f4046e2ebdd342f6b14e57b7"
-  integrity sha512-86cKX9yIHP9C/wnVRhm5QnaBPqTWaSxb0Z2BlMLT0xWqQf0RVb9e4pUtfAsGNDhTyN2exQF54+G4IkspsplnKg==
+"@ledgerhq/hw-transport@^5.25.0", "@ledgerhq/hw-transport@^5.30.0", "@ledgerhq/hw-transport@^5.45.0":
+  version "5.45.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.45.0.tgz#5d1e23d61d99664faf29609dbd4a5ca6d1f4c1bc"
+  integrity sha512-YDkPQ2u5BJaMk2rJ8jcSucCv1JRUhmlaWUOvZ+Q7I8VNnvBM+N5yc9nqRX8TuHRlbPyiFm8xjEkPktVejuTAvQ==
   dependencies:
-    "@ledgerhq/devices" "^5.30.0"
-    "@ledgerhq/errors" "^5.30.0"
-    events "^3.2.0"
+    "@ledgerhq/devices" "^5.45.0"
+    "@ledgerhq/errors" "^5.43.0"
+    events "^3.3.0"
 
-"@ledgerhq/logs@^5.30.0":
-  version "5.30.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-5.30.0.tgz#76e8d7e5a06a73c9b99da51fa5befd5cfd5309d4"
-  integrity sha512-wUhg2VTfUrWihjdGqKkH/s7TBzdIM1yyd2LiscYsfTX2I0xYDMnpE+NkMReeGU8PN3QhCPgnlg9/P9V6UWoJBA==
+"@ledgerhq/logs@^5.30.0", "@ledgerhq/logs@^5.43.0":
+  version "5.43.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-5.43.0.tgz#031bad4b8a3525c5e14210afde0bc09c79564026"
+  integrity sha512-QWfQjea3ekh9ZU+JeL2tJC9cTKLZ/JrcS0JGatLejpRYxQajvnHvHfh0dbHOKXEaXfCskEPTZ3f1kzuts742GA==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -4243,10 +4244,15 @@ eventemitter3@^4.0.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-events@^3.0.0, events@^3.2.0:
+events@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
   integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
+
+events@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
 eventsource-polyfill@^0.9.6:
   version "0.9.6"
@@ -8406,6 +8412,13 @@ rxjs@^6.6.0, rxjs@^6.6.3:
   dependencies:
     tslib "^1.9.0"
 
+rxjs@^6.6.6:
+  version "6.6.6"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.6.tgz#14d8417aa5a07c5e633995b525e1e3c0dec03b70"
+  integrity sha512-/oTwee4N4iWzAMAL9xdGKjkEHmIwupR3oXbQjCKywF1BeFohswF3vZdogbmEF6pZkOsXTzWkrZszrWpQTByYVg==
+  dependencies:
+    tslib "^1.9.0"
+
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -8501,6 +8514,13 @@ semver@^7.2.1, semver@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
   integrity sha512-OrOb32TeeambH6UrhtShmF7CRDqhL6/5XpPNp2DuRH6+9QLw/orhp72j87v8Qa1ScDkvrrBNpZcDejAirJmfXQ==
+
+semver@^7.3.4:
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.4.tgz#27aaa7d2e4ca76452f98d3add093a72c943edc97"
+  integrity sha512-tCfb2WLjqFAtXn4KEdxIhalnRtoKFN7nAwj0B3ZXCbQloV2tq5eDbcTmT68JJD3nRJq24/XgxtQKFIpQdtvmVw==
+  dependencies:
+    lru-cache "^6.0.0"
 
 send@0.17.1:
   version "0.17.1"
