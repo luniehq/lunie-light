@@ -59,8 +59,8 @@ export function coinReducer(chainCoin, ibcInfo) {
     }
   }
 
-  const precision = coinLookup.chainToViewConversionFactor
-    .toString()
+  const precision = BigNumber(coinLookup.chainToViewConversionFactor)
+    .toFixed()
     .split('.')[1].length
 
   return {
