@@ -135,7 +135,9 @@ export default {
       if (this.transaction.details.amounts) {
         return this.transaction.details.amounts
       } else if (this.transaction.details.amount) {
-        return [this.transaction.details.amount]
+        return Array.isArray(this.transaction.details.amount)
+          ? this.transaction.details.amount
+          : [this.transaction.details.amount]
       }
       return null
     },
