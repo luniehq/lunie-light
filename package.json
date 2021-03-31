@@ -24,7 +24,7 @@
   "dependencies": {
     "@cosmjs/launchpad": "^0.23.1",
     "@cosmjs/launchpad-ledger": "^0.23.1",
-    "@ledgerhq/hw-transport-webhid": "^5.30.0",
+    "@ledgerhq/hw-transport-webhid": "^5.48.0",
     "@ledgerhq/hw-transport-webusb": "^5.30.0",
     "@nuxtjs/axios": "^5.12.2",
     "bech32": "^1.1.4",
