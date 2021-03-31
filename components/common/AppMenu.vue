@@ -46,6 +46,13 @@
       </nuxt-link>
     </div>
     <div>
+      <div class="app-menu-bug-report">
+        <a
+          href="https://github.com/tendermint/lunie-light/issues/new"
+          target="_blank"
+          >Report a bug</a
+        >
+      </div>
       <ConnectedNetwork @close-menu="handleClick" />
     </div>
   </menu>
@@ -98,6 +105,21 @@ export default {
   background: var(--app-nav-hover);
   box-shadow: 0 0 1px 0 var(--gray-700);
   color: var(--gray-100);
+}
+
+.app-menu .app-menu-bug-report a {
+  display: block;
+  text-align: right;
+  padding-right: 0.5rem;
+  margin: 0.5rem 1rem;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--gray-700);
+  transition: all 0.5s ease;
+}
+
+.app-menu .app-menu-bug-report a:hover {
+  color: var(--gray-500);
 }
 
 @media screen and (max-width: 1023px) {
