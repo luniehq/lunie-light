@@ -32,7 +32,7 @@
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.8.0",
     "dayjs": "^1.9.6",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "nuxt": "^2.14.7",
     "nuxt-material-design-icons": "^1.0.4",
     "vue-clipboard2": "^0.3.1",
